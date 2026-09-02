@@ -41,13 +41,9 @@ export default function Layout() {
   };
 
   const navLinks = [
-    { label: "Shop",              path: "/shop",  mega: true  },
-    { label: "New Arrivals",      path: "/shop?filter=new" },
-    { label: "Journaling",        path: "/shop?cat=journals" },
-    { label: "Study",             path: "/shop?cat=pens" },
-    { label: "Craft",             path: "/shop?cat=stickers" },
-    { label: "Collections",       path: "/shop" },
-    { label: "Blog",              path: "/blog",  dim: true },
+    { label: "SHOP+",   path: "/shop",  mega: true  },
+    { label: "NEW IN",  path: "/shop?filter=new" },
+    { label: "GIFTING", path: "/shop" },
   ];
 
   return (

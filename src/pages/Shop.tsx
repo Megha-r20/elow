@@ -101,57 +101,35 @@ export default function Shop() {
               </h1>
               <p style={{ fontSize: 13.5, color: T.light, marginTop: 4 }}>{filtered.length} products</p>
             </div>
-            {/* Search + sort bar */}
-            <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-              <div style={{ position: "relative" }}>
-                <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: T.light }}>
-                  <Icons.Search />
-                </span>
-                <input
-                  className="field field-sm"
-                  value={searchQ}
-                  onChange={e => setSearchQ(e.target.value)}
-                  placeholder="Search products…"
-                  style={{ paddingLeft: 38, minWidth: 220 }}
-                />
-              </div>
-              <select className="field field-sm" value={sort} onChange={e => setSort(e.target.value)} style={{ minWidth: 168 }}>
-                {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-              </select>
-              {/* Grid view toggle */}
-              <div style={{ display: "flex", border: `1.5px solid ${T.border}`, borderRadius: 9, overflow: "hidden" }}>
-                {([3, 4] as const).map(n => (
-                  <button key={n} onClick={() => setGridView(n)} style={{ width: 34, height: 34, border: "none", cursor: "pointer", background: gridView === n ? "#1C1C1A" : "#fff", color: gridView === n ? "#fff" : T.muted, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.14s", fontSize: 11, fontWeight: 700 }}>
-                    {n === 3 ? "⊞" : "⊟"}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
       <div className="container" style={{ padding: "32px 32px" }}>
-        {/* Active filter chips */}
-        {activeFilters.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24, alignItems: "center" }}>
-            <span style={{ fontSize: 12.5, fontWeight: 600, color: T.muted, marginRight: 4 }}>Active filters:</span>
-            {activeFilters.map(f => (
-              <button key={f.label} onClick={f.clear} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#1C1C1A", color: "#fff", border: "none", borderRadius: 999, padding: "6px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-                {f.label}
-                <span style={{ fontSize: 10, opacity: 0.7 }}>✕</span>
-              </button>
-            ))}
-            <button onClick={clearAll} style={{ background: "none", border: "none", fontSize: 12.5, color: T.muted, cursor: "pointer", fontFamily: "inherit", fontWeight: 600, textDecoration: "underline" }}>
-              Clear all
-            </button>
-          </div>
-        )}
-
         <div style={{ display: "grid", gridTemplateColumns: showFilters ? "240px 1fr" : "1fr", gap: 32, alignItems: "start" }}>
-          {/* ── Sidebar filters ─────────────────────────────────── */}
+          {/* ── Sidebar filters ───────────────────────────────── */}
           {showFilters && (
             <aside style={{ position: "sticky", top: 90 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 16 }}>
+                {/* Search */}
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: T.light }}>
+                    <Icons.Search />
+                  </span>
+                  <input
+                    className="field field-sm"
+                    value={searchQ}
+                    onChange={e => setSearchQ(e.target.value)}
+                    placeholder="Search products..."
+                    style={{ paddingLeft: 38, width: "100%", background: "#fff" }}
+                  />
+                </div>
+                {/* Sort */}
+                <select className="field field-sm" value={sort} onChange={e => setSort(e.target.value)} style={{ width: "100%", background: "#fff" }}>
+                  {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+              </div>
+
               <div style={{ background: "#fff", borderRadius: 18, border: `1px solid ${T.border}`, overflow: "hidden" }}>
                 {/* Categories */}
                 <div style={{ padding: "20px 20px 0" }}>
@@ -222,15 +200,25 @@ export default function Shop() {
 
           {/* ── Product grid ─────────────────────────────────────── */}
           <div>
-            {/* Toggle sidebar + count */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-              <button onClick={() => setShowFilters(f => !f)} className="btn btn-ghost btn-sm" style={{ gap: 7 }}>
-                <Icons.Filter />
-                {showFilters ? "Hide" : "Show"} Filters
-              </button>
-              <p style={{ fontSize: 13, color: T.light, fontWeight: 500 }}>
-                Showing {filtered.length} of {PRODUCTS.length} products
-              </p>
+            {/* Toggle sidebar + count + grid view */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, gap: 16, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <button onClick={() => setShowFilters(f => !f)} className="btn btn-ghost btn-sm" style={{ gap: 7 }}>
+                  <Icons.Filter />
+                  {showFilters ? "Hide" : "Show"} Filters
+                </button>
+                <p style={{ fontSize: 13, color: T.light, fontWeight: 500 }}>
+                  Showing {filtered.length} of {PRODUCTS.length} products
+                </p>
+              </div>
+              {/* Grid view toggle */}
+              <div style={{ display: "flex", border: `1.5px solid ${T.border}`, borderRadius: 9, overflow: "hidden" }}>
+                {([3, 4] as const).map(n => (
+                  <button key={n} onClick={() => setGridView(n)} style={{ width: 34, height: 34, border: "none", cursor: "pointer", background: gridView === n ? "#1C1C1A" : "#fff", color: gridView === n ? "#fff" : T.muted, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.14s", fontSize: 11, fontWeight: 700 }}>
+                    {n === 3 ? "III" : "IIII"}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {filtered.length === 0 ? (
