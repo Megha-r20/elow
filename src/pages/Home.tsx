@@ -119,17 +119,16 @@ export default function Home() {
           <SectionHead eyebrow="Browse" title="Shop by Category" sub="Find exactly what you need — from journals to desk accessories." right={
             <button onClick={() => navigate("/shop")} className="btn btn-ghost btn-md">View all <Icons.ArrowRight /></button>
           } />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 14 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 20 }}>
             {CATEGORIES.map(cat => (
-              <button key={cat.id} onClick={() => navigate(`/shop?cat=${cat.id}`)} style={{ border: "none", background: "none", cursor: "pointer", padding: 0, textAlign: "center" }}>
-                <div className="coll-card">
-                  <div className="coll-img" style={{ borderRadius: 18, overflow: "hidden", height: 148, background: cat.color }}>
-                    <img src={cat.image} alt={cat.label} style={{ width: "100%", height: "100%", objectFit: "cover", mixBlendMode: "multiply" }} />
-                  </div>
-                  <div style={{ marginTop: 10, textAlign: "center" }}>
-                    <p style={{ fontSize: 11.5, fontWeight: 700, color: T.txt, letterSpacing: "0.2px" }}>{cat.label}</p>
-                    <p style={{ fontSize: 11, color: T.light, marginTop: 3 }}>{cat.productCount} items</p>
-                  </div>
+              <button key={cat.id} className="hover-card" onClick={() => navigate(`/shop?cat=${cat.id}`)} style={{ border: "none", background: "none", cursor: "pointer", padding: 0, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div style={{ borderRadius: "120px 120px 16px 16px", overflow: "hidden", width: "100%", height: 190, background: cat.color, position: "relative", marginBottom: 16 }}>
+                  <img src={cat.image} alt={cat.label} style={{ width: "100%", height: "100%", objectFit: "cover", mixBlendMode: "multiply", display: "block" }} />
+                  <div style={{ position: "absolute", inset: 0, borderRadius: "120px 120px 16px 16px", border: "1px solid rgba(0,0,0,0.06)", pointerEvents: "none" }} />
+                </div>
+                <div>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: T.txt, letterSpacing: "0.2px" }}>{cat.label}</p>
+                  <p style={{ fontSize: 11.5, color: T.light, marginTop: 4 }}>{cat.productCount} items</p>
                 </div>
               </button>
             ))}
