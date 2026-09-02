@@ -52,7 +52,7 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 48,
-    isNew: true, isBestseller: true,
+    isNew: true,
   },
   {
     id: "p2",
@@ -82,7 +82,6 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 72,
-    isBestseller: true,
     isNew: true,
   },
   {
@@ -143,7 +142,6 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 61,
-    isBestseller: true,
     isNew: true,
   },
   {
@@ -296,7 +294,10 @@ export const PRODUCTS: Product[] = [
     stockCount: 42,
   },
   {
-    id: "p10",
+    id: "p10",    badge: "BESTSELLER",
+    badgeVariant: "yellow",
+    isBestseller: true,
+
     name: "Rainbow Washi Tape Set — 12 rolls",
     shortName: "Rainbow Washi Set",
     category: "washi",
@@ -321,7 +322,6 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 38,
-    isBestseller: true,
   },
   {
     id: "p11",
@@ -353,7 +353,10 @@ export const PRODUCTS: Product[] = [
     stockCount: 11,
   },
   {
-    id: "p12",
+    id: "p12",    badge: "BESTSELLER",
+    badgeVariant: "yellow",
+    isBestseller: true,
+
     name: "Aesthetic Desk Organizer — Cream Oak",
     shortName: "Desk Organizer",
     category: "desk",
@@ -478,4 +481,5 @@ export const HERO_IMAGES = {
   bulletJournal:  u("photo-1711030239034-d7dbf7f2794d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
   deskOrg:        u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
 };
+
 
