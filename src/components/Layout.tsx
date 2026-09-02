@@ -41,9 +41,9 @@ export default function Layout() {
   };
 
   const navLinks = [
-    { label: "SHOP+",   path: "/shop",  mega: true  },
+    { label: "SHOP+",   path: "/shop" },
     { label: "NEW IN",  path: "/shop?filter=new" },
-    { label: "GIFTING", path: "/shop" },
+    { label: "GIFTING", path: "/shop?cat=gifting" },
   ];
 
   return (
