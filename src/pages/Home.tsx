@@ -253,9 +253,9 @@ export default function Home() {
       </section>
 
       {/* ── Editorial quote banner ───────────────────────────────── */}
-      <section style={{ position: "relative", overflow: "hidden", height: 260 }}>
-        <img src="/quote-bg.png" alt="Aesthetic journaling" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 35%" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(105deg, rgba(28,28,26,0.82) 0%, rgba(28,28,26,0.55) 55%, transparent 80%)" }} />
+      <section style={{ position: "relative", overflow: "hidden", height: 280 }}>
+        <img src={HERO_IMAGES.writing2} alt="Someone writing in a notebook" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(28,28,26,0.85) 0%, rgba(28,28,26,0.7) 35%, transparent 60%)" }} />
         <div className="container" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center" }}>
           <div>
             <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.6)", letterSpacing: "3px", marginBottom: 16 }}>FOR THE ONES WHO WRITE</p>
