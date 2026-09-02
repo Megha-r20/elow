@@ -52,8 +52,7 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 48,
-    isNew: true,
-    isBestseller: false,
+    isNew: true, isBestseller: true,
   },
   {
     id: "p2",
@@ -83,6 +82,7 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 72,
+    isBestseller: true,
     isNew: true,
   },
   {
@@ -143,6 +143,7 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 61,
+    isBestseller: true,
     isNew: true,
   },
   {
@@ -233,6 +234,7 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 22,
+    isBestseller: true,
   },
   {
     id: "p8",
@@ -319,6 +321,7 @@ export const PRODUCTS: Product[] = [
     ],
     inStock: true,
     stockCount: 38,
+    isBestseller: true,
   },
   {
     id: "p11",
@@ -475,3 +478,4 @@ export const HERO_IMAGES = {
   bulletJournal:  u("photo-1711030239034-d7dbf7f2794d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
   deskOrg:        u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
 };
+

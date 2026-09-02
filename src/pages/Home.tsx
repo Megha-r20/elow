@@ -186,35 +186,17 @@ export default function Home() {
       </section>
 
       {/* ── Best Sellers ─────────────────────────────────────────── */}
-      <section className="section" style={{ background: T.cream }}>
+      <section className="section" style={{ background: T.cream, overflow: "hidden" }}>
         <div className="container">
           <SectionHead eyebrow="Most Popular" title="Best Sellers" sub="The products our community can't stop buying." right={
             <button onClick={() => navigate("/shop?filter=bestseller")} className="btn btn-ghost btn-md">View all <Icons.ArrowRight /></button>
           } />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 14 }}>
+          <div className="hide-scroll" style={{ display: "flex", gap: 24, overflowX: "auto", paddingBottom: 32, paddingTop: 16, margin: "0 -32px", paddingLeft: 32, paddingRight: 32, scrollSnapType: "x mandatory" }}>
             {bestSellers.map((p, i) => (
-              <div key={p.id} className="product-card" onClick={() => navigate(`/product/${p.id}`)} style={{ cursor: "pointer" }}>
-                <div className="card-img" style={{ position: "relative", overflow: "hidden", height: 200, background: "#F5F0E8" }}>
-                  <img src={p.images[0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  <div style={{ position: "absolute", top: 10, left: 10 }}>
-                    <span style={{ background: "#1C1C1A", color: "#fff", fontSize: 9.5, fontWeight: 800, borderRadius: 6, padding: "3px 8px" }}>#{i + 1} BESTSELLER</span>
-                  </div>
-                </div>
-                <div style={{ padding: "12px 14px 16px", flex: 1, display: "flex", flexDirection: "column", gap: 5 }}>
-                  <p style={{ fontSize: 10.5, fontWeight: 600, color: T.teal, letterSpacing: "1px", textTransform: "uppercase" }}>{p.subcategory}</p>
-                  <p style={{ fontSize: 13, fontWeight: 600, color: T.txt, lineHeight: 1.38 }}>{p.name}</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                    <Stars n={Math.floor(p.rating)} size={11} />
-                    <span style={{ fontSize: 11, color: T.light }}>({p.reviewCount})</span>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 7, marginTop: 2 }}>
-                    <span style={{ fontSize: 15, fontWeight: 700 }}>&#8377;{p.price}</span>
-                    <span style={{ fontSize: 11, color: T.light, textDecoration: "line-through" }}>&#8377;{p.originalPrice}</span>
-                  </div>
-                  <button className="btn btn-dark btn-sm btn-full" style={{ marginTop: 4 }}
-                    onClick={e => { e.stopPropagation(); addItem(p); addToast(`${p.shortName} added to cart`); }}>
-                    Add to Cart
-                  </button>
+              <div key={p.id} style={{ flex: "0 0 280px", position: "relative", scrollSnapAlign: "start" }}>
+                <ProductCard product={p} />
+                <div style={{ position: "absolute", top: -14, left: -14, width: 44, height: 44, borderRadius: "50%", background: "#1C1C1A", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 800, border: "4px solid #FAFAF7", zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+                  {i + 1}
                 </div>
               </div>
             ))}
