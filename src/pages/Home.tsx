@@ -30,12 +30,13 @@ export default function Home() {
         {/* Background Video */}
         <video 
           autoPlay loop muted playsInline 
-          src="https://videos.pexels.com/video-files/6803850/6803850-uhd_2732_1440_25fps.mp4" 
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
-        />
+        >
+          <source src="/Background_video.mp4" type="video/mp4" />
+        </video>
         
-        {/* Subtle light overlay to ensure dark text remains readable */}
-        <div style={{ position: "absolute", inset: 0, background: "rgba(250, 250, 247, 0.88)", zIndex: 1 }} />
+        {/* Very subtle light overlay so video is completely visible */}
+        <div style={{ position: "absolute", inset: 0, background: "rgba(250, 250, 247, 0.45)", zIndex: 1 }} />
         {/* Gradient fade to blend into the next section */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 60%, rgba(250, 250, 247, 1) 100%)", zIndex: 1 }} />
 
@@ -46,12 +47,12 @@ export default function Home() {
             <span style={{ fontSize: 12, fontWeight: 600, color: T.teal, letterSpacing: "0.5px" }}>New collection — now live</span>
           </div>
 
-          <h1 className="font-display" style={{ fontSize: 72, fontWeight: 400, color: T.txt, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24, maxWidth: 800 }}>
+          <h1 className="font-display" style={{ fontSize: 72, fontWeight: 400, color: T.txt, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24, maxWidth: 800, textShadow: "0 2px 24px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,1)" }}>
             Beautiful <span style={{ color: T.teal, fontStyle: "italic" }}>Stationery</span><br />
             for Every Moment.
           </h1>
 
-          <p style={{ fontSize: 18, color: T.muted, lineHeight: 1.75, marginBottom: 40, maxWidth: 540 }}>
+          <p style={{ fontSize: 18, color: T.muted, lineHeight: 1.75, marginBottom: 40, maxWidth: 540, textShadow: "0 1px 12px rgba(255,255,255,0.9)" }}>
             Journals, pens, washi tapes, and more — thoughtfully curated for students, journalers, and everyday creatives across India.
           </p>
 
