@@ -63,27 +63,6 @@ export function ProductCard({ product, compact = false }: { product: Product; co
           <Icons.Heart filled={wished} />
         </button>
 
-        {/* Quick add */}
-        <div className="card-actions" style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 12px 12px" }}>
-          <button
-            onClick={handleAdd}
-            disabled={!product.inStock}
-            style={{
-              width: "100%", border: "none", borderRadius: 10, padding: "10px 0",
-              background: inCart ? "#1a7a56" : "rgba(28,28,26,0.88)", color: "#fff",
-              fontSize: 11.5, fontWeight: 700, cursor: product.inStock ? "pointer" : "not-allowed",
-              fontFamily: "inherit", letterSpacing: "0.5px", backdropFilter: "blur(6px)",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
-              transition: "background 0.15s",
-            }}
-          >
-            {inCart ? (
-              <><Icons.Check /> In Cart</>
-            ) : product.inStock ? (
-              "+ Quick Add"
-            ) : "Out of Stock"}
-          </button>
-        </div>
       </div>
 
       {/* Info area */}
@@ -102,16 +81,14 @@ export function ProductCard({ product, compact = false }: { product: Product; co
         </div>
         <Price price={product.price} original={product.originalPrice} size="sm" />
 
-        {!compact && (
-          <button
-            onClick={handleAdd}
-            disabled={!product.inStock}
-            className="btn btn-dark btn-sm btn-full"
-            style={{ marginTop: 4 }}
-          >
-            {inCart ? "✓ In Cart" : product.inStock ? "Add to Cart" : "Out of Stock"}
-          </button>
-        )}
+        <button
+          onClick={handleAdd}
+          disabled={!product.inStock}
+          className="btn btn-dark btn-sm btn-full"
+          style={{ marginTop: 4 }}
+        >
+          {inCart ? "✓ In Cart" : product.inStock ? "Add to Cart" : "Out of Stock"}
+        </button>
       </div>
     </div>
   );
