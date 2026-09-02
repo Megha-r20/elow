@@ -22,7 +22,23 @@ export default function Layout() {
   const [searchQ,    setSearchQ]    = useState("");
   const [mobileNav,  setMobileNav]  = useState(false);
 
-  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + "/");
+  const isActive = (path: string) => {
+    const [p, q] = path.split("?");
+    if (location.pathname !== p && !location.pathname.startsWith(p + "/")) return false;
+    
+    const currentSearch = new URLSearchParams(location.search);
+    if (!q) {
+      // For links like /shop, only active if no cat or filter is selected
+      return !currentSearch.has("cat") && !currentSearch.has("filter");
+    }
+    
+    // For links with queries, ensure they match exactly
+    const linkSearch = new URLSearchParams(q);
+    for (const [k, v] of linkSearch.entries()) {
+      if (currentSearch.get(k) !== v) return false;
+    }
+    return true;
+  };
 
   const navLinks = [
     { label: "Shop",              path: "/shop",  mega: true  },
@@ -109,7 +125,7 @@ export default function Layout() {
                 </div>
               ) : (
                 <a key={link.label} href={link.path}
-                  className={`nav-link${isActive(link.path.split("?")[0]) ? " active" : ""}`}
+                  className={`nav-link${isActive(link.path) ? " active" : ""}`}
                   style={link.dim ? { color: "#8C8880", fontWeight: 400 } : {}}
                 >
                   {link.label}
