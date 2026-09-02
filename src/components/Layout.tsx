@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router";
-import { useCart, useDrawer } from "../hooks";
+import { useCart, useDrawer, useToast } from "../hooks";
 import { CartDrawer } from "./CartDrawer";
 import { Icons } from "./ui";
 import { CATEGORIES } from "../data";
@@ -15,6 +15,7 @@ const ANNOUNCE = [
 export default function Layout() {
   const { count }           = useCart();
   const { openCart }        = useDrawer();
+  const { addToast }        = useToast();
   const navigate            = useNavigate();
   const location            = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -122,10 +123,10 @@ export default function Layout() {
             <button className="icon-btn" onClick={() => setSearchOpen(o => !o)} title="Search">
               <Icons.Search />
             </button>
-            <button className="icon-btn hide-mobile" title="Account">
+            <button className="icon-btn hide-mobile" title="Account" onClick={() => addToast("Account portal coming soon", "info")}>
               <Icons.User />
             </button>
-            <button className="icon-btn hide-mobile" title="Wishlist">
+            <button className="icon-btn hide-mobile" title="Wishlist" onClick={() => navigate("/shop?filter=wishlist")}>
               <Icons.Heart />
             </button>
             <button

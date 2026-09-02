@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router";
 import { SectionHead, Icons, Breadcrumb } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { PRODUCTS, CATEGORIES, SORT_OPTIONS, PRICE_RANGES } from "../data";
+import { useWishlist } from "../hooks";
 
 const T = {
   border: "#EDE8E1", txt: "#1C1C1A", muted: "#5C5C58", light: "#8C8880",
@@ -12,6 +13,7 @@ const T = {
 export default function Shop() {
   const [params]   = useSearchParams();
   const navigate   = useNavigate();
+  const wishlist   = useWishlist();
 
   const initCat = params.get("cat") ?? "all";
   const initQ   = params.get("q") ?? "";
@@ -22,6 +24,7 @@ export default function Shop() {
   const [onlyInStock,  setOnlyInStock]  = useState(false);
   const [onlyNew,      setOnlyNew]      = useState(params.get("filter") === "new");
   const [onlyBest,     setOnlyBest]     = useState(params.get("filter") === "bestseller");
+  const [onlyWishlist, setOnlyWishlist] = useState(params.get("filter") === "wishlist");
   const [searchQ,      setSearchQ]      = useState(initQ);
   const [gridView,     setGridView]     = useState<3 | 4>(4);
   const [showFilters,  setShowFilters]  = useState(true);
@@ -47,6 +50,7 @@ export default function Shop() {
     if (onlyInStock) list = list.filter(p => p.inStock);
     if (onlyNew)     list = list.filter(p => p.isNew);
     if (onlyBest)    list = list.filter(p => p.isBestseller);
+    if (onlyWishlist)list = list.filter(p => wishlist.has(p.id));
 
     // Price range
     if (priceRange !== null) {
@@ -68,14 +72,15 @@ export default function Shop() {
 
   const activeFilters = [
     ...(activeCat !== "all" ? [{ label: CATEGORIES.find(c => c.id === activeCat)?.label ?? activeCat, clear: () => setActiveCat("all") }] : []),
-    ...(onlyNew   ? [{ label: "New Arrivals",  clear: () => setOnlyNew(false)   }] : []),
-    ...(onlyBest  ? [{ label: "Best Sellers",  clear: () => setOnlyBest(false)  }] : []),
-    ...(onlyInStock ? [{ label: "In Stock",    clear: () => setOnlyInStock(false) }] : []),
+    ...(onlyNew      ? [{ label: "New Arrivals",  clear: () => setOnlyNew(false)      }] : []),
+    ...(onlyBest     ? [{ label: "Best Sellers",  clear: () => setOnlyBest(false)     }] : []),
+    ...(onlyWishlist ? [{ label: "My Wishlist",   clear: () => setOnlyWishlist(false) }] : []),
+    ...(onlyInStock  ? [{ label: "In Stock",      clear: () => setOnlyInStock(false)  }] : []),
     ...(priceRange !== null ? [{ label: PRICE_RANGES[priceRange].label, clear: () => setPriceRange(null) }] : []),
     ...(searchQ ? [{ label: `"${searchQ}"`, clear: () => setSearchQ("") }] : []),
   ];
 
-  const clearAll = () => { setActiveCat("all"); setOnlyNew(false); setOnlyBest(false); setOnlyInStock(false); setPriceRange(null); setSearchQ(""); };
+  const clearAll = () => { setActiveCat("all"); setOnlyNew(false); setOnlyBest(false); setOnlyWishlist(false); setOnlyInStock(false); setPriceRange(null); setSearchQ(""); };
 
   const currentCat = CATEGORIES.find(c => c.id === activeCat);
 
@@ -189,9 +194,10 @@ export default function Shop() {
                   <p style={{ fontSize: 10.5, fontWeight: 700, color: T.light, letterSpacing: "2px", marginBottom: 14 }}>FILTER BY</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {[
-                      { label: "New Arrivals",  v: onlyNew,     set: setOnlyNew     },
-                      { label: "Best Sellers",  v: onlyBest,    set: setOnlyBest    },
-                      { label: "In Stock Only", v: onlyInStock, set: setOnlyInStock },
+                      { label: "New Arrivals",  v: onlyNew,      set: setOnlyNew      },
+                      { label: "Best Sellers",  v: onlyBest,     set: setOnlyBest     },
+                      { label: "My Wishlist",   v: onlyWishlist, set: setOnlyWishlist },
+                      { label: "In Stock Only", v: onlyInStock,  set: setOnlyInStock  },
                     ].map(f => (
                       <label key={f.label} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", cursor: "pointer", borderRadius: 9, transition: "background 0.14s", fontSize: 13.5, fontWeight: f.v ? 700 : 500, color: f.v ? T.txt : T.muted }}
                         onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = T.sand)}
