@@ -25,68 +25,58 @@ export default function Home() {
   return (
     <div>
       {/* ── Hero ────────────────────────────────────────────────── */}
-      <section style={{ background: "linear-gradient(135deg, #FAFAF7 0%, #F5F0E8 50%, #EDF9F8 100%)", padding: "80px 0 72px", overflow: "hidden", position: "relative" }}>
-        {/* Decorative circles */}
-        <div style={{ position: "absolute", top: -60, right: -60, width: 320, height: 320, borderRadius: "50%", background: "rgba(61,189,181,0.06)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: -80, left: -40, width: 240, height: 240, borderRadius: "50%", background: "rgba(61,189,181,0.04)", pointerEvents: "none" }} />
+      <section style={{ position: "relative", minHeight: "85vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", padding: "120px 0 80px" }}>
+        
+        {/* Background Video */}
+        <video 
+          autoPlay loop muted playsInline 
+          src="https://videos.pexels.com/video-files/6803850/6803850-uhd_2732_1440_25fps.mp4" 
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
+        />
+        
+        {/* Subtle light overlay to ensure dark text remains readable */}
+        <div style={{ position: "absolute", inset: 0, background: "rgba(250, 250, 247, 0.88)", zIndex: 1 }} />
+        {/* Gradient fade to blend into the next section */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 60%, rgba(250, 250, 247, 1) 100%)", zIndex: 1 }} />
 
-        <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
-            {/* Left: copy */}
-            <div>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "rgba(61,189,181,0.10)", border: "1px solid rgba(61,189,181,0.25)", borderRadius: 999, padding: "6px 16px", marginBottom: 28 }}>
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: T.teal, display: "inline-block" }} />
-                <span style={{ fontSize: 11.5, fontWeight: 600, color: T.teal, letterSpacing: "0.5px" }}>New collection — now live</span>
+        <div className="container" style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+          
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "rgba(61,189,181,0.10)", border: "1px solid rgba(61,189,181,0.25)", borderRadius: 999, padding: "6px 16px", marginBottom: 32 }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: T.teal, display: "inline-block" }} />
+            <span style={{ fontSize: 12, fontWeight: 600, color: T.teal, letterSpacing: "0.5px" }}>New collection — now live</span>
+          </div>
+
+          <h1 className="font-display" style={{ fontSize: 72, fontWeight: 400, color: T.txt, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24, maxWidth: 800 }}>
+            Beautiful <span style={{ color: T.teal, fontStyle: "italic" }}>Stationery</span><br />
+            for Every Moment.
+          </h1>
+
+          <p style={{ fontSize: 18, color: T.muted, lineHeight: 1.75, marginBottom: 40, maxWidth: 540 }}>
+            Journals, pens, washi tapes, and more — thoughtfully curated for students, journalers, and everyday creatives across India.
+          </p>
+
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center", marginBottom: 64 }}>
+            <button className="btn btn-dark btn-xl" onClick={() => navigate("/shop")}>
+              Shop Now <Icons.ArrowRight />
+            </button>
+            <button className="btn btn-ghost btn-xl" onClick={() => navigate("/shop?cat=journals")} style={{ background: "rgba(255,255,255,0.5)", border: `1px solid rgba(0,0,0,0.05)` }}>
+              Explore Journals
+            </button>
+          </div>
+
+          {/* Social proof */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 48, paddingTop: 36, borderTop: `1px solid rgba(28,28,26,0.1)`, flexWrap: "wrap" }}>
+            {[
+              { n: "10K+",  l: "Happy customers" },
+              { n: "4.8★",  l: "Average rating" },
+              { n: "200+",  l: "Products available" },
+              { n: "Free",  l: "Shipping on ₹999+" },
+            ].map(s => (
+              <div key={s.n} style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 24, fontWeight: 800, color: T.txt, lineHeight: 1 }}>{s.n}</div>
+                <div style={{ fontSize: 12.5, color: T.light, marginTop: 8, fontWeight: 500 }}>{s.l}</div>
               </div>
-
-              <h1 className="font-display" style={{ fontSize: 64, fontWeight: 400, color: T.txt, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
-                Beautiful<br />
-                <span style={{ color: T.teal, fontStyle: "italic" }}>Stationery</span><br />
-                for Every Moment.
-              </h1>
-
-              <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.75, marginBottom: 36, maxWidth: 400 }}>
-                Journals, pens, washi tapes, and more — thoughtfully curated for students, journalers, and everyday creatives across India.
-              </p>
-
-              <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 48 }}>
-                <button className="btn btn-dark btn-xl" onClick={() => navigate("/shop")}>
-                  Shop Now <Icons.ArrowRight />
-                </button>
-                <button className="btn btn-ghost btn-xl" onClick={() => navigate("/shop?cat=journals")}>
-                  Explore Journals
-                </button>
-              </div>
-
-              {/* Social proof */}
-              <div style={{ display: "flex", alignItems: "center", gap: 20, paddingTop: 28, borderTop: `1px solid ${T.border}`, flexWrap: "wrap" }}>
-                {[
-                  { n: "10K+",  l: "Happy customers" },
-                  { n: "4.8★",  l: "Average rating" },
-                  { n: "200+",  l: "Products available" },
-                  { n: "Free",  l: "Shipping on ₹999+" },
-                ].map(s => (
-                  <div key={s.n}>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: T.txt, lineHeight: 1 }}>{s.n}</div>
-                    <div style={{ fontSize: 11.5, color: T.light, marginTop: 3, fontWeight: 500 }}>{s.l}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right: image mosaic */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, height: 500 }}>
-              {[
-                { img: HERO_IMAGES.journalCollage, h: 300, align: "start" },
-                { img: HERO_IMAGES.washiRolls,     h: 220, align: "end"   },
-                { img: HERO_IMAGES.pensPouch,       h: 220, align: "start" },
-                { img: HERO_IMAGES.deskPinks,       h: 300, align: "end"   },
-              ].map((item, i) => (
-                <div key={i} style={{ borderRadius: 20, overflow: "hidden", height: item.h, alignSelf: item.align as "start"|"end", boxShadow: "0 8px 32px rgba(0,0,0,0.10)" }}>
-                  <img src={item.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -119,31 +109,18 @@ export default function Home() {
           <SectionHead eyebrow="Browse" title="Shop by Category" sub="Find exactly what you need — from journals to desk accessories." right={
             <button onClick={() => navigate("/shop")} className="btn btn-ghost btn-md">View all <Icons.ArrowRight /></button>
           } />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gridAutoRows: "240px", gap: 16 }}>
-            {CATEGORIES.map((cat, i) => {
-              // Create a bento box layout for 7 items
-              let colSpan = "span 1";
-              if (i === 0 || i === 1) colSpan = "span 2"; // Journals, Pens
-              if (i === 4) colSpan = "span 2"; // Planners
-              if (i === 5 || i === 6) colSpan = "span 2"; // Notebooks, Desk Accessories
-              
-              return (
-                <button key={cat.id} className="hover-card" onClick={() => navigate(`/shop?cat=${cat.id}`)} style={{ gridColumn: colSpan, border: "none", background: "none", cursor: "pointer", padding: 0, textAlign: "left", borderRadius: 24, overflow: "hidden", position: "relative", width: "100%", height: "100%", display: "block" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 24 }}>
+            {CATEGORIES.map(cat => (
+              <button key={cat.id} className="hover-card" onClick={() => navigate(`/shop?cat=${cat.id}`)} style={{ border: "none", background: "none", cursor: "pointer", padding: 0, textAlign: "center", display: "flex", flexDirection: "column" }}>
+                <div style={{ borderRadius: 20, overflow: "hidden", aspectRatio: "1/1", width: "100%", position: "relative", marginBottom: 16, border: "1px solid rgba(0,0,0,0.04)", boxShadow: "0 4px 12px rgba(0,0,0,0.03)", background: cat.color }}>
                   <img src={cat.image} alt={cat.label} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(28,28,26,0.85) 0%, rgba(28,28,26,0.2) 40%, transparent 100%)", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 24 }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <div>
-                        <h3 className="font-display" style={{ color: "#fff", fontSize: 28, lineHeight: 1.1, marginBottom: 4 }}>{cat.label}</h3>
-                        <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 13, fontWeight: 500 }}>{cat.productCount} items</p>
-                      </div>
-                      <div style={{ width: 40, height: 40, borderRadius: "50%", background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
-                        <Icons.ArrowRight />
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+                </div>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: T.txt, letterSpacing: "0.2px", lineHeight: 1.3 }}>{cat.label}</p>
+                  <p style={{ fontSize: 11.5, color: T.light, marginTop: 4 }}>{cat.productCount} items</p>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </section>
