@@ -254,7 +254,7 @@ export default function Home() {
 
       {/* ── Editorial quote banner ───────────────────────────────── */}
       <section style={{ position: "relative", overflow: "hidden", height: 260 }}>
-        <img src={HERO_IMAGES.writing3} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+        <img src="/quote-bg.png" alt="Aesthetic journaling" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 35%" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(105deg, rgba(28,28,26,0.82) 0%, rgba(28,28,26,0.55) 55%, transparent 80%)" }} />
         <div className="container" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center" }}>
           <div>
