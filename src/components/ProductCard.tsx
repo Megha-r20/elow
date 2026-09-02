@@ -6,7 +6,17 @@ import { useWishlist } from "../hooks";
 import { useToast } from "../hooks";
 import type { Product } from "../data";
 
-export function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
+export function ProductCard({ 
+  product, 
+  compact = false,
+  badgeOverride,
+  badgeVariantOverride
+}: { 
+  product: Product; 
+  compact?: boolean;
+  badgeOverride?: string;
+  badgeVariantOverride?: "teal" | "dark" | "yellow" | "red";
+}) {
   const navigate  = useNavigate();
   const { addItem, isInCart } = useCart();
   const { has, toggle }       = useWishlist();
@@ -29,6 +39,9 @@ export function ProductCard({ product, compact = false }: { product: Product; co
     addToast(wished ? "Removed from wishlist" : "Saved to wishlist", "info");
   };
 
+  const finalBadge = badgeOverride || product.badge;
+  const finalBadgeVariant = badgeVariantOverride || product.badgeVariant || "teal";
+
   return (
     <div
       className="product-card"
@@ -45,8 +58,8 @@ export function ProductCard({ product, compact = false }: { product: Product; co
 
         {/* Badges */}
         <div style={{ position: "absolute", top: 12, left: 12, display: "flex", flexDirection: "column", gap: 5 }}>
-          {product.badge && (
-            <Badge label={product.badge} variant={product.badgeVariant ?? "teal"} />
+          {finalBadge && (
+            <Badge label={finalBadge} variant={finalBadgeVariant} />
           )}
           {!product.inStock && (
             <Badge label="OUT OF STOCK" variant="dark" />
