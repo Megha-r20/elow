@@ -193,7 +193,7 @@ export default function Home() {
           } />
           <div className="hide-scroll" style={{ display: "flex", gap: 24, overflowX: "auto", paddingBottom: 32, paddingTop: 16, margin: "0 -32px", paddingLeft: 32, paddingRight: 32, scrollSnapType: "x mandatory" }}>
             {bestSellers.map((p, i) => (
-              <div key={p.id} style={{ flex: "0 0 240px", position: "relative", scrollSnapAlign: "start" }}>
+              <div key={p.id} style={{ flex: "0 0 240px", display: "flex", flexDirection: "column", position: "relative", scrollSnapAlign: "start" }}>
                 <ProductCard product={p} compact={true} />
                 <div style={{ position: "absolute", top: -14, left: -14, width: 44, height: 44, borderRadius: "50%", background: "#1C1C1A", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 800, border: "4px solid #FAFAF7", zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
                   {i + 1}

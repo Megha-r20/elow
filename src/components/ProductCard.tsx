@@ -33,7 +33,7 @@ export function ProductCard({ product, compact = false }: { product: Product; co
     <div
       className="product-card"
       onClick={() => navigate(`/product/${product.id}`)}
-      style={{ flex: "0 0 auto" }}
+      style={{ height: "100%" }}
     >
       {/* Image area */}
       <div className="card-img" style={{ position: "relative", overflow: "hidden", height: imgH, background: "#F5F0E8", flexShrink: 0 }}>
@@ -85,7 +85,7 @@ export function ProductCard({ product, compact = false }: { product: Product; co
           onClick={handleAdd}
           disabled={!product.inStock}
           className="btn btn-dark btn-sm btn-full"
-          style={{ marginTop: 4 }}
+          style={{ marginTop: "auto" }}
         >
           {inCart ? "✓ In Cart" : product.inStock ? "Add to Cart" : "Out of Stock"}
         </button>
