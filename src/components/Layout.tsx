@@ -27,9 +27,10 @@ export default function Layout() {
     { label: "Shop",              path: "/shop",  mega: true  },
     { label: "New Arrivals",      path: "/shop?filter=new" },
     { label: "Journaling",        path: "/shop?cat=journals" },
-    { label: "Study Essentials",  path: "/shop?cat=pens" },
+    { label: "Study",             path: "/shop?cat=pens" },
+    { label: "Craft",             path: "/shop?cat=stickers" },
     { label: "Collections",       path: "/shop" },
-    { label: "Blog",              path: "/blog" },
+    { label: "Blog",              path: "/blog",  dim: true },
   ];
 
   return (
@@ -107,7 +108,9 @@ export default function Layout() {
                 </div>
               ) : (
                 <a key={link.label} href={link.path}
-                  className={`nav-link${isActive(link.path.split("?")[0]) ? " active" : ""}`}>
+                  className={`nav-link${isActive(link.path.split("?")[0]) ? " active" : ""}`}
+                  style={link.dim ? { color: "#8C8880", fontWeight: 400 } : {}}
+                >
                   {link.label}
                 </a>
               )
