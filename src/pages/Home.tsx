@@ -199,35 +199,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Editorial split: The Journaling Edit ────────────────── */}
-      <section className="section" style={{ background: T.sand }}>
+      {/* ── Editorial Banner: For the ones who write ────────────────────────────────────────────── */}
+      <section className="section" style={{ background: T.sand, padding: "80px 0" }}>
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderRadius: 24, overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.08)" }}>
-            {/* Image */}
-            <div style={{ position: "relative", height: 440 }}>
-              <img src={HERO_IMAGES.writing1} alt="The Journaling Edit" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 50%, rgba(245,240,232,0.18) 100%)" }} />
-            </div>
-            {/* Copy */}
-            <div style={{ background: "#fff", padding: "64px 56px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-                <span style={{ display: "inline-block", width: 20, height: 1.5, background: T.teal }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: T.teal, letterSpacing: "2px" }}>FEATURED COLLECTION</span>
-              </div>
-              <h2 className="font-display" style={{ fontSize: 42, color: T.txt, lineHeight: 1.12, marginBottom: 20 }}>
-                The Journaling Edit
-              </h2>
-              <p style={{ fontSize: 14.5, color: T.muted, lineHeight: 1.78, marginBottom: 36 }}>
-                Everything you need to build a journaling habit that sticks. Dotted journals, smooth gel pens, decorative washi tapes, and more — curated for beginners and seasoned journalers alike.
+          <div style={{ position: "relative", width: "100%", height: 480, borderRadius: 24, overflow: "hidden", boxShadow: "0 12px 40px rgba(0,0,0,0.15)" }}>
+            <img src={HERO_IMAGES.cozySetup} alt="Journaling aesthetic" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            
+            {/* Dark moody overlay to make white text pop and match the aesthetic */}
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(28,28,26,0.85) 0%, rgba(28,28,26,0.4) 50%, rgba(28,28,26,0.1) 100%)" }} />
+            
+            <div style={{ position: "absolute", inset: 0, padding: "0 80px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <p style={{ color: "#fff", fontSize: 12, fontWeight: 700, letterSpacing: "3px", textTransform: "uppercase", marginBottom: 20 }}>
+                For the ones who write
               </p>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 36 }}>
-                {["Journals", "Pens", "Washi Tape", "Stickers"].map(t => (
-                  <span key={t} style={{ background: T.sand, border: `1px solid ${T.border}`, borderRadius: 999, padding: "6px 16px", fontSize: 12.5, fontWeight: 600, color: T.txt }}>{t}</span>
-                ))}
-              </div>
-              <button className="btn btn-dark btn-lg" onClick={() => navigate("/shop?cat=journals")} style={{ alignSelf: "flex-start" }}>
-                Shop the Edit <Icons.ArrowRight />
-              </button>
+              <h2 className="font-display" style={{ color: "#fff", fontSize: 56, lineHeight: 1.15, fontWeight: 400, fontStyle: "italic", maxWidth: 600 }}>
+                "Write it down.<br />Make it yours."
+              </h2>
             </div>
           </div>
         </div>
