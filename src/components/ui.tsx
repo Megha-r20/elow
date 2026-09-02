@@ -184,7 +184,7 @@ export function Price({ price, original, size = "md" }: { price: number; origina
       {original && original > price && (
         <>
           <span style={{ fontSize: s.og, color: "#B8B4AE", textDecoration: "line-through" }}>&#8377;{original.toLocaleString("en-IN")}</span>
-          <span style={{ fontSize: s.og, fontWeight: 700, color: "#3dbdb5" }}>{disc}% off</span>
+          <span style={{ fontSize: s.og, fontWeight: 700, color: "#3dbdb5" }}>{disc}% OFF</span>
         </>
       )}
     </div>

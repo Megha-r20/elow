@@ -4,6 +4,7 @@ import { Icons } from "./ui";
 import { useCart } from "../hooks";
 import { useWishlist } from "../hooks";
 import { useToast } from "../hooks";
+import { ShoppingBag } from "lucide-react";
 import type { Product } from "../data";
 
 export function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
@@ -67,7 +68,7 @@ export function ProductCard({ product, compact = false }: { product: Product; co
 
       {/* Info area */}
       <div style={{ padding: compact ? "12px 14px 14px" : "14px 16px 18px", display: "flex", flexDirection: "column", gap: 6, flex: 1 }}>
-        <p style={{ fontSize: 10.5, fontWeight: 600, color: "#3dbdb5", letterSpacing: "1px", textTransform: "uppercase" }}>
+        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#3dbdb5", letterSpacing: "1px", textTransform: "uppercase" }}>
           {product.subcategory}
         </p>
         <h3 style={{ fontSize: compact ? 13 : 14, fontWeight: 600, color: "#1C1C1A", lineHeight: 1.38, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
@@ -87,7 +88,7 @@ export function ProductCard({ product, compact = false }: { product: Product; co
           className="btn btn-dark btn-sm btn-full"
           style={{ marginTop: "auto" }}
         >
-          {inCart ? "✓ In Cart" : product.inStock ? "Add to Cart" : "Out of Stock"}
+          {inCart ? "✔ In Cart" : product.inStock ? <><ShoppingBag size={14} strokeWidth={2.5} /> Add to Cart</> : "Out of Stock"}
         </button>
       </div>
     </div>

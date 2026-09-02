@@ -34,12 +34,13 @@ body {
 /* ── Product card ────────────────────────────────────────────────── */
 .product-card {
   background: #fff; border-radius: 16px; overflow: hidden;
-  border: 1px solid #EDE8E1;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
   transition: box-shadow 0.22s ease, transform 0.22s ease;
   cursor: pointer; display: flex; flex-direction: column;
 }
 .product-card:hover {
-  box-shadow: 0 12px 40px rgba(0,0,0,0.09);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
   transform: translateY(-4px);
 }
 .product-card .card-img img { transition: transform 0.44s cubic-bezier(.22,.61,.36,1); }
@@ -149,8 +150,8 @@ select.field { appearance: none; cursor: pointer; background-image: url("data:im
 /* ── Badge ───────────────────────────────────────────────────────── */
 .badge {
   display: inline-flex; align-items: center;
-  font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
-  border-radius: 6px; padding: 3px 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  border-radius: 4px; padding: 4px 6px;
 }
 
 /* ── Chip / filter pill ──────────────────────────────────────────── */
