@@ -41,7 +41,7 @@ export default function Layout() {
   };
 
   const navLinks: { label: string; path: string; mega?: boolean; dim?: boolean }[] = [
-    { label: "SHOP+",   path: "/shop", mega: true },
+    { label: "SHOP", path: "/shop" },
     { label: "NEW IN",  path: "/shop?filter=new", dim: true },
     { label: "GIFTING", path: "/shop?cat=gifting" },
   ];
