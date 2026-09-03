@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useState, useCallback, type ReactNode } from "react";
-import type { Product } from "./data";
+import type { Product } from "../data";
 
 /* ─── Cart ─────────────────────────────────────────────────────── */
 export type CartItem = {
