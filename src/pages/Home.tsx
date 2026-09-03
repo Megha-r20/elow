@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { SectionHead, Icons, Badge, Stars, Divider } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
-import { Book, PenTool, Paperclip, Star, Calendar, Notebook, PenBox } from "lucide-react";
+import { Book, PenTool, Paperclip, Star, Calendar, Notebook, PenBox, Gift } from "lucide-react";
 import { PRODUCTS, CATEGORIES, HERO_IMAGES, getFeatured, getBestSellers } from "../data";
 import { useCart, useToast } from "../hooks";
 
@@ -116,7 +116,7 @@ export default function Home() {
             <button onClick={() => navigate("/shop")} className="btn btn-ghost btn-md" style={{ border: `1px solid ${T.border}` }}>View all <Icons.ArrowRight /></button>
           } />
           
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: 16 }}>
             {CATEGORIES.map(cat => {
               // Map category ID to lucide icon
               const IconComp = {
@@ -126,7 +126,8 @@ export default function Home() {
                 stickers: Star,
                 planners: Calendar,
                 notebooks: Notebook,
-                desk: PenBox
+                desk: PenBox,
+                gifting: Gift
               }[cat.id] || Book;
 
               return (
