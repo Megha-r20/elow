@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router";
 import { SectionHead, Icons, Breadcrumb } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
@@ -28,6 +28,14 @@ export default function Shop() {
   const [searchQ,      setSearchQ]      = useState(initQ);
   const [gridView,     setGridView]     = useState<3 | 4>(4);
   const [showFilters,  setShowFilters]  = useState(true);
+
+  useEffect(() => {
+    setActiveCat(params.get("cat") ?? "all");
+    setOnlyNew(params.get("filter") === "new");
+    setOnlyBest(params.get("filter") === "bestseller");
+    setOnlyWishlist(params.get("filter") === "wishlist");
+    setSearchQ(params.get("q") ?? "");
+  }, [params]);
 
   const filtered = useMemo(() => {
     let list = [...PRODUCTS];
@@ -68,7 +76,7 @@ export default function Shop() {
     }
 
     return list;
-  }, [activeCat, sort, priceRange, onlyInStock, onlyNew, onlyBest, searchQ]);
+  }, [activeCat, sort, priceRange, onlyInStock, onlyNew, onlyBest, onlyWishlist, searchQ, wishlist.ids]);
 
   const activeFilters = [
     ...(activeCat !== "all" ? [{ label: CATEGORIES.find(c => c.id === activeCat)?.label ?? activeCat, clear: () => setActiveCat("all") }] : []),

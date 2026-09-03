@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useReducer, useState, useCallback, type ReactNode , useEffect} from "react";
 import type { Product } from "../data";
 
 /* ─── Cart ─────────────────────────────────────────────────────── */
@@ -59,7 +59,18 @@ type CartCtx = {
 const CartContext = createContext<CartCtx | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] });
+    const [state, dispatch] = useReducer(cartReducer, { items: [] }, (initial) => {
+    try {
+      const stored = localStorage.getItem("cart");
+      return stored ? JSON.parse(stored) : initial;
+    } catch {
+      return initial;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(state));
+  }, [state]);
 
   const addItem    = useCallback((product: Product, qty = 1) => dispatch({ type: "ADD", product, qty }), []);
   const removeItem = useCallback((id: string) => dispatch({ type: "REMOVE", id }), []);
@@ -93,7 +104,18 @@ type WishCtx = {
 const WishContext = createContext<WishCtx | null>(null);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
-  const [ids, setIds] = useState<Set<string>>(new Set());
+    const [ids, setIds] = useState<Set<string>>(() => {
+    try {
+      const stored = localStorage.getItem("wishlist");
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("wishlist", JSON.stringify(Array.from(ids)));
+  }, [ids]);
   const toggle = useCallback((id: string) =>
     setIds(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; }), []);
   const has = useCallback((id: string) => ids.has(id), [ids]);
