@@ -35,7 +35,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.1,
     reviewCount: 108,
     images: [
-      u("1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/15937294/pexels-photo-15937294.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/7657387/pexels-photo-7657387.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -95,7 +95,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/6340707/pexels-photo-6340707.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/30683621/pexels-photo-30683621.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["stickers", "aesthetic", "eco-friendly", "pinterest", "stationery"],
     badge: "NEW",
@@ -179,8 +179,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 105,
     images: [
       "https://images.pexels.com/photos/5426052/pexels-photo-5426052.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1567855354833-ac2c4f967b0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1725953386283-d918bb2ac9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1567855354833-ac2c4f967b0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1725953386283-d918bb2ac9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["desk", "aesthetic", "minimalist", "pinterest", "stationery"],
     isNew: false,
@@ -206,8 +206,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 396,
     images: [
       "https://images.pexels.com/photos/36376224/pexels-photo-36376224.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1774878520736-6cacbcce1b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1774878520736-6cacbcce1b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["journals", "aesthetic", "luxury", "pinterest", "stationery"],
     isNew: false,
@@ -232,7 +232,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 22,
     images: [
-      u("1772890227578-50e68afb31c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1772890227578-50e68afb31c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/30683622/pexels-photo-30683622.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/6195790/pexels-photo-6195790.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -260,7 +260,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 277,
     images: [
       "https://images.pexels.com/photos/6195790/pexels-photo-6195790.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/6969293/pexels-photo-6969293.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "handcrafted", "pinterest", "stationery"],
@@ -317,9 +317,9 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 378,
     images: [
-      u("1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/38840591/pexels-photo-38840591.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["planners", "aesthetic", "colorful", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -431,9 +431,9 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 260,
     images: [
-      u("1762318897771-f68b31c0d11f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1762318897771-f68b31c0d11f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["pens", "aesthetic", "aesthetic", "pinterest", "stationery"],
     isNew: false,
@@ -489,7 +489,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/29997001/pexels-photo-29997001.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774878520736-6cacbcce1b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1774878520736-6cacbcce1b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["stickers", "aesthetic", "everyday", "pinterest", "stationery"],
     badge: "NEW",
@@ -517,7 +517,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 267,
     images: [
       "https://images.pexels.com/photos/8986081/pexels-photo-8986081.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/30355544/pexels-photo-30355544.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "vintage", "pinterest", "stationery"],
@@ -545,9 +545,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.1,
     reviewCount: 248,
     images: [
-      u("1700085663963-bbe0f7789b4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1772890227578-50e68afb31c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1700085663963-bbe0f7789b4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1772890227578-50e68afb31c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["notebooks", "aesthetic", "everyday", "pinterest", "stationery"],
     isNew: false,
@@ -601,7 +601,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.1,
     reviewCount: 238,
     images: [
-      u("1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/7657391/pexels-photo-7657391.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/12914430/pexels-photo-12914430.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -657,9 +657,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.7,
     reviewCount: 257,
     images: [
-      u("1711030239034-d7dbf7f2794d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1711030239034-d7dbf7f2794d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/17042503/pexels-photo-17042503.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["washi", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -685,8 +685,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 331,
     images: [
       "https://images.pexels.com/photos/37401695/pexels-photo-37401695.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["stickers", "aesthetic", "minimalist", "pinterest", "stationery"],
     isNew: false,
@@ -711,9 +711,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.2,
     reviewCount: 151,
     images: [
-      u("1760720962384-e470ee773c1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1760720962384-e470ee773c1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/4925688/pexels-photo-4925688.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774878488110-a1da46f5dc5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1774878488110-a1da46f5dc5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["planners", "aesthetic", "luxury", "pinterest", "stationery"],
     isNew: false,
@@ -795,7 +795,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 109,
     images: [
       "https://images.pexels.com/photos/15937294/pexels-photo-15937294.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/16605273/pexels-photo-16605273.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "colorful", "pinterest", "stationery"],
@@ -824,8 +824,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 84,
     images: [
       "https://images.pexels.com/photos/30683621/pexels-photo-30683621.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1518082049942-62a4e31b18d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1518082049942-62a4e31b18d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["pens", "aesthetic", "minimalist", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -852,9 +852,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.1,
     reviewCount: 359,
     images: [
-      u("1750814019023-4e43037f5075?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1750814019023-4e43037f5075?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1601311911926-dbdae16e54c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1601311911926-dbdae16e54c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["washi", "aesthetic", "ultimate", "pinterest", "gift"],
     isNew: false,
@@ -879,9 +879,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.4,
     reviewCount: 84,
     images: [
-      u("1725953386283-d918bb2ac9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1731575131336-9756ecd34dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1774878520736-6cacbcce1b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1725953386283-d918bb2ac9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1731575131336-9756ecd34dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1774878520736-6cacbcce1b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["stickers", "aesthetic", "aesthetic", "pinterest", "stationery"],
     isNew: false,
@@ -935,7 +935,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.7,
     reviewCount: 352,
     images: [
-      u("1579017308347-e53e0d2fc5e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1579017308347-e53e0d2fc5e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/9664160/pexels-photo-9664160.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/17042501/pexels-photo-17042501.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -964,8 +964,8 @@ export const PRODUCTS: Product[] = [
     rating: 4.2,
     reviewCount: 106,
     images: [
-      u("1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/37100683/pexels-photo-37100683.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "modern", "pinterest", "stationery"],
@@ -994,7 +994,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 419,
     images: [
       "https://images.pexels.com/photos/34159490/pexels-photo-34159490.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/16472571/pexels-photo-16472571.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "everyday", "pinterest", "stationery"],
@@ -1022,7 +1022,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/36421444/pexels-photo-36421444.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/6969293/pexels-photo-6969293.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["pens", "aesthetic", "aesthetic", "pinterest", "stationery"],
     badge: "SALE",
@@ -1051,7 +1051,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/7657391/pexels-photo-7657391.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/36582881/pexels-photo-36582881.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774878488110-a1da46f5dc5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1774878488110-a1da46f5dc5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["washi", "aesthetic", "compact", "pinterest", "stationery"],
     isNew: false,
@@ -1188,7 +1188,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/35278942/pexels-photo-35278942.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/8251921/pexels-photo-8251921.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1660324197196-69580168711e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1660324197196-69580168711e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["journals", "aesthetic", "eco-friendly", "pinterest", "stationery"],
     badge: "SALE",
@@ -1246,7 +1246,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/8250905/pexels-photo-8250905.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/7657387/pexels-photo-7657387.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["washi", "aesthetic", "everyday", "pinterest", "stationery"],
     badge: "NEW",
@@ -1274,7 +1274,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 115,
     images: [
       "https://images.pexels.com/photos/28921200/pexels-photo-28921200.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/8986081/pexels-photo-8986081.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "handcrafted", "pinterest", "stationery"],
@@ -1328,7 +1328,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 463,
     images: [
       "https://images.pexels.com/photos/983828/pexels-photo-983828.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/17042498/pexels-photo-17042498.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "compact", "pinterest", "stationery"],
@@ -1355,8 +1355,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 217,
     images: [
       "https://images.pexels.com/photos/39675/pexels-photo-39675.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774878488255-5fc29c9edfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1774878488255-5fc29c9edfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["desk", "aesthetic", "luxury", "pinterest", "stationery"],
     badge: "SALE",
@@ -1412,7 +1412,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.1,
     reviewCount: 232,
     images: [
-      u("1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/4690306/pexels-photo-4690306.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/36376224/pexels-photo-36376224.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -1527,8 +1527,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 263,
     images: [
       "https://images.pexels.com/photos/7657387/pexels-photo-7657387.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1781456505405-76d614cf5746?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1535837487710-a191373a20ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1781456505405-76d614cf5746?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1535837487710-a191373a20ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["notebooks", "aesthetic", "colorful", "pinterest", "stationery"],
     badge: "SALE",
@@ -1583,7 +1583,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 224,
     images: [
       "https://images.pexels.com/photos/18277845/pexels-photo-18277845.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774878488110-a1da46f5dc5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1774878488110-a1da46f5dc5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/6969293/pexels-photo-6969293.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "vintage", "pinterest", "stationery"],
@@ -1610,7 +1610,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 332,
     images: [
       "https://images.pexels.com/photos/4690306/pexels-photo-4690306.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/8251921/pexels-photo-8251921.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "handcrafted", "pinterest", "stationery"],
@@ -1637,7 +1637,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 246,
     images: [
       "https://images.pexels.com/photos/8004105/pexels-photo-8004105.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/18277843/pexels-photo-18277843.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "everyday", "pinterest", "stationery"],
@@ -1665,7 +1665,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.7,
     reviewCount: 105,
     images: [
-      u("1660324197196-69580168711e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1660324197196-69580168711e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/3927131/pexels-photo-3927131.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/9743043/pexels-photo-9743043.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -1696,7 +1696,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/5250892/pexels-photo-5250892.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/7657384/pexels-photo-7657384.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["planners", "aesthetic", "ultimate", "pinterest", "gift"],
     isNew: false,
@@ -1723,7 +1723,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/6969293/pexels-photo-6969293.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/7657376/pexels-photo-7657376.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["notebooks", "aesthetic", "luxury", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -1751,7 +1751,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 234,
     images: [
       "https://images.pexels.com/photos/30683622/pexels-photo-30683622.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/8716210/pexels-photo-8716210.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "premium", "pinterest", "stationery"],
@@ -1779,7 +1779,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.1,
     reviewCount: 263,
     images: [
-      u("1774878488110-a1da46f5dc5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1774878488110-a1da46f5dc5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/5412111/pexels-photo-5412111.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/33857229/pexels-photo-33857229.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -1807,7 +1807,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 233,
     images: [
       "https://images.pexels.com/photos/7718794/pexels-photo-7718794.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1781456505405-76d614cf5746?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1781456505405-76d614cf5746?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/37401695/pexels-photo-37401695.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "modern", "pinterest", "stationery"],
@@ -1833,7 +1833,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.2,
     reviewCount: 50,
     images: [
-      u("1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/30021730/pexels-photo-30021730.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/33445595/pexels-photo-33445595.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -1860,9 +1860,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.3,
     reviewCount: 122,
     images: [
-      u("1535837487710-a191373a20ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1518082049942-62a4e31b18d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1535837487710-a191373a20ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1518082049942-62a4e31b18d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["stickers", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -1941,7 +1941,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 30,
     images: [
-      u("1725953236941-ec8efc71b0fc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1725953236941-ec8efc71b0fc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/31172334/pexels-photo-31172334.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -1971,7 +1971,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 204,
     images: [
       "https://images.pexels.com/photos/5445610/pexels-photo-5445610.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/5081531/pexels-photo-5081531.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "ultimate", "pinterest", "gift"],
@@ -2025,8 +2025,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 137,
     images: [
       "https://images.pexels.com/photos/4925688/pexels-photo-4925688.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["washi", "aesthetic", "luxury", "pinterest", "stationery"],
     isNew: false,
@@ -2051,9 +2051,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 366,
     images: [
-      u("1518082049942-62a4e31b18d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1518082049942-62a4e31b18d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/17042501/pexels-photo-17042501.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1760720962384-e470ee773c1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1760720962384-e470ee773c1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["stickers", "aesthetic", "colorful", "pinterest", "stationery"],
     isNew: false,
@@ -2079,8 +2079,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 248,
     images: [
       "https://images.pexels.com/photos/5706020/pexels-photo-5706020.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1762318897771-f68b31c0d11f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1762318897771-f68b31c0d11f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["planners", "aesthetic", "minimalist", "pinterest", "stationery"],
     badge: "SALE",
@@ -2109,7 +2109,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/18277854/pexels-photo-18277854.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/31172334/pexels-photo-31172334.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["notebooks", "aesthetic", "classic", "pinterest", "stationery"],
     badge: "NEW",
@@ -2137,7 +2137,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 44,
     images: [
       "https://images.pexels.com/photos/9664160/pexels-photo-9664160.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/18277845/pexels-photo-18277845.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "aesthetic", "pinterest", "stationery"],
@@ -2167,7 +2167,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/29391663/pexels-photo-29391663.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/18277843/pexels-photo-18277843.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1760720962384-e470ee773c1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1760720962384-e470ee773c1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["journals", "aesthetic", "compact", "pinterest", "stationery"],
     isNew: false,
@@ -2277,7 +2277,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.7,
     reviewCount: 48,
     images: [
-      u("1601311911926-dbdae16e54c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1601311911926-dbdae16e54c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/28921200/pexels-photo-28921200.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -2365,8 +2365,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 171,
     images: [
       "https://images.pexels.com/photos/17042498/pexels-photo-17042498.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1627807353979-f8bd316b62cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1521669145854-0bd392445939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["journals", "aesthetic", "modern", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -2393,9 +2393,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.6,
     reviewCount: 62,
     images: [
-      u("1774878488255-5fc29c9edfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1774878488255-5fc29c9edfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/983828/pexels-photo-983828.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1772890227578-50e68afb31c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1772890227578-50e68afb31c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["pens", "aesthetic", "modern", "pinterest", "stationery"],
     badge: "SALE",
@@ -2422,9 +2422,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.2,
     reviewCount: 378,
     images: [
-      u("1731575131336-9756ecd34dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1731575131336-9756ecd34dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/17042491/pexels-photo-17042491.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["washi", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "NEW",
@@ -2451,9 +2451,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.3,
     reviewCount: 349,
     images: [
-      u("1567855354833-ac2c4f967b0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1567855354833-ac2c4f967b0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1725953236941-ec8efc71b0fc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1725953236941-ec8efc71b0fc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["stickers", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -2478,9 +2478,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.3,
     reviewCount: 26,
     images: [
-      u("1774878520736-6cacbcce1b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1725953386283-d918bb2ac9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1774878520736-6cacbcce1b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1725953386283-d918bb2ac9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["planners", "aesthetic", "luxury", "pinterest", "stationery"],
     isNew: false,
@@ -2505,9 +2505,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.0,
     reviewCount: 384,
     images: [
-      u("1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/36421444/pexels-photo-36421444.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1784798455842-3a0be501172c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["notebooks", "aesthetic", "handcrafted", "pinterest", "stationery"],
     isNew: false,
@@ -2588,9 +2588,9 @@ export const PRODUCTS: Product[] = [
     rating: 4.4,
     reviewCount: 459,
     images: [
-      u("1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/8004106/pexels-photo-8004106.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1601311911926-dbdae16e54c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1601311911926-dbdae16e54c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["pens", "aesthetic", "modern", "pinterest", "stationery"],
     isNew: false,
@@ -2616,7 +2616,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 363,
     images: [
       "https://images.pexels.com/photos/3927131/pexels-photo-3927131.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/983828/pexels-photo-983828.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "premium", "pinterest", "stationery"],
@@ -2700,7 +2700,7 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.pexels.com/photos/21630720/pexels-photo-21630720.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/9743043/pexels-photo-9743043.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1660324197196-69580168711e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1660324197196-69580168711e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["notebooks", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -2755,8 +2755,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 307,
     images: [
       "https://images.pexels.com/photos/1074921/pexels-photo-1074921.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("1774878488255-5fc29c9edfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      u("1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      u("photo-1774878488255-5fc29c9edfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1779684998928-2d824ee831cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
     ],
     tags: ["journals", "aesthetic", "premium", "pinterest", "stationery"],
     badge: "SALE",
@@ -2810,7 +2810,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.4,
     reviewCount: 441,
     images: [
-      u("1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+      u("photo-1518082130724-74d38e9ab9d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
       "https://images.pexels.com/photos/39675/pexels-photo-39675.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/4860071/pexels-photo-4860071.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
