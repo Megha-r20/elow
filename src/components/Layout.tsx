@@ -72,11 +72,8 @@ export default function Layout() {
       }}>
         <div className="container" style={{ display: "flex", alignItems: "center", height: 66, gap: 24 }}>
           {/* Logo */}
-          <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", gap: 9, background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0 }}>
-            <div style={{ width: 34, height: 34, background: "#1C1C1A", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ color: "#fff", fontSize: 15, fontFamily: "'DM Serif Display', serif", fontStyle: "italic" }}>u</span>
-            </div>
-            <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, color: "#1C1C1A", letterSpacing: "-0.2px" }}>uni seoul</span>
+          <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0 }}>
+            <img src="/logo.png" alt="elow" style={{ height: 44, objectFit: "contain", transform: "translateY(2px)" }} />
           </button>
 
           {/* Desktop nav */}
@@ -217,11 +214,8 @@ export default function Layout() {
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 48, marginBottom: 56 }}>
             {/* Brand */}
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 20 }}>
-                <div style={{ width: 34, height: 34, background: "#3dbdb5", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ color: "#fff", fontSize: 15, fontFamily: "'DM Serif Display', serif", fontStyle: "italic" }}>u</span>
-                </div>
-                <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, color: "#fff" }}>uni seoul</span>
+              <div style={{ marginBottom: 20, background: "#fff", display: "inline-block", padding: "8px 12px", borderRadius: 12 }}>
+                <img src="/logo.png" alt="elow" style={{ height: 36, objectFit: "contain", display: "block" }} />
               </div>
               <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.55)", lineHeight: 1.85, maxWidth: 230, marginBottom: 24 }}>
                 Your home for premium Korean and Japanese-inspired stationery. Beautiful things for beautiful routines.
