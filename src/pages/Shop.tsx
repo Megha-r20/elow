@@ -105,7 +105,7 @@ export default function Shop() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 }}>
             <div>
               <h1 className="font-display" style={{ fontSize: 36, fontWeight: 400, color: T.txt, letterSpacing: "-0.3px" }}>
-                {currentCat ? currentCat.label : "All Products"}
+                {onlyWishlist ? "My Wishlist" : currentCat ? currentCat.label : "All Products"}
               </h1>
               <p style={{ fontSize: 13.5, color: T.light, marginTop: 4 }}>{filtered.length} products</p>
             </div>
