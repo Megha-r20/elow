@@ -114,9 +114,9 @@ export default function Shop() {
       </div>
 
       <div className="container" style={{ padding: "32px 32px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: showFilters ? "240px 1fr" : "1fr", gap: 32, alignItems: "start" }}>
+        <div style={{ display: "grid", gridTemplateColumns: (showFilters && !onlyWishlist) ? "240px 1fr" : "1fr", gap: 32, alignItems: "start" }}>
           {/* ── Sidebar filters ───────────────────────────────── */}
-          {showFilters && (
+          {showFilters && !onlyWishlist && (
             <aside style={{ position: "sticky", top: 90 }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 16 }}>
                 {/* Search */}
@@ -211,12 +211,16 @@ export default function Shop() {
             {/* Toggle sidebar + count + grid view */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, gap: 16, flexWrap: "wrap" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <button onClick={() => setShowFilters(f => !f)} className="btn btn-ghost btn-sm" style={{ gap: 7 }}>
-                  <Icons.Filter />
-                  {showFilters ? "Hide" : "Show"} Filters
-                </button>
+                {!onlyWishlist && (
+                  <button onClick={() => setShowFilters(f => !f)} className="btn btn-ghost btn-sm" style={{ gap: 7 }}>
+                    <Icons.Filter />
+                    {showFilters ? "Hide" : "Show"} Filters
+                  </button>
+                )}
                 <p style={{ fontSize: 13, color: T.light, fontWeight: 500 }}>
-                  Showing {filtered.length} of {PRODUCTS.length} products
+                  {onlyWishlist 
+                    ? `You have ${filtered.length} items in your wishlist` 
+                    : `Showing ${filtered.length} of ${PRODUCTS.length} products`}
                 </p>
               </div>
               {/* Grid view toggle */}
