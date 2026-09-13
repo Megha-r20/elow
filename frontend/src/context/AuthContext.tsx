@@ -76,6 +76,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        return { success: false, error: `Backend server error (${res.status}). Please try again.` };
+      }
+
       const data = await res.json();
       if (!res.ok) {
         return { success: false, error: data.error || "Login failed" };
@@ -97,6 +102,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role }),
       });
+
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        return { success: false, error: `Backend server error (${res.status}). Please try again.` };
+      }
 
       const data = await res.json();
       if (!res.ok) {
