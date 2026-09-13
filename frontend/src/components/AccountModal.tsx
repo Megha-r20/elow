@@ -6,36 +6,11 @@ import { useNavigate } from "react-router";
 
 export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { lastOrder } = useCart();
-  const { user, updateProfile } = useAuth();
+  const { user } = useAuth();
   const { addToast }  = useToast();
   const navigate      = useNavigate();
-  const [tab, setTab] = useState<"profile" | "orders" | "addresses">("orders");
+  const [tab, setTab] = useState<"orders" | "addresses">("orders");
   const [liveOrder, setLiveOrder] = useState<any>(lastOrder);
-
-  const [profileName, setProfileName] = useState(user?.name || "");
-  const [profileEmail, setProfileEmail] = useState(user?.email || "");
-  const [profilePhone, setProfilePhone] = useState(user?.phone || "9876543210");
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      setProfileName(user.name || "");
-      setProfileEmail(user.email || "");
-      if (user.phone) setProfilePhone(user.phone);
-    }
-  }, [user]);
-
-  const handleSaveProfile = async () => {
-    setSaving(true);
-    const res = await updateProfile({ name: profileName, email: profileEmail, phone: profilePhone });
-    setSaving(false);
-    if (res.success) {
-      addToast("Profile settings saved!");
-      onClose();
-    } else {
-      addToast(res.error || "Failed to save profile", "error");
-    }
-  };
 
   useEffect(() => {
     if (!isOpen || !lastOrder?.id) return;
@@ -124,7 +99,6 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           {[
             { id: "orders", label: "Orders" },
             { id: "addresses", label: "Saved Addresses" },
-            { id: "profile", label: "Profile Settings" },
           ].map(t => (
             <button
               key={t.id}
@@ -224,43 +198,6 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               <button onClick={() => addToast("Address manager updated", "info")} className="btn btn-ghost btn-sm btn-full">
                 + Add New Address
               </button>
-            </div>
-          )}
-
-          {tab === "profile" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div>
-                <label style={{ fontSize: 12, fontWeight: 700, color: "#9C968D", display: "block", marginBottom: 6 }}>FULL NAME</label>
-                <input
-                  className="field field-sm"
-                  value={profileName}
-                  onChange={e => setProfileName(e.target.value)}
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: 12, fontWeight: 700, color: "#9C968D", display: "block", marginBottom: 6 }}>EMAIL</label>
-                <input
-                  className="field field-sm"
-                  value={profileEmail}
-                  onChange={e => setProfileEmail(e.target.value)}
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: 12, fontWeight: 700, color: "#9C968D", display: "block", marginBottom: 6 }}>PHONE</label>
-                <input
-                  className="field field-sm"
-                  value={profilePhone}
-                  onChange={e => setProfilePhone(e.target.value)}
-                />
-              </div>
-              <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
-                <button onClick={handleSaveProfile} disabled={saving} className="btn btn-teal btn-md" style={{ flex: 1 }}>
-                  {saving ? "Saving..." : "Save Profile Details"}
-                </button>
-                <button onClick={() => { onClose(); navigate("/settings"); }} className="btn btn-ghost btn-md">
-                  Full Settings →
-                </button>
-              </div>
             </div>
           )}
         </div>
