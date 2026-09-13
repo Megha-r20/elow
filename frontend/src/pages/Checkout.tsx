@@ -26,12 +26,11 @@ const STATES = ["Andhra Pradesh","Assam","Bihar","Delhi","Goa","Gujarat","Karnat
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const { items, subtotal, clearCart } = useCart();
+  const { items, subtotal, discount, clearCart, saveOrder } = useCart();
   const [step,   setStep]   = useState(0);
   const [form,   setForm]   = useState<FormData>(INIT_FORM);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
 
-  const discount = 0;
   const shipping = subtotal >= 999 ? 0 : 79;
   const giftCost = form.giftWrap ? 49 : 0;
   const total    = subtotal - discount + shipping + giftCost;
@@ -72,6 +71,28 @@ export default function Checkout() {
     if (step === 0 && !validateDelivery()) return;
     if (step === 1 && !validatePayment()) return;
     if (step === 2) {
+      const orderId = `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      saveOrder({
+        id: orderId,
+        items,
+        subtotal,
+        discount,
+        shipping,
+        giftCost,
+        total,
+        deliveryAddress: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          phone: form.phone,
+          address: form.address,
+          city: form.city,
+          state: form.state,
+          pincode: form.pincode,
+        },
+        payMethod: form.payMethod,
+        date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
+      });
       clearCart();
       navigate("/order-confirmation");
       return;

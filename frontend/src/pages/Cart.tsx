@@ -9,24 +9,20 @@ const T = { border:"#EDE8E1",txt:"#1C1C1A",muted:"#5C5C58",light:"#8C8880",sand:
 
 export default function Cart() {
   const navigate = useNavigate();
-  const { items, count, subtotal, removeItem, setQty, clearCart } = useCart();
-  const [promoCode, setPromoCode] = useState("");
-  const [promoApplied, setPromoApplied] = useState(false);
-  const [promoError, setPromoError]     = useState("");
+  const { items, count, subtotal, removeItem, setQty, clearCart, promoCode, discount, applyPromo, removePromo } = useCart();
+  const [inputCode, setInputCode] = useState(promoCode ?? "");
+  const [promoError, setPromoError] = useState("");
 
-  const discount   = promoApplied ? Math.round(subtotal * 0.1) : 0;
-  const shipping   = subtotal >= 999 ? 0 : 79;
-  const total      = subtotal - discount + shipping;
+  const shipping = subtotal >= 999 ? 0 : 79;
+  const total    = subtotal - discount + shipping;
 
   const related = PRODUCTS.filter(p => !items.find(i => i.product.id === p.id)).slice(0, 4);
 
-  const applyPromo = () => {
-    if (promoCode.toLowerCase() === "write50") {
-      setPromoApplied(true);
+  const handleApplyPromo = () => {
+    if (applyPromo(inputCode)) {
       setPromoError("");
     } else {
       setPromoError("Invalid promo code. Try WRITE50.");
-      setPromoApplied(false);
     }
   };
 
@@ -138,18 +134,24 @@ export default function Cart() {
                 <div style={{ display: "flex", gap: 8 }}>
                   <input
                     className="field field-sm"
-                    value={promoCode}
-                    onChange={e => { setPromoCode(e.target.value); setPromoError(""); }}
+                    value={inputCode}
+                    onChange={e => { setInputCode(e.target.value); setPromoError(""); }}
                     placeholder="Enter code (try WRITE50)"
-                    disabled={promoApplied}
+                    disabled={!!promoCode}
                     style={{ flex: 1 }}
                   />
-                  <button className="btn btn-dark btn-sm" onClick={applyPromo} disabled={promoApplied || !promoCode}>
-                    {promoApplied ? "✓" : "Apply"}
-                  </button>
+                  {promoCode ? (
+                    <button className="btn btn-ghost btn-sm" onClick={() => { removePromo(); setInputCode(""); }}>
+                      Remove
+                    </button>
+                  ) : (
+                    <button className="btn btn-dark btn-sm" onClick={handleApplyPromo} disabled={!inputCode}>
+                      Apply
+                    </button>
+                  )}
                 </div>
                 {promoError && <p style={{ fontSize: 12, color: "#e05252", marginTop: 6, fontWeight: 500 }}>{promoError}</p>}
-                {promoApplied && <p style={{ fontSize: 12, color: "#1a7a56", marginTop: 6, fontWeight: 600 }}>✓ WRITE50 applied — 10% off!</p>}
+                {promoCode && <p style={{ fontSize: 12, color: "#1a7a56", marginTop: 6, fontWeight: 600 }}>✓ {promoCode} applied — 10% off!</p>}
               </div>
 
               <button className="btn btn-dark btn-lg btn-full" style={{ marginBottom: 10 }} onClick={() => navigate("/checkout")}>

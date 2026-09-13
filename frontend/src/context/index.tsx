@@ -45,21 +45,49 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
+export type OrderDetails = {
+  id: string;
+  items: CartItem[];
+  subtotal: number;
+  discount: number;
+  shipping: number;
+  giftCost: number;
+  total: number;
+  deliveryAddress: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    pincode: string;
+  };
+  payMethod: string;
+  date: string;
+};
+
 type CartCtx = {
   items: CartItem[];
   count: number;
   subtotal: number;
+  promoCode: string | null;
+  discount: number;
+  applyPromo: (code: string) => boolean;
+  removePromo: () => void;
   addItem: (product: Product, qty?: number) => void;
   removeItem: (id: string) => void;
   setQty: (id: string, qty: number) => void;
   clearCart: () => void;
   isInCart: (id: string) => boolean;
+  lastOrder: OrderDetails | null;
+  saveOrder: (order: OrderDetails) => void;
 };
 
 const CartContext = createContext<CartCtx | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [state, dispatch] = useReducer(cartReducer, { items: [] }, (initial) => {
+  const [state, dispatch] = useReducer(cartReducer, { items: [] }, (initial) => {
     try {
       const stored = localStorage.getItem("cart");
       return stored ? JSON.parse(stored) : initial;
@@ -68,21 +96,62 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   });
 
+  const [promoCode, setPromoCode] = useState<string | null>(() => {
+    try { return localStorage.getItem("promoCode"); } catch { return null; }
+  });
+
+  const [lastOrder, setLastOrder] = useState<OrderDetails | null>(() => {
+    try {
+      const stored = localStorage.getItem("lastOrder");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(state));
   }, [state]);
 
+  useEffect(() => {
+    if (promoCode) localStorage.setItem("promoCode", promoCode);
+    else localStorage.removeItem("promoCode");
+  }, [promoCode]);
+
+  useEffect(() => {
+    if (lastOrder) localStorage.setItem("lastOrder", JSON.stringify(lastOrder));
+  }, [lastOrder]);
+
   const addItem    = useCallback((product: Product, qty = 1) => dispatch({ type: "ADD", product, qty }), []);
   const removeItem = useCallback((id: string) => dispatch({ type: "REMOVE", id }), []);
   const setQty     = useCallback((id: string, qty: number) => dispatch({ type: "SET_QTY", id, qty }), []);
-  const clearCart  = useCallback(() => dispatch({ type: "CLEAR" }), []);
+  const clearCart  = useCallback(() => { dispatch({ type: "CLEAR" }); setPromoCode(null); }, []);
   const isInCart   = useCallback((id: string) => state.items.some(i => i.product.id === id), [state.items]);
 
   const count    = state.items.reduce((s, i) => s + i.qty, 0);
   const subtotal = state.items.reduce((s, i) => s + i.product.price * i.qty, 0);
 
+  const applyPromo = useCallback((code: string) => {
+    if (code.trim().toUpperCase() === "WRITE50") {
+      setPromoCode("WRITE50");
+      return true;
+    }
+    return false;
+  }, []);
+
+  const removePromo = useCallback(() => { setPromoCode(null); }, []);
+
+  const discount = promoCode === "WRITE50" ? Math.round(subtotal * 0.1) : 0;
+
+  const saveOrder = useCallback((order: OrderDetails) => {
+    setLastOrder(order);
+  }, []);
+
   return (
-    <CartContext.Provider value={{ items: state.items, count, subtotal, addItem, removeItem, setQty, clearCart, isInCart }}>
+    <CartContext.Provider value={{
+      items: state.items, count, subtotal, promoCode, discount, applyPromo, removePromo,
+      addItem, removeItem, setQty, clearCart, isInCart, lastOrder, saveOrder,
+    }}>
       {children}
     </CartContext.Provider>
   );

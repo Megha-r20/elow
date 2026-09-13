@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
 // Vite config — https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
   return {
     base: '/',
     plugins: [
@@ -17,14 +17,18 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      host: '0.0.0.0',
-      port: parseInt(process.env.PORT || '8443'),
-      strictPort: true,
+      host: '127.0.0.1',
+      port: 5173,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:5005',
+          changeOrigin: true,
+        },
+      },
     },
     preview: {
-      host: '0.0.0.0',
-      port: parseInt(process.env.PORT || '8443'),
+      host: '127.0.0.1',
+      port: 5173,
     },
   }
 })
-

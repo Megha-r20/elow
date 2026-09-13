@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router";
+import { Outlet, useNavigate, useLocation, Link } from "react-router";
 import { useCart, useDrawer, useToast } from "../hooks";
 import { CartDrawer } from "./CartDrawer";
+import { AccountModal } from "./AccountModal";
 import { Icons } from "./ui";
 import { CATEGORIES } from "../data";
 
@@ -21,6 +22,7 @@ export default function Layout() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQ,    setSearchQ]    = useState("");
   const [mobileNav,  setMobileNav]  = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   const isActive = (path: string) => {
     const [p, q] = path.split("?");
@@ -28,11 +30,9 @@ export default function Layout() {
     
     const currentSearch = new URLSearchParams(location.search);
     if (!q) {
-      // For links like /shop, only active if no cat or filter is selected
       return !currentSearch.has("cat") && !currentSearch.has("filter");
     }
     
-    // For links with queries, ensure they match exactly
     const linkSearch = new URLSearchParams(q);
     for (const [k, v] of linkSearch.entries()) {
       if (currentSearch.get(k) !== v) return false;
@@ -99,10 +99,10 @@ export default function Layout() {
                         <div key={col.h}>
                           <p style={{ fontSize: 9.5, fontWeight: 700, color: "#B8B4AE", letterSpacing: "2px", marginBottom: 14 }}>{col.h}</p>
                           {col.ls.map(l => (
-                            <a key={l} href="/shop" style={{ display: "block", fontSize: 13.5, fontWeight: 500, color: "#1C1C1A", textDecoration: "none", padding: "7px 0", borderBottom: "1px solid #F5F0E8", transition: "color 0.13s, padding-left 0.15s" }}
+                            <Link key={l} to="/shop" style={{ display: "block", fontSize: 13.5, fontWeight: 500, color: "#1C1C1A", textDecoration: "none", padding: "7px 0", borderBottom: "1px solid #F5F0E8", transition: "color 0.13s, padding-left 0.15s" }}
                               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = "#3dbdb5"; el.style.paddingLeft = "6px"; }}
                               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = "#1C1C1A"; el.style.paddingLeft = "0"; }}
-                            >{l}</a>
+                            >{l}</Link>
                           ))}
                         </div>
                       ))}
@@ -111,18 +111,18 @@ export default function Layout() {
                           <img src={CATEGORIES[0].image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         </div>
                         <p style={{ fontSize: 12, fontWeight: 700, color: "#1C1C1A", marginTop: 10 }}>The Journaling Edit</p>
-                        <a href="/shop" style={{ fontSize: 12, color: "#3dbdb5", textDecoration: "none", fontWeight: 600 }}>Shop now →</a>
+                        <Link to="/shop" style={{ fontSize: 12, color: "#3dbdb5", textDecoration: "none", fontWeight: 600 }}>Shop now →</Link>
                       </div>
                     </div>
                   </div>
                 </div>
               ) : (
-                <a key={link.label} href={link.path}
+                <Link key={link.label} to={link.path}
                   className={`nav-link${isActive(link.path) ? " active" : ""}`}
                   style={link.dim ? { color: "#8C8880", fontWeight: 400 } : {}}
                 >
                   {link.label}
-                </a>
+                </Link>
               )
             ))}
           </nav>
@@ -132,7 +132,7 @@ export default function Layout() {
             <button className="icon-btn" onClick={() => setSearchOpen(o => !o)} title="Search">
               <Icons.Search />
             </button>
-            <button className="icon-btn hide-mobile" title="Account" onClick={() => addToast("Account portal coming soon", "info")}>
+            <button className="icon-btn hide-mobile" title="Account" onClick={() => setAccountOpen(true)}>
               <Icons.User />
             </button>
             <button className="icon-btn hide-mobile" title="Wishlist" onClick={() => navigate("/shop?filter=wishlist")}>
@@ -146,17 +146,41 @@ export default function Layout() {
             >
               <Icons.Bag count={count} />
             </button>
-            {/* Hamburger */}
-            <button className="icon-btn" style={{ display: "none" }} onClick={() => setMobileNav(o => !o)}
-              // Show on mobile via inline media query workaround (CSS class)
-            >
-              <svg width="20" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                <path d="M1 1h18M1 7h18M1 13h18"/>
+            {/* Mobile Hamburger toggle */}
+            <button className="icon-btn show-mobile-only" onClick={() => setMobileNav(o => !o)} title="Menu">
+              <svg width="22" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M1 1h20M1 8h20M1 15h20"/>
               </svg>
             </button>
           </div>
         </div>
       </header>
+
+      {/* Mobile Drawer */}
+      {mobileNav && (
+        <>
+          <div onClick={() => setMobileNav(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.40)", zIndex: 600, backdropFilter: "blur(3px)" }} />
+          <div style={{
+            position: "fixed", top: 0, left: 0, bottom: 0, width: 280, background: "#fff", zIndex: 700,
+            padding: "24px", display: "flex", flexDirection: "column", gap: 20, boxShadow: "10px 0 40px rgba(0,0,0,0.15)"
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <img src="/logo.png" alt="elow" style={{ height: 40 }} />
+              <button onClick={() => setMobileNav(false)} className="icon-btn"><Icons.Close /></button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 12 }}>
+              <Link to="/shop" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Shop All</Link>
+              <Link to="/shop?filter=new" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>New Arrivals</Link>
+              <Link to="/shop?cat=gifting" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Gifting</Link>
+              <Link to="/shop?filter=wishlist" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Wishlist</Link>
+              <button onClick={() => { setMobileNav(false); setAccountOpen(true); }} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>My Account</button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Account Modal */}
+      <AccountModal isOpen={accountOpen} onClose={() => setAccountOpen(false)} />
 
       {/* Search overlay */}
       {searchOpen && (
@@ -239,10 +263,10 @@ export default function Layout() {
                 <p style={{ fontSize: 10.5, fontWeight: 700, color: "rgba(255,255,255,0.35)", letterSpacing: "2px", marginBottom: 20 }}>{col.h.toUpperCase()}</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   {col.ls.map(l => (
-                    <a key={l} href="/shop" style={{ fontSize: 13.5, color: "rgba(255,255,255,0.55)", textDecoration: "none", fontWeight: 400, transition: "color 0.14s" }}
+                    <Link key={l} to="/shop" style={{ fontSize: 13.5, color: "rgba(255,255,255,0.55)", textDecoration: "none", fontWeight: 400, transition: "color 0.14s" }}
                       onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#fff")}
                       onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)")}
-                    >{l}</a>
+                    >{l}</Link>
                   ))}
                 </div>
               </div>
@@ -260,7 +284,7 @@ export default function Layout() {
                 onFocus={e => ((e.currentTarget as HTMLElement).style.borderColor = "#3dbdb5")}
                 onBlur={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)")}
               />
-              <button className="btn btn-teal btn-md">Subscribe</button>
+              <button className="btn btn-teal btn-md" onClick={() => addToast("Subscribed to newsletter!")}>Subscribe</button>
             </div>
           </div>
 

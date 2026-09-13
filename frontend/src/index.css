@@ -232,10 +232,13 @@ input[type="radio"] {
 }
 
 /* ── Responsive ──────────────────────────────────────────────────── */
+.show-mobile-only { display: none !important; }
+
 @media (max-width: 900px) {
   .section { padding: 44px 0; }
   .container { padding: 0 16px; }
   .hide-mobile { display: none !important; }
+  .show-mobile-only { display: flex !important; }
   .mobile-full { width: 100% !important; min-width: unset !important; }
 }
 

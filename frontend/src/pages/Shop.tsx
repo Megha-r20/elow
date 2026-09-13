@@ -11,7 +11,7 @@ const T = {
 };
 
 export default function Shop() {
-  const [params]   = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const navigate   = useNavigate();
   const wishlist   = useWishlist();
 
@@ -36,6 +36,14 @@ export default function Shop() {
     setOnlyWishlist(params.get("filter") === "wishlist");
     setSearchQ(params.get("q") ?? "");
   }, [params]);
+
+  const changeCat = (catId: string) => {
+    setActiveCat(catId);
+    const newParams = new URLSearchParams(params);
+    if (catId === "all") newParams.delete("cat");
+    else newParams.set("cat", catId);
+    setParams(newParams);
+  };
 
   const filtered = useMemo(() => {
     let list = [...PRODUCTS];
@@ -143,12 +151,12 @@ export default function Shop() {
                 <div style={{ padding: "20px 20px 0" }}>
                   <p style={{ fontSize: 10.5, fontWeight: 700, color: T.light, letterSpacing: "2px", marginBottom: 14 }}>CATEGORIES</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <button onClick={() => setActiveCat("all")} style={{ textAlign: "left", background: activeCat === "all" ? T.sand : "transparent", border: "none", borderRadius: 9, padding: "9px 12px", fontSize: 13.5, fontWeight: activeCat === "all" ? 700 : 500, color: T.txt, cursor: "pointer", fontFamily: "inherit", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "background 0.14s" }}>
+                    <button onClick={() => changeCat("all")} style={{ textAlign: "left", background: activeCat === "all" ? T.sand : "transparent", border: "none", borderRadius: 9, padding: "9px 12px", fontSize: 13.5, fontWeight: activeCat === "all" ? 700 : 500, color: T.txt, cursor: "pointer", fontFamily: "inherit", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "background 0.14s" }}>
                       <span>All Products</span>
                       <span style={{ fontSize: 11.5, color: T.light }}>{PRODUCTS.length}</span>
                     </button>
                     {CATEGORIES.map(cat => (
-                      <button key={cat.id} onClick={() => setActiveCat(cat.id)} style={{ textAlign: "left", background: activeCat === cat.id ? T.sand : "transparent", border: "none", borderRadius: 9, padding: "9px 12px", fontSize: 13.5, fontWeight: activeCat === cat.id ? 700 : 500, color: activeCat === cat.id ? T.txt : T.muted, cursor: "pointer", fontFamily: "inherit", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "background 0.14s" }}>
+                      <button key={cat.id} onClick={() => changeCat(cat.id)} style={{ textAlign: "left", background: activeCat === cat.id ? T.sand : "transparent", border: "none", borderRadius: 9, padding: "9px 12px", fontSize: 13.5, fontWeight: activeCat === cat.id ? 700 : 500, color: activeCat === cat.id ? T.txt : T.muted, cursor: "pointer", fontFamily: "inherit", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "background 0.14s" }}>
                         <span>{cat.label}</span>
                         <span style={{ fontSize: 11.5, color: T.light }}>{cat.productCount}</span>
                       </button>
