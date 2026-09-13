@@ -221,17 +221,25 @@ input[type="radio"] {
   .mobile-full { width: 100% !important; min-width: unset !important; }
 }
 
-/* -- Hover card (images) ------------------------------------------- */
-.hover-card {
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+/* ── Click & Hover Background Color Glow Effect ─────────────────── */
+.product-card, .hover-card, .category-card {
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative;
 }
-.hover-card:hover {
+
+.product-card:hover, .hover-card:hover, .category-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 48px rgba(35, 32, 29, 0.09) !important;
+  box-shadow: 0 16px 36px rgba(94, 140, 119, 0.22), 0 0 20px rgba(94, 140, 119, 0.28) !important;
+  border-color: rgba(94, 140, 119, 0.45) !important;
 }
-.hover-card img {
-  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.hover-card:hover img {
+
+.product-card:hover img, .hover-card:hover img, .category-card:hover img {
   transform: scale(1.04);
+}
+
+.product-card:active, .hover-card:active, .category-card:active {
+  transform: scale(0.97) !important;
+  box-shadow: 0 0 40px rgba(94, 140, 119, 0.60), 0 16px 48px rgba(94, 140, 119, 0.40), inset 0 0 20px rgba(94, 140, 119, 0.18) !important;
+  border-color: #5E8C77 !important;
+  background: #F4F8F6 !important;
 }
