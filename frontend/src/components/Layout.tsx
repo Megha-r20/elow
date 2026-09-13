@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Outlet, useNavigate, useLocation, Link } from "react-router";
 import { useCart, useDrawer, useToast } from "../hooks";
+import { useAuth } from "../context/AuthContext";
 import { CartDrawer } from "./CartDrawer";
 import { AccountModal } from "./AccountModal";
+import { AuthModal } from "./AuthModal";
 import { Icons } from "./ui";
 import { CATEGORIES } from "../data";
 
@@ -17,12 +19,16 @@ export default function Layout() {
   const { count }           = useCart();
   const { openCart }        = useDrawer();
   const { addToast }        = useToast();
+  const { user, isAdmin, logout } = useAuth();
   const navigate            = useNavigate();
   const location            = useLocation();
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQ,    setSearchQ]    = useState("");
-  const [mobileNav,  setMobileNav]  = useState(false);
+  const [searchOpen, setSearchOpen]   = useState(false);
+  const [searchQ,    setSearchQ]      = useState("");
+  const [mobileNav,  setMobileNav]    = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+
 
   const isActive = (path: string) => {
     const [p, q] = path.split("?");
@@ -128,13 +134,156 @@ export default function Layout() {
           </nav>
 
           {/* Right actions */}
-          <div style={{ display: "flex", alignItems: "center", gap: 4, marginLeft: "auto", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 4, marginLeft: "auto", flexShrink: 0, position: "relative" }}>
             <button className="icon-btn" onClick={() => setSearchOpen(o => !o)} title="Search">
               <Icons.Search />
             </button>
-            <button className="icon-btn hide-mobile" title="Account" onClick={() => setAccountOpen(true)}>
-              <Icons.User />
-            </button>
+
+            {/* Account / User Menu */}
+            {user ? (
+              <div style={{ position: "relative" }}>
+                <button
+                  className="hide-mobile"
+                  onClick={() => setUserDropdownOpen(o => !o)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    background: "#FAF7F2",
+                    border: "1px solid #EAE3D9",
+                    borderRadius: 999,
+                    padding: "4px 12px 4px 6px",
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: "50%",
+                      background: isAdmin ? "#23201D" : "#5E8C77",
+                      color: "#FFFFFF",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <span style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>
+                    {user.name.split(" ")[0]}
+                  </span>
+                  {isAdmin && (
+                    <span style={{ fontSize: 9.5, fontWeight: 800, background: "#23201D", color: "#FFFFFF", padding: "2px 6px", borderRadius: 4, letterSpacing: "0.5px" }}>
+                      ADMIN
+                    </span>
+                  )}
+                </button>
+
+                {/* Dropdown Menu */}
+                {userDropdownOpen && (
+                  <>
+                    <div onClick={() => setUserDropdownOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 450 }} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: "120%",
+                        width: 220,
+                        background: "#FFFFFF",
+                        borderRadius: 16,
+                        border: "1px solid #EAE3D9",
+                        boxShadow: "0 12px 36px rgba(35,32,29,0.15)",
+                        padding: "8px",
+                        zIndex: 500,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 4,
+                      }}
+                    >
+                      <div style={{ padding: "10px 12px", borderBottom: "1px solid #F4EFE6" }}>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: "#23201D" }}>{user.name}</p>
+                        <p style={{ fontSize: 11, color: "#9C968D" }}>{user.email}</p>
+                      </div>
+
+                      {isAdmin && (
+                        <button
+                          onClick={() => { setUserDropdownOpen(false); navigate("/admin"); }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                            padding: "10px 12px",
+                            fontSize: 12.5,
+                            fontWeight: 700,
+                            color: "#5E8C77",
+                            background: "#F2F7F4",
+                            borderRadius: 10,
+                            border: "none",
+                            cursor: "pointer",
+                            textAlign: "left",
+                          }}
+                        >
+                          ⚡ Admin Dashboard
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => { setUserDropdownOpen(false); setAccountOpen(true); }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          padding: "9px 12px",
+                          fontSize: 12.5,
+                          fontWeight: 600,
+                          color: "#23201D",
+                          background: "none",
+                          borderRadius: 10,
+                          border: "none",
+                          cursor: "pointer",
+                          textAlign: "left",
+                        }}
+                      >
+                        📦 My Orders
+                      </button>
+
+                      <button
+                        onClick={() => { setUserDropdownOpen(false); logout(); addToast("Logged out successfully"); }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          padding: "9px 12px",
+                          fontSize: 12.5,
+                          fontWeight: 600,
+                          color: "#DC2626",
+                          background: "none",
+                          borderRadius: 10,
+                          border: "none",
+                          cursor: "pointer",
+                          textAlign: "left",
+                        }}
+                      >
+                        🚪 Sign Out
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <button
+                className="icon-btn hide-mobile"
+                title="Sign In / Register"
+                onClick={() => setAuthModalOpen(true)}
+              >
+                <Icons.User />
+              </button>
+            )}
+
             <button className="icon-btn hide-mobile" title="Wishlist" onClick={() => navigate("/shop?filter=wishlist")}>
               <Icons.Heart />
             </button>
@@ -173,7 +322,14 @@ export default function Layout() {
               <Link to="/shop?filter=new" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>New Arrivals</Link>
               <Link to="/shop?cat=gifting" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Gifting</Link>
               <Link to="/shop?filter=wishlist" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Wishlist</Link>
-              <button onClick={() => { setMobileNav(false); setAccountOpen(true); }} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>My Account</button>
+              {isAdmin && (
+                <Link to="/admin" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#5E8C77", textDecoration: "none" }}>⚡ Admin Portal</Link>
+              )}
+              {user ? (
+                <button onClick={() => { setMobileNav(false); logout(); addToast("Logged out"); }} style={{ fontSize: 16, fontWeight: 700, color: "#DC2626", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>Sign Out</button>
+              ) : (
+                <button onClick={() => { setMobileNav(false); setAuthModalOpen(true); }} style={{ fontSize: 16, fontWeight: 700, color: "#5E8C77", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>Sign In / Register</button>
+              )}
             </div>
           </div>
         </>
@@ -181,6 +337,10 @@ export default function Layout() {
 
       {/* Account Modal */}
       <AccountModal isOpen={accountOpen} onClose={() => setAccountOpen(false)} />
+
+      {/* Auth Modal */}
+      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+
 
       {/* Search overlay */}
       {searchOpen && (

@@ -254,3 +254,8 @@ export function useDrawer() {
   if (!ctx) throw new Error("useDrawer must be used within DrawerProvider");
   return ctx;
 }
+
+/* ─── Export Auth ────────────────────────────────────────────────── */
+export { AuthProvider, useAuth, type User, type UserRole } from "./AuthContext";
+
+

@@ -6,6 +6,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import { AdminDashboard } from "./pages/AdminDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
       { path: "cart",               Component: Cart             },
       { path: "checkout",           Component: Checkout         },
       { path: "order-confirmation", Component: OrderConfirmation},
+      { path: "admin",              Component: AdminDashboard   },
       { path: "*", Component: () => {
         const n = (globalThis as any).__reactRouterNavigate;
         return (
