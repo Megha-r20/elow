@@ -3,81 +3,77 @@ import { useCart, useToast } from "../hooks";
 import { useAuth } from "../context/AuthContext";
 import { Icons, Divider } from "./ui";
 import { useNavigate } from "react-router";
-
-export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const { lastOrder } = useCart();
-  const { user } = useAuth();
-  const { addToast }  = useToast();
-  const navigate      = useNavigate();
-  const [tab, setTab] = useState<"orders" | "addresses">("orders");
-  const [liveOrder, setLiveOrder] = useState<any>(lastOrder);
-
-  useEffect(() => {
-    if (!isOpen || !lastOrder?.id) return;
-
-    const fetchLiveOrder = async () => {
-      try {
-        const res = await fetch("/api/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(lastOrder),
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data.order) {
-            setLiveOrder(data.order);
-          }
-        }
-      } catch (err) {
-        console.error("Error fetching live order in modal:", err);
-      }
+export function AccountModal({ isOpen, onClose }) {
+    const { lastOrder } = useCart();
+    const { user } = useAuth();
+    const { addToast } = useToast();
+    const navigate = useNavigate();
+    const [tab, setTab] = useState("orders");
+    const [liveOrder, setLiveOrder] = useState(lastOrder);
+    useEffect(() => {
+        if (!isOpen || !lastOrder?.id)
+            return;
+        const fetchLiveOrder = async () => {
+            try {
+                const res = await fetch("/api/orders", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(lastOrder),
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.order) {
+                        setLiveOrder(data.order);
+                    }
+                }
+            }
+            catch (err) {
+                console.error("Error fetching live order in modal:", err);
+            }
+        };
+        fetchLiveOrder();
+    }, [isOpen, lastOrder]);
+    if (!isOpen)
+        return null;
+    const displayOrder = liveOrder || lastOrder;
+    const status = displayOrder?.status || "Processing";
+    const getStatusStyle = (st) => {
+        const s = st.toLowerCase();
+        if (s === "cancelled")
+            return { color: "#DC2626", bg: "rgba(220,38,38,0.12)" };
+        if (s === "delivered")
+            return { color: "#16A34A", bg: "rgba(22,163,74,0.12)" };
+        if (s === "shipped")
+            return { color: "#2563EB", bg: "rgba(37,99,235,0.12)" };
+        return { color: "#5E8C77", bg: "rgba(94,140,119,0.12)" };
     };
-
-    fetchLiveOrder();
-  }, [isOpen, lastOrder]);
-
-  if (!isOpen) return null;
-
-  const displayOrder = liveOrder || lastOrder;
-  const status = displayOrder?.status || "Processing";
-
-  const getStatusStyle = (st: string) => {
-    const s = st.toLowerCase();
-    if (s === "cancelled") return { color: "#DC2626", bg: "rgba(220,38,38,0.12)" };
-    if (s === "delivered") return { color: "#16A34A", bg: "rgba(22,163,74,0.12)" };
-    if (s === "shipped")   return { color: "#2563EB", bg: "rgba(37,99,235,0.12)" };
-    return { color: "#5E8C77", bg: "rgba(94,140,119,0.12)" };
-  };
-
-  const statusStyle = getStatusStyle(status);
-
-  const handleCancelOrder = async (id: string) => {
-    if (!window.confirm(`Are you sure you want to cancel Order #${id}?`)) return;
-
-    try {
-      const res = await fetch(`/api/orders/${id}/cancel`, { method: "PATCH" });
-      const data = await res.json();
-      if (res.ok) {
-        addToast(`Order #${id} has been cancelled`, "info");
-        setLiveOrder(data.order);
-      } else {
-        addToast(data.error || "Failed to cancel order", "error");
-      }
-    } catch (err) {
-      addToast("Network error cancelling order", "error");
-    }
-  };
-
-  return (
-    <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 600, backdropFilter: "blur(3px)" }} />
+    const statusStyle = getStatusStyle(status);
+    const handleCancelOrder = async (id) => {
+        if (!window.confirm(`Are you sure you want to cancel Order #${id}?`))
+            return;
+        try {
+            const res = await fetch(`/api/orders/${id}/cancel`, { method: "PATCH" });
+            const data = await res.json();
+            if (res.ok) {
+                addToast(`Order #${id} has been cancelled`, "info");
+                setLiveOrder(data.order);
+            }
+            else {
+                addToast(data.error || "Failed to cancel order", "error");
+            }
+        }
+        catch (err) {
+            addToast("Network error cancelling order", "error");
+        }
+    };
+    return (<>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 600, backdropFilter: "blur(3px)" }}/>
       <div style={{
-        position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
-        width: 540, maxWidth: "90vw", maxHeight: "85vh", background: "#fff", zIndex: 700,
-        borderRadius: 24, boxShadow: "0 24px 72px rgba(35,32,29,0.18)", display: "flex", flexDirection: "column",
-        overflow: "hidden", border: "1px solid #EAE3D9"
-      }}>
+            position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+            width: 540, maxWidth: "90vw", maxHeight: "85vh", background: "#fff", zIndex: 700,
+            borderRadius: 24, boxShadow: "0 24px 72px rgba(35,32,29,0.18)", display: "flex", flexDirection: "column",
+            overflow: "hidden", border: "1px solid #EAE3D9"
+        }}>
         {/* Header */}
         <div style={{ padding: "20px 28px", borderBottom: "1px solid #EAE3D9", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#FAF7F2" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -99,29 +95,21 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           {[
             { id: "orders", label: "Orders" },
             { id: "addresses", label: "Saved Addresses" },
-          ].map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id as any)}
-              style={{
+        ].map(t => (<button key={t.id} onClick={() => setTab(t.id)} style={{
                 flex: 1, padding: "12px 16px", fontSize: 13, fontWeight: 600,
                 border: "none", background: "none", cursor: "pointer", fontFamily: "inherit",
                 color: tab === t.id ? "#5E8C77" : "#9C968D",
                 borderBottom: `2.5px solid ${tab === t.id ? "#5E8C77" : "transparent"}`,
                 transition: "all 0.15s"
-              }}
-            >
+            }}>
               {t.label}
-            </button>
-          ))}
+            </button>))}
         </div>
 
         {/* Body */}
         <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px" }}>
-          {tab === "orders" && (
-            <div>
-              {displayOrder ? (
-                <div style={{ background: "#FAF7F2", borderRadius: 16, border: "1px solid #EAE3D9", padding: "18px 20px" }}>
+          {tab === "orders" && (<div>
+              {displayOrder ? (<div style={{ background: "#FAF7F2", borderRadius: 16, border: "1px solid #EAE3D9", padding: "18px 20px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                     <div>
                       <p style={{ fontSize: 11, fontWeight: 700, color: "#9C968D", letterSpacing: "1px" }}>ORDER ID</p>
@@ -131,19 +119,17 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                       ● {status}
                     </span>
                   </div>
-                  <Divider margin={12} />
+                  <Divider margin={12}/>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
-                    {displayOrder.items.map(({ product: p, qty }: { product: any; qty: number }) => (
-                      <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <img src={p.images[0]} alt={p.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: "cover" }} />
+                    {displayOrder.items.map(({ product: p, qty }) => (<div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <img src={p.images[0]} alt={p.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: "cover" }}/>
                         <div style={{ flex: 1 }}>
                           <p style={{ fontSize: 13, fontWeight: 600, color: "#23201D" }}>{p.name}</p>
                           <p style={{ fontSize: 11.5, color: "#9C968D" }}>Qty: {qty} · &#8377;{p.price}</p>
                         </div>
-                      </div>
-                    ))}
+                      </div>))}
                   </div>
-                  <Divider margin={12} />
+                  <Divider margin={12}/>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <p style={{ fontSize: 12.5, color: "#6E6A63" }}>Date: {displayOrder.date}</p>
                     <p style={{ fontSize: 15, fontWeight: 700, color: "#23201D" }}>Total: &#8377;{displayOrder.total?.toLocaleString("en-IN")}</p>
@@ -152,37 +138,27 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                     <button onClick={() => { onClose(); navigate("/order-confirmation"); }} className="btn btn-ghost btn-sm" style={{ flex: 1 }}>
                       View Full Order Status →
                     </button>
-                    {(status === "Processing" || status === "Order Placed") && (
-                      <button
-                        onClick={() => handleCancelOrder(displayOrder.id)}
-                        style={{
-                          background: "#FDF2F2",
-                          color: "#DC2626",
-                          border: "1px solid #F8B4B4",
-                          padding: "6px 14px",
-                          borderRadius: 8,
-                          fontSize: 12,
-                          fontWeight: 700,
-                          cursor: "pointer",
-                        }}
-                      >
+                    {(status === "Processing" || status === "Order Placed") && (<button onClick={() => handleCancelOrder(displayOrder.id)} style={{
+                        background: "#FDF2F2",
+                        color: "#DC2626",
+                        border: "1px solid #F8B4B4",
+                        padding: "6px 14px",
+                        borderRadius: 8,
+                        fontSize: 12,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                    }}>
                         Cancel Order
-                      </button>
-                    )}
+                      </button>)}
                   </div>
-                </div>
-              ) : (
-                <div style={{ textAlign: "center", padding: "40px 0" }}>
+                </div>) : (<div style={{ textAlign: "center", padding: "40px 0" }}>
                   <div style={{ fontSize: 36, marginBottom: 12, opacity: 0.3 }}>📦</div>
                   <p style={{ fontSize: 15, fontWeight: 700, color: "#23201D" }}>No orders placed yet</p>
                   <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>Your order history will show up here.</p>
-                </div>
-              )}
-            </div>
-          )}
+                </div>)}
+            </div>)}
 
-          {tab === "addresses" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {tab === "addresses" && (<div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div style={{ border: "1.5px solid #5E8C77", background: "#F2F7F4", borderRadius: 14, padding: "16px 18px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: "#23201D" }}>Default Address</span>
@@ -198,10 +174,8 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               <button onClick={() => addToast("Address manager updated", "info")} className="btn btn-ghost btn-sm btn-full">
                 + Add New Address
               </button>
-            </div>
-          )}
+            </div>)}
         </div>
       </div>
-    </>
-  );
+    </>);
 }

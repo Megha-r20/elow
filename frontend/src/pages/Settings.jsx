@@ -2,35 +2,28 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../hooks";
 import { Link, useNavigate } from "react-router";
-import { Icons, Divider } from "../components/ui";
-
 export default function Settings() {
-  const { user, updateProfile } = useAuth();
-  const { addToast } = useToast();
-  const navigate = useNavigate();
-
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [phone, setPhone] = useState(user?.phone || "9876543210");
-
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [savingProfile, setSavingProfile] = useState(false);
-  const [savingPassword, setSavingPassword] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      setName(user.name || "");
-      setEmail(user.email || "");
-      if (user.phone) setPhone(user.phone);
-    }
-  }, [user]);
-
-  if (!user) {
-    return (
-      <div style={{ background: "#FAF7F2", minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    const { user, updateProfile } = useAuth();
+    const { addToast } = useToast();
+    const navigate = useNavigate();
+    const [name, setName] = useState(user?.name || "");
+    const [email, setEmail] = useState(user?.email || "");
+    const [phone, setPhone] = useState(user?.phone || "9876543210");
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [savingProfile, setSavingProfile] = useState(false);
+    const [savingPassword, setSavingPassword] = useState(false);
+    useEffect(() => {
+        if (user) {
+            setName(user.name || "");
+            setEmail(user.email || "");
+            if (user.phone)
+                setPhone(user.phone);
+        }
+    }, [user]);
+    if (!user) {
+        return (<div style={{ background: "#FAF7F2", minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
         <div style={{ background: "#FFFFFF", padding: "40px 32px", borderRadius: 24, border: "1px solid #EAE3D9", textAlign: "center", maxWidth: 440, boxShadow: "0 12px 32px rgba(35,32,29,0.08)" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#23201D" }}>Authentication Required</h2>
@@ -43,59 +36,52 @@ export default function Settings() {
             </Link>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  const handleProfileSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim()) {
-      addToast("Full name and email address are required", "error");
-      return;
+      </div>);
     }
-
-    setSavingProfile(true);
-    const res = await updateProfile({ name: name.trim(), email: email.trim(), phone: phone.trim() });
-    setSavingProfile(false);
-
-    if (res.success) {
-      addToast("Profile details updated successfully!");
-    } else {
-      addToast(res.error || "Failed to update profile", "error");
-    }
-  };
-
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentPassword) {
-      addToast("Please enter your current password", "error");
-      return;
-    }
-    if (newPassword.length < 6) {
-      addToast("New password must be at least 6 characters long", "error");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      addToast("New passwords do not match", "error");
-      return;
-    }
-
-    setSavingPassword(true);
-    const res = await updateProfile({ currentPassword, newPassword });
-    setSavingPassword(false);
-
-    if (res.success) {
-      addToast("Password changed successfully!");
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-    } else {
-      addToast(res.error || "Failed to change password", "error");
-    }
-  };
-
-  return (
-    <div style={{ background: "#FAF7F2", minHeight: "100vh", padding: "40px 0 80px" }}>
+    const handleProfileSubmit = async (e) => {
+        e.preventDefault();
+        if (!name.trim() || !email.trim()) {
+            addToast("Full name and email address are required", "error");
+            return;
+        }
+        setSavingProfile(true);
+        const res = await updateProfile({ name: name.trim(), email: email.trim(), phone: phone.trim() });
+        setSavingProfile(false);
+        if (res.success) {
+            addToast("Profile details updated successfully!");
+        }
+        else {
+            addToast(res.error || "Failed to update profile", "error");
+        }
+    };
+    const handlePasswordSubmit = async (e) => {
+        e.preventDefault();
+        if (!currentPassword) {
+            addToast("Please enter your current password", "error");
+            return;
+        }
+        if (newPassword.length < 6) {
+            addToast("New password must be at least 6 characters long", "error");
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            addToast("New passwords do not match", "error");
+            return;
+        }
+        setSavingPassword(true);
+        const res = await updateProfile({ currentPassword, newPassword });
+        setSavingPassword(false);
+        if (res.success) {
+            addToast("Password changed successfully!");
+            setCurrentPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
+        }
+        else {
+            addToast(res.error || "Failed to change password", "error");
+        }
+    };
+    return (<div style={{ background: "#FAF7F2", minHeight: "100vh", padding: "40px 0 80px" }}>
       <div className="container" style={{ maxWidth: 860 }}>
         {/* Header */}
         <div style={{ marginBottom: 32 }}>
@@ -129,11 +115,9 @@ export default function Settings() {
             </div>
 
             <div style={{ display: "flex", gap: 12 }}>
-              {user.role === "admin" && (
-                <Link to="/admin" className="btn btn-teal btn-sm">
+              {user.role === "admin" && (<Link to="/admin" className="btn btn-teal btn-sm">
                   ⚡ Admin Portal
-                </Link>
-              )}
+                </Link>)}
               <button onClick={() => navigate("/shop")} className="btn btn-ghost btn-sm">
                 Shop Catalog
               </button>
@@ -150,37 +134,17 @@ export default function Settings() {
             <form onSubmit={handleProfileSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>FULL NAME *</label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  className="field field-sm"
-                  placeholder="e.g. Ritika Sharma"
-                />
+                <input type="text" required value={name} onChange={e => setName(e.target.value)} className="field field-sm" placeholder="e.g. Ritika Sharma"/>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>EMAIL ADDRESS *</label>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    className="field field-sm"
-                    placeholder="name@example.com"
-                  />
+                  <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="field field-sm" placeholder="name@example.com"/>
                 </div>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>PHONE NUMBER</label>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    className="field field-sm"
-                    placeholder="9876543210"
-                  />
+                  <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} className="field field-sm" placeholder="9876543210"/>
                 </div>
               </div>
 
@@ -202,35 +166,17 @@ export default function Settings() {
             <form onSubmit={handlePasswordSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>CURRENT PASSWORD *</label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={e => setCurrentPassword(e.target.value)}
-                  className="field field-sm"
-                  placeholder="Enter current password"
-                />
+                <input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="field field-sm" placeholder="Enter current password"/>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>NEW PASSWORD *</label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={e => setNewPassword(e.target.value)}
-                    className="field field-sm"
-                    placeholder="At least 6 characters"
-                  />
+                  <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="field field-sm" placeholder="At least 6 characters"/>
                 </div>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>CONFIRM NEW PASSWORD *</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={e => setConfirmPassword(e.target.value)}
-                    className="field field-sm"
-                    placeholder="Repeat new password"
-                  />
+                  <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="field field-sm" placeholder="Repeat new password"/>
                 </div>
               </div>
 
@@ -243,6 +189,5 @@ export default function Settings() {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>);
 }

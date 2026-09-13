@@ -1,34 +1,28 @@
 import { useNavigate } from "react-router";
 import { useCart } from "../hooks";
-import { Breadcrumb, QtyStepper, ShippingProgress, Icons, Divider, Price } from "../components/ui";
+import { Breadcrumb, QtyStepper, ShippingProgress, Icons, Divider } from "../components/ui";
 import { PRODUCTS } from "../data";
 import { ProductCard } from "../components/ProductCard";
 import { useState } from "react";
-
-const T = { border:"#EAE3D9",txt:"#23201D",muted:"#6E6A63",light:"#9C968D",sand:"#F4EFE6",cream:"#FAF7F2",teal:"#5E8C77" };
-
+const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#5E8C77" };
 export default function Cart() {
-  const navigate = useNavigate();
-  const { items, count, subtotal, removeItem, setQty, clearCart, promoCode, discount, applyPromo, removePromo } = useCart();
-  const [inputCode, setInputCode] = useState(promoCode ?? "");
-  const [promoError, setPromoError] = useState("");
-
-  const shipping = subtotal >= 999 ? 0 : 79;
-  const total    = subtotal - discount + shipping;
-
-  const related = PRODUCTS.filter(p => !items.find(i => i.product.id === p.id)).slice(0, 4);
-
-  const handleApplyPromo = () => {
-    if (applyPromo(inputCode)) {
-      setPromoError("");
-    } else {
-      setPromoError("Invalid promo code. Try WRITE50.");
-    }
-  };
-
-  if (items.length === 0) {
-    return (
-      <div style={{ background: T.cream, minHeight: "70vh" }}>
+    const navigate = useNavigate();
+    const { items, count, subtotal, removeItem, setQty, clearCart, promoCode, discount, applyPromo, removePromo } = useCart();
+    const [inputCode, setInputCode] = useState(promoCode ?? "");
+    const [promoError, setPromoError] = useState("");
+    const shipping = subtotal >= 999 ? 0 : 79;
+    const total = subtotal - discount + shipping;
+    const related = PRODUCTS.filter(p => !items.find(i => i.product.id === p.id)).slice(0, 4);
+    const handleApplyPromo = () => {
+        if (applyPromo(inputCode)) {
+            setPromoError("");
+        }
+        else {
+            setPromoError("Invalid promo code. Try WRITE50.");
+        }
+    };
+    if (items.length === 0) {
+        return (<div style={{ background: T.cream, minHeight: "70vh" }}>
         <div className="container" style={{ padding: "64px 32px", textAlign: "center" }}>
           <div style={{ fontSize: 64, marginBottom: 20, opacity: 0.15 }}>
             <Icons.Bag />
@@ -41,14 +35,11 @@ export default function Cart() {
             Browse Products <Icons.ArrowRight />
           </button>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ background: T.cream, minHeight: "100vh" }}>
+      </div>);
+    }
+    return (<div style={{ background: T.cream, minHeight: "100vh" }}>
       <div className="container" style={{ padding: "32px 32px 80px" }}>
-        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Shop", href: "/shop" }, { label: "Cart" }]} />
+        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Shop", href: "/shop" }, { label: "Cart" }]}/>
         <h1 className="font-display" style={{ fontSize: 38, color: T.txt, marginBottom: 8 }}>Your Cart</h1>
         <p style={{ fontSize: 14, color: T.muted, marginBottom: 36 }}>{count} {count === 1 ? "item" : "items"}</p>
 
@@ -57,18 +48,15 @@ export default function Cart() {
           <div style={{ background: "#fff", borderRadius: 20, border: `1px solid ${T.border}`, overflow: "hidden" }}>
             {/* Table header */}
             <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr auto", gap: 16, padding: "16px 24px", borderBottom: `1px solid ${T.border}`, background: T.sand }}>
-              {["Product", "Price", "Quantity", "Total", ""].map(h => (
-                <p key={h} style={{ fontSize: 11, fontWeight: 700, color: T.light, letterSpacing: "1.5px", textTransform: "uppercase" }}>{h}</p>
-              ))}
+              {["Product", "Price", "Quantity", "Total", ""].map(h => (<p key={h} style={{ fontSize: 11, fontWeight: 700, color: T.light, letterSpacing: "1.5px", textTransform: "uppercase" }}>{h}</p>))}
             </div>
 
             {/* Items */}
-            {items.map(({ product: p, qty }) => (
-              <div key={p.id} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr auto", gap: 16, padding: "20px 24px", borderBottom: `1px solid ${T.border}`, alignItems: "center" }}>
+            {items.map(({ product: p, qty }) => (<div key={p.id} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr auto", gap: 16, padding: "20px 24px", borderBottom: `1px solid ${T.border}`, alignItems: "center" }}>
                 {/* Product */}
                 <div style={{ display: "flex", gap: 14, alignItems: "center", cursor: "pointer" }} onClick={() => navigate(`/product/${p.id}`)}>
                   <div style={{ width: 72, height: 72, borderRadius: 12, overflow: "hidden", flexShrink: 0, border: `1px solid ${T.border}` }}>
-                    <img src={p.images[0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={p.images[0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
                   </div>
                   <div>
                     <p style={{ fontSize: 13.5, fontWeight: 600, color: T.txt, lineHeight: 1.38, marginBottom: 3 }}>{p.name}</p>
@@ -78,15 +66,14 @@ export default function Cart() {
                 {/* Price */}
                 <p style={{ fontSize: 14, fontWeight: 600, color: T.txt }}>&#8377;{p.price.toLocaleString("en-IN")}</p>
                 {/* Qty */}
-                <QtyStepper qty={qty} onAdd={() => setQty(p.id, qty + 1)} onSub={() => setQty(p.id, qty - 1)} max={p.stockCount} />
+                <QtyStepper qty={qty} onAdd={() => setQty(p.id, qty + 1)} onSub={() => setQty(p.id, qty - 1)} max={p.stockCount}/>
                 {/* Total */}
                 <p style={{ fontSize: 14, fontWeight: 700, color: T.txt }}>&#8377;{(p.price * qty).toLocaleString("en-IN")}</p>
                 {/* Remove */}
                 <button onClick={() => removeItem(p.id)} className="icon-btn" style={{ color: T.light, flexShrink: 0 }} title="Remove">
                   <Icons.Close />
                 </button>
-              </div>
-            ))}
+              </div>))}
 
             {/* Cart actions */}
             <div style={{ padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -102,7 +89,7 @@ export default function Cart() {
           {/* Order summary */}
           <div style={{ display: "flex", flexDirection: "column", gap: 14, position: "sticky", top: 90 }}>
             {/* Shipping progress */}
-            <ShippingProgress subtotal={subtotal} />
+            <ShippingProgress subtotal={subtotal}/>
 
             {/* Summary card */}
             <div style={{ background: "#fff", borderRadius: 20, border: `1px solid ${T.border}`, padding: "24px" }}>
@@ -110,18 +97,16 @@ export default function Cart() {
 
               <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 20 }}>
                 {[
-                  { l: "Subtotal",  v: `₹${subtotal.toLocaleString("en-IN")}`, strong: false },
-                  ...(discount > 0 ? [{ l: "Discount (WRITE50 -10%)", v: `-₹${discount.toLocaleString("en-IN")}`, strong: false, green: true }] : []),
-                  { l: shipping === 0 ? "Shipping — FREE" : "Shipping", v: shipping === 0 ? "Free" : `₹${shipping}`, strong: false, green: shipping === 0 },
-                ].map(r => (
-                  <div key={r.l} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            { l: "Subtotal", v: `₹${subtotal.toLocaleString("en-IN")}`, strong: false },
+            ...(discount > 0 ? [{ l: "Discount (WRITE50 -10%)", v: `-₹${discount.toLocaleString("en-IN")}`, strong: false, green: true }] : []),
+            { l: shipping === 0 ? "Shipping — FREE" : "Shipping", v: shipping === 0 ? "Free" : `₹${shipping}`, strong: false, green: shipping === 0 },
+        ].map(r => (<div key={r.l} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 14, color: T.muted }}>{r.l}</span>
-                    <span style={{ fontSize: 14, fontWeight: 600, color: (r as any).green ? "#1a7a56" : T.txt }}>{r.v}</span>
-                  </div>
-                ))}
+                    <span style={{ fontSize: 14, fontWeight: 600, color: r.green ? "#1a7a56" : T.txt }}>{r.v}</span>
+                  </div>))}
               </div>
 
-              <Divider margin={0} />
+              <Divider margin={0}/>
 
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", margin: "16px 0 20px" }}>
                 <span style={{ fontSize: 15, fontWeight: 700, color: T.txt }}>Total</span>
@@ -132,23 +117,12 @@ export default function Cart() {
               <div style={{ marginBottom: 20 }}>
                 <p style={{ fontSize: 11.5, fontWeight: 700, color: T.light, letterSpacing: "1.5px", marginBottom: 10 }}>PROMO CODE</p>
                 <div style={{ display: "flex", gap: 8 }}>
-                  <input
-                    className="field field-sm"
-                    value={inputCode}
-                    onChange={e => { setInputCode(e.target.value); setPromoError(""); }}
-                    placeholder="Enter code (try WRITE50)"
-                    disabled={!!promoCode}
-                    style={{ flex: 1 }}
-                  />
-                  {promoCode ? (
-                    <button className="btn btn-ghost btn-sm" onClick={() => { removePromo(); setInputCode(""); }}>
+                  <input className="field field-sm" value={inputCode} onChange={e => { setInputCode(e.target.value); setPromoError(""); }} placeholder="Enter code (try WRITE50)" disabled={!!promoCode} style={{ flex: 1 }}/>
+                  {promoCode ? (<button className="btn btn-ghost btn-sm" onClick={() => { removePromo(); setInputCode(""); }}>
                       Remove
-                    </button>
-                  ) : (
-                    <button className="btn btn-dark btn-sm" onClick={handleApplyPromo} disabled={!inputCode}>
+                    </button>) : (<button className="btn btn-dark btn-sm" onClick={handleApplyPromo} disabled={!inputCode}>
                       Apply
-                    </button>
-                  )}
+                    </button>)}
                 </div>
                 {promoError && <p style={{ fontSize: 12, color: "#e05252", marginTop: 6, fontWeight: 500 }}>{promoError}</p>}
                 {promoCode && <p style={{ fontSize: 12, color: "#1a7a56", marginTop: 6, fontWeight: 600 }}>✓ {promoCode} applied — 10% off!</p>}
@@ -165,29 +139,24 @@ export default function Cart() {
             {/* Trust */}
             <div style={{ background: "#fff", borderRadius: 16, border: `1px solid ${T.border}`, padding: "16px 18px", display: "flex", flexDirection: "column", gap: 10 }}>
               {[
-                { icon: <Icons.Shield />,  t: "Secure Payment" },
-                { icon: <Icons.Package />, t: "Easy Returns within 7 days" },
-                { icon: <Icons.Truck />,   t: "Delivery in 1–4 working days" },
-              ].map(f => (
-                <div key={f.t} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            { icon: <Icons.Shield />, t: "Secure Payment" },
+            { icon: <Icons.Package />, t: "Easy Returns within 7 days" },
+            { icon: <Icons.Truck />, t: "Delivery in 1–4 working days" },
+        ].map(f => (<div key={f.t} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ color: T.teal }}>{f.icon}</span>
                   <span style={{ fontSize: 12.5, color: T.muted, fontWeight: 500 }}>{f.t}</span>
-                </div>
-              ))}
+                </div>))}
             </div>
           </div>
         </div>
 
         {/* You may also like */}
-        {related.length > 0 && (
-          <div style={{ marginTop: 64 }}>
+        {related.length > 0 && (<div style={{ marginTop: 64 }}>
             <h2 className="font-display" style={{ fontSize: 28, color: T.txt, marginBottom: 24 }}>You May Also Like</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
-              {related.map(p => <ProductCard key={p.id} product={p} />)}
+              {related.map(p => <ProductCard key={p.id} product={p}/>)}
             </div>
-          </div>
-        )}
+          </div>)}
       </div>
-    </div>
-  );
+    </div>);
 }
