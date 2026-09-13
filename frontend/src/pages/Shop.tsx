@@ -37,6 +37,25 @@ export default function Shop() {
     setSearchQ(params.get("q") ?? "");
   }, [params]);
 
+  const [liveProducts, setLiveProducts] = useState<any[]>(PRODUCTS);
+
+  useEffect(() => {
+    async function fetchLiveProducts() {
+      try {
+        const res = await fetch("/api/products");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.products && data.products.length > 0) {
+            setLiveProducts(data.products);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch live products in Shop:", err);
+      }
+    }
+    fetchLiveProducts();
+  }, []);
+
   const changeCat = (catId: string) => {
     setActiveCat(catId);
     const newParams = new URLSearchParams(params);
@@ -46,7 +65,7 @@ export default function Shop() {
   };
 
   const filtered = useMemo(() => {
-    let list = [...PRODUCTS];
+    let list = [...liveProducts];
 
     // Category
     if (activeCat !== "all") list = list.filter(p => p.category === activeCat);
@@ -57,7 +76,7 @@ export default function Shop() {
       list = list.filter(p =>
         p.name.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q) ||
-        p.tags.some(t => t.includes(q)) ||
+        (p.tags && p.tags.some((t: string) => t.toLowerCase().includes(q))) ||
         p.subcategory.toLowerCase().includes(q)
       );
     }

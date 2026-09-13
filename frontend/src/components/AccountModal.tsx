@@ -1,15 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart, useToast } from "../hooks";
+import { useAuth } from "../context/AuthContext";
 import { Icons, Divider } from "./ui";
 import { useNavigate } from "react-router";
 
 export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { lastOrder } = useCart();
+  const { user } = useAuth();
   const { addToast }  = useToast();
   const navigate      = useNavigate();
   const [tab, setTab] = useState<"profile" | "orders" | "addresses">("orders");
+  const [liveOrder, setLiveOrder] = useState<any>(lastOrder);
+
+  useEffect(() => {
+    if (!isOpen || !lastOrder?.id) return;
+
+    const fetchLiveOrder = async () => {
+      try {
+        const res = await fetch(`/api/orders/${lastOrder.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setLiveOrder(data);
+        }
+      } catch (err) {
+        console.error("Error fetching live order in modal:", err);
+      }
+    };
+
+    fetchLiveOrder();
+  }, [isOpen, lastOrder?.id]);
 
   if (!isOpen) return null;
+
+  const displayOrder = liveOrder || lastOrder;
+  const status = displayOrder?.status || "Processing";
+
+  const getStatusStyle = (st: string) => {
+    const s = st.toLowerCase();
+    if (s === "cancelled") return { color: "#DC2626", bg: "rgba(220,38,38,0.12)" };
+    if (s === "delivered") return { color: "#16A34A", bg: "rgba(22,163,74,0.12)" };
+    if (s === "shipped")   return { color: "#2563EB", bg: "rgba(37,99,235,0.12)" };
+    return { color: "#5E8C77", bg: "rgba(94,140,119,0.12)" };
+  };
+
+  const statusStyle = getStatusStyle(status);
 
   return (
     <>
@@ -24,11 +58,11 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         <div style={{ padding: "20px 28px", borderBottom: "1px solid #EAE3D9", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#FAF7F2" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#23201D", color: "#FAF7F2", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 16 }}>
-              R
+              {user?.name ? user.name.charAt(0).toUpperCase() : "R"}
             </div>
             <div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: "#23201D" }}>Ritika Sharma</h3>
-              <p style={{ fontSize: 12, color: "#9C968D" }}>ritika@example.com</p>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: "#23201D" }}>{user?.name || "Ritika Sharma"}</h3>
+              <p style={{ fontSize: 12, color: "#9C968D" }}>{user?.email || "ritika@example.com"}</p>
             </div>
           </div>
           <button onClick={onClose} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 34, height: 34 }}>
@@ -63,20 +97,20 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px" }}>
           {tab === "orders" && (
             <div>
-              {lastOrder ? (
+              {displayOrder ? (
                 <div style={{ background: "#FAF7F2", borderRadius: 16, border: "1px solid #EAE3D9", padding: "18px 20px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                     <div>
                       <p style={{ fontSize: 11, fontWeight: 700, color: "#9C968D", letterSpacing: "1px" }}>ORDER ID</p>
-                      <p style={{ fontSize: 14, fontWeight: 700, color: "#23201D", fontFamily: "monospace" }}>{lastOrder.id}</p>
+                      <p style={{ fontSize: 14, fontWeight: 700, color: "#23201D", fontFamily: "monospace" }}>{displayOrder.id}</p>
                     </div>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "#5E8C77", background: "rgba(94,140,119,0.12)", padding: "4px 10px", borderRadius: 999 }}>
-                      Processing
+                    <span style={{ fontSize: 11, fontWeight: 700, color: statusStyle.color, background: statusStyle.bg, padding: "4px 12px", borderRadius: 999 }}>
+                      ● {status}
                     </span>
                   </div>
                   <Divider margin={12} />
                   <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
-                    {lastOrder.items.map(({ product: p, qty }) => (
+                    {displayOrder.items.map(({ product: p, qty }: { product: any; qty: number }) => (
                       <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                         <img src={p.images[0]} alt={p.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: "cover" }} />
                         <div style={{ flex: 1 }}>
@@ -88,8 +122,8 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   </div>
                   <Divider margin={12} />
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <p style={{ fontSize: 12.5, color: "#6E6A63" }}>Date: {lastOrder.date}</p>
-                    <p style={{ fontSize: 15, fontWeight: 700, color: "#23201D" }}>Total: &#8377;{lastOrder.total.toLocaleString("en-IN")}</p>
+                    <p style={{ fontSize: 12.5, color: "#6E6A63" }}>Date: {displayOrder.date}</p>
+                    <p style={{ fontSize: 15, fontWeight: 700, color: "#23201D" }}>Total: &#8377;{displayOrder.total?.toLocaleString("en-IN")}</p>
                   </div>
                   <button onClick={() => { onClose(); navigate("/order-confirmation"); }} className="btn btn-ghost btn-sm btn-full" style={{ marginTop: 14 }}>
                     View Full Order Status →

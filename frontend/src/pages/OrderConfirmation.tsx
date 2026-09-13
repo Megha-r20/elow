@@ -11,18 +11,52 @@ export default function OrderConfirmation() {
   const navigate = useNavigate();
   const { lastOrder } = useCart();
   const [show, setShow] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState<any>(lastOrder);
 
   useEffect(() => {
     const t = setTimeout(() => setShow(true), 100);
     return () => clearTimeout(t);
   }, []);
 
+  // Fetch live order status from backend API
+  useEffect(() => {
+    const targetId = lastOrder?.id;
+    if (!targetId) return;
+
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch(`/api/orders/${targetId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setCurrentOrder(data);
+        }
+      } catch (err) {
+        console.error("Error fetching live order status:", err);
+      }
+    };
+
+    fetchStatus();
+    const timer = setInterval(fetchStatus, 2500);
+    return () => clearInterval(timer);
+  }, [lastOrder?.id]);
+
   const recommended = PRODUCTS.filter(p => p.isBestseller).slice(0, 4);
   const deliveryDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
 
-  const orderId = lastOrder?.id ?? `US-${new Date().getFullYear()}-DEMO88`;
-  const items = lastOrder?.items ?? [];
-  const address = lastOrder?.deliveryAddress;
+  const activeOrder = currentOrder || lastOrder;
+  const orderId = activeOrder?.id ?? `US-${new Date().getFullYear()}-DEMO88`;
+  const items = activeOrder?.items ?? [];
+  const address = activeOrder?.deliveryAddress;
+  const orderStatus = (activeOrder?.status || "Processing").trim();
+
+  // Helper to determine step completion
+  const isCancelled = orderStatus.toLowerCase() === "cancelled";
+  const isProcessing = orderStatus.toLowerCase() === "processing" || orderStatus.toLowerCase() === "order placed";
+  const isShipped = orderStatus.toLowerCase() === "shipped";
+  const isDelivered = orderStatus.toLowerCase() === "delivered";
+
+  // Step indexes: 0 = Placed, 1 = Packing/Processing, 2 = Shipped, 3 = Delivered
+  const activeStepIndex = isDelivered ? 3 : isShipped ? 2 : isProcessing ? 1 : 0;
 
   return (
     <div style={{ background: T.cream, minHeight: "100vh" }}>
@@ -30,27 +64,44 @@ export default function OrderConfirmation() {
       <div style={{ background: "linear-gradient(135deg, #edfcfa 0%, #f5f0e8 100%)", padding: "64px 0 52px", textAlign: "center", borderBottom: `1px solid ${T.border}` }}>
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
           <div style={{
-            width: 76, height: 76, borderRadius: "50%", background: T.teal,
+            width: 76, height: 76, borderRadius: "50%", background: isCancelled ? "#DC2626" : T.teal,
             display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: `0 0 0 ${show ? "16px" : "0"} rgba(61,189,181,0.14)`,
+            boxShadow: `0 0 0 ${show ? "16px" : "0"} ${isCancelled ? "rgba(220,38,38,0.14)" : "rgba(61,189,181,0.14)"}`,
             transition: "box-shadow 0.6s ease 0.3s",
           }}>
-            <span style={{ color: "#fff", fontSize: 34 }}>✓</span>
+            <span style={{ color: "#fff", fontSize: 34 }}>{isCancelled ? "✕" : "✓"}</span>
           </div>
         </div>
 
         <h1 className="font-display" style={{ fontSize: 44, color: T.txt, marginBottom: 10, lineHeight: 1.1 }}>
-          Order Confirmed!
+          {isCancelled ? "Order Cancelled" : "Order Confirmed!"}
         </h1>
         <p style={{ fontSize: 15.5, color: T.muted, marginBottom: 20, lineHeight: 1.75, maxWidth: 480, margin: "0 auto 20px" }}>
-          Thank you {address?.firstName ? `${address.firstName} ` : ""}for your order! We've received it and are preparing it with care.
+          {isCancelled
+            ? `Order ${orderId} has been marked as cancelled. If you have questions, please contact support.`
+            : `Thank you ${address?.firstName ? `${address.firstName} ` : ""}for your order! We've received it and are preparing it with care.`}
         </p>
 
         <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#fff", border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "12px 24px" }}>
           <Icons.Package />
           <div style={{ textAlign: "left" }}>
-            <p style={{ fontSize: 11, fontWeight: 700, color: T.light, letterSpacing: "1.5px" }}>ORDER NUMBER</p>
-            <p style={{ fontSize: 16, fontWeight: 700, color: T.txt, fontFamily: "monospace" }}>{orderId}</p>
+            <p style={{ fontSize: 11, fontWeight: 700, color: T.light, letterSpacing: "1.5px" }}>ORDER NUMBER & STATUS</p>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 2 }}>
+              <p style={{ fontSize: 16, fontWeight: 700, color: T.txt, fontFamily: "monospace" }}>{orderId}</p>
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 800,
+                  padding: "3px 10px",
+                  borderRadius: 999,
+                  background: isCancelled ? "#FDF2F2" : isDelivered ? "#F0FDF4" : isShipped ? "#EFF6FF" : "#F2F7F4",
+                  color: isCancelled ? "#DC2626" : isDelivered ? "#16A34A" : isShipped ? "#2563EB" : "#5E8C77",
+                  border: `1px solid ${isCancelled ? "#F8B4B4" : isDelivered ? "#BBF7D0" : isShipped ? "#BFDBFE" : "#8EBAA3"}`,
+                }}
+              >
+                ● {orderStatus}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -58,26 +109,65 @@ export default function OrderConfirmation() {
       <div className="container" style={{ padding: "40px 32px 80px" }}>
         {/* Status timeline */}
         <div style={{ background: "#fff", borderRadius: 20, border: `1px solid ${T.border}`, padding: "28px 32px", marginBottom: 24 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: T.txt, marginBottom: 24 }}>Order Progress</h2>
-          <div style={{ display: "flex", gap: 0 }}>
-            {[
-              { icon: "✓", label: "Order Placed",    sub: "Just now",                  done: true  },
-              { icon: "📦", label: "Packing",         sub: "Today – Tomorrow",          done: false },
-              { icon: "🚚", label: "Shipped",         sub: "Within 24 hours",           done: false },
-              { icon: "🎉", label: "Delivered",       sub: deliveryDate.toLocaleDateString("en-IN", { day: "numeric", month: "long" }), done: false },
-            ].map((s, i) => (
-              <div key={s.label} style={{ display: "flex", alignItems: "center", flex: i < 3 ? 1 : 0 }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, minWidth: 96 }}>
-                  <div style={{ width: 42, height: 42, borderRadius: "50%", background: s.done ? T.teal : T.sand, border: `2.5px solid ${s.done ? T.teal : T.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
-                    {s.done ? <span style={{ color: "#fff", fontSize: 18 }}>✓</span> : <span>{s.icon}</span>}
-                  </div>
-                  <p style={{ fontSize: 12.5, fontWeight: 700, color: s.done ? T.txt : T.muted, textAlign: "center" }}>{s.label}</p>
-                  <p style={{ fontSize: 11.5, color: T.light, textAlign: "center" }}>{s.sub}</p>
-                </div>
-                {i < 3 && <div style={{ flex: 1, height: 2, background: s.done ? T.teal : T.border, marginBottom: 38 }} />}
-              </div>
-            ))}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: T.txt }}>Order Progress</h2>
+            <span style={{ fontSize: 12, fontWeight: 600, color: "#5E8C77" }}>⚡ Live sync with Admin portal</span>
           </div>
+
+          {isCancelled ? (
+            <div style={{ background: "#FDF2F2", border: "1px solid #F8B4B4", color: "#9B1C1C", borderRadius: 12, padding: "16px 20px", fontWeight: 600, fontSize: 14 }}>
+              ⚠️ This order has been cancelled by the store administrator.
+            </div>
+          ) : (
+            <div style={{ display: "flex", gap: 0 }}>
+              {[
+                { icon: "✓", label: "Order Placed", sub: "Just now", stepIdx: 0 },
+                { icon: "📦", label: "Processing / Packing", sub: isProcessing ? "In Progress" : "Done", stepIdx: 1 },
+                { icon: "🚚", label: "Shipped", sub: isShipped || isDelivered ? "Dispatched" : "Within 24 hrs", stepIdx: 2 },
+                { icon: "🎉", label: "Delivered", sub: isDelivered ? "Delivered!" : deliveryDate.toLocaleDateString("en-IN", { day: "numeric", month: "short" }), stepIdx: 3 },
+              ].map((s, i) => {
+                const isDone = activeStepIndex >= s.stepIdx;
+                const isCurrent = activeStepIndex === s.stepIdx;
+
+                return (
+                  <div key={s.label} style={{ display: "flex", alignItems: "center", flex: i < 3 ? 1 : 0 }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, minWidth: 100 }}>
+                      <div
+                        style={{
+                          width: 44,
+                          height: 44,
+                          borderRadius: "50%",
+                          background: isDone ? T.teal : T.sand,
+                          border: `2.5px solid ${isDone ? T.teal : T.border}`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: 18,
+                          boxShadow: isCurrent ? "0 0 0 6px rgba(94,140,119,0.2)" : "none",
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        {isDone ? <span style={{ color: "#fff", fontSize: 18, fontWeight: 700 }}>✓</span> : <span>{s.icon}</span>}
+                      </div>
+                      <p style={{ fontSize: 12.5, fontWeight: 700, color: isDone ? T.txt : T.muted, textAlign: "center" }}>{s.label}</p>
+                      <p style={{ fontSize: 11.5, color: isCurrent ? T.teal : T.light, fontWeight: isCurrent ? 700 : 400, textAlign: "center" }}>{s.sub}</p>
+                    </div>
+                    {i < 3 && (
+                      <div
+                        style={{
+                          flex: 1,
+                          height: 3,
+                          background: activeStepIndex > i ? T.teal : T.border,
+                          marginBottom: 38,
+                          transition: "background 0.4s ease",
+                        }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Order Details & Summary Card */}
@@ -87,7 +177,7 @@ export default function OrderConfirmation() {
             <div style={{ background: "#fff", borderRadius: 20, border: `1px solid ${T.border}`, padding: "28px" }}>
               <h3 style={{ fontSize: 17, fontWeight: 700, color: T.txt, marginBottom: 18 }}>Items Ordered ({items.length})</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {items.map(({ product: p, qty }) => (
+                {items.map(({ product: p, qty }: { product: any; qty: number }) => (
                   <div key={p.id} style={{ display: "flex", gap: 14, alignItems: "center", paddingBottom: 14, borderBottom: `1px solid ${T.border}` }}>
                     <img src={p.images[0]} alt={p.name} style={{ width: 60, height: 60, borderRadius: 10, objectFit: "cover", border: `1px solid ${T.border}` }} />
                     <div style={{ flex: 1 }}>
