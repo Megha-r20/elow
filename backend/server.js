@@ -259,6 +259,37 @@ app.post("/api/admin/products", (req, res) => {
   res.status(201).json({ success: true, product: newProduct });
 });
 
+// Admin Product Edit API
+app.put("/api/admin/products/:id", (req, res) => {
+  const prodId = req.params.id;
+  const productIndex = productsList.findIndex(p => p.id === prodId);
+
+  if (productIndex === -1) {
+    return res.status(404).json({ error: "Product not found" });
+  }
+
+  const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } = req.body;
+
+  const currentProduct = productsList[productIndex];
+  const updatedProduct = {
+    ...currentProduct,
+    name: name !== undefined ? name.trim() : currentProduct.name,
+    category: category !== undefined ? category : currentProduct.category,
+    subcategory: subcategory !== undefined ? subcategory : currentProduct.subcategory,
+    price: price !== undefined ? Number(price) : currentProduct.price,
+    originalPrice: originalPrice !== undefined ? (originalPrice ? Number(originalPrice) : undefined) : currentProduct.originalPrice,
+    description: description !== undefined ? description : currentProduct.description,
+    images: images && images.length > 0 ? images : currentProduct.images,
+    inStock: inStock !== undefined ? Boolean(inStock) : currentProduct.inStock,
+    isNew: isNew !== undefined ? Boolean(isNew) : currentProduct.isNew,
+    isBestseller: isBestseller !== undefined ? Boolean(isBestseller) : currentProduct.isBestseller,
+  };
+
+  productsList[productIndex] = updatedProduct;
+  console.log(`[Admin Updated Product] ${updatedProduct.name} (${updatedProduct.id})`);
+  res.json({ success: true, product: updatedProduct });
+});
+
 // Admin Product Delete API
 app.delete("/api/admin/products/:id", (req, res) => {
   const prodId = req.params.id;
