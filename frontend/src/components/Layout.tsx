@@ -73,7 +73,7 @@ export default function Layout() {
         <div className="container" style={{ display: "flex", alignItems: "center", height: 66, gap: 24 }}>
           {/* Logo */}
           <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0 }}>
-            <img src="/logo.png" alt="elow" style={{ height: 52, objectFit: "contain", filter: "drop-shadow(1.5px 1.5px 0 #1C1C1A) drop-shadow(-1.5px -1.5px 0 #1C1C1A) drop-shadow(1.5px -1.5px 0 #1C1C1A) drop-shadow(-1.5px 1.5px 0 #1C1C1A)" }} />
+            <img src="/logo.png" alt="elow" style={{ height: 48, objectFit: "contain", borderRadius: 8 }} />
           </button>
 
           {/* Desktop nav */}
@@ -239,7 +239,7 @@ export default function Layout() {
             {/* Brand */}
             <div>
               <div style={{ marginBottom: 20, background: "#fff", display: "inline-block", padding: "8px 12px", borderRadius: 12 }}>
-                <img src="/logo.png" alt="elow" style={{ height: 36, objectFit: "contain", display: "block", filter: "drop-shadow(1px 1px 0 #1C1C1A) drop-shadow(-1px -1px 0 #1C1C1A) drop-shadow(1px -1px 0 #1C1C1A) drop-shadow(-1px 1px 0 #1C1C1A)" }} />
+                <img src="/logo.png" alt="elow" style={{ height: 38, objectFit: "contain", display: "block", borderRadius: 6 }} />
               </div>
               <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.55)", lineHeight: 1.85, maxWidth: 230, marginBottom: 24 }}>
                 Your home for premium Korean and Japanese-inspired stationery. Beautiful things for beautiful routines.
