@@ -52,6 +52,10 @@ export default function Layout() {
     { label: "GIFTING", path: "/shop?cat=gifting" },
   ];
 
+  if (isAdmin) {
+    navLinks.push({ label: "⚡ ADMIN PORTAL", path: "/admin" });
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       {/* Announcement bar */}
@@ -71,15 +75,23 @@ export default function Layout() {
         </div>
       </div>
 
-      {/* Header */}
+      {/* Header Navbar */}
       <header style={{
-        position: "sticky", top: 0, zIndex: 300, background: "#fff",
-        borderBottom: "1px solid #EDE8E1", boxShadow: "0 1px 20px rgba(0,0,0,0.04)",
+        position: "sticky", top: 0, zIndex: 350,
+        background: "rgba(255, 255, 255, 0.94)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderBottom: "1px solid #EDE8E1",
+        boxShadow: "0 4px 20px rgba(35, 32, 29, 0.04)",
+        transition: "all 0.2s ease"
       }}>
         <div className="container" style={{ display: "flex", alignItems: "center", height: 66, gap: 24 }}>
           {/* Logo */}
-          <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0 }}>
-            <img src="/logo.png" alt="elow" style={{ height: 48, objectFit: "contain", borderRadius: 8 }} />
+          <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0, transition: "transform 0.15s ease" }}
+            onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.02)")}
+            onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <img src="/logo.png" alt="elow" style={{ height: 46, objectFit: "contain", borderRadius: 8 }} />
           </button>
 
           {/* Desktop nav */}
@@ -125,7 +137,13 @@ export default function Layout() {
               ) : (
                 <Link key={link.label} to={link.path}
                   className={`nav-link${isActive(link.path) ? " active" : ""}`}
-                  style={link.dim ? { color: "#8C8880", fontWeight: 400 } : {}}
+                  style={
+                    link.path === "/admin"
+                      ? { color: isActive(link.path) ? "#5E8C77" : "#5E8C77", fontWeight: 700 }
+                      : link.dim
+                      ? { color: "#8C8880", fontWeight: 400 }
+                      : {}
+                  }
                 >
                   {link.label}
                 </Link>
@@ -134,7 +152,7 @@ export default function Layout() {
           </nav>
 
           {/* Right actions */}
-          <div style={{ display: "flex", alignItems: "center", gap: 4, marginLeft: "auto", flexShrink: 0, position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginLeft: "auto", flexShrink: 0, position: "relative" }}>
             <button className="icon-btn" onClick={() => setSearchOpen(o => !o)} title="Search">
               <Icons.Search />
             </button>
@@ -149,12 +167,15 @@ export default function Layout() {
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
-                    background: "#FAF7F2",
-                    border: "1px solid #EAE3D9",
+                    background: isAdmin ? "#1C1C1A" : "#FAF7F2",
+                    color: isAdmin ? "#FFFFFF" : "#23201D",
+                    border: isAdmin ? "1px solid #383430" : "1px solid #EAE3D9",
                     borderRadius: 999,
-                    padding: "4px 12px 4px 6px",
+                    padding: "5px 14px 5px 6px",
                     cursor: "pointer",
                     fontFamily: "inherit",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    transition: "all 0.18s ease",
                   }}
                 >
                   <div
@@ -162,10 +183,10 @@ export default function Layout() {
                       width: 28,
                       height: 28,
                       borderRadius: "50%",
-                      background: isAdmin ? "#23201D" : "#5E8C77",
+                      background: "#5E8C77",
                       color: "#FFFFFF",
                       fontSize: 12,
-                      fontWeight: 700,
+                      fontWeight: 800,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -173,14 +194,15 @@ export default function Layout() {
                   >
                     {user.name.charAt(0).toUpperCase()}
                   </div>
-                  <span style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: isAdmin ? "#FFFFFF" : "#23201D" }}>
                     {user.name.split(" ")[0]}
                   </span>
                   {isAdmin && (
-                    <span style={{ fontSize: 9.5, fontWeight: 800, background: "#23201D", color: "#FFFFFF", padding: "2px 6px", borderRadius: 4, letterSpacing: "0.5px" }}>
+                    <span style={{ fontSize: 9.5, fontWeight: 800, background: "#5E8C77", color: "#FFFFFF", padding: "2px 7px", borderRadius: 999, letterSpacing: "0.5px" }}>
                       ADMIN
                     </span>
                   )}
+                  <span style={{ fontSize: 10, opacity: 0.6, marginLeft: 2 }}>▼</span>
                 </button>
 
                 {/* Dropdown Menu */}
@@ -192,7 +214,7 @@ export default function Layout() {
                         position: "absolute",
                         right: 0,
                         top: "120%",
-                        width: 220,
+                        width: 230,
                         background: "#FFFFFF",
                         borderRadius: 16,
                         border: "1px solid #EAE3D9",
@@ -205,30 +227,58 @@ export default function Layout() {
                       }}
                     >
                       <div style={{ padding: "10px 12px", borderBottom: "1px solid #F4EFE6" }}>
-                        <p style={{ fontSize: 13, fontWeight: 700, color: "#23201D" }}>{user.name}</p>
-                        <p style={{ fontSize: 11, color: "#9C968D" }}>{user.email}</p>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          <p style={{ fontSize: 13.5, fontWeight: 800, color: "#23201D" }}>{user.name}</p>
+                          {isAdmin && (
+                            <span style={{ fontSize: 9, fontWeight: 800, background: "#1C1C1A", color: "#FFFFFF", padding: "2px 6px", borderRadius: 4 }}>
+                              ADMIN
+                            </span>
+                          )}
+                        </div>
+                        <p style={{ fontSize: 11, color: "#9C968D", marginTop: 2 }}>{user.email}</p>
                       </div>
 
                       {isAdmin && (
-                        <button
-                          onClick={() => { setUserDropdownOpen(false); navigate("/admin"); }}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 8,
-                            padding: "10px 12px",
-                            fontSize: 12.5,
-                            fontWeight: 700,
-                            color: "#5E8C77",
-                            background: "#F2F7F4",
-                            borderRadius: 10,
-                            border: "none",
-                            cursor: "pointer",
-                            textAlign: "left",
-                          }}
-                        >
-                          ⚡ Admin Dashboard
-                        </button>
+                        <>
+                          <button
+                            onClick={() => { setUserDropdownOpen(false); navigate("/admin"); }}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              padding: "10px 12px",
+                              fontSize: 12.5,
+                              fontWeight: 700,
+                              color: "#5E8C77",
+                              background: "#F2F7F4",
+                              borderRadius: 10,
+                              border: "none",
+                              cursor: "pointer",
+                              textAlign: "left",
+                            }}
+                          >
+                            ⚡ Admin Control Center
+                          </button>
+                          <button
+                            onClick={() => { setUserDropdownOpen(false); navigate("/shop"); }}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              padding: "9px 12px",
+                              fontSize: 12.5,
+                              fontWeight: 600,
+                              color: "#23201D",
+                              background: "none",
+                              borderRadius: 10,
+                              border: "none",
+                              cursor: "pointer",
+                              textAlign: "left",
+                            }}
+                          >
+                            🛍️ View Store Front
+                          </button>
+                        </>
                       )}
 
                       <button
