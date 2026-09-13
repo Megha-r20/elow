@@ -302,6 +302,26 @@ export default function Layout() {
                       </button>
 
                       <button
+                        onClick={() => { setUserDropdownOpen(false); navigate("/settings"); }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          padding: "9px 12px",
+                          fontSize: 12.5,
+                          fontWeight: 600,
+                          color: "#23201D",
+                          background: "none",
+                          borderRadius: 10,
+                          border: "none",
+                          cursor: "pointer",
+                          textAlign: "left",
+                        }}
+                      >
+                        ⚙️ Profile Settings
+                      </button>
+
+                      <button
                         onClick={() => { setUserDropdownOpen(false); logout(); addToast("Logged out successfully"); }}
                         style={{
                           display: "flex",

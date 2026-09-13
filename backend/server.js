@@ -199,6 +199,75 @@ app.get("/api/auth/me", (req, res) => {
   }
 });
 
+// Auth API - Update Profile & Password
+app.patch("/api/auth/profile", (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    const userId = tokensStore.get(token);
+    if (!userId) {
+      return res.status(401).json({ error: "Invalid or expired session token" });
+    }
+
+    const user = usersStore.find(u => u.id === userId);
+    if (!user) {
+      return res.status(401).json({ error: "User profile not found" });
+    }
+
+    const { name, email, phone, currentPassword, newPassword } = req.body || {};
+
+    if (name) {
+      const cleanName = safeStr(name);
+      if (cleanName) user.name = cleanName;
+    }
+
+    if (email) {
+      const cleanEmail = safeLower(email);
+      if (cleanEmail && cleanEmail !== safeLower(user.email)) {
+        const existing = usersStore.find(u => u.id !== user.id && safeLower(u.email) === cleanEmail);
+        if (existing) {
+          return res.status(400).json({ error: "An account with this email already exists" });
+        }
+        user.email = cleanEmail;
+      }
+    }
+
+    if (phone !== undefined) {
+      user.phone = safeStr(phone);
+    }
+
+    if (newPassword) {
+      const cleanCurrent = safeStr(currentPassword);
+      const cleanNew = safeStr(newPassword);
+
+      if (!cleanCurrent) {
+        return res.status(400).json({ error: "Current password is required to set a new password" });
+      }
+
+      if (String(user.password) !== cleanCurrent) {
+        return res.status(400).json({ error: "Incorrect current password" });
+      }
+
+      if (cleanNew.length < 6) {
+        return res.status(400).json({ error: "New password must be at least 6 characters long" });
+      }
+
+      user.password = cleanNew;
+      console.log(`[User Updated Password] ${user.email}`);
+    }
+
+    console.log(`[User Updated Profile] ${user.name} (${user.email})`);
+    res.json({ success: true, user: sanitizeUser(user), message: "Profile updated successfully" });
+  } catch (err) {
+    console.error("[Update Profile Error]", err);
+    res.status(500).json({ error: "Failed to update profile settings" });
+  }
+});
+
 // Categories API
 app.get("/api/categories", (req, res) => {
   res.json(CATEGORIES || []);

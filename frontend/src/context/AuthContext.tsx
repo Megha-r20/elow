@@ -6,6 +6,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
+  phone?: string;
   role: UserRole;
   createdAt: string;
 };
@@ -17,6 +18,7 @@ type AuthContextType = {
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (name: string, email: string, password: string, role?: UserRole) => Promise<{ success: boolean; error?: string }>;
+  updateProfile: (data: { name?: string; email?: string; phone?: string; currentPassword?: string; newPassword?: string }) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 };
 
@@ -122,6 +124,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const updateProfile = useCallback(async (data: { name?: string; email?: string; phone?: string; currentPassword?: string; newPassword?: string }) => {
+    if (!token) return { success: false, error: "Not authenticated" };
+
+    try {
+      const res = await fetch("/api/auth/profile", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      const resData = await res.json();
+      if (!res.ok) {
+        return { success: false, error: resData.error || "Failed to update profile" };
+      }
+
+      setUser(resData.user);
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || "Network error updating profile" };
+    }
+  }, [token]);
+
   const logout = useCallback(() => {
     localStorage.removeItem("elow_token");
     setToken(null);
@@ -139,6 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         login,
         register,
+        updateProfile,
         logout,
       }}
     >
