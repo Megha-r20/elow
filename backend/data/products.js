@@ -14,8 +14,8 @@ export const PRODUCTS = [
     reviewCount: 390,
     images: [
       "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -42,9 +42,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 420,
     images: [
-      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -69,9 +69,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 183,
     images: [
-      "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "everyday", "pinterest", "stationery"],
     badge: "NEW",
@@ -98,9 +98,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 225,
     images: [
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "NEW",
@@ -127,9 +127,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 312,
     images: [
-      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "minimalist", "pinterest", "stationery"],
     isNew: false,
@@ -154,7 +154,7 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 190,
     images: [
-      "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
@@ -181,9 +181,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 435,
     images: [
-      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "minimalist", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -210,9 +210,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 324,
     images: [
-      "https://images.pexels.com/photos/5234490/pexels-photo-5234490.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8472799/pexels-photo-8472799.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "vintage", "pinterest", "stationery"],
     isNew: false,
@@ -237,9 +237,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 151,
     images: [
-      "https://images.pexels.com/photos/17618795/pexels-photo-17618795.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/4246094/pexels-photo-4246094.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6094048/pexels-photo-6094048.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "modern", "pinterest", "stationery"],
     badge: "NEW",
@@ -266,9 +266,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 143,
     images: [
-      "https://images.pexels.com/photos/39265165/pexels-photo-39265165.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "ultimate", "pinterest", "gift"],
     badge: "BESTSELLER",
@@ -295,9 +295,9 @@ export const PRODUCTS = [
     rating: 5.0,
     reviewCount: 400,
     images: [
-      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1059382/pexels-photo-1059382.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -322,9 +322,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 96,
     images: [
-      "https://images.pexels.com/photos/1083728/pexels-photo-1083728.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7005607/pexels-photo-7005607.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8099373/pexels-photo-8099373.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "NEW",
@@ -351,9 +351,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 257,
     images: [
-      "https://images.pexels.com/photos/7658310/pexels-photo-7658310.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7054793/pexels-photo-7054793.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7181188/pexels-photo-7181188.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373289/pexels-photo-6373289.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "minimalist", "pinterest", "stationery"],
     isNew: false,
@@ -378,9 +378,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 469,
     images: [
-      "https://images.pexels.com/photos/34436210/pexels-photo-34436210.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/36421444/pexels-photo-36421444.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/32368063/pexels-photo-32368063.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -407,9 +407,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 164,
     images: [
-      "https://images.pexels.com/photos/7735699/pexels-photo-7735699.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19364472/pexels-photo-19364472.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35768427/pexels-photo-35768427.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "premium", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -436,9 +436,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 82,
     images: [
-      "https://images.pexels.com/photos/37401749/pexels-photo-37401749.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19585984/pexels-photo-19585984.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "compact", "pinterest", "stationery"],
     isNew: false,
@@ -463,8 +463,8 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 411,
     images: [
-      "https://images.pexels.com/photos/14956248/pexels-photo-14956248.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/39265165/pexels-photo-39265165.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "classic", "pinterest", "stationery"],
@@ -492,9 +492,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 129,
     images: [
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29509324/pexels-photo-29509324.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1059382/pexels-photo-1059382.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "everyday", "pinterest", "stationery"],
     badge: "NEW",
@@ -521,9 +521,9 @@ export const PRODUCTS = [
     rating: 4.0,
     reviewCount: 277,
     images: [
-      "https://images.pexels.com/photos/28503352/pexels-photo-28503352.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/28503352/pexels-photo-28503352.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "aesthetic", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -550,9 +550,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 231,
     images: [
-      "https://images.pexels.com/photos/7657391/pexels-photo-7657391.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5483188/pexels-photo-5483188.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "ultimate", "pinterest", "gift"],
     isNew: false,
@@ -577,9 +577,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 338,
     images: [
-      "https://images.pexels.com/photos/19756945/pexels-photo-19756945.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/32368063/pexels-photo-32368063.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/165841/pexels-photo-165841.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "modern", "pinterest", "stationery"],
     isNew: false,
@@ -604,9 +604,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 478,
     images: [
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "vintage", "pinterest", "stationery"],
     badge: "NEW",
@@ -633,9 +633,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 28,
     images: [
-      "https://images.pexels.com/photos/13521059/pexels-photo-13521059.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37401749/pexels-photo-37401749.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/13521059/pexels-photo-13521059.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "aesthetic", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -662,9 +662,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 304,
     images: [
-      "https://images.pexels.com/photos/15240629/pexels-photo-15240629.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35016344/pexels-photo-35016344.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/13179266/pexels-photo-13179266.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "luxury", "pinterest", "stationery"],
     isNew: false,
@@ -689,8 +689,8 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 443,
     images: [
-      "https://images.pexels.com/photos/27200472/pexels-photo-27200472.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "vintage", "pinterest", "stationery"],
@@ -716,9 +716,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 110,
     images: [
-      "https://images.pexels.com/photos/7718656/pexels-photo-7718656.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7005607/pexels-photo-7005607.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8762862/pexels-photo-8762862.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "colorful", "pinterest", "stationery"],
     badge: "NEW",
@@ -745,9 +745,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 474,
     images: [
-      "https://images.pexels.com/photos/28028334/pexels-photo-28028334.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5710689/pexels-photo-5710689.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6893329/pexels-photo-6893329.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373289/pexels-photo-6373289.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "modern", "pinterest", "stationery"],
     isNew: false,
@@ -772,9 +772,9 @@ export const PRODUCTS = [
     rating: 4.0,
     reviewCount: 463,
     images: [
-      "https://images.pexels.com/photos/760716/pexels-photo-760716.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8986081/pexels-photo-8986081.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34607/pexels-photo-34607.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "eco-friendly", "pinterest", "stationery"],
     badge: "NEW",
@@ -801,9 +801,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 168,
     images: [
-      "https://images.pexels.com/photos/8472799/pexels-photo-8472799.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/3205588/pexels-photo-3205588.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "aesthetic", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -830,9 +830,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 102,
     images: [
-      "https://images.pexels.com/photos/5383779/pexels-photo-5383779.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19585984/pexels-photo-19585984.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/2718571/pexels-photo-2718571.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "ultimate", "pinterest", "gift"],
     badge: "BESTSELLER",
@@ -859,9 +859,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 288,
     images: [
-      "https://images.pexels.com/photos/33164253/pexels-photo-33164253.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35016344/pexels-photo-35016344.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "SALE",
@@ -888,9 +888,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 221,
     images: [
-      "https://images.pexels.com/photos/15713275/pexels-photo-15713275.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29509375/pexels-photo-29509375.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/11124936/pexels-photo-11124936.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "colorful", "pinterest", "stationery"],
     isNew: false,
@@ -915,9 +915,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 488,
     images: [
-      "https://images.pexels.com/photos/7005607/pexels-photo-7005607.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1083728/pexels-photo-1083728.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/32368063/pexels-photo-32368063.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "minimalist", "pinterest", "stationery"],
     isNew: false,
@@ -942,9 +942,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 54,
     images: [
-      "https://images.pexels.com/photos/7054793/pexels-photo-7054793.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37865721/pexels-photo-37865721.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373289/pexels-photo-6373289.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "vintage", "pinterest", "stationery"],
     isNew: false,
@@ -969,9 +969,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 266,
     images: [
-      "https://images.pexels.com/photos/8986081/pexels-photo-8986081.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29279362/pexels-photo-29279362.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "colorful", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -998,9 +998,9 @@ export const PRODUCTS = [
     rating: 5.0,
     reviewCount: 407,
     images: [
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37627838/pexels-photo-37627838.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "handcrafted", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -1027,9 +1027,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 290,
     images: [
-      "https://images.pexels.com/photos/13521053/pexels-photo-13521053.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/13521053/pexels-photo-13521053.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6905162/pexels-photo-6905162.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "eco-friendly", "pinterest", "stationery"],
     isNew: false,
@@ -1054,9 +1054,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 412,
     images: [
-      "https://images.pexels.com/photos/21840648/pexels-photo-21840648.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/31995462/pexels-photo-31995462.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35016344/pexels-photo-35016344.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "NEW",
@@ -1083,9 +1083,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 124,
     images: [
-      "https://images.pexels.com/photos/1059382/pexels-photo-1059382.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6353769/pexels-photo-6353769.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8487200/pexels-photo-8487200.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "colorful", "pinterest", "stationery"],
     badge: "NEW",
@@ -1112,9 +1112,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 468,
     images: [
-      "https://images.pexels.com/photos/22763683/pexels-photo-22763683.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/627530/pexels-photo-627530.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "ultimate", "pinterest", "gift"],
     isNew: false,
@@ -1139,9 +1139,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 479,
     images: [
-      "https://images.pexels.com/photos/9462092/pexels-photo-9462092.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/28028334/pexels-photo-28028334.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7657391/pexels-photo-7657391.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373289/pexels-photo-6373289.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "compact", "pinterest", "stationery"],
     isNew: false,
@@ -1166,9 +1166,9 @@ export const PRODUCTS = [
     rating: 4.0,
     reviewCount: 490,
     images: [
-      "https://images.pexels.com/photos/34640260/pexels-photo-34640260.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34436210/pexels-photo-34436210.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "vintage", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -1195,9 +1195,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 463,
     images: [
-      "https://images.pexels.com/photos/9511742/pexels-photo-9511742.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/32975295/pexels-photo-32975295.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "classic", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -1224,9 +1224,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 328,
     images: [
-      "https://images.pexels.com/photos/2718571/pexels-photo-2718571.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7218533/pexels-photo-7218533.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/30294767/pexels-photo-30294767.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "modern", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -1253,9 +1253,9 @@ export const PRODUCTS = [
     rating: 4.0,
     reviewCount: 44,
     images: [
-      "https://images.pexels.com/photos/36344773/pexels-photo-36344773.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37674319/pexels-photo-37674319.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34331373/pexels-photo-34331373.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "aesthetic", "pinterest", "stationery"],
     isNew: false,
@@ -1280,9 +1280,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 270,
     images: [
-      "https://images.pexels.com/photos/36421444/pexels-photo-36421444.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6374/pexels-photo-6374.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5386483/pexels-photo-5386483.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "everyday", "pinterest", "stationery"],
     isNew: false,
@@ -1307,9 +1307,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 232,
     images: [
-      "https://images.pexels.com/photos/627530/pexels-photo-627530.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8762862/pexels-photo-8762862.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/11124936/pexels-photo-11124936.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "eco-friendly", "pinterest", "stationery"],
     isNew: false,
@@ -1334,9 +1334,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 398,
     images: [
-      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/9462092/pexels-photo-9462092.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7718899/pexels-photo-7718899.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -1363,9 +1363,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 72,
     images: [
-      "https://images.pexels.com/photos/34436215/pexels-photo-34436215.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/760716/pexels-photo-760716.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19756945/pexels-photo-19756945.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "everyday", "pinterest", "stationery"],
     isNew: false,
@@ -1390,9 +1390,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 324,
     images: [
-      "https://images.pexels.com/photos/3205588/pexels-photo-3205588.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35768427/pexels-photo-35768427.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6632852/pexels-photo-6632852.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "ultimate", "pinterest", "gift"],
     isNew: false,
@@ -1417,8 +1417,8 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 223,
     images: [
-      "https://images.pexels.com/photos/38644476/pexels-photo-38644476.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "vintage", "pinterest", "stationery"],
@@ -1446,9 +1446,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 48,
     images: [
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37674319/pexels-photo-37674319.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/31995462/pexels-photo-31995462.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "luxury", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -1475,9 +1475,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 219,
     images: [
-      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8250989/pexels-photo-8250989.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29509515/pexels-photo-29509515.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "classic", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -1504,9 +1504,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 160,
     images: [
-      "https://images.pexels.com/photos/36421444/pexels-photo-36421444.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7583441/pexels-photo-7583441.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8230968/pexels-photo-8230968.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "premium", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -1533,9 +1533,9 @@ export const PRODUCTS = [
     rating: 5.0,
     reviewCount: 386,
     images: [
-      "https://images.pexels.com/photos/7718792/pexels-photo-7718792.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7657391/pexels-photo-7657391.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37865721/pexels-photo-37865721.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "premium", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -1562,9 +1562,9 @@ export const PRODUCTS = [
     rating: 5.0,
     reviewCount: 375,
     images: [
-      "https://images.pexels.com/photos/8057039/pexels-photo-8057039.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/18277845/pexels-photo-18277845.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "vintage", "pinterest", "stationery"],
     isNew: false,
@@ -1589,9 +1589,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 464,
     images: [
-      "https://images.pexels.com/photos/6632852/pexels-photo-6632852.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6632852/pexels-photo-6632852.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -1618,9 +1618,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 226,
     images: [
-      "https://images.pexels.com/photos/6905162/pexels-photo-6905162.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/2718571/pexels-photo-2718571.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/13521053/pexels-photo-13521053.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "compact", "pinterest", "stationery"],
     badge: "SALE",
@@ -1647,9 +1647,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 83,
     images: [
-      "https://images.pexels.com/photos/37674319/pexels-photo-37674319.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/10920328/pexels-photo-10920328.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/31718612/pexels-photo-31718612.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "modern", "pinterest", "stationery"],
     isNew: false,
@@ -1674,9 +1674,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 125,
     images: [
-      "https://images.pexels.com/photos/8487200/pexels-photo-8487200.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/27200472/pexels-photo-27200472.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7668396/pexels-photo-7668396.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "ultimate", "pinterest", "gift"],
     badge: "SALE",
@@ -1703,9 +1703,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 406,
     images: [
-      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7657397/pexels-photo-7657397.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/22763683/pexels-photo-22763683.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "eco-friendly", "pinterest", "stationery"],
     isNew: false,
@@ -1730,9 +1730,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 500,
     images: [
-      "https://images.pexels.com/photos/5710689/pexels-photo-5710689.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5483188/pexels-photo-5483188.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "minimalist", "pinterest", "stationery"],
     isNew: false,
@@ -1757,9 +1757,9 @@ export const PRODUCTS = [
     rating: 4.0,
     reviewCount: 165,
     images: [
-      "https://images.pexels.com/photos/33887246/pexels-photo-33887246.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -1784,9 +1784,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 144,
     images: [
-      "https://images.pexels.com/photos/19364472/pexels-photo-19364472.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8472799/pexels-photo-8472799.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5250892/pexels-photo-5250892.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "handcrafted", "pinterest", "stationery"],
     isNew: false,
@@ -1811,9 +1811,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 58,
     images: [
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6905162/pexels-photo-6905162.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "vintage", "pinterest", "stationery"],
     isNew: false,
@@ -1838,9 +1838,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 476,
     images: [
-      "https://images.pexels.com/photos/31718612/pexels-photo-31718612.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37674319/pexels-photo-37674319.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7661590/pexels-photo-7661590.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "everyday", "pinterest", "stationery"],
     badge: "SALE",
@@ -1867,9 +1867,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 469,
     images: [
-      "https://images.pexels.com/photos/6353769/pexels-photo-6353769.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/36421444/pexels-photo-36421444.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "minimalist", "pinterest", "stationery"],
     isNew: false,
@@ -1894,9 +1894,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 298,
     images: [
-      "https://images.pexels.com/photos/7583441/pexels-photo-7583441.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1083728/pexels-photo-1083728.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7718656/pexels-photo-7718656.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "luxury", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -1923,9 +1923,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 417,
     images: [
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5483188/pexels-photo-5483188.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6893329/pexels-photo-6893329.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373289/pexels-photo-6373289.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "premium", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -1952,9 +1952,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 51,
     images: [
-      "https://images.pexels.com/photos/34607/pexels-photo-34607.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29279362/pexels-photo-29279362.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "ultimate", "pinterest", "gift"],
     badge: "SALE",
@@ -1981,9 +1981,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 370,
     images: [
-      "https://images.pexels.com/photos/8730993/pexels-photo-8730993.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34511907/pexels-photo-34511907.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/24876030/pexels-photo-24876030.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -2008,9 +2008,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 229,
     images: [
-      "https://images.pexels.com/photos/38393959/pexels-photo-38393959.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/4246094/pexels-photo-4246094.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/38393959/pexels-photo-38393959.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "handcrafted", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -2037,9 +2037,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 478,
     images: [
-      "https://images.pexels.com/photos/13179266/pexels-photo-13179266.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/13179266/pexels-photo-13179266.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8004028/pexels-photo-8004028.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "premium", "pinterest", "stationery"],
     isNew: false,
@@ -2064,9 +2064,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 258,
     images: [
-      "https://images.pexels.com/photos/7668396/pexels-photo-7668396.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8250989/pexels-photo-8250989.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/27200472/pexels-photo-27200472.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "vintage", "pinterest", "stationery"],
     badge: "SALE",
@@ -2093,9 +2093,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 439,
     images: [
-      "https://images.pexels.com/photos/8099373/pexels-photo-8099373.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7005607/pexels-photo-7005607.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/9743014/pexels-photo-9743014.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "colorful", "pinterest", "stationery"],
     badge: "NEW",
@@ -2122,9 +2122,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 489,
     images: [
-      "https://images.pexels.com/photos/7718899/pexels-photo-7718899.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/9462092/pexels-photo-9462092.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7054793/pexels-photo-7054793.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373289/pexels-photo-6373289.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "classic", "pinterest", "stationery"],
     badge: "NEW",
@@ -2151,9 +2151,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 329,
     images: [
-      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34436215/pexels-photo-34436215.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8057039/pexels-photo-8057039.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "classic", "pinterest", "stationery"],
     isNew: false,
@@ -2178,9 +2178,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 236,
     images: [
-      "https://images.pexels.com/photos/8730901/pexels-photo-8730901.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5234490/pexels-photo-5234490.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19364472/pexels-photo-19364472.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "handcrafted", "pinterest", "stationery"],
     isNew: false,
@@ -2205,9 +2205,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 360,
     images: [
-      "https://images.pexels.com/photos/30727761/pexels-photo-30727761.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5721552/pexels-photo-5721552.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/30727761/pexels-photo-30727761.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "handcrafted", "pinterest", "stationery"],
     badge: "SALE",
@@ -2234,9 +2234,9 @@ export const PRODUCTS = [
     rating: 4.0,
     reviewCount: 261,
     images: [
-      "https://images.pexels.com/photos/20336992/pexels-photo-20336992.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/13179266/pexels-photo-13179266.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "ultimate", "pinterest", "gift"],
     badge: "LIMITED",
@@ -2263,9 +2263,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 132,
     images: [
-      "https://images.pexels.com/photos/8250989/pexels-photo-8250989.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7668396/pexels-photo-7668396.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29509324/pexels-photo-29509324.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "classic", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -2292,9 +2292,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 354,
     images: [
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29279362/pexels-photo-29279362.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/32368063/pexels-photo-32368063.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "vintage", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -2321,9 +2321,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 306,
     images: [
-      "https://images.pexels.com/photos/5445610/pexels-photo-5445610.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6893329/pexels-photo-6893329.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "everyday", "pinterest", "stationery"],
     isNew: false,
@@ -2348,9 +2348,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 443,
     images: [
-      "https://images.pexels.com/photos/18277845/pexels-photo-18277845.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34640260/pexels-photo-34640260.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/9305286/pexels-photo-9305286.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "eco-friendly", "pinterest", "stationery"],
     isNew: false,
@@ -2375,9 +2375,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 324,
     images: [
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37627838/pexels-photo-37627838.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "everyday", "pinterest", "stationery"],
     isNew: false,
@@ -2402,9 +2402,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 299,
     images: [
-      "https://images.pexels.com/photos/19585984/pexels-photo-19585984.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/30294767/pexels-photo-30294767.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "colorful", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -2431,9 +2431,9 @@ export const PRODUCTS = [
     rating: 4.4,
     reviewCount: 414,
     images: [
-      "https://images.pexels.com/photos/31995462/pexels-photo-31995462.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/15240629/pexels-photo-15240629.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/31718612/pexels-photo-31718612.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "vintage", "pinterest", "stationery"],
     isNew: false,
@@ -2458,8 +2458,8 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 139,
     images: [
-      "https://images.pexels.com/photos/29279362/pexels-photo-29279362.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5386483/pexels-photo-5386483.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "minimalist", "pinterest", "stationery"],
@@ -2485,9 +2485,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 132,
     images: [
-      "https://images.pexels.com/photos/7657397/pexels-photo-7657397.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7583441/pexels-photo-7583441.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8099373/pexels-photo-8099373.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "minimalist", "pinterest", "stationery"],
     isNew: false,
@@ -2512,9 +2512,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 222,
     images: [
-      "https://images.pexels.com/photos/37865721/pexels-photo-37865721.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37865721/pexels-photo-37865721.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7718899/pexels-photo-7718899.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "ultimate", "pinterest", "gift"],
     badge: "BESTSELLER",
@@ -2541,9 +2541,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 351,
     images: [
-      "https://images.pexels.com/photos/36421444/pexels-photo-36421444.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8986081/pexels-photo-8986081.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8986081/pexels-photo-8986081.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "modern", "pinterest", "stationery"],
     isNew: false,
@@ -2568,9 +2568,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 185,
     images: [
-      "https://images.pexels.com/photos/37627838/pexels-photo-37627838.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35768427/pexels-photo-35768427.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8730993/pexels-photo-8730993.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "luxury", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -2597,9 +2597,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 245,
     images: [
-      "https://images.pexels.com/photos/6094048/pexels-photo-6094048.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/4246094/pexels-photo-4246094.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/13521053/pexels-photo-13521053.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "minimalist", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -2626,9 +2626,9 @@ export const PRODUCTS = [
     rating: 4.3,
     reviewCount: 113,
     images: [
-      "https://images.pexels.com/photos/10920328/pexels-photo-10920328.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/31718612/pexels-photo-31718612.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["stickers", "aesthetic", "handcrafted", "pinterest", "stationery"],
     isNew: false,
@@ -2653,9 +2653,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 32,
     images: [
-      "https://images.pexels.com/photos/29509324/pexels-photo-29509324.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
       "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/14807516/pexels-photo-14807516.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["planners", "aesthetic", "premium", "pinterest", "stationery"],
     badge: "NEW",
@@ -2682,9 +2682,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 80,
     images: [
-      "https://images.pexels.com/photos/8230968/pexels-photo-8230968.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5712576/pexels-photo-5712576.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5712463/pexels-photo-5712463.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9784245/pexels-photo-9784245.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["notebooks", "aesthetic", "vintage", "pinterest", "stationery"],
     isNew: false,
@@ -2709,9 +2709,9 @@ export const PRODUCTS = [
     rating: 4.1,
     reviewCount: 184,
     images: [
-      "https://images.pexels.com/photos/36181031/pexels-photo-36181031.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7718899/pexels-photo-7718899.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["desk", "aesthetic", "luxury", "pinterest", "stationery"],
     badge: "BESTSELLER",
@@ -2738,9 +2738,9 @@ export const PRODUCTS = [
     rating: 4.0,
     reviewCount: 412,
     images: [
-      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/33887246/pexels-photo-33887246.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35768427/pexels-photo-35768427.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["journals", "aesthetic", "everyday", "pinterest", "stationery"],
     badge: "LIMITED",
@@ -2767,9 +2767,9 @@ export const PRODUCTS = [
     rating: 4.2,
     reviewCount: 134,
     images: [
-      "https://images.pexels.com/photos/34511907/pexels-photo-34511907.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5554657/pexels-photo-5554657.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37627838/pexels-photo-37627838.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["pens", "aesthetic", "minimalist", "pinterest", "stationery"],
     badge: "SALE",
@@ -2796,9 +2796,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 44,
     images: [
-      "https://images.pexels.com/photos/7218533/pexels-photo-7218533.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6094048/pexels-photo-6094048.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/30294767/pexels-photo-30294767.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["washi", "aesthetic", "ultimate", "pinterest", "gift"],
     isNew: false,
@@ -2823,9 +2823,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 384,
     images: [
-      "https://images.pexels.com/photos/37627838/pexels-photo-37627838.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29509324/pexels-photo-29509324.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/17618795/pexels-photo-17618795.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -2852,9 +2852,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 213,
     images: [
-      "https://images.pexels.com/photos/37401749/pexels-photo-37401749.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/165841/pexels-photo-165841.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -2881,9 +2881,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 588,
     images: [
-      "https://images.pexels.com/photos/8762862/pexels-photo-8762862.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5250892/pexels-photo-5250892.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34436215/pexels-photo-34436215.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "SALE",
@@ -2910,9 +2910,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 185,
     images: [
-      "https://images.pexels.com/photos/31718612/pexels-photo-31718612.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/31995462/pexels-photo-31995462.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -2939,9 +2939,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 563,
     images: [
-      "https://images.pexels.com/photos/37865721/pexels-photo-37865721.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5386483/pexels-photo-5386483.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -2968,9 +2968,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 700,
     images: [
-      u("photo-1579017308347-e53e0d2fc5e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/36421444/pexels-photo-36421444.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/28028334/pexels-photo-28028334.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -2997,9 +2997,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 469,
     images: [
-      "https://images.pexels.com/photos/5483188/pexels-photo-5483188.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/9743014/pexels-photo-9743014.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/11124936/pexels-photo-11124936.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -3026,9 +3026,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 106,
     images: [
-      "https://images.pexels.com/photos/29509375/pexels-photo-29509375.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6632852/pexels-photo-6632852.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7657391/pexels-photo-7657391.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -3055,9 +3055,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 352,
     images: [
-      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6632852/pexels-photo-6632852.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/29509324/pexels-photo-29509324.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -3084,9 +3084,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 622,
     images: [
-      u("photo-1725953386283-d918bb2ac9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/5445610/pexels-photo-5445610.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8730993/pexels-photo-8730993.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -3113,9 +3113,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 247,
     images: [
-      "https://images.pexels.com/photos/5383779/pexels-photo-5383779.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3142,9 +3142,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 234,
     images: [
-      "https://images.pexels.com/photos/39265165/pexels-photo-39265165.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6893329/pexels-photo-6893329.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35016344/pexels-photo-35016344.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -3171,9 +3171,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 351,
     images: [
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34436215/pexels-photo-34436215.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -3200,9 +3200,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 346,
     images: [
-      "https://images.pexels.com/photos/5250892/pexels-photo-5250892.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8099373/pexels-photo-8099373.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8004028/pexels-photo-8004028.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3229,9 +3229,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 516,
     images: [
-      "https://images.pexels.com/photos/1059382/pexels-photo-1059382.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5712576/pexels-photo-5712576.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7718899/pexels-photo-7718899.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -3258,9 +3258,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 752,
     images: [
-      "https://images.pexels.com/photos/7718899/pexels-photo-7718899.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "SALE",
@@ -3287,9 +3287,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 800,
     images: [
-      "https://images.pexels.com/photos/34511907/pexels-photo-34511907.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/39265165/pexels-photo-39265165.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/13521053/pexels-photo-13521053.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3316,9 +3316,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 537,
     images: [
-      "https://images.pexels.com/photos/29509515/pexels-photo-29509515.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("photo-1601311911926-dbdae16e54c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/6353769/pexels-photo-6353769.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -3345,9 +3345,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 239,
     images: [
-      "https://images.pexels.com/photos/4729797/pexels-photo-4729797.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7583441/pexels-photo-7583441.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8472799/pexels-photo-8472799.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -3374,9 +3374,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 635,
     images: [
-      "https://images.pexels.com/photos/8487200/pexels-photo-8487200.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7583441/pexels-photo-7583441.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/159752/pencil-office-design-sharp-159752.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -3403,9 +3403,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 572,
     images: [
-      "https://images.pexels.com/photos/8099373/pexels-photo-8099373.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/30294767/pexels-photo-30294767.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("photo-1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA")
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -3432,9 +3432,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 404,
     images: [
-      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("photo-1750814019023-4e43037f5075?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/2718571/pexels-photo-2718571.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -3461,9 +3461,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 761,
     images: [
-      "https://images.pexels.com/photos/20336992/pexels-photo-20336992.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/33887246/pexels-photo-33887246.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3490,9 +3490,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 391,
     images: [
-      "https://images.pexels.com/photos/13521053/pexels-photo-13521053.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5721552/pexels-photo-5721552.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/31718612/pexels-photo-31718612.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -3519,9 +3519,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 412,
     images: [
-      "https://images.pexels.com/photos/34835173/pexels-photo-34835173.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6353769/pexels-photo-6353769.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/39265165/pexels-photo-39265165.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3548,9 +3548,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 81,
     images: [
-      "https://images.pexels.com/photos/5386483/pexels-photo-5386483.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35016344/pexels-photo-35016344.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6094048/pexels-photo-6094048.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -3577,9 +3577,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 497,
     images: [
-      "https://images.pexels.com/photos/8004028/pexels-photo-8004028.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6374/pexels-photo-6374.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34331373/pexels-photo-34331373.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -3606,9 +3606,9 @@ export const PRODUCTS = [
     rating: 4.5,
     reviewCount: 584,
     images: [
-      u("photo-1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/19585984/pexels-photo-19585984.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1059382/pexels-photo-1059382.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -3635,9 +3635,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 659,
     images: [
-      u("photo-1750814019023-4e43037f5075?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/15240629/pexels-photo-15240629.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6094048/pexels-photo-6094048.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -3664,9 +3664,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 137,
     images: [
-      u("photo-1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/7657397/pexels-photo-7657397.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8762862/pexels-photo-8762862.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -3693,9 +3693,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 446,
     images: [
-      "https://images.pexels.com/photos/7181188/pexels-photo-7181188.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19797312/pexels-photo-19797312.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6905162/pexels-photo-6905162.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -3722,9 +3722,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 264,
     images: [
-      "https://images.pexels.com/photos/13521059/pexels-photo-13521059.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/2718571/pexels-photo-2718571.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "SALE",
@@ -3751,9 +3751,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 736,
     images: [
-      "https://images.pexels.com/photos/6893329/pexels-photo-6893329.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34511907/pexels-photo-34511907.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/1059382/pexels-photo-1059382.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373289/pexels-photo-6373289.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3780,9 +3780,9 @@ export const PRODUCTS = [
     rating: 5.0,
     reviewCount: 536,
     images: [
-      "https://images.pexels.com/photos/37674319/pexels-photo-37674319.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/165841/pexels-photo-165841.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/37865721/pexels-photo-37865721.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -3809,9 +3809,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 387,
     images: [
-      "https://images.pexels.com/photos/7661590/pexels-photo-7661590.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19364472/pexels-photo-19364472.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/28028334/pexels-photo-28028334.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -3838,9 +3838,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 656,
     images: [
-      u("photo-1762318897771-f68b31c0d11f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/1090680/pexels-photo-1090680.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6632852/pexels-photo-6632852.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3867,9 +3867,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 550,
     images: [
-      "https://images.pexels.com/photos/19585984/pexels-photo-19585984.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34511907/pexels-photo-34511907.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8472799/pexels-photo-8472799.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3896,9 +3896,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 548,
     images: [
-      "https://images.pexels.com/photos/19756945/pexels-photo-19756945.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8762862/pexels-photo-8762862.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/10567234/pexels-photo-10567234.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "SALE",
@@ -3925,9 +3925,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 75,
     images: [
-      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/9300770/pexels-photo-9300770.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19585984/pexels-photo-19585984.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -3954,9 +3954,9 @@ export const PRODUCTS = [
     rating: 5.0,
     reviewCount: 65,
     images: [
-      "https://images.pexels.com/photos/2718571/pexels-photo-2718571.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/2718571/pexels-photo-2718571.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/10920328/pexels-photo-10920328.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373289/pexels-photo-6373289.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3746948/pexels-photo-3746948.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/37627848/pexels-photo-37627848.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -3983,9 +3983,9 @@ export const PRODUCTS = [
     rating: 5.0,
     reviewCount: 178,
     images: [
-      "https://images.pexels.com/photos/15713275/pexels-photo-15713275.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8057039/pexels-photo-8057039.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5483188/pexels-photo-5483188.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -4012,9 +4012,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 419,
     images: [
-      "https://images.pexels.com/photos/35768427/pexels-photo-35768427.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("photo-1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/5234490/pexels-photo-5234490.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "SALE",
@@ -4041,9 +4041,9 @@ export const PRODUCTS = [
     rating: 4.9,
     reviewCount: 635,
     images: [
-      "https://images.pexels.com/photos/5594317/pexels-photo-5594317.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      u("photo-1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-      "https://images.pexels.com/photos/5250892/pexels-photo-5250892.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -4070,9 +4070,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 214,
     images: [
-      "https://images.pexels.com/photos/17618795/pexels-photo-17618795.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/35748604/pexels-photo-35748604.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/9743014/pexels-photo-9743014.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -4099,9 +4099,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 319,
     images: [
-      "https://images.pexels.com/photos/32975295/pexels-photo-32975295.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/10920328/pexels-photo-10920328.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5483188/pexels-photo-5483188.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "LIMITED",
@@ -4128,9 +4128,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 307,
     images: [
-      "https://images.pexels.com/photos/5712576/pexels-photo-5712576.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/11124936/pexels-photo-11124936.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/19364472/pexels-photo-19364472.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/7822110/pexels-photo-7822110.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
@@ -4157,9 +4157,9 @@ export const PRODUCTS = [
     rating: 4.7,
     reviewCount: 552,
     images: [
-      "https://images.pexels.com/photos/7583441/pexels-photo-7583441.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/5710689/pexels-photo-5710689.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7718792/pexels-photo-7718792.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/5717492/pexels-photo-5717492.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/895465/pexels-photo-895465.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "BESTSELLER",
@@ -4186,9 +4186,9 @@ export const PRODUCTS = [
     rating: 4.8,
     reviewCount: 329,
     images: [
-      "https://images.pexels.com/photos/7735699/pexels-photo-7735699.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/30727761/pexels-photo-30727761.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/6632852/pexels-photo-6632852.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "GIFT",
@@ -4215,9 +4215,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 299,
     images: [
-      "https://images.pexels.com/photos/9743014/pexels-photo-9743014.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/34640260/pexels-photo-34640260.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6929345/pexels-photo-6929345.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/7005470/pexels-photo-7005470.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6929348/pexels-photo-6929348.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "SALE",
@@ -4244,9 +4244,9 @@ export const PRODUCTS = [
     rating: 4.6,
     reviewCount: 614,
     images: [
-      "https://images.pexels.com/photos/9462092/pexels-photo-9462092.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/8730993/pexels-photo-8730993.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
-      "https://images.pexels.com/photos/7005607/pexels-photo-7005607.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/3771088/pexels-photo-3771088.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop",
+      "https://images.pexels.com/photos/6373292/pexels-photo-6373292.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
     ],
     tags: ["gifting", "gift", "combo", "set", "aesthetic"],
     badge: "NEW",
