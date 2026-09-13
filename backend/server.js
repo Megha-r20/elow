@@ -11,6 +11,45 @@ app.use(express.json());
 // Memory store for placed orders
 const ordersStore = new Map();
 
+// Initial sample order for demonstration in Admin Portal
+const initialDemoOrder = {
+  id: "US-2026-DEMO01",
+  items: [
+    {
+      product: {
+        id: "journal-01",
+        name: "Linen Hardcover Bullet Journal 160GSM",
+        price: 1299,
+        category: "journals",
+        subcategory: "Hardcover",
+        images: ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"]
+      },
+      qty: 1
+    }
+  ],
+  deliveryAddress: {
+    firstName: "Ritika",
+    lastName: "Sharma",
+    email: "ritika@example.com",
+    phone: "9876543210",
+    address: "Flat 4B, Orchid Heights, MG Road",
+    city: "Mumbai",
+    state: "Maharashtra",
+    pincode: "400001"
+  },
+  payMethod: "upi",
+  subtotal: 1299,
+  discount: 0,
+  shipping: 0,
+  giftCost: 0,
+  total: 1299,
+  status: "Processing",
+  date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
+  createdAt: new Date().toISOString()
+};
+ordersStore.set(initialDemoOrder.id, initialDemoOrder);
+
+
 // Dynamic products list in memory initialized from PRODUCTS array
 let productsList = [...PRODUCTS];
 
