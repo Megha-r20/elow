@@ -24,6 +24,34 @@ const INIT_FORM: FormData = {
 const STEPS = ["Delivery", "Payment", "Review"];
 const STATES = ["Andhra Pradesh","Assam","Bihar","Delhi","Goa","Gujarat","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Odisha","Punjab","Rajasthan","Tamil Nadu","Telangana","Uttar Pradesh","West Bengal"];
 
+type FieldProps = {
+  label: string;
+  field: keyof FormData;
+  type?: string;
+  placeholder?: string;
+  form: FormData;
+  errors: Partial<Record<keyof FormData, string>>;
+  set: (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+  [k: string]: any;
+};
+
+function Field({ label, field, type = "text", placeholder, form, errors, set, ...rest }: FieldProps) {
+  return (
+    <div>
+      <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: T.light, letterSpacing: "1px", marginBottom: 6 }}>{label}</label>
+      <input
+        type={type}
+        className={`field${errors[field] ? " error" : ""}`}
+        value={String(form[field])}
+        onChange={set(field)}
+        placeholder={placeholder}
+        {...rest}
+      />
+      {errors[field] && <p style={{ fontSize: 11.5, color: "#e05252", marginTop: 5, fontWeight: 500 }}>{errors[field]}</p>}
+    </div>
+  );
+}
+
 export default function Checkout() {
   const navigate = useNavigate();
   const { items, subtotal, discount, clearCart, saveOrder } = useCart();
@@ -100,21 +128,6 @@ export default function Checkout() {
     setStep(s => s + 1);
   };
 
-  const Field = ({ label, field, type = "text", placeholder, ...rest }: { label: string; field: keyof FormData; type?: string; placeholder?: string; [k: string]: any }) => (
-    <div>
-      <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: T.light, letterSpacing: "1px", marginBottom: 6 }}>{label}</label>
-      <input
-        type={type}
-        className={`field${errors[field] ? " error" : ""}`}
-        value={String(form[field])}
-        onChange={set(field)}
-        placeholder={placeholder}
-        {...rest}
-      />
-      {errors[field] && <p style={{ fontSize: 11.5, color: "#e05252", marginTop: 5, fontWeight: 500 }}>{errors[field]}</p>}
-    </div>
-  );
-
   if (items.length === 0) {
     return (
       <div className="container" style={{ padding: "80px 32px", textAlign: "center" }}>
@@ -144,19 +157,19 @@ export default function Checkout() {
               <div>
                 <h2 style={{ fontSize: 20, fontWeight: 700, color: T.txt, marginBottom: 24 }}>Delivery Information</h2>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                  <Field label="FIRST NAME" field="firstName" placeholder="Ritika" />
-                  <Field label="LAST NAME" field="lastName" placeholder="Sharma" />
-                  <Field label="EMAIL ADDRESS" field="email" type="email" placeholder="ritika@example.com" />
-                  <Field label="PHONE NUMBER" field="phone" type="tel" placeholder="9876543210" />
+                  <Field label="FIRST NAME" field="firstName" placeholder="Ritika" form={form} errors={errors} set={set} />
+                  <Field label="LAST NAME" field="lastName" placeholder="Sharma" form={form} errors={errors} set={set} />
+                  <Field label="EMAIL ADDRESS" field="email" type="email" placeholder="ritika@example.com" form={form} errors={errors} set={set} />
+                  <Field label="PHONE NUMBER" field="phone" type="tel" placeholder="9876543210" form={form} errors={errors} set={set} />
                 </div>
 
                 <Divider margin={24} />
 
                 <h3 style={{ fontSize: 16, fontWeight: 700, color: T.txt, marginBottom: 16 }}>Shipping Address</h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                  <Field label="ADDRESS LINE" field="address" placeholder="Flat 4B, Orchid Heights, MG Road" />
+                  <Field label="ADDRESS LINE" field="address" placeholder="Flat 4B, Orchid Heights, MG Road" form={form} errors={errors} set={set} />
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                    <Field label="CITY" field="city" placeholder="Mumbai" />
+                    <Field label="CITY" field="city" placeholder="Mumbai" form={form} errors={errors} set={set} />
                     <div>
                       <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: T.light, letterSpacing: "1px", marginBottom: 6 }}>STATE</label>
                       <select className="field" value={form.state} onChange={set("state")}>
@@ -164,7 +177,7 @@ export default function Checkout() {
                       </select>
                     </div>
                   </div>
-                  <Field label="PIN CODE" field="pincode" placeholder="400001" style={{ maxWidth: 200 }} />
+                  <Field label="PIN CODE" field="pincode" placeholder="400001" style={{ maxWidth: 200 }} form={form} errors={errors} set={set} maxLength={6} />
                 </div>
 
                 <Divider margin={24} />
