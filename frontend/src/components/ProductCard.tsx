@@ -37,7 +37,7 @@ export function ProductCard({ product, compact = false }: { product: Product; co
       style={{ height: "100%" }}
     >
       {/* Image area */}
-      <div className="card-img" style={{ position: "relative", overflow: "hidden", height: imgH, background: "#F5F0E8", flexShrink: 0 }}>
+      <div className="card-img" style={{ position: "relative", overflow: "hidden", height: imgH, background: "#F4EFE6", flexShrink: 0 }}>
         <img
           src={product.images[0]}
           alt={product.name}
@@ -58,7 +58,7 @@ export function ProductCard({ product, compact = false }: { product: Product; co
         <button
           className="wish-btn icon-btn"
           onClick={handleWish}
-          style={{ position: "absolute", top: 10, right: 10, background: "rgba(255,255,255,0.92)", borderRadius: "50%", width: 36, height: 36, color: wished ? "#F472B6" : "#5C5C58", boxShadow: "0 2px 8px rgba(0,0,0,0.10)" }}
+          style={{ position: "absolute", top: 10, right: 10, background: "rgba(255,255,255,0.92)", borderRadius: "50%", width: 36, height: 36, color: wished ? "#E26D5C" : "#6E6A63", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
           title={wished ? "Remove from wishlist" : "Save to wishlist"}
         >
           <Icons.Heart filled={wished} />
@@ -68,15 +68,15 @@ export function ProductCard({ product, compact = false }: { product: Product; co
 
       {/* Info area */}
       <div style={{ padding: compact ? "12px 14px 14px" : "14px 16px 18px", display: "flex", flexDirection: "column", gap: 6, flex: 1 }}>
-        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#3dbdb5", letterSpacing: "1px", textTransform: "uppercase" }}>
+        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#5E8C77", letterSpacing: "1px", textTransform: "uppercase" }}>
           {product.subcategory}
         </p>
-        <h3 style={{ fontSize: compact ? 13 : 14, fontWeight: 600, color: "#1C1C1A", lineHeight: 1.38, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+        <h3 style={{ fontSize: compact ? 13 : 14, fontWeight: 600, color: "#23201D", lineHeight: 1.38, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
           {product.name}
         </h3>
         <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
           <Stars n={Math.floor(product.rating)} size={11} />
-          <span style={{ fontSize: 11, color: "#8C8880", fontWeight: 500 }}>
+          <span style={{ fontSize: 11, color: "#9C968D", fontWeight: 500 }}>
             {product.rating.toFixed(1)} ({product.reviewCount})
           </span>
         </div>

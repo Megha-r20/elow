@@ -5,7 +5,7 @@ import { PRODUCTS } from "../data";
 import { ProductCard } from "../components/ProductCard";
 import { useCart } from "../hooks";
 
-const T = { teal:"#3dbdb5",txt:"#1C1C1A",muted:"#5C5C58",light:"#8C8880",border:"#EDE8E1",sand:"#F5F0E8",cream:"#FAFAF7" };
+const T = { teal:"#5E8C77",txt:"#23201D",muted:"#6E6A63",light:"#9C968D",border:"#EAE3D9",sand:"#F4EFE6",cream:"#FAF7F2" };
 
 export default function OrderConfirmation() {
   const navigate = useNavigate();

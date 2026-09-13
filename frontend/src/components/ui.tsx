@@ -1,4 +1,5 @@
 import type { ReactNode, CSSProperties } from "react";
+import { Link } from "react-router";
 
 /* ─── Icons ─────────────────────────────────────────────────────── */
 export const Icons = {
@@ -13,7 +14,7 @@ export const Icons = {
     </svg>
   ),
   Heart: ({ filled = false }: { filled?: boolean }) => (
-    <svg width="18" height="18" fill={filled ? "#F472B6" : "none"} stroke={filled ? "#F472B6" : "currentColor"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="18" height="18" fill={filled ? "#E26D5C" : "none"} stroke={filled ? "#E26D5C" : "currentColor"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M9 16S2 11.5 2 6.25A4.25 4.25 0 0 1 9 3.5a4.25 4.25 0 0 1 7 2.75C16 11.5 9 16 9 16z"/>
     </svg>
   ),
@@ -24,9 +25,9 @@ export const Icons = {
       </svg>
       {count !== undefined && count > 0 && (
         <span style={{
-          position: "absolute", top: -6, right: -8, background: "#3dbdb5", color: "#fff",
+          position: "absolute", top: -6, right: -8, background: "#5E8C77", color: "#fff",
           fontSize: 9, fontWeight: 800, borderRadius: "50%", width: 17, height: 17,
-          display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #FAFAF7",
+          display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #FAF7F2",
         }}>{count > 9 ? "9+" : count}</span>
       )}
     </div>
@@ -67,7 +68,7 @@ export const Icons = {
     </svg>
   ),
   Star: ({ filled = true }: { filled?: boolean }) => (
-    <svg width="13" height="13" fill={filled ? "#F59E0B" : "#E5E0D8"} viewBox="0 0 24 24">
+    <svg width="13" height="13" fill={filled ? "#E59866" : "#E4DCD3"} viewBox="0 0 24 24">
       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
     </svg>
   ),
@@ -111,7 +112,7 @@ export function Stars({ n, size = 12, showCount, count }: { n: number; size?: nu
         ))}
       </div>
       {showCount && count !== undefined && (
-        <span style={{ fontSize: size + 1, color: "#8C8880", fontWeight: 500 }}>({count})</span>
+        <span style={{ fontSize: size + 1, color: "#9C968D", fontWeight: 500 }}>({count})</span>
       )}
     </div>
   );
@@ -119,18 +120,18 @@ export function Stars({ n, size = 12, showCount, count }: { n: number; size?: nu
 
 /* ─── Badge ─────────────────────────────────────────────────────── */
 const BADGE_STYLES: Record<string, { bg: string; color: string }> = {
-  teal:   { bg: "#3dbdb5", color: "#fff" },
-  yellow: { bg: "#F59E0B", color: "#1C1C1A" },
-  red:    { bg: "#ef4444", color: "#fff" },
-  pink:   { bg: "#F472B6", color: "#fff" },
-  dark:   { bg: "#1C1C1A", color: "#fff" },
-  sage:   { bg: "#86C99E", color: "#1C1C1A" },
+  teal:   { bg: "#5E8C77", color: "#fff" },
+  yellow: { bg: "#E59866", color: "#23201D" },
+  red:    { bg: "#D97762", color: "#fff" },
+  pink:   { bg: "#E8A598", color: "#fff" },
+  dark:   { bg: "#23201D", color: "#FAF7F2" },
+  sage:   { bg: "#D8E5DD", color: "#2E5242" },
 };
 
 export function Badge({ label, variant = "teal" }: { label: string; variant?: keyof typeof BADGE_STYLES }) {
   const { bg, color } = BADGE_STYLES[variant] ?? BADGE_STYLES.teal;
   return (
-    <span className="badge" style={{ background: bg, color, boxShadow: `0 2px 6px ${bg}55` }}>
+    <span className="badge" style={{ background: bg, color, boxShadow: `0 2px 8px ${bg}44` }}>
       {label}
     </span>
   );
@@ -155,15 +156,15 @@ export function SectionHead({
       <div style={{ flex: 1 }}>
         {eyebrow && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, justifyContent: center ? "center" : "flex-start" }}>
-            <span style={{ display: "inline-block", width: 18, height: 1.5, background: "#3dbdb5" }} />
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#3dbdb5", letterSpacing: "2px", textTransform: "uppercase" }}>{eyebrow}</span>
+            <span style={{ display: "inline-block", width: 18, height: 1.5, background: "#5E8C77" }} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#5E8C77", letterSpacing: "2px", textTransform: "uppercase" }}>{eyebrow}</span>
           </div>
         )}
-        <h2 className="font-display" style={{ fontSize: 30, fontWeight: 400, color: "#1C1C1A", lineHeight: 1.12, letterSpacing: "-0.3px" }}>
+        <h2 className="font-display" style={{ fontSize: 32, fontWeight: 400, color: "#23201D", lineHeight: 1.12, letterSpacing: "-0.3px" }}>
           {title}
         </h2>
         {sub && (
-          <p style={{ fontSize: 14, color: "#8C8880", marginTop: 8, fontWeight: 400, lineHeight: 1.65, maxWidth: center ? 480 : "none" }}>
+          <p style={{ fontSize: 14, color: "#6E6A63", marginTop: 8, fontWeight: 400, lineHeight: 1.65, maxWidth: center ? 480 : "none" }}>
             {sub}
           </p>
         )}
@@ -180,11 +181,11 @@ export function Price({ price, original, size = "md" }: { price: number; origina
   const disc = original ? Math.round((1 - price / original) * 100) : 0;
   return (
     <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
-      <span style={{ fontSize: s.price, fontWeight: 700, color: "#1C1C1A" }}>&#8377;{price.toLocaleString("en-IN")}</span>
+      <span style={{ fontSize: s.price, fontWeight: 700, color: "#23201D" }}>&#8377;{price.toLocaleString("en-IN")}</span>
       {original && original > price && (
         <>
-          <span style={{ fontSize: s.og, color: "#B8B4AE", textDecoration: "line-through" }}>&#8377;{original.toLocaleString("en-IN")}</span>
-          <span style={{ fontSize: s.og, fontWeight: 700, color: "#3dbdb5" }}>{disc}% OFF</span>
+          <span style={{ fontSize: s.og, color: "#9C968D", textDecoration: "line-through" }}>&#8377;{original.toLocaleString("en-IN")}</span>
+          <span style={{ fontSize: s.og, fontWeight: 700, color: "#5E8C77" }}>{disc}% OFF</span>
         </>
       )}
     </div>
@@ -193,7 +194,7 @@ export function Price({ price, original, size = "md" }: { price: number; origina
 
 /* ─── Divider ───────────────────────────────────────────────────── */
 export function Divider({ margin = 24 }: { margin?: number }) {
-  return <div style={{ width: "100%", height: 1, background: "#EDE8E1", margin: `${margin}px 0` }} />;
+  return <div style={{ width: "100%", height: 1, background: "#EAE3D9", margin: `${margin}px 0` }} />;
 }
 
 /* ─── Quantity stepper ───────────────────────────────────────────── */
@@ -206,7 +207,7 @@ export function QtyStepper({ qty, onAdd, onSub, onChange, min = 1, max = 99 }: {
       <input
         type="number" min={min} max={max} value={qty}
         onChange={e => onChange?.(parseInt(e.target.value) || min)}
-        style={{ width: 48, textAlign: "center", border: "1.5px solid #EDE8E1", borderRadius: 8, padding: "7px 0", fontSize: 14, fontWeight: 600, fontFamily: "inherit", outline: "none", background: "#fff", color: "#1C1C1A" }}
+        style={{ width: 48, textAlign: "center", border: "1.5px solid #EAE3D9", borderRadius: 8, padding: "7px 0", fontSize: 14, fontWeight: 600, fontFamily: "inherit", outline: "none", background: "#fff", color: "#23201D" }}
       />
       <button className="qty-btn" onClick={onAdd} disabled={qty >= max}>+</button>
     </div>
@@ -218,8 +219,8 @@ export function Empty({ icon, title, sub, action }: { icon?: string; title: stri
   return (
     <div style={{ textAlign: "center", padding: "72px 24px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {icon && <div style={{ fontSize: 48, opacity: 0.3 }}>{icon}</div>}
-      <h3 style={{ fontSize: 18, fontWeight: 700, color: "#1C1C1A" }}>{title}</h3>
-      {sub && <p style={{ fontSize: 14, color: "#8C8880", maxWidth: 340, lineHeight: 1.65 }}>{sub}</p>}
+      <h3 style={{ fontSize: 18, fontWeight: 700, color: "#23201D" }}>{title}</h3>
+      {sub && <p style={{ fontSize: 14, color: "#6E6A63", maxWidth: 340, lineHeight: 1.65 }}>{sub}</p>}
       {action}
     </div>
   );
@@ -228,29 +229,29 @@ export function Empty({ icon, title, sub, action }: { icon?: string; title: stri
 /* ─── Link button ───────────────────────────────────────────────── */
 export function LinkBtn({ to, children, style: sx }: { to: string; children: ReactNode; style?: CSSProperties }) {
   return (
-    <a href={to} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#3dbdb5", textDecoration: "none", transition: "gap 0.15s", ...sx }}
+    <Link to={to} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#5E8C77", textDecoration: "none", transition: "gap 0.15s", ...sx }}
       onMouseEnter={e => ((e.currentTarget as HTMLElement).style.gap = "10px")}
       onMouseLeave={e => ((e.currentTarget as HTMLElement).style.gap = "6px")}
     >
       {children} <Icons.ArrowRight />
-    </a>
+    </Link>
   );
 }
 
 /* ─── Breadcrumb ─────────────────────────────────────────────────── */
 export function Breadcrumb({ items }: { items: { label: string; href?: string }[] }) {
   return (
-    <nav style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, color: "#8C8880", marginBottom: 24, flexWrap: "wrap" }}>
+    <nav style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, color: "#9C968D", marginBottom: 24, flexWrap: "wrap" }}>
       {items.map((item, i) => (
         <span key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
           {i > 0 && <span style={{ opacity: 0.5 }}>/</span>}
           {item.href ? (
-            <a href={item.href} style={{ color: "#8C8880", textDecoration: "none", fontWeight: 500, transition: "color 0.14s" }}
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#1C1C1A")}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "#8C8880")}
-            >{item.label}</a>
+            <Link to={item.href} style={{ color: "#9C968D", textDecoration: "none", fontWeight: 500, transition: "color 0.14s" }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#23201D")}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "#9C968D")}
+            >{item.label}</Link>
           ) : (
-            <span style={{ color: "#1C1C1A", fontWeight: 600 }}>{item.label}</span>
+            <span style={{ color: "#23201D", fontWeight: 600 }}>{item.label}</span>
           )}
         </span>
       ))}
@@ -270,19 +271,19 @@ export function StepBar({ steps, current }: { steps: string[]; current: number }
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, minWidth: 80 }}>
               <div style={{
                 width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
-                background: done ? "#3dbdb5" : active ? "#1C1C1A" : "#F0ECE4",
-                color: done || active ? "#fff" : "#A8A49E",
-                fontWeight: 700, fontSize: 13, border: `2px solid ${active ? "#1C1C1A" : done ? "#3dbdb5" : "#EDE8E1"}`,
+                background: done ? "#5E8C77" : active ? "#23201D" : "#F4EFE6",
+                color: done || active ? "#fff" : "#9C968D",
+                fontWeight: 700, fontSize: 13, border: `2px solid ${active ? "#23201D" : done ? "#5E8C77" : "#EAE3D9"}`,
                 transition: "all 0.2s",
               }}>
                 {done ? <Icons.Check /> : <span>{i + 1}</span>}
               </div>
-              <span style={{ fontSize: 11, fontWeight: active ? 700 : 500, color: active ? "#1C1C1A" : done ? "#3dbdb5" : "#A8A49E", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: 11, fontWeight: active ? 700 : 500, color: active ? "#23201D" : done ? "#5E8C77" : "#9C968D", whiteSpace: "nowrap" }}>
                 {step}
               </span>
             </div>
             {i < steps.length - 1 && (
-              <div style={{ flex: 1, height: 1.5, background: done ? "#3dbdb5" : "#EDE8E1", marginBottom: 22, transition: "background 0.3s" }} />
+              <div style={{ flex: 1, height: 1.5, background: done ? "#5E8C77" : "#EAE3D9", marginBottom: 22, transition: "background 0.3s" }} />
             )}
           </div>
         );
@@ -294,7 +295,7 @@ export function StepBar({ steps, current }: { steps: string[]; current: number }
 /* ─── Skeleton card ──────────────────────────────────────────────── */
 export function SkeletonCard() {
   return (
-    <div style={{ borderRadius: 16, overflow: "hidden", background: "#fff", border: "1px solid #EDE8E1" }}>
+    <div style={{ borderRadius: 18, overflow: "hidden", background: "#fff", border: "1px solid #EAE3D9" }}>
       <div className="skeleton" style={{ height: 240, borderRadius: 0 }} />
       <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
         <div className="skeleton" style={{ height: 14, width: "70%" }} />
@@ -310,12 +311,12 @@ export function ShippingProgress({ subtotal, threshold = 999 }: { subtotal: numb
   const rem = Math.max(0, threshold - subtotal);
   const pct = Math.min(100, (subtotal / threshold) * 100);
   return (
-    <div style={{ background: rem === 0 ? "#e8faf4" : "#F5F0E8", borderRadius: 12, padding: "12px 16px" }}>
-      <p style={{ fontSize: 12.5, fontWeight: 600, color: rem === 0 ? "#1a7a56" : "#1C1C1A", marginBottom: 8 }}>
+    <div style={{ background: rem === 0 ? "#EAF2EE" : "#F4EFE6", borderRadius: 12, padding: "12px 16px" }}>
+      <p style={{ fontSize: 12.5, fontWeight: 600, color: rem === 0 ? "#3A6E56" : "#23201D", marginBottom: 8 }}>
         {rem === 0 ? "🎉 You have FREE shipping!" : `Add ₹${rem} more for FREE shipping`}
       </p>
-      <div style={{ background: "#EDE8E1", borderRadius: 999, height: 5, overflow: "hidden" }}>
-        <div className="prog-bar" style={{ height: "100%", borderRadius: 999, background: rem === 0 ? "#22c55e" : "#3dbdb5", "--pw": `${pct}%`, width: `${pct}%` } as CSSProperties} />
+      <div style={{ background: "#EAE3D9", borderRadius: 999, height: 5, overflow: "hidden" }}>
+        <div className="prog-bar" style={{ height: "100%", borderRadius: 999, background: rem === 0 ? "#5E8C77" : "#5E8C77", "--pw": `${pct}%`, width: `${pct}%` } as CSSProperties} />
       </div>
     </div>
   );

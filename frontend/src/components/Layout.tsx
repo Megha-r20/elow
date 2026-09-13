@@ -56,10 +56,10 @@ export default function Layout() {
               {ANNOUNCE.map((m, i) => (
                 <span key={m} style={{ display: "flex", alignItems: "center" }}>
                   <span style={{ fontSize: 11.5, fontWeight: 500, color: "rgba(255,255,255,0.82)", whiteSpace: "nowrap" }}>{m}</span>
-                  {i < ANNOUNCE.length - 1 && <span style={{ color: "#3dbdb5", margin: "0 24px", fontSize: 10 }}>✦</span>}
+                  {i < ANNOUNCE.length - 1 && <span style={{ color: "#5E8C77", margin: "0 24px", fontSize: 10 }}>✦</span>}
                 </span>
               ))}
-              <span style={{ color: "#3dbdb5", margin: "0 24px", fontSize: 10 }}>✦</span>
+              <span style={{ color: "#5E8C77", margin: "0 24px", fontSize: 10 }}>✦</span>
             </span>
           ))}
         </div>
@@ -201,20 +201,20 @@ export default function Layout() {
                   onChange={e => setSearchQ(e.target.value)}
                   onKeyDown={e => { if (e.key === "Enter" && searchQ.trim()) { setSearchOpen(false); navigate(`/shop?q=${encodeURIComponent(searchQ.trim())}`); }}}
                   placeholder="Search journals, pens, washi tape, stickers…"
-                  style={{ flex: 1, fontSize: 17, border: "none", borderBottom: "2px solid #3dbdb5", borderRadius: 0, padding: "8px 0", background: "transparent" }}
+                  style={{ flex: 1, fontSize: 17, border: "none", borderBottom: "2px solid #5E8C77", borderRadius: 0, padding: "8px 0", background: "transparent" }}
                 />
-                <button onClick={() => setSearchOpen(false)} className="icon-btn" style={{ background: "#F5F0E8", borderRadius: "50%", width: 38, height: 38 }}>
+                <button onClick={() => setSearchOpen(false)} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 38, height: 38 }}>
                   <Icons.Close />
                 </button>
               </div>
               <div style={{ maxWidth: 680, margin: "0 auto" }}>
-                <p style={{ fontSize: 10.5, fontWeight: 700, color: "#B8B4AE", letterSpacing: "2px", marginBottom: 14 }}>POPULAR SEARCHES</p>
+                <p style={{ fontSize: 10.5, fontWeight: 700, color: "#9C968D", letterSpacing: "2px", marginBottom: 14 }}>POPULAR SEARCHES</p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {["dotted journals","gel pens","washi tape","sticker book","highlighters","bullet journal","weekly planner","pen case"].map(s => (
                     <button key={s} onClick={() => { setSearchOpen(false); navigate(`/shop?q=${encodeURIComponent(s)}`); }}
-                      style={{ background: "#F5F0E8", border: "none", borderRadius: 999, padding: "8px 18px", fontSize: 13, fontWeight: 500, color: "#5C5C58", cursor: "pointer", fontFamily: "inherit", transition: "all 0.14s" }}
-                      onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#1C1C1A"; el.style.color = "#fff"; }}
-                      onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F5F0E8"; el.style.color = "#5C5C58"; }}
+                      style={{ background: "#F4EFE6", border: "none", borderRadius: 999, padding: "8px 18px", fontSize: 13, fontWeight: 500, color: "#6E6A63", cursor: "pointer", fontFamily: "inherit", transition: "all 0.14s" }}
+                      onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#23201D"; el.style.color = "#FAF7F2"; }}
+                      onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F4EFE6"; el.style.color = "#6E6A63"; }}
                     >{s}</button>
                   ))}
                 </div>

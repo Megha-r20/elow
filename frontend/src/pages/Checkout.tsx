@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useCart } from "../hooks";
 import { StepBar, Breadcrumb, Icons, Divider } from "../components/ui";
 
-const T = { border:"#EDE8E1",txt:"#1C1C1A",muted:"#5C5C58",light:"#8C8880",sand:"#F5F0E8",cream:"#FAFAF7",teal:"#3dbdb5" };
+const T = { border:"#EAE3D9",txt:"#23201D",muted:"#6E6A63",light:"#9C968D",sand:"#F4EFE6",cream:"#FAF7F2",teal:"#5E8C77" };
 
 type FormData = {
   firstName: string; lastName: string; email: string; phone: string;

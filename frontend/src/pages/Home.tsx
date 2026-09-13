@@ -6,13 +6,13 @@ import { PRODUCTS, CATEGORIES, HERO_IMAGES, getFeatured, getBestSellers } from "
 import { useCart, useToast } from "../hooks";
 
 const T = {
-  teal:    "#3dbdb5",
-  cream:   "#FAFAF7",
-  sand:    "#F5F0E8",
-  border:  "#EDE8E1",
-  txt:     "#1C1C1A",
-  muted:   "#5C5C58",
-  light:   "#8C8880",
+  teal:    "#5E8C77",
+  cream:   "#FAF7F2",
+  sand:    "#F4EFE6",
+  border:  "#EAE3D9",
+  txt:     "#23201D",
+  muted:   "#6E6A63",
+  light:   "#9C968D",
 };
 
 export default function Home() {
@@ -333,7 +333,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(61,189,181,0.88) 0%, rgba(61,189,181,0.60) 40%, rgba(28,28,26,0.70) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(94,140,119,0.88) 0%, rgba(94,140,119,0.60) 40%, rgba(35,32,29,0.70) 100%)" }} />
         <div className="container" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
           <div>
             <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "3px", marginBottom: 16 }}>YOUR CREATIVE COMPANION</p>
@@ -348,14 +348,14 @@ export default function Home() {
       </section>
 
       {/* ── Recent arrivals marquee ──────────────────────────────── */}
-      <section style={{ background: "#1C1C1A", overflow: "hidden", padding: "18px 0", borderTop: `1px solid rgba(255,255,255,0.08)` }}>
+      <section style={{ background: "#23201D", overflow: "hidden", padding: "18px 0", borderTop: `1px solid rgba(255,255,255,0.08)` }}>
         <div className="marquee-track">
           {[0, 1].map(k => (
             <span key={k} style={{ display: "flex", alignItems: "center" }}>
               {["A5 Dotted Journals", "Pastel Gel Pens", "Washi Tape Sets", "Kawaii Sticker Books", "Weekly Planners", "Desk Organizers", "Highlighter Sets", "Wax Seal Stamps"].map((item, i) => (
                 <span key={item} style={{ display: "flex", alignItems: "center" }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.55)", whiteSpace: "nowrap", letterSpacing: "0.3px" }}>{item}</span>
-                  <span style={{ color: "#3dbdb5", margin: "0 28px" }}>✦</span>
+                  <span style={{ color: "#5E8C77", margin: "0 28px" }}>✦</span>
                 </span>
               ))}
             </span>
