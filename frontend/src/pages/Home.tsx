@@ -47,7 +47,7 @@ export default function Home() {
 
         <div className="container" style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "rgba(61,189,181,0.10)", border: "1px solid rgba(61,189,181,0.25)", borderRadius: 999, padding: "6px 16px", marginBottom: 32 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "rgba(94,140,119,0.12)", border: "1px solid rgba(94,140,119,0.30)", borderRadius: 999, padding: "6px 16px", marginBottom: 32 }}>
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: T.teal, display: "inline-block" }} />
             <span style={{ fontSize: 12, fontWeight: 600, color: T.teal, letterSpacing: "0.5px" }}>New collection — now live</span>
           </div>

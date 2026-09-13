@@ -106,7 +106,7 @@ export default function Layout() {
                           <p style={{ fontSize: 9.5, fontWeight: 700, color: "#B8B4AE", letterSpacing: "2px", marginBottom: 14 }}>{col.h}</p>
                           {col.ls.map(l => (
                             <Link key={l} to="/shop" style={{ display: "block", fontSize: 13.5, fontWeight: 500, color: "#1C1C1A", textDecoration: "none", padding: "7px 0", borderBottom: "1px solid #F5F0E8", transition: "color 0.13s, padding-left 0.15s" }}
-                              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = "#3dbdb5"; el.style.paddingLeft = "6px"; }}
+                              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = "#5E8C77"; el.style.paddingLeft = "6px"; }}
                               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = "#1C1C1A"; el.style.paddingLeft = "0"; }}
                             >{l}</Link>
                           ))}
@@ -117,7 +117,7 @@ export default function Layout() {
                           <img src={CATEGORIES[0].image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         </div>
                         <p style={{ fontSize: 12, fontWeight: 700, color: "#1C1C1A", marginTop: 10 }}>The Journaling Edit</p>
-                        <Link to="/shop" style={{ fontSize: 12, color: "#3dbdb5", textDecoration: "none", fontWeight: 600 }}>Shop now →</Link>
+                        <Link to="/shop" style={{ fontSize: 12, color: "#5E8C77", textDecoration: "none", fontWeight: 600 }}>Shop now →</Link>
                       </div>
                     </div>
                   </div>
@@ -451,7 +451,7 @@ export default function Layout() {
           {/* Bottom bar */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
             <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.35)" }}>
-              © 2025 Uni Seoul. All rights reserved. Made with care in India.
+              © 2026 Elow. All rights reserved. Made with care in India.
             </p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {["VISA","Mastercard","UPI","RuPay","PayTM","GPay"].map(pm => (
@@ -467,8 +467,8 @@ export default function Layout() {
       {/* Back to top */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        style={{ position: "fixed", bottom: 24, right: 24, zIndex: 200, width: 44, height: 44, background: "#1C1C1A", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 20px rgba(0,0,0,0.20)", transition: "transform 0.18s, background 0.18s" }}
-        onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-3px)"; el.style.background = "#3dbdb5"; }}
+        style={{ position: "fixed", bottom: 28, right: 28, zIndex: 400, width: 44, height: 44, background: "#1C1C1A", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 24px rgba(0,0,0,0.25)", transition: "transform 0.18s, background 0.18s" }}
+        onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-3px)"; el.style.background = "#5E8C77"; }}
         onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.background = "#1C1C1A"; }}
       >
         ↑
