@@ -105,7 +105,7 @@ export function AdminDashboard() {
   useEffect(() => {
     fetchProducts();
     fetchOrders();
-  }, []);
+  }, [tab]);
 
   // Handle Add Product Submit
   const handleAddProduct = async (e: React.FormEvent) => {
@@ -242,6 +242,13 @@ export function AdminDashboard() {
           </div>
 
           <div style={{ display: "flex", gap: 12 }}>
+            <button
+              onClick={() => { fetchOrders(); fetchProducts(); addToast("Refreshed store data"); }}
+              className="btn"
+              style={{ background: "rgba(255,255,255,0.1)", color: "#FFFFFF", padding: "12px 18px", borderRadius: 12, fontWeight: 600, border: "none", cursor: "pointer" }}
+            >
+              🔄 Refresh Data
+            </button>
             <button
               onClick={() => setShowAddModal(true)}
               className="btn"

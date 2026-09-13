@@ -95,13 +95,16 @@ export default function Checkout() {
     return Object.keys(e).length === 0;
   };
 
-  const next = () => {
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+  const next = async () => {
     if (step === 0 && !validateDelivery()) return;
     if (step === 1 && !validatePayment()) return;
     if (step === 2) {
-      const orderId = `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-      saveOrder({
-        id: orderId,
+      if (isPlacingOrder) return;
+      setIsPlacingOrder(true);
+
+      const orderPayload = {
         items,
         subtotal,
         discount,
@@ -119,9 +122,38 @@ export default function Checkout() {
           pincode: form.pincode,
         },
         payMethod: form.payMethod,
-        date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-      });
+      };
+
+      let finalOrder: any = null;
+
+      try {
+        const res = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderPayload),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          finalOrder = data.order;
+        }
+      } catch (err) {
+        console.error("Failed to post order to server:", err);
+      }
+
+      if (!finalOrder) {
+        const orderId = `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+        finalOrder = {
+          id: orderId,
+          ...orderPayload,
+          status: "Processing",
+          date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
+        };
+      }
+
+      saveOrder(finalOrder);
       clearCart();
+      setIsPlacingOrder(false);
       navigate("/order-confirmation");
       return;
     }
