@@ -361,6 +361,27 @@ app.get("/api/orders/:id", (req, res) => {
   res.json(order);
 });
 
+// Orders API (Cancel Order by Customer)
+app.patch("/api/orders/:id/cancel", (req, res) => {
+  const orderId = req.params.id;
+  const order = ordersStore.get(orderId);
+
+  if (!order) {
+    return res.status(404).json({ error: "Order not found" });
+  }
+
+  if (order.status === "Shipped" || order.status === "Delivered") {
+    return res.status(400).json({ error: `Cannot cancel order after it has been ${order.status.toLowerCase()}` });
+  }
+
+  order.status = "Cancelled";
+  ordersStore.set(orderId, order);
+  console.log(`[Order Cancelled by Customer] ID: ${orderId}`);
+
+  res.json({ success: true, message: "Order cancelled successfully", order });
+});
+
+
 app.listen(PORT, () => {
   console.log(`🚀 Elow Backend Express API running on http://localhost:${PORT}`);
 });

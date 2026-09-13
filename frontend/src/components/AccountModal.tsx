@@ -52,6 +52,23 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
 
   const statusStyle = getStatusStyle(status);
 
+  const handleCancelOrder = async (id: string) => {
+    if (!window.confirm(`Are you sure you want to cancel Order #${id}?`)) return;
+
+    try {
+      const res = await fetch(`/api/orders/${id}/cancel`, { method: "PATCH" });
+      const data = await res.json();
+      if (res.ok) {
+        addToast(`Order #${id} has been cancelled`, "info");
+        setLiveOrder(data.order);
+      } else {
+        addToast(data.error || "Failed to cancel order", "error");
+      }
+    } catch (err) {
+      addToast("Network error cancelling order", "error");
+    }
+  };
+
   return (
     <>
       <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 600, backdropFilter: "blur(3px)" }} />
@@ -132,9 +149,28 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                     <p style={{ fontSize: 12.5, color: "#6E6A63" }}>Date: {displayOrder.date}</p>
                     <p style={{ fontSize: 15, fontWeight: 700, color: "#23201D" }}>Total: &#8377;{displayOrder.total?.toLocaleString("en-IN")}</p>
                   </div>
-                  <button onClick={() => { onClose(); navigate("/order-confirmation"); }} className="btn btn-ghost btn-sm btn-full" style={{ marginTop: 14 }}>
-                    View Full Order Status →
-                  </button>
+                  <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+                    <button onClick={() => { onClose(); navigate("/order-confirmation"); }} className="btn btn-ghost btn-sm" style={{ flex: 1 }}>
+                      View Full Order Status →
+                    </button>
+                    {(status === "Processing" || status === "Order Placed") && (
+                      <button
+                        onClick={() => handleCancelOrder(displayOrder.id)}
+                        style={{
+                          background: "#FDF2F2",
+                          color: "#DC2626",
+                          border: "1px solid #F8B4B4",
+                          padding: "6px 14px",
+                          borderRadius: 8,
+                          fontSize: 12,
+                          fontWeight: 700,
+                          cursor: "pointer",
+                        }}
+                      >
+                        Cancel Order
+                      </button>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div style={{ textAlign: "center", padding: "40px 0" }}>
