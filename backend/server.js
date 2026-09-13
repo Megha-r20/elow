@@ -333,6 +333,51 @@ app.delete("/api/admin/products/:id", (req, res) => {
   }
 });
 
+// Admin Product Edit / Update API
+app.put("/api/admin/products/:id", (req, res) => {
+  try {
+    const prodId = req.params.id;
+    const index = productsList.findIndex(p => p.id === prodId);
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } = req.body || {};
+
+    const cleanName = safeStr(name);
+    const cleanCategory = safeStr(category);
+    const numPrice = Number(price);
+
+    if (!cleanName || !cleanCategory || isNaN(numPrice) || numPrice <= 0) {
+      return res.status(400).json({ error: "Valid name, category, and price are required" });
+    }
+
+    const existing = productsList[index];
+    const updatedProduct = {
+      ...existing,
+      name: cleanName,
+      shortName: cleanName,
+      category: cleanCategory,
+      subcategory: safeStr(subcategory) || existing.subcategory || "General",
+      price: numPrice,
+      originalPrice: originalPrice !== undefined && originalPrice !== "" && !isNaN(Number(originalPrice)) ? Number(originalPrice) : undefined,
+      description: safeStr(description) || existing.description,
+      images: Array.isArray(images) && images.length > 0 ? images : existing.images,
+      inStock: inStock !== undefined ? Boolean(inStock) : existing.inStock,
+      isNew: isNew !== undefined ? Boolean(isNew) : existing.isNew,
+      isBestseller: isBestseller !== undefined ? Boolean(isBestseller) : existing.isBestseller,
+    };
+
+    productsList[index] = updatedProduct;
+    console.log(`[Admin Updated Product] ${updatedProduct.name} (${updatedProduct.id})`);
+    res.json({ success: true, product: updatedProduct });
+  } catch (err) {
+    console.error("[Edit Product Error]", err);
+    res.status(500).json({ error: "Failed to update product details" });
+  }
+});
+
 // Admin Get All Orders API
 app.get("/api/admin/orders", (req, res) => {
   const orders = Array.from(ordersStore.values());

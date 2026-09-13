@@ -73,20 +73,74 @@ export function AdminDashboard() {
   });
 
   // Edit Product Modal State
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editProd, setEditProd] = useState<{
-    id: string;
-    name: string;
-    category: string;
-    subcategory: string;
-    price: string;
-    originalPrice: string;
-    description: string;
-    imageUrl: string;
-    inStock: boolean;
-    isNew: boolean;
-    isBestseller: boolean;
-  } | null>(null);
+  const [editingProduct, setEditingProduct] = useState<AdminProduct | null>(null);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    category: "journals",
+    subcategory: "",
+    price: "",
+    originalPrice: "",
+    description: "",
+    imageUrl: "",
+    inStock: true,
+    isNew: false,
+    isBestseller: false,
+  });
+
+  const openEditModal = (p: AdminProduct) => {
+    setEditingProduct(p);
+    setEditForm({
+      name: p.name || "",
+      category: p.category || "journals",
+      subcategory: p.subcategory || "",
+      price: String(p.price || ""),
+      originalPrice: p.originalPrice ? String(p.originalPrice) : "",
+      description: p.description || "",
+      imageUrl: p.images?.[0] || "",
+      inStock: p.inStock ?? true,
+      isNew: p.isNew ?? false,
+      isBestseller: p.isBestseller ?? false,
+    });
+  };
+
+  const handleUpdateProduct = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+    if (!editForm.name || !editForm.price) {
+      addToast("Product name and price are required", "error");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/admin/products/${editingProduct.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editForm.name,
+          category: editForm.category,
+          subcategory: editForm.subcategory,
+          price: Number(editForm.price),
+          originalPrice: editForm.originalPrice ? Number(editForm.originalPrice) : undefined,
+          description: editForm.description,
+          images: editForm.imageUrl ? [editForm.imageUrl] : editingProduct.images,
+          inStock: editForm.inStock,
+          isNew: editForm.isNew,
+          isBestseller: editForm.isBestseller,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        addToast(`Updated product "${data.product.name}" successfully!`);
+        setEditingProduct(null);
+        fetchProducts();
+      } else {
+        addToast(data.error || "Failed to update product", "error");
+      }
+    } catch (err) {
+      addToast("Network error updating product", "error");
+    }
+  };
 
   // Fetch Products
   const fetchProducts = async () => {
@@ -193,64 +247,6 @@ export function AdminDashboard() {
       }
     } catch (err) {
       addToast("Network error deleting product", "error");
-    }
-  };
-
-  // Open Edit Modal
-  const handleOpenEditModal = (p: AdminProduct) => {
-    setEditProd({
-      id: p.id,
-      name: p.name,
-      category: p.category,
-      subcategory: p.subcategory || "",
-      price: String(p.price),
-      originalPrice: p.originalPrice ? String(p.originalPrice) : "",
-      description: p.description || "",
-      imageUrl: p.images?.[0] || "",
-      inStock: p.inStock,
-      isNew: Boolean(p.isNew),
-      isBestseller: Boolean(p.isBestseller),
-    });
-    setShowEditModal(true);
-  };
-
-  // Handle Edit Product Submit
-  const handleUpdateProduct = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editProd || !editProd.name || !editProd.price) {
-      addToast("Product name and price are required", "error");
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/admin/products/${editProd.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: editProd.name,
-          category: editProd.category,
-          subcategory: editProd.subcategory,
-          price: Number(editProd.price),
-          originalPrice: editProd.originalPrice ? Number(editProd.originalPrice) : undefined,
-          description: editProd.description,
-          images: editProd.imageUrl ? [editProd.imageUrl] : undefined,
-          inStock: editProd.inStock,
-          isNew: editProd.isNew,
-          isBestseller: editProd.isBestseller,
-        }),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        addToast(`Product "${data.product.name}" updated successfully!`);
-        setShowEditModal(false);
-        setEditProd(null);
-        fetchProducts();
-      } else {
-        addToast(data.error || "Failed to update product", "error");
-      }
-    } catch (err) {
-      addToast("Network error updating product", "error");
     }
   };
 
@@ -623,10 +619,12 @@ export function AdminDashboard() {
                         <td style={{ padding: "14px 12px", textAlign: "right" }}>
                           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
                             <button
-                              onClick={() => handleOpenEditModal(p)}
-                              style={{ background: "rgba(94,140,119,0.12)", color: "#5E8C77", border: "1px solid rgba(94,140,119,0.35)", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }}
+                              onClick={() => openEditModal(p)}
+                              style={{ background: "#FAF7F2", color: "#5E8C77", border: "1px solid #5E8C77", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }}
+                              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#5E8C77"; (e.currentTarget as HTMLElement).style.color = "#FFFFFF"; }}
+                              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#FAF7F2"; (e.currentTarget as HTMLElement).style.color = "#5E8C77"; }}
                             >
-                              Edit
+                              ✏️ Edit
                             </button>
                             <button
                               onClick={() => handleDeleteProduct(p.id, p.name)}
@@ -792,6 +790,8 @@ export function AdminDashboard() {
                     <option value="journals">Journals</option>
                     <option value="planners">Planners</option>
                     <option value="pens">Pens & Ink</option>
+                    <option value="washi">Washi Tape</option>
+                    <option value="stickers">Stickers</option>
                     <option value="workspace">Workspace</option>
                     <option value="accessories">Accessories</option>
                   </select>
@@ -845,17 +845,18 @@ export function AdminDashboard() {
           </div>
         </>
       )}
+
       {/* EDIT PRODUCT MODAL */}
-      {showEditModal && editProd && (
+      {editingProduct && (
         <>
-          <div onClick={() => setShowEditModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 800, backdropFilter: "blur(4px)" }} />
+          <div onClick={() => setEditingProduct(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 800, backdropFilter: "blur(4px)" }} />
           <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 500, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#5E8C77", letterSpacing: "1px" }}>EDIT PRODUCT ID: #{editProd.id}</span>
-                <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Edit Product Details</h3>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#5E8C77", letterSpacing: "1px" }}>EDIT PRODUCT</span>
+                <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Edit #{editingProduct.id}</h3>
               </div>
-              <button onClick={() => setShowEditModal(false)} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 34, height: 34, border: "none", cursor: "pointer" }}>
+              <button onClick={() => setEditingProduct(null)} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 34, height: 34, border: "none", cursor: "pointer" }}>
                 <Icons.Close />
               </button>
             </div>
@@ -863,58 +864,60 @@ export function AdminDashboard() {
             <form onSubmit={handleUpdateProduct} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>PRODUCT NAME *</label>
-                <input type="text" required value={editProd.name} onChange={e => setEditProd({ ...editProd, name: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                <input type="text" required placeholder="Product name" value={editForm.name} onChange={e => setEditForm({ ...editForm, name: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>CATEGORY</label>
-                  <select value={editProd.category} onChange={e => setEditProd({ ...editProd, category: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}>
+                  <select value={editForm.category} onChange={e => setEditForm({ ...editForm, category: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}>
                     <option value="journals">Journals</option>
                     <option value="planners">Planners</option>
                     <option value="pens">Pens & Ink</option>
+                    <option value="washi">Washi Tape</option>
+                    <option value="stickers">Stickers</option>
                     <option value="workspace">Workspace</option>
                     <option value="accessories">Accessories</option>
                   </select>
                 </div>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>SUBCATEGORY</label>
-                  <input type="text" value={editProd.subcategory} onChange={e => setEditProd({ ...editProd, subcategory: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                  <input type="text" placeholder="Subcategory" value={editForm.subcategory} onChange={e => setEditForm({ ...editForm, subcategory: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
                 </div>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>PRICE (&#8377;) *</label>
-                  <input type="number" required value={editProd.price} onChange={e => setEditProd({ ...editProd, price: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                  <input type="number" required placeholder="Price" value={editForm.price} onChange={e => setEditForm({ ...editForm, price: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
                 </div>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>ORIGINAL PRICE (&#8377;)</label>
-                  <input type="number" value={editProd.originalPrice} onChange={e => setEditProd({ ...editProd, originalPrice: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                  <input type="number" placeholder="Original price" value={editForm.originalPrice} onChange={e => setEditForm({ ...editForm, originalPrice: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
                 </div>
               </div>
 
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>IMAGE URL</label>
-                <input type="url" value={editProd.imageUrl} onChange={e => setEditProd({ ...editProd, imageUrl: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                <input type="url" placeholder="https://..." value={editForm.imageUrl} onChange={e => setEditForm({ ...editForm, imageUrl: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
               </div>
 
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>DESCRIPTION</label>
-                <textarea rows={3} value={editProd.description} onChange={e => setEditProd({ ...editProd, description: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                <textarea rows={3} placeholder="Description..." value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
               </div>
 
               <div style={{ display: "flex", gap: 16, marginTop: 4 }}>
                 <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
-                  <input type="checkbox" checked={editProd.inStock} onChange={e => setEditProd({ ...editProd, inStock: e.target.checked })} />
+                  <input type="checkbox" checked={editForm.inStock} onChange={e => setEditForm({ ...editForm, inStock: e.target.checked })} />
                   In Stock
                 </label>
                 <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
-                  <input type="checkbox" checked={editProd.isNew} onChange={e => setEditProd({ ...editProd, isNew: e.target.checked })} />
+                  <input type="checkbox" checked={editForm.isNew} onChange={e => setEditForm({ ...editForm, isNew: e.target.checked })} />
                   New Arrival
                 </label>
                 <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
-                  <input type="checkbox" checked={editProd.isBestseller} onChange={e => setEditProd({ ...editProd, isBestseller: e.target.checked })} />
+                  <input type="checkbox" checked={editForm.isBestseller} onChange={e => setEditForm({ ...editForm, isBestseller: e.target.checked })} />
                   Bestseller
                 </label>
               </div>
