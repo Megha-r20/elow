@@ -5,8 +5,21 @@ import { PRODUCTS, CATEGORIES, REVIEWS, PRICE_RANGES } from "./data/products.js"
 const app = express();
 const PORT = process.env.PORT || 5005;
 
-app.use(cors());
+// Middleware
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
+
+// Handle malformed JSON body errors gracefully
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    return res.status(400).json({ error: "Malformed JSON payload in request" });
+  }
+  next(err);
+});
+
+// Defensive string helpers
+const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
+const safeLower = (v) => safeStr(v).toLowerCase();
 
 // Memory store for placed orders
 const ordersStore = new Map();
@@ -49,9 +62,8 @@ const initialDemoOrder = {
 };
 ordersStore.set(initialDemoOrder.id, initialDemoOrder);
 
-
 // Dynamic products list in memory initialized from PRODUCTS array
-let productsList = [...PRODUCTS];
+let productsList = Array.isArray(PRODUCTS) ? [...PRODUCTS] : [];
 
 // Memory store for users
 const usersStore = [
@@ -79,8 +91,9 @@ const tokensStore = new Map([
   ["token_cust_demo", "user-cust-1"]
 ]);
 
-// Helper to strip sensitive data
+// Helper to strip sensitive password field
 const sanitizeUser = (user) => {
+  if (!user) return null;
   const { password, ...safeUser } = user;
   return safeUser;
 };
@@ -92,216 +105,232 @@ app.get("/api/health", (req, res) => {
 
 // Auth API - Register
 app.post("/api/auth/register", (req, res) => {
-  const { name, email, password, role } = req.body;
+  try {
+    const { name, email, password, role } = req.body || {};
 
-  if (!name || !email || !password) {
-    return res.status(400).json({ error: "Name, email, and password are required" });
+    const cleanName = safeStr(name);
+    const cleanEmail = safeLower(email);
+    const cleanPass = safeStr(password);
+
+    if (!cleanName || !cleanEmail || !cleanPass) {
+      return res.status(400).json({ error: "Name, email, and password are required" });
+    }
+
+    const existingUser = usersStore.find(u => safeLower(u.email) === cleanEmail);
+    if (existingUser) {
+      return res.status(400).json({ error: "An account with this email already exists" });
+    }
+
+    const newUser = {
+      id: `user-${Date.now()}`,
+      name: cleanName,
+      email: cleanEmail,
+      password: cleanPass,
+      role: role === "admin" ? "admin" : "user",
+      createdAt: new Date().toISOString()
+    };
+
+    usersStore.push(newUser);
+    const token = `token_${newUser.id}_${Date.now()}`;
+    tokensStore.set(token, newUser.id);
+
+    console.log(`[User Registered] ${newUser.name} (${newUser.email}) - Role: ${newUser.role}`);
+    res.status(201).json({ success: true, user: sanitizeUser(newUser), token });
+  } catch (err) {
+    console.error("[Register Error]", err);
+    res.status(500).json({ error: "Failed to register user account" });
   }
-
-  const existingUser = usersStore.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
-  if (existingUser) {
-    return res.status(400).json({ error: "An account with this email already exists" });
-  }
-
-  const newUser = {
-    id: `user-${Date.now()}`,
-    name: name.trim(),
-    email: email.trim().toLowerCase(),
-    password: password,
-    role: role === "admin" ? "admin" : "user",
-    createdAt: new Date().toISOString()
-  };
-
-  usersStore.push(newUser);
-  const token = `token_${newUser.id}_${Date.now()}`;
-  tokensStore.set(token, newUser.id);
-
-  console.log(`[User Registered] ${newUser.name} (${newUser.email}) - Role: ${newUser.role}`);
-  res.status(201).json({ success: true, user: sanitizeUser(newUser), token });
 });
 
 // Auth API - Login
 app.post("/api/auth/login", (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body || {};
 
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required" });
+    const cleanEmail = safeLower(email);
+    const cleanPass = safeStr(password);
+
+    if (!cleanEmail || !cleanPass) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    const user = usersStore.find(
+      u => safeLower(u.email) === cleanEmail && String(u.password) === cleanPass
+    );
+
+    if (!user) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    const token = `token_${user.id}_${Date.now()}`;
+    tokensStore.set(token, user.id);
+
+    console.log(`[User Logged In] ${user.name} (${user.email}) - Role: ${user.role}`);
+    res.json({ success: true, user: sanitizeUser(user), token });
+  } catch (err) {
+    console.error("[Login Error]", err);
+    res.status(500).json({ error: "Failed to authenticate user" });
   }
-
-  const user = usersStore.find(
-    u => u.email.toLowerCase() === email.trim().toLowerCase() && u.password === password
-  );
-
-  if (!user) {
-    return res.status(401).json({ error: "Invalid email or password" });
-  }
-
-  const token = `token_${user.id}_${Date.now()}`;
-  tokensStore.set(token, user.id);
-
-  console.log(`[User Logged In] ${user.name} (${user.email}) - Role: ${user.role}`);
-  res.json({ success: true, user: sanitizeUser(user), token });
 });
 
 // Auth API - Current User
 app.get("/api/auth/me", (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
-  const token = authHeader.split(" ")[1];
-  const userId = tokensStore.get(token);
-  if (!userId) {
-    return res.status(401).json({ error: "Invalid or expired token" });
-  }
+    const token = authHeader.split(" ")[1];
+    const userId = tokensStore.get(token);
+    if (!userId) {
+      return res.status(401).json({ error: "Invalid or expired session token" });
+    }
 
-  const user = usersStore.find(u => u.id === userId);
-  if (!user) {
-    return res.status(401).json({ error: "User not found" });
-  }
+    const user = usersStore.find(u => u.id === userId);
+    if (!user) {
+      return res.status(401).json({ error: "User profile not found" });
+    }
 
-  res.json({ user: sanitizeUser(user) });
+    res.json({ user: sanitizeUser(user) });
+  } catch (err) {
+    console.error("[Auth Me Error]", err);
+    res.status(500).json({ error: "Failed to fetch active user profile" });
+  }
 });
 
 // Categories API
 app.get("/api/categories", (req, res) => {
-  res.json(CATEGORIES);
+  res.json(CATEGORIES || []);
 });
 
 // Products List API (supports filtering, searching, and sorting)
 app.get("/api/products", (req, res) => {
-  const { cat, q, filter, priceRange, inStock, sort } = req.query;
-  let list = [...productsList];
+  try {
+    const { cat, q, filter, priceRange, inStock, sort } = req.query;
+    let list = [...productsList];
 
-  // Category filter
-  if (cat && cat !== "all") {
-    list = list.filter(p => p.category === cat);
-  }
-
-  // Search query
-  if (q && typeof q === "string" && q.trim()) {
-    const query = q.toLowerCase().trim();
-    list = list.filter(p =>
-      p.name.toLowerCase().includes(query) ||
-      p.description.toLowerCase().includes(query) ||
-      p.subcategory.toLowerCase().includes(query) ||
-      (p.tags && p.tags.some(t => t.toLowerCase().includes(query)))
-    );
-  }
-
-  // Special Filter flags
-  if (filter === "new")       list = list.filter(p => p.isNew);
-  if (filter === "bestseller") list = list.filter(p => p.isBestseller);
-  if (inStock === "true")     list = list.filter(p => p.inStock);
-
-  // Price range filter
-  if (priceRange !== undefined && priceRange !== null && priceRange !== "") {
-    const idx = parseInt(priceRange, 10);
-    if (!isNaN(idx) && PRICE_RANGES[idx]) {
-      const r = PRICE_RANGES[idx];
-      list = list.filter(p => p.price >= r.min && p.price <= r.max);
+    // Category filter
+    if (cat && cat !== "all") {
+      list = list.filter(p => p.category === cat);
     }
-  }
 
-  // Sorting
-  switch (sort) {
-    case "price-asc":   list.sort((a, b) => a.price - b.price); break;
-    case "price-desc":  list.sort((a, b) => b.price - a.price); break;
-    case "rating":      list.sort((a, b) => b.rating - a.rating); break;
-    case "newest":      list.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0)); break;
-    case "bestselling": list.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0)); break;
-  }
+    // Search query with safe string checks
+    if (q && typeof q === "string" && q.trim()) {
+      const query = safeLower(q);
+      list = list.filter(p => {
+        const name = safeLower(p.name);
+        const desc = safeLower(p.description);
+        const subcat = safeLower(p.subcategory);
+        const tags = Array.isArray(p.tags) ? p.tags.map(safeLower) : [];
+        return name.includes(query) || desc.includes(query) || subcat.includes(query) || tags.some(t => t.includes(query));
+      });
+    }
 
-  res.json({ products: list, count: list.length });
+    // Special Filter flags
+    if (filter === "new")        list = list.filter(p => Boolean(p.isNew));
+    if (filter === "bestseller") list = list.filter(p => Boolean(p.isBestseller));
+    if (inStock === "true")      list = list.filter(p => Boolean(p.inStock));
+
+    // Price range filter
+    if (priceRange !== undefined && priceRange !== null && priceRange !== "") {
+      const idx = parseInt(String(priceRange), 10);
+      if (!isNaN(idx) && PRICE_RANGES && PRICE_RANGES[idx]) {
+        const r = PRICE_RANGES[idx];
+        list = list.filter(p => (p.price || 0) >= r.min && (p.price || 0) <= r.max);
+      }
+    }
+
+    // Sorting
+    switch (sort) {
+      case "price-asc":   list.sort((a, b) => (a.price || 0) - (b.price || 0)); break;
+      case "price-desc":  list.sort((a, b) => (b.price || 0) - (a.price || 0)); break;
+      case "rating":      list.sort((a, b) => (b.rating || 0) - (a.rating || 0)); break;
+      case "newest":      list.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0)); break;
+      case "bestselling": list.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0)); break;
+    }
+
+    res.json({ products: list, count: list.length });
+  } catch (err) {
+    console.error("[Get Products Error]", err);
+    res.status(500).json({ error: "Error retrieving product catalog" });
+  }
 });
 
 // Single Product Details API
 app.get("/api/products/:id", (req, res) => {
-  const product = productsList.find(p => p.id === req.params.id);
-  if (!product) {
-    return res.status(404).json({ error: "Product not found" });
+  try {
+    const product = productsList.find(p => p.id === req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    const reviews = Array.isArray(REVIEWS) ? REVIEWS.filter(r => r.productId === product.id) : [];
+    const related = productsList.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+
+    res.json({ product, reviews, related });
+  } catch (err) {
+    console.error("[Get Product Detail Error]", err);
+    res.status(500).json({ error: "Error fetching product details" });
   }
-
-  const reviews = REVIEWS.filter(r => r.productId === product.id);
-  const related = productsList.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
-
-  res.json({ product, reviews, related });
 });
 
 // Admin Product Create API
 app.post("/api/admin/products", (req, res) => {
-  const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } = req.body;
+  try {
+    const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } = req.body || {};
 
-  if (!name || !category || !price) {
-    return res.status(400).json({ error: "Name, category, and price are required" });
+    const cleanName = safeStr(name);
+    const cleanCategory = safeStr(category);
+    const numPrice = Number(price);
+
+    if (!cleanName || !cleanCategory || isNaN(numPrice) || numPrice <= 0) {
+      return res.status(400).json({ error: "Valid name, category, and price are required" });
+    }
+
+    const newProduct = {
+      id: `prod-${Date.now()}`,
+      name: cleanName,
+      category: cleanCategory,
+      subcategory: safeStr(subcategory) || "General",
+      price: numPrice,
+      originalPrice: originalPrice ? Number(originalPrice) : undefined,
+      description: safeStr(description) || "Handcrafted aesthetic lifestyle product.",
+      images: Array.isArray(images) && images.length > 0 ? images : ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
+      inStock: inStock !== undefined ? Boolean(inStock) : true,
+      rating: 5.0,
+      reviewCount: 0,
+      isNew: isNew !== undefined ? Boolean(isNew) : true,
+      isBestseller: Boolean(isBestseller),
+      tags: ["New Arrival"]
+    };
+
+    productsList.unshift(newProduct);
+    console.log(`[Admin Added Product] ${newProduct.name} (${newProduct.id})`);
+    res.status(201).json({ success: true, product: newProduct });
+  } catch (err) {
+    console.error("[Add Product Error]", err);
+    res.status(500).json({ error: "Failed to create new product" });
   }
-
-  const newProduct = {
-    id: `prod-${Date.now()}`,
-    name: name.trim(),
-    category,
-    subcategory: subcategory || "General",
-    price: Number(price),
-    originalPrice: originalPrice ? Number(originalPrice) : undefined,
-    description: description || "Handcrafted aesthetic lifestyle product.",
-    images: images && images.length > 0 ? images : ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
-    inStock: inStock !== undefined ? Boolean(inStock) : true,
-    rating: 5.0,
-    reviewCount: 0,
-    isNew: isNew !== undefined ? Boolean(isNew) : true,
-    isBestseller: Boolean(isBestseller),
-    tags: ["New Arrival"]
-  };
-
-  productsList.unshift(newProduct);
-  console.log(`[Admin Added Product] ${newProduct.name} (${newProduct.id})`);
-  res.status(201).json({ success: true, product: newProduct });
-});
-
-// Admin Product Edit API
-app.put("/api/admin/products/:id", (req, res) => {
-  const prodId = req.params.id;
-  const productIndex = productsList.findIndex(p => p.id === prodId);
-
-  if (productIndex === -1) {
-    return res.status(404).json({ error: "Product not found" });
-  }
-
-  const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } = req.body;
-
-  const currentProduct = productsList[productIndex];
-  const updatedProduct = {
-    ...currentProduct,
-    name: name !== undefined ? name.trim() : currentProduct.name,
-    category: category !== undefined ? category : currentProduct.category,
-    subcategory: subcategory !== undefined ? subcategory : currentProduct.subcategory,
-    price: price !== undefined ? Number(price) : currentProduct.price,
-    originalPrice: originalPrice !== undefined ? (originalPrice ? Number(originalPrice) : undefined) : currentProduct.originalPrice,
-    description: description !== undefined ? description : currentProduct.description,
-    images: images && images.length > 0 ? images : currentProduct.images,
-    inStock: inStock !== undefined ? Boolean(inStock) : currentProduct.inStock,
-    isNew: isNew !== undefined ? Boolean(isNew) : currentProduct.isNew,
-    isBestseller: isBestseller !== undefined ? Boolean(isBestseller) : currentProduct.isBestseller,
-  };
-
-  productsList[productIndex] = updatedProduct;
-  console.log(`[Admin Updated Product] ${updatedProduct.name} (${updatedProduct.id})`);
-  res.json({ success: true, product: updatedProduct });
 });
 
 // Admin Product Delete API
 app.delete("/api/admin/products/:id", (req, res) => {
-  const prodId = req.params.id;
-  const initialLen = productsList.length;
-  productsList = productsList.filter(p => p.id !== prodId);
+  try {
+    const prodId = req.params.id;
+    const initialLen = productsList.length;
+    productsList = productsList.filter(p => p.id !== prodId);
 
-  if (productsList.length === initialLen) {
-    return res.status(404).json({ error: "Product not found" });
+    if (productsList.length === initialLen) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    console.log(`[Admin Deleted Product] ID: ${prodId}`);
+    res.json({ success: true, message: "Product deleted successfully" });
+  } catch (err) {
+    console.error("[Delete Product Error]", err);
+    res.status(500).json({ error: "Failed to delete product" });
   }
-
-  console.log(`[Admin Deleted Product] ID: ${prodId}`);
-  res.json({ success: true, message: "Product deleted successfully" });
 });
 
 // Admin Get All Orders API
@@ -312,108 +341,149 @@ app.get("/api/admin/orders", (req, res) => {
 
 // Admin Update Order Status API
 app.patch("/api/admin/orders/:id/status", (req, res) => {
-  const { status } = req.body;
-  const order = ordersStore.get(req.params.id);
+  try {
+    const { status } = req.body || {};
+    const order = ordersStore.get(req.params.id);
 
-  if (!order) {
-    return res.status(404).json({ error: "Order not found" });
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    const cleanStatus = safeStr(status);
+    if (!cleanStatus) {
+      return res.status(400).json({ error: "Order status is required" });
+    }
+
+    order.status = cleanStatus;
+    ordersStore.set(order.id, order);
+
+    console.log(`[Admin Updated Order Status] ID: ${order.id} -> Status: ${cleanStatus}`);
+    res.json({ success: true, order });
+  } catch (err) {
+    console.error("[Update Status Error]", err);
+    res.status(500).json({ error: "Failed to update order status" });
   }
-
-  if (!status) {
-    return res.status(400).json({ error: "Status is required" });
-  }
-
-  order.status = status;
-  ordersStore.set(order.id, order);
-
-  console.log(`[Admin Updated Order Status] ID: ${order.id} -> Status: ${status}`);
-  res.json({ success: true, order });
 });
 
 // Promo Code Validation API
 app.post("/api/promo/validate", (req, res) => {
-  const { code } = req.body;
-  if (!code) {
-    return res.status(400).json({ valid: false, error: "Code is required" });
-  }
+  try {
+    const { code } = req.body || {};
+    const cleanCode = safeStr(code).toUpperCase();
 
-  if (code.trim().toUpperCase() === "WRITE50") {
-    return res.json({ valid: true, code: "WRITE50", discountPercent: 10, message: "10% discount applied!" });
-  }
+    if (!cleanCode) {
+      return res.status(400).json({ valid: false, error: "Code is required" });
+    }
 
-  res.status(400).json({ valid: false, error: "Invalid promo code. Try WRITE50." });
+    if (cleanCode === "WRITE50") {
+      return res.json({ valid: true, code: "WRITE50", discountPercent: 10, message: "10% discount applied!" });
+    }
+
+    res.status(400).json({ valid: false, error: "Invalid promo code. Try WRITE50." });
+  } catch (err) {
+    console.error("[Promo Error]", err);
+    res.status(500).json({ valid: false, error: "Error validating promo code" });
+  }
 });
 
 // Orders API (Create or Sync Order)
 app.post("/api/orders", (req, res) => {
-  const { id, items, deliveryAddress, payMethod, subtotal, discount, shipping, giftCost, total, status } = req.body;
+  try {
+    const { id, items, deliveryAddress, payMethod, subtotal, discount, shipping, giftCost, total, status } = req.body || {};
 
-  if (!items || !Array.isArray(items) || items.length === 0) {
-    return res.status(400).json({ error: "Cart items are required" });
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Cart items are required" });
+    }
+    if (!deliveryAddress || typeof deliveryAddress !== "object" || !safeStr(deliveryAddress.email) || !safeStr(deliveryAddress.address)) {
+      return res.status(400).json({ error: "Valid delivery address and email are required" });
+    }
+
+    const orderId = safeStr(id) || `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
+    // Return existing order if already in memory store (preserves Admin status updates)
+    if (ordersStore.has(orderId)) {
+      return res.json({ success: true, order: ordersStore.get(orderId) });
+    }
+
+    const order = {
+      id: orderId,
+      items,
+      deliveryAddress,
+      payMethod: safeStr(payMethod) || "upi",
+      subtotal: Number(subtotal) || 0,
+      discount: Number(discount) || 0,
+      shipping: Number(shipping) || 0,
+      giftCost: Number(giftCost) || 0,
+      total: Number(total) || 0,
+      status: safeStr(status) || "Processing",
+      date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
+      createdAt: new Date().toISOString()
+    };
+
+    ordersStore.set(orderId, order);
+    console.log(`[Order Registered/Synced] ID: ${orderId}, Total: ₹${order.total}`);
+
+    res.status(201).json({ success: true, order });
+  } catch (err) {
+    console.error("[Create Order Error]", err);
+    res.status(500).json({ error: "Failed to create order" });
   }
-  if (!deliveryAddress || !deliveryAddress.email || !deliveryAddress.address) {
-    return res.status(400).json({ error: "Valid delivery address is required" });
-  }
-
-  const orderId = id || `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-
-  // Return existing order if already in memory store (preserves Admin status updates)
-  if (ordersStore.has(orderId)) {
-    return res.json({ success: true, order: ordersStore.get(orderId) });
-  }
-
-  const order = {
-    id: orderId,
-    items,
-    deliveryAddress,
-    payMethod: payMethod || "upi",
-    subtotal: subtotal || 0,
-    discount: discount || 0,
-    shipping: shipping || 0,
-    giftCost: giftCost || 0,
-    total: total || 0,
-    status: status || "Processing",
-    date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-    createdAt: new Date().toISOString()
-  };
-
-  ordersStore.set(orderId, order);
-  console.log(`[Order Registered/Synced] ID: ${orderId}, Total: ₹${order.total}`);
-
-  res.status(201).json({ success: true, order });
 });
 
 // Orders API (Get Order Details)
 app.get("/api/orders/:id", (req, res) => {
-  const order = ordersStore.get(req.params.id);
-  if (!order) {
-    return res.status(404).json({ error: "Order not found" });
+  try {
+    const order = ordersStore.get(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    res.json(order);
+  } catch (err) {
+    console.error("[Get Order Error]", err);
+    res.status(500).json({ error: "Error fetching order details" });
   }
-  res.json(order);
 });
 
 // Orders API (Cancel Order by Customer)
 app.patch("/api/orders/:id/cancel", (req, res) => {
-  const orderId = req.params.id;
-  const order = ordersStore.get(orderId);
+  try {
+    const orderId = req.params.id;
+    const order = ordersStore.get(orderId);
 
-  if (!order) {
-    return res.status(404).json({ error: "Order not found" });
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    if (order.status === "Shipped" || order.status === "Delivered") {
+      return res.status(400).json({ error: `Cannot cancel order after it has been ${order.status.toLowerCase()}` });
+    }
+
+    order.status = "Cancelled";
+    ordersStore.set(orderId, order);
+    console.log(`[Order Cancelled by Customer] ID: ${orderId}`);
+
+    res.json({ success: true, message: "Order cancelled successfully", order });
+  } catch (err) {
+    console.error("[Cancel Order Error]", err);
+    res.status(500).json({ error: "Failed to cancel order" });
   }
-
-  if (order.status === "Shipped" || order.status === "Delivered") {
-    return res.status(400).json({ error: `Cannot cancel order after it has been ${order.status.toLowerCase()}` });
-  }
-
-  order.status = "Cancelled";
-  ordersStore.set(orderId, order);
-  console.log(`[Order Cancelled by Customer] ID: ${orderId}`);
-
-  res.json({ success: true, message: "Order cancelled successfully", order });
 });
 
+// Global catch-all 500 error handler middleware
+app.use((err, req, res, next) => {
+  console.error("[Global Express Error]", err);
+  res.status(500).json({ error: err?.message || "Internal server error" });
+});
 
-app.listen(PORT, () => {
+// Global process exception safety handlers
+process.on("uncaughtException", (err) => {
+  console.error("[Uncaught Process Exception]", err);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("[Unhandled Promise Rejection]", reason);
+});
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Elow Backend Express API running on http://localhost:${PORT}`);
 });
-
