@@ -313,9 +313,9 @@ app.post("/api/promo/validate", (req, res) => {
   res.status(400).json({ valid: false, error: "Invalid promo code. Try WRITE50." });
 });
 
-// Orders API (Create Order)
+// Orders API (Create or Sync Order)
 app.post("/api/orders", (req, res) => {
-  const { items, deliveryAddress, payMethod, subtotal, discount, shipping, giftCost, total } = req.body;
+  const { id, items, deliveryAddress, payMethod, subtotal, discount, shipping, giftCost, total, status } = req.body;
 
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: "Cart items are required" });
@@ -324,7 +324,13 @@ app.post("/api/orders", (req, res) => {
     return res.status(400).json({ error: "Valid delivery address is required" });
   }
 
-  const orderId = `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+  const orderId = id || `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
+  // Return existing order if already in memory store (preserves Admin status updates)
+  if (ordersStore.has(orderId)) {
+    return res.json({ success: true, order: ordersStore.get(orderId) });
+  }
+
   const order = {
     id: orderId,
     items,
@@ -335,13 +341,13 @@ app.post("/api/orders", (req, res) => {
     shipping: shipping || 0,
     giftCost: giftCost || 0,
     total: total || 0,
-    status: "Processing",
+    status: status || "Processing",
     date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
     createdAt: new Date().toISOString()
   };
 
   ordersStore.set(orderId, order);
-  console.log(`[Order Placed] ID: ${orderId}, Total: ₹${order.total}`);
+  console.log(`[Order Registered/Synced] ID: ${orderId}, Total: ₹${order.total}`);
 
   res.status(201).json({ success: true, order });
 });

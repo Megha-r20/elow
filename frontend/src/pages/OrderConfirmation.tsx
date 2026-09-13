@@ -18,27 +18,33 @@ export default function OrderConfirmation() {
     return () => clearTimeout(t);
   }, []);
 
-  // Fetch live order status from backend API
+  // Sync order & fetch live status from backend API
   useEffect(() => {
-    const targetId = lastOrder?.id;
-    if (!targetId) return;
+    if (!lastOrder?.id) return;
 
-    const fetchStatus = async () => {
+    const syncAndFetchStatus = async () => {
       try {
-        const res = await fetch(`/api/orders/${targetId}`);
+        const res = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(lastOrder),
+        });
+
         if (res.ok) {
           const data = await res.json();
-          setCurrentOrder(data);
+          if (data.order) {
+            setCurrentOrder(data.order);
+          }
         }
       } catch (err) {
-        console.error("Error fetching live order status:", err);
+        console.error("Error syncing live order status:", err);
       }
     };
 
-    fetchStatus();
-    const timer = setInterval(fetchStatus, 2500);
+    syncAndFetchStatus();
+    const timer = setInterval(syncAndFetchStatus, 2000);
     return () => clearInterval(timer);
-  }, [lastOrder?.id]);
+  }, [lastOrder]);
 
   const recommended = PRODUCTS.filter(p => p.isBestseller).slice(0, 4);
   const deliveryDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);

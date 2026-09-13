@@ -17,10 +17,17 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
 
     const fetchLiveOrder = async () => {
       try {
-        const res = await fetch(`/api/orders/${lastOrder.id}`);
+        const res = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(lastOrder),
+        });
+
         if (res.ok) {
           const data = await res.json();
-          setLiveOrder(data);
+          if (data.order) {
+            setLiveOrder(data.order);
+          }
         }
       } catch (err) {
         console.error("Error fetching live order in modal:", err);
@@ -28,7 +35,7 @@ export function AccountModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     };
 
     fetchLiveOrder();
-  }, [isOpen, lastOrder?.id]);
+  }, [isOpen, lastOrder]);
 
   if (!isOpen) return null;
 
