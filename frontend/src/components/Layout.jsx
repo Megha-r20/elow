@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet, useNavigate, useLocation, Link } from "react-router";
 import { useCart, useDrawer, useToast } from "../hooks";
 import { useAuth } from "../context/AuthContext";
 import { CartDrawer } from "./CartDrawer";
 import { AccountModal } from "./AccountModal";
 import { AuthModal } from "./AuthModal";
+import { SpinWheelModal } from "./SpinWheelModal";
+import { SpinLauncher } from "./SpinLauncher";
 import { Icons } from "./ui";
 import { CATEGORIES } from "../data";
 const ANNOUNCE = [
@@ -26,6 +28,17 @@ export default function Layout() {
     const [accountOpen, setAccountOpen] = useState(false);
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+    const [spinModalOpen, setSpinModalOpen] = useState(false);
+
+    useEffect(() => {
+        const hasSpun = localStorage.getItem("spinWonPrize");
+        if (!hasSpun) {
+            const timer = setTimeout(() => {
+                setSpinModalOpen(true);
+            }, 2500);
+            return () => clearTimeout(timer);
+        }
+    }, []);
     const isActive = (path) => {
         const [p, q] = path.split("?");
         if (location.pathname !== p && !location.pathname.startsWith(p + "/"))
@@ -321,6 +334,12 @@ export default function Layout() {
 
       {/* Auth Modal */}
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)}/>
+
+      {/* Spin & Win Promo Modal */}
+      <SpinWheelModal isOpen={spinModalOpen} onClose={() => setSpinModalOpen(false)}/>
+
+      {/* Floating Spin Launcher Trigger */}
+      <SpinLauncher onClick={() => setSpinModalOpen(true)}/>
 
 
       {/* Search overlay */}

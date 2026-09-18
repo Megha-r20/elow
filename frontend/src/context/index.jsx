@@ -75,14 +75,25 @@ export function CartProvider({ children }) {
     const count = state.items.reduce((s, i) => s + i.qty, 0);
     const subtotal = state.items.reduce((s, i) => s + i.product.price * i.qty, 0);
     const applyPromo = useCallback((code) => {
-        if (code.trim().toUpperCase() === "WRITE50") {
-            setPromoCode("WRITE50");
+        const cleaned = code.trim().toUpperCase();
+        const validCodes = ["WRITE50", "ELOW10", "SPIN50", "SPIN100", "SPIN150", "SPIN250", "SPIN10"];
+        if (validCodes.includes(cleaned)) {
+            setPromoCode(cleaned);
             return true;
         }
         return false;
     }, []);
     const removePromo = useCallback(() => { setPromoCode(null); }, []);
-    const discount = promoCode === "WRITE50" ? Math.round(subtotal * 0.1) : 0;
+    let discount = 0;
+    if (promoCode) {
+        const c = promoCode.toUpperCase();
+        if (c === "SPIN50") discount = 50;
+        else if (c === "SPIN100") discount = 100;
+        else if (c === "SPIN150") discount = 150;
+        else if (c === "SPIN250") discount = 250;
+        else if (c === "WRITE50" || c === "ELOW10" || c === "SPIN10") discount = Math.round(subtotal * 0.1);
+        discount = Math.min(discount, subtotal);
+    }
     const saveOrder = useCallback((order) => {
         setLastOrder(order);
     }, []);
