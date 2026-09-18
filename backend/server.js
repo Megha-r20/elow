@@ -1,9 +1,17 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 import { PRODUCTS, CATEGORIES, REVIEWS, PRICE_RANGES } from "./data/products.js";
+import { Product } from "./models/Product.js";
+import { Order } from "./models/Order.js";
+import { User } from "./models/User.js";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5005;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors({ origin: "*", credentials: true }));
@@ -21,8 +29,30 @@ app.use((err, req, res, next) => {
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
 const safeLower = (v) => safeStr(v).toLowerCase();
 
-// Memory store for placed orders
-const ordersStore = new Map();
+// In-memory fallback / cache stores
+let productsListMemory = Array.isArray(PRODUCTS) ? [...PRODUCTS] : [];
+const tokensStore = new Map([
+  ["token_admin_demo", "user-admin-1"],
+  ["token_cust_demo", "user-cust-1"],
+]);
+
+// Initial sample user accounts for seeding
+const initialUsers = [
+  {
+    id: "user-admin-1",
+    name: "Elow Admin",
+    email: "admin@elow.com",
+    password: "admin123",
+    role: "admin",
+  },
+  {
+    id: "user-cust-1",
+    name: "Ritika Sharma",
+    email: "ritika@example.com",
+    password: "user123",
+    role: "user",
+  },
+];
 
 // Initial sample order for demonstration in Admin Portal
 const initialDemoOrder = {
@@ -35,10 +65,10 @@ const initialDemoOrder = {
         price: 1299,
         category: "journals",
         subcategory: "Hardcover",
-        images: ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"]
+        images: ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
       },
-      qty: 1
-    }
+      qty: 1,
+    },
   ],
   deliveryAddress: {
     firstName: "Ritika",
@@ -48,7 +78,7 @@ const initialDemoOrder = {
     address: "Flat 4B, Orchid Heights, MG Road",
     city: "Mumbai",
     state: "Maharashtra",
-    pincode: "400001"
+    pincode: "400001",
   },
   payMethod: "upi",
   subtotal: 1299,
@@ -58,53 +88,69 @@ const initialDemoOrder = {
   total: 1299,
   status: "Processing",
   date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-  createdAt: new Date().toISOString()
 };
-ordersStore.set(initialDemoOrder.id, initialDemoOrder);
 
-// Dynamic products list in memory initialized from PRODUCTS array
-let productsList = Array.isArray(PRODUCTS) ? [...PRODUCTS] : [];
-
-// Memory store for users
-const usersStore = [
-  {
-    id: "user-admin-1",
-    name: "Elow Admin",
-    email: "admin@elow.in",
-    password: "admin123",
-    role: "admin",
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: "user-cust-1",
-    name: "Ritika Sharma",
-    email: "ritika@example.com",
-    password: "password123",
-    role: "user",
-    createdAt: new Date().toISOString()
+// Connect to MongoDB Atlas & seed default catalog
+async function connectDBAndSeed() {
+  if (!MONGODB_URI) {
+    console.warn("⚠️ MONGODB_URI environment variable is not defined.");
+    return;
   }
-];
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log("🟢 Connected to MongoDB Atlas successfully!");
 
-// Memory store for active sessions/tokens
-const tokensStore = new Map([
-  ["token_admin_demo", "user-admin-1"],
-  ["token_cust_demo", "user-cust-1"]
-]);
+    // Seed products catalog if collection is empty
+    const count = await Product.countDocuments();
+    if (count === 0 && Array.isArray(PRODUCTS) && PRODUCTS.length > 0) {
+      console.log(`🌱 Seeding ${PRODUCTS.length} stationery items into MongoDB Atlas...`);
+      await Product.insertMany(PRODUCTS);
+      console.log("✅ Seeded products into MongoDB Atlas successfully!");
+    } else {
+      console.log(`📦 MongoDB Atlas contains ${count} products.`);
+    }
+
+    // Seed initial users if collection is empty
+    const userCount = await User.countDocuments();
+    if (userCount === 0) {
+      await User.insertMany(initialUsers);
+      console.log("✅ Seeded default admin/user accounts into MongoDB Atlas!");
+    }
+
+    // Seed initial demo order if collection is empty
+    const orderCount = await Order.countDocuments();
+    if (orderCount === 0) {
+      await Order.create(initialDemoOrder);
+      console.log("✅ Seeded initial demo order into MongoDB Atlas!");
+    }
+  } catch (err) {
+    console.error("❌ MongoDB Atlas connection error:", err.message);
+  }
+}
+
+connectDBAndSeed();
 
 // Helper to strip sensitive password field
 const sanitizeUser = (user) => {
   if (!user) return null;
-  const { password, ...safeUser } = user;
+  const raw = typeof user.toObject === "function" ? user.toObject() : user;
+  const { password, _id, __v, ...safeUser } = raw;
   return safeUser;
 };
 
-// Health Check
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", service: "elow-backend", timestamp: new Date().toISOString() });
+// Health Check API
+app.get("/api/health", async (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
+  res.json({
+    status: "ok",
+    service: "elow-backend",
+    database: dbStatus,
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Auth API - Register
-app.post("/api/auth/register", (req, res) => {
+app.post("/api/auth/register", async (req, res) => {
   try {
     const { name, email, password, role } = req.body || {};
 
@@ -116,21 +162,19 @@ app.post("/api/auth/register", (req, res) => {
       return res.status(400).json({ error: "Name, email, and password are required" });
     }
 
-    const existingUser = usersStore.find(u => safeLower(u.email) === cleanEmail);
+    const existingUser = await User.findOne({ email: cleanEmail }).lean();
     if (existingUser) {
       return res.status(400).json({ error: "An account with this email already exists" });
     }
 
-    const newUser = {
+    const newUser = await User.create({
       id: `user-${Date.now()}`,
       name: cleanName,
       email: cleanEmail,
       password: cleanPass,
       role: role === "admin" ? "admin" : "user",
-      createdAt: new Date().toISOString()
-    };
+    });
 
-    usersStore.push(newUser);
     const token = `token_${newUser.id}_${Date.now()}`;
     tokensStore.set(token, newUser.id);
 
@@ -143,7 +187,7 @@ app.post("/api/auth/register", (req, res) => {
 });
 
 // Auth API - Login
-app.post("/api/auth/login", (req, res) => {
+app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body || {};
 
@@ -154,9 +198,7 @@ app.post("/api/auth/login", (req, res) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
-    const user = usersStore.find(
-      u => safeLower(u.email) === cleanEmail && String(u.password) === cleanPass
-    );
+    const user = await User.findOne({ email: cleanEmail, password: cleanPass }).lean();
 
     if (!user) {
       return res.status(401).json({ error: "Invalid email or password" });
@@ -174,7 +216,7 @@ app.post("/api/auth/login", (req, res) => {
 });
 
 // Auth API - Current User
-app.get("/api/auth/me", (req, res) => {
+app.get("/api/auth/me", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -187,7 +229,7 @@ app.get("/api/auth/me", (req, res) => {
       return res.status(401).json({ error: "Invalid or expired session token" });
     }
 
-    const user = usersStore.find(u => u.id === userId);
+    const user = await User.findOne({ id: userId }).lean();
     if (!user) {
       return res.status(401).json({ error: "User profile not found" });
     }
@@ -200,7 +242,7 @@ app.get("/api/auth/me", (req, res) => {
 });
 
 // Auth API - Update Profile & Password
-app.patch("/api/auth/profile", (req, res) => {
+app.patch("/api/auth/profile", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -213,12 +255,12 @@ app.patch("/api/auth/profile", (req, res) => {
       return res.status(401).json({ error: "Invalid or expired session token" });
     }
 
-    const user = usersStore.find(u => u.id === userId);
+    const user = await User.findOne({ id: userId });
     if (!user) {
       return res.status(401).json({ error: "User profile not found" });
     }
 
-    const { name, email, phone, currentPassword, newPassword } = req.body || {};
+    const { name, email, phone, bio, avatar, address, currentPassword, newPassword } = req.body || {};
 
     if (name) {
       const cleanName = safeStr(name);
@@ -228,7 +270,7 @@ app.patch("/api/auth/profile", (req, res) => {
     if (email) {
       const cleanEmail = safeLower(email);
       if (cleanEmail && cleanEmail !== safeLower(user.email)) {
-        const existing = usersStore.find(u => u.id !== user.id && safeLower(u.email) === cleanEmail);
+        const existing = await User.findOne({ id: { $ne: user.id }, email: cleanEmail }).lean();
         if (existing) {
           return res.status(400).json({ error: "An account with this email already exists" });
         }
@@ -236,9 +278,10 @@ app.patch("/api/auth/profile", (req, res) => {
       }
     }
 
-    if (phone !== undefined) {
-      user.phone = safeStr(phone);
-    }
+    if (phone !== undefined) user.phone = safeStr(phone);
+    if (bio !== undefined) user.bio = safeStr(bio);
+    if (avatar !== undefined) user.avatar = safeStr(avatar);
+    if (address !== undefined) user.address = safeStr(address);
 
     if (newPassword) {
       const cleanCurrent = safeStr(currentPassword);
@@ -257,9 +300,9 @@ app.patch("/api/auth/profile", (req, res) => {
       }
 
       user.password = cleanNew;
-      console.log(`[User Updated Password] ${user.email}`);
     }
 
+    await user.save();
     console.log(`[User Updated Profile] ${user.name} (${user.email})`);
     res.json({ success: true, user: sanitizeUser(user), message: "Profile updated successfully" });
   } catch (err) {
@@ -273,50 +316,73 @@ app.get("/api/categories", (req, res) => {
   res.json(CATEGORIES || []);
 });
 
-// Products List API (supports filtering, searching, and sorting)
-app.get("/api/products", (req, res) => {
+// Products List API (Queries MongoDB Atlas with fallback to memory)
+app.get("/api/products", async (req, res) => {
   try {
     const { cat, q, filter, priceRange, inStock, sort } = req.query;
-    let list = [...productsList];
+
+    let products = [];
+    if (mongoose.connection.readyState === 1) {
+      products = await Product.find({}).lean();
+    } else {
+      products = [...productsListMemory];
+    }
+
+    let list = [...products];
 
     // Category filter
     if (cat && cat !== "all") {
-      list = list.filter(p => p.category === cat);
+      list = list.filter((p) => p.category === cat);
     }
 
-    // Search query with safe string checks
+    // Search query
     if (q && typeof q === "string" && q.trim()) {
       const query = safeLower(q);
-      list = list.filter(p => {
+      list = list.filter((p) => {
         const name = safeLower(p.name);
         const desc = safeLower(p.description);
         const subcat = safeLower(p.subcategory);
         const tags = Array.isArray(p.tags) ? p.tags.map(safeLower) : [];
-        return name.includes(query) || desc.includes(query) || subcat.includes(query) || tags.some(t => t.includes(query));
+        return (
+          name.includes(query) ||
+          desc.includes(query) ||
+          subcat.includes(query) ||
+          tags.some((t) => t.includes(query))
+        );
       });
     }
 
     // Special Filter flags
-    if (filter === "new")        list = list.filter(p => Boolean(p.isNew));
-    if (filter === "bestseller") list = list.filter(p => Boolean(p.isBestseller));
-    if (inStock === "true")      list = list.filter(p => Boolean(p.inStock));
+    if (filter === "new") list = list.filter((p) => Boolean(p.isNew));
+    if (filter === "bestseller") list = list.filter((p) => Boolean(p.isBestseller));
+    if (inStock === "true") list = list.filter((p) => Boolean(p.inStock));
 
     // Price range filter
     if (priceRange !== undefined && priceRange !== null && priceRange !== "") {
       const idx = parseInt(String(priceRange), 10);
       if (!isNaN(idx) && PRICE_RANGES && PRICE_RANGES[idx]) {
         const r = PRICE_RANGES[idx];
-        list = list.filter(p => (p.price || 0) >= r.min && (p.price || 0) <= r.max);
+        list = list.filter((p) => (p.price || 0) >= r.min && (p.price || 0) <= r.max);
       }
     }
 
     // Sorting
     switch (sort) {
-      case "price-asc":   list.sort((a, b) => (a.price || 0) - (b.price || 0)); break;
-      case "price-desc":  list.sort((a, b) => (b.price || 0) - (a.price || 0)); break;
-      case "rating":      list.sort((a, b) => (b.rating || 0) - (a.rating || 0)); break;
-      case "newest":      list.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0)); break;
-      case "bestselling": list.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0)); break;
+      case "price-asc":
+        list.sort((a, b) => (a.price || 0) - (b.price || 0));
+        break;
+      case "price-desc":
+        list.sort((a, b) => (b.price || 0) - (a.price || 0));
+        break;
+      case "rating":
+        list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      case "newest":
+        list.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+        break;
+      case "bestselling":
+        list.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0));
+        break;
     }
 
     res.json({ products: list, count: list.length });
@@ -327,16 +393,32 @@ app.get("/api/products", (req, res) => {
 });
 
 // Single Product Details API
-app.get("/api/products/:id", (req, res) => {
+app.get("/api/products/:id", async (req, res) => {
   try {
-    const product = productsList.find(p => p.id === req.params.id);
+    let product = null;
+    let related = [];
+
+    if (mongoose.connection.readyState === 1) {
+      product = await Product.findOne({ id: req.params.id }).lean();
+      if (product) {
+        related = await Product.find({ category: product.category, id: { $ne: product.id } })
+          .limit(4)
+          .lean();
+      }
+    } else {
+      product = productsListMemory.find((p) => p.id === req.params.id);
+      if (product) {
+        related = productsListMemory
+          .filter((p) => p.category === product.category && p.id !== product.id)
+          .slice(0, 4);
+      }
+    }
+
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    const reviews = Array.isArray(REVIEWS) ? REVIEWS.filter(r => r.productId === product.id) : [];
-    const related = productsList.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
-
+    const reviews = Array.isArray(REVIEWS) ? REVIEWS.filter((r) => r.productId === product.id) : [];
     res.json({ product, reviews, related });
   } catch (err) {
     console.error("[Get Product Detail Error]", err);
@@ -344,10 +426,11 @@ app.get("/api/products/:id", (req, res) => {
   }
 });
 
-// Admin Product Create API
-app.post("/api/admin/products", (req, res) => {
+// Admin Product Create API (Saves to MongoDB Atlas)
+app.post("/api/admin/products", async (req, res) => {
   try {
-    const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } = req.body || {};
+    const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } =
+      req.body || {};
 
     const cleanName = safeStr(name);
     const cleanCategory = safeStr(category);
@@ -357,25 +440,35 @@ app.post("/api/admin/products", (req, res) => {
       return res.status(400).json({ error: "Valid name, category, and price are required" });
     }
 
-    const newProduct = {
+    const newProductData = {
       id: `prod-${Date.now()}`,
       name: cleanName,
+      shortName: cleanName,
       category: cleanCategory,
       subcategory: safeStr(subcategory) || "General",
       price: numPrice,
       originalPrice: originalPrice ? Number(originalPrice) : undefined,
       description: safeStr(description) || "Handcrafted aesthetic lifestyle product.",
-      images: Array.isArray(images) && images.length > 0 ? images : ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
+      images:
+        Array.isArray(images) && images.length > 0
+          ? images
+          : ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
       inStock: inStock !== undefined ? Boolean(inStock) : true,
       rating: 5.0,
       reviewCount: 0,
       isNew: isNew !== undefined ? Boolean(isNew) : true,
       isBestseller: Boolean(isBestseller),
-      tags: ["New Arrival"]
+      tags: ["New Arrival"],
     };
 
-    productsList.unshift(newProduct);
-    console.log(`[Admin Added Product] ${newProduct.name} (${newProduct.id})`);
+    let newProduct = newProductData;
+    if (mongoose.connection.readyState === 1) {
+      newProduct = await Product.create(newProductData);
+    } else {
+      productsListMemory.unshift(newProductData);
+    }
+
+    console.log(`[Admin Added Product to MongoDB Atlas] ${newProduct.name} (${newProduct.id})`);
     res.status(201).json({ success: true, product: newProduct });
   } catch (err) {
     console.error("[Add Product Error]", err);
@@ -383,18 +476,25 @@ app.post("/api/admin/products", (req, res) => {
   }
 });
 
-// Admin Product Delete API
-app.delete("/api/admin/products/:id", (req, res) => {
+// Admin Product Delete API (Deletes from MongoDB Atlas)
+app.delete("/api/admin/products/:id", async (req, res) => {
   try {
     const prodId = req.params.id;
-    const initialLen = productsList.length;
-    productsList = productsList.filter(p => p.id !== prodId);
 
-    if (productsList.length === initialLen) {
-      return res.status(404).json({ error: "Product not found" });
+    if (mongoose.connection.readyState === 1) {
+      const deleted = await Product.findOneAndDelete({ id: prodId });
+      if (!deleted) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+    } else {
+      const initialLen = productsListMemory.length;
+      productsListMemory = productsListMemory.filter((p) => p.id !== prodId);
+      if (productsListMemory.length === initialLen) {
+        return res.status(404).json({ error: "Product not found" });
+      }
     }
 
-    console.log(`[Admin Deleted Product] ID: ${prodId}`);
+    console.log(`[Admin Deleted Product from MongoDB Atlas] ID: ${prodId}`);
     res.json({ success: true, message: "Product deleted successfully" });
   } catch (err) {
     console.error("[Delete Product Error]", err);
@@ -402,17 +502,12 @@ app.delete("/api/admin/products/:id", (req, res) => {
   }
 });
 
-// Admin Product Edit / Update API
-app.put("/api/admin/products/:id", (req, res) => {
+// Admin Product Edit / Update API (Updates MongoDB Atlas)
+app.put("/api/admin/products/:id", async (req, res) => {
   try {
     const prodId = req.params.id;
-    const index = productsList.findIndex(p => p.id === prodId);
-
-    if (index === -1) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-
-    const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } = req.body || {};
+    const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } =
+      req.body || {};
 
     const cleanName = safeStr(name);
     const cleanCategory = safeStr(category);
@@ -422,24 +517,39 @@ app.put("/api/admin/products/:id", (req, res) => {
       return res.status(400).json({ error: "Valid name, category, and price are required" });
     }
 
-    const existing = productsList[index];
-    const updatedProduct = {
-      ...existing,
+    const updateFields = {
       name: cleanName,
       shortName: cleanName,
       category: cleanCategory,
-      subcategory: safeStr(subcategory) || existing.subcategory || "General",
+      subcategory: safeStr(subcategory) || "General",
       price: numPrice,
-      originalPrice: originalPrice !== undefined && originalPrice !== "" && !isNaN(Number(originalPrice)) ? Number(originalPrice) : undefined,
-      description: safeStr(description) || existing.description,
-      images: Array.isArray(images) && images.length > 0 ? images : existing.images,
-      inStock: inStock !== undefined ? Boolean(inStock) : existing.inStock,
-      isNew: isNew !== undefined ? Boolean(isNew) : existing.isNew,
-      isBestseller: isBestseller !== undefined ? Boolean(isBestseller) : existing.isBestseller,
+      originalPrice:
+        originalPrice !== undefined && originalPrice !== "" && !isNaN(Number(originalPrice))
+          ? Number(originalPrice)
+          : undefined,
+      description: safeStr(description),
+      images: Array.isArray(images) && images.length > 0 ? images : undefined,
+      inStock: inStock !== undefined ? Boolean(inStock) : true,
+      isNew: isNew !== undefined ? Boolean(isNew) : false,
+      isBestseller: isBestseller !== undefined ? Boolean(isBestseller) : false,
     };
 
-    productsList[index] = updatedProduct;
-    console.log(`[Admin Updated Product] ${updatedProduct.name} (${updatedProduct.id})`);
+    let updatedProduct = null;
+    if (mongoose.connection.readyState === 1) {
+      updatedProduct = await Product.findOneAndUpdate({ id: prodId }, updateFields, { new: true }).lean();
+      if (!updatedProduct) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+    } else {
+      const idx = productsListMemory.findIndex((p) => p.id === prodId);
+      if (idx === -1) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      productsListMemory[idx] = { ...productsListMemory[idx], ...updateFields };
+      updatedProduct = productsListMemory[idx];
+    }
+
+    console.log(`[Admin Updated Product in MongoDB Atlas] ${updatedProduct.name} (${updatedProduct.id})`);
     res.json({ success: true, product: updatedProduct });
   } catch (err) {
     console.error("[Edit Product Error]", err);
@@ -447,32 +557,41 @@ app.put("/api/admin/products/:id", (req, res) => {
   }
 });
 
-// Admin Get All Orders API
-app.get("/api/admin/orders", (req, res) => {
-  const orders = Array.from(ordersStore.values());
-  res.json({ orders });
+// Admin Get All Orders API (Reads from MongoDB Atlas)
+app.get("/api/admin/orders", async (req, res) => {
+  try {
+    let orders = [];
+    if (mongoose.connection.readyState === 1) {
+      orders = await Order.find({}).sort({ createdAt: -1 }).lean();
+    }
+    res.json({ orders });
+  } catch (err) {
+    console.error("[Get Orders Error]", err);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
 });
 
-// Admin Update Order Status API
-app.patch("/api/admin/orders/:id/status", (req, res) => {
+// Admin Update Order Status API (Updates MongoDB Atlas)
+app.patch("/api/admin/orders/:id/status", async (req, res) => {
   try {
     const { status } = req.body || {};
-    const order = ordersStore.get(req.params.id);
-
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
-    }
-
     const cleanStatus = safeStr(status);
+
     if (!cleanStatus) {
       return res.status(400).json({ error: "Order status is required" });
     }
 
-    order.status = cleanStatus;
-    ordersStore.set(order.id, order);
+    let updatedOrder = null;
+    if (mongoose.connection.readyState === 1) {
+      updatedOrder = await Order.findOneAndUpdate({ id: req.params.id }, { status: cleanStatus }, { new: true }).lean();
+    }
 
-    console.log(`[Admin Updated Order Status] ID: ${order.id} -> Status: ${cleanStatus}`);
-    res.json({ success: true, order });
+    if (!updatedOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    console.log(`[Admin Updated Order Status in MongoDB Atlas] ID: ${updatedOrder.id} -> ${cleanStatus}`);
+    res.json({ success: true, order: updatedOrder });
   } catch (err) {
     console.error("[Update Status Error]", err);
     res.status(500).json({ error: "Failed to update order status" });
@@ -489,19 +608,20 @@ app.post("/api/promo/validate", (req, res) => {
       return res.status(400).json({ valid: false, error: "Code is required" });
     }
 
-    if (cleanCode === "WRITE50") {
-      return res.json({ valid: true, code: "WRITE50", discountPercent: 10, message: "10% discount applied!" });
+    const validCodes = ["WRITE50", "ELOW10", "SPIN50", "SPIN100", "SPIN150", "SPIN250", "SPIN10"];
+    if (validCodes.includes(cleanCode)) {
+      return res.json({ valid: true, code: cleanCode, message: `Promo code ${cleanCode} applied!` });
     }
 
-    res.status(400).json({ valid: false, error: "Invalid promo code. Try WRITE50." });
+    res.status(400).json({ valid: false, error: "Invalid promo code" });
   } catch (err) {
     console.error("[Promo Error]", err);
     res.status(500).json({ valid: false, error: "Error validating promo code" });
   }
 });
 
-// Orders API (Create or Sync Order)
-app.post("/api/orders", (req, res) => {
+// Orders API (Create Order in MongoDB Atlas)
+app.post("/api/orders", async (req, res) => {
   try {
     const { id, items, deliveryAddress, payMethod, subtotal, discount, shipping, giftCost, total, status } = req.body || {};
 
@@ -514,12 +634,14 @@ app.post("/api/orders", (req, res) => {
 
     const orderId = safeStr(id) || `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
-    // Return existing order if already in memory store (preserves Admin status updates)
-    if (ordersStore.has(orderId)) {
-      return res.json({ success: true, order: ordersStore.get(orderId) });
+    if (mongoose.connection.readyState === 1) {
+      const existing = await Order.findOne({ id: orderId }).lean();
+      if (existing) {
+        return res.json({ success: true, order: existing });
+      }
     }
 
-    const order = {
+    const orderData = {
       id: orderId,
       items,
       deliveryAddress,
@@ -531,23 +653,28 @@ app.post("/api/orders", (req, res) => {
       total: Number(total) || 0,
       status: safeStr(status) || "Processing",
       date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-      createdAt: new Date().toISOString()
     };
 
-    ordersStore.set(orderId, order);
-    console.log(`[Order Registered/Synced] ID: ${orderId}, Total: ₹${order.total}`);
+    let newOrder = orderData;
+    if (mongoose.connection.readyState === 1) {
+      newOrder = await Order.create(orderData);
+    }
 
-    res.status(201).json({ success: true, order });
+    console.log(`[Order Created in MongoDB Atlas] ID: ${orderId}, Total: ₹${newOrder.total}`);
+    res.status(201).json({ success: true, order: newOrder });
   } catch (err) {
     console.error("[Create Order Error]", err);
     res.status(500).json({ error: "Failed to create order" });
   }
 });
 
-// Orders API (Get Order Details)
-app.get("/api/orders/:id", (req, res) => {
+// Orders API (Get Order Details from MongoDB Atlas)
+app.get("/api/orders/:id", async (req, res) => {
   try {
-    const order = ordersStore.get(req.params.id);
+    let order = null;
+    if (mongoose.connection.readyState === 1) {
+      order = await Order.findOne({ id: req.params.id }).lean();
+    }
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
@@ -558,11 +685,15 @@ app.get("/api/orders/:id", (req, res) => {
   }
 });
 
-// Orders API (Cancel Order by Customer)
-app.patch("/api/orders/:id/cancel", (req, res) => {
+// Orders API (Cancel Order by Customer in MongoDB Atlas)
+app.patch("/api/orders/:id/cancel", async (req, res) => {
   try {
     const orderId = req.params.id;
-    const order = ordersStore.get(orderId);
+    let order = null;
+
+    if (mongoose.connection.readyState === 1) {
+      order = await Order.findOne({ id: orderId });
+    }
 
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
@@ -573,8 +704,8 @@ app.patch("/api/orders/:id/cancel", (req, res) => {
     }
 
     order.status = "Cancelled";
-    ordersStore.set(orderId, order);
-    console.log(`[Order Cancelled by Customer] ID: ${orderId}`);
+    await order.save();
+    console.log(`[Order Cancelled in MongoDB Atlas] ID: ${orderId}`);
 
     res.json({ success: true, message: "Order cancelled successfully", order });
   } catch (err) {
