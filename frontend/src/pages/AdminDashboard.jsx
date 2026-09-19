@@ -17,6 +17,7 @@ export function AdminDashboard() {
     // Orders State
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(true);
+    const [adminOrderFilter, setAdminOrderFilter] = useState("all");
     // New Product Form Modal
     const [showAddModal, setShowAddModal] = useState(false);
     const [newProd, setNewProd] = useState({
@@ -243,10 +244,25 @@ export function AdminDashboard() {
         </div>
       </div>);
     }
-    // Calculate Metrics
     const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
     const totalOrdersCount = orders.length;
     const inStockCount = products.filter(p => p.inStock).length;
+
+    // Filtered Admin Orders by Status
+    const processingCount = orders.filter(o => (o.status || "Processing").toLowerCase() === "processing" || (o.status || "").toLowerCase() === "order placed").length;
+    const shippedCount = orders.filter(o => (o.status || "").toLowerCase() === "shipped").length;
+    const deliveredCount = orders.filter(o => (o.status || "").toLowerCase() === "delivered").length;
+    const cancelledCount = orders.filter(o => (o.status || "").toLowerCase() === "cancelled").length;
+
+    const filteredAdminOrders = orders.filter(o => {
+        const s = (o.status || "Processing").toLowerCase();
+        if (adminOrderFilter === "processing") return s === "processing" || s === "order placed";
+        if (adminOrderFilter === "shipped") return s === "shipped";
+        if (adminOrderFilter === "delivered") return s === "delivered";
+        if (adminOrderFilter === "cancelled") return s === "cancelled";
+        return true;
+    });
+
     // Filtered Products for Tab 2
     const filteredProducts = products.filter(p => {
         const matchesCategory = categoryFilter === "all" || p.category === categoryFilter;
@@ -528,7 +544,7 @@ export function AdminDashboard() {
 
         {/* TAB 3: ORDERS MANAGEMENT */}
         {tab === "orders" && (<div style={{ background: "#FFFFFF", padding: 28, borderRadius: 24, border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
                 <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Customer Orders Fulfillment</h3>
                 <p style={{ fontSize: 13, color: "#9C968D", marginTop: 2 }}>Track orders, update fulfillment status in real-time, and inspect customer addresses.</p>
@@ -539,8 +555,45 @@ export function AdminDashboard() {
               </button>
             </div>
 
-            {loadingOrders ? (<div style={{ padding: 40, textAlign: "center", color: "#9C968D" }}>Loading live orders...</div>) : orders.length === 0 ? (<div style={{ padding: 40, textAlign: "center", color: "#9C968D" }}>No orders found in memory store.</div>) : (<div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                {orders.map(o => {
+            {/* Order Status Category Filter Bars */}
+            <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
+              {[
+                { id: "all", label: `All Orders (${orders.length})` },
+                { id: "processing", label: `Processing 🟡 (${processingCount})` },
+                { id: "shipped", label: `Shipped 🔵 (${shippedCount})` },
+                { id: "delivered", label: `Delivered 🟢 (${deliveredCount})` },
+                { id: "cancelled", label: `Cancelled 🔴 (${cancelledCount})` },
+              ].map(st => (
+                <button
+                  key={st.id}
+                  onClick={() => setAdminOrderFilter(st.id)}
+                  style={{
+                    background: adminOrderFilter === st.id ? "#23201D" : "#FAF7F2",
+                    color: adminOrderFilter === st.id ? "#FAF7F2" : "#6E6A63",
+                    border: `1.5px solid ${adminOrderFilter === st.id ? "#23201D" : "#EAE3D9"}`,
+                    borderRadius: 999,
+                    padding: "8px 18px",
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                    transition: "all 0.15s ease",
+                    boxShadow: adminOrderFilter === st.id ? "0 4px 12px rgba(35,32,29,0.12)" : "none",
+                  }}
+                >
+                  {st.label}
+                </button>
+              ))}
+            </div>
+
+            {loadingOrders ? (<div style={{ padding: 40, textAlign: "center", color: "#9C968D" }}>Loading live orders...</div>) : filteredAdminOrders.length === 0 ? (
+              <div style={{ padding: "48px 24px", textAlign: "center", background: "#FAF7F2", borderRadius: 20, border: "1px dashed #EAE3D9" }}>
+                <div style={{ fontSize: 36, marginBottom: 12, opacity: 0.4 }}>📦</div>
+                <h4 style={{ fontSize: 16, fontWeight: 800, color: "#23201D" }}>No {adminOrderFilter !== "all" ? adminOrderFilter : ""} orders found</h4>
+                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>There are currently no orders in this status category.</p>
+              </div>
+            ) : (<div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                {filteredAdminOrders.map(o => {
                     const bStyle = getStatusBadgeStyle(o.status || "Processing");
                     return (<div key={o.id} style={{ border: "1px solid #EAE3D9", borderRadius: 20, padding: 24, background: "#FAF7F2" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, marginBottom: 16 }}>
