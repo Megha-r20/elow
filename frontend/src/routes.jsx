@@ -8,6 +8,11 @@ import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import { AdminDashboard } from "./pages/AdminDashboard";
 import Settings from "./pages/Settings";
+import ShippingPolicy from "./pages/ShippingPolicy";
+import FAQ from "./pages/FAQ";
+import Contact from "./pages/Contact";
+import ReturnsPolicy from "./pages/ReturnsPolicy";
+
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -21,6 +26,10 @@ export const router = createBrowserRouter([
             { path: "order-confirmation", Component: OrderConfirmation },
             { path: "admin", Component: AdminDashboard },
             { path: "settings", Component: Settings },
+            { path: "shipping", Component: ShippingPolicy },
+            { path: "faq", Component: FAQ },
+            { path: "contact", Component: Contact },
+            { path: "returns", Component: ReturnsPolicy },
             { path: "*", Component: () => {
                     const n = globalThis.__reactRouterNavigate;
                     return (<div style={{ textAlign: "center", padding: "120px 24px" }}>
