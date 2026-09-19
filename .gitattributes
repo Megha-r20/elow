@@ -4,18 +4,13 @@
 # ---------------------------------------------------------------------------
 # Images & Graphics
 # ---------------------------------------------------------------------------
-*.png                filter=lfs diff=lfs merge=lfs -text
-*.jpg                filter=lfs diff=lfs merge=lfs -text
-*.jpeg               filter=lfs diff=lfs merge=lfs -text
-*.gif                filter=lfs diff=lfs merge=lfs -text
-*.bmp                filter=lfs diff=lfs merge=lfs -text
-*.tiff               filter=lfs diff=lfs merge=lfs -text
-*.tif                filter=lfs diff=lfs merge=lfs -text
-*.ico                filter=lfs diff=lfs merge=lfs -text
-*.webp               filter=lfs diff=lfs merge=lfs -text
-*.psd                filter=lfs diff=lfs merge=lfs -text
-*.ai                 filter=lfs diff=lfs merge=lfs -text
-*.sketch             filter=lfs diff=lfs merge=lfs -text
+# Standard web images are checked directly into Git (not LFS) so deployment platforms (Vercel/Render) serve them natively.
+# *.png
+# *.jpg
+# *.jpeg
+# *.gif
+# *.ico
+# *.webp
 
 # ---------------------------------------------------------------------------
 # Video
