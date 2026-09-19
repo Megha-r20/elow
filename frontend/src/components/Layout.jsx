@@ -93,13 +93,13 @@ export default function Layout() {
             boxShadow: "0 4px 20px rgba(35, 32, 29, 0.04)",
             transition: "all 0.2s ease"
         }}>
-        <div className="container" style={{ display: "flex", alignItems: "center", height: 66, gap: 24 }}>
+        <div className="container" style={{ display: "flex", alignItems: "center", height: 70, gap: 28 }}>
           {/* Logo */}
-          <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0, transition: "transform 0.15s ease" }} onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.02)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}>
+          <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0, transition: "transform 0.15s ease" }} onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}>
             <img
               src={logoDataUrl}
               alt="elow"
-              style={{ height: 50, width: "auto", objectFit: "contain", borderRadius: 8 }}
+              style={{ height: 54, width: "auto", objectFit: "contain" }}
             />
           </button>
 
