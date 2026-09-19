@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
-    userId: { type: String },
+    id: { type: String, required: true, unique: true, index: true },
+    userId: { type: String, index: true },
     items: [
       {
         product: { type: Object, required: true },
@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema(
     deliveryAddress: {
       firstName: { type: String },
       lastName: { type: String },
-      email: { type: String },
+      email: { type: String, index: true },
       phone: { type: String },
       address: { type: String },
       city: { type: String },
@@ -26,7 +26,7 @@ const orderSchema = new mongoose.Schema(
     shipping: { type: Number },
     giftCost: { type: Number },
     total: { type: Number },
-    status: { type: String, default: "Processing" },
+    status: { type: String, default: "Processing", index: true },
     date: { type: String },
   },
   { timestamps: true }

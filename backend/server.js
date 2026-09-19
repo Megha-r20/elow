@@ -13,11 +13,36 @@ const app = express();
 const PORT = process.env.PORT || 5005;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// Middleware
-app.use(cors({ origin: "*", credentials: true }));
+// Dynamic CORS configuration for Production (Vercel) and Local Dev
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(",").map((url) => url.trim())
+  : ["http://localhost:5173", "http://127.0.0.1:5173"];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow non-browser agents or matching frontend origins or preview Vercel domains
+      if (
+        !origin ||
+        allowedOrigins.includes("*") ||
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app") ||
+        process.env.NODE_ENV !== "production"
+      ) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Fallback permissive CORS for custom production client domains
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 
-// Handle malformed JSON body errors gracefully
+// Handle malformed JSON payload errors gracefully
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
     return res.status(400).json({ error: "Malformed JSON payload in request" });
@@ -29,14 +54,13 @@ app.use((err, req, res, next) => {
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
 const safeLower = (v) => safeStr(v).toLowerCase();
 
-// In-memory fallback / cache stores
+// In-memory fallback stores
 let productsListMemory = Array.isArray(PRODUCTS) ? [...PRODUCTS] : [];
 const tokensStore = new Map([
   ["token_admin_demo", "user-admin-1"],
   ["token_cust_demo", "user-cust-1"],
 ]);
 
-// Initial sample user accounts for seeding
 const initialUsers = [
   {
     id: "user-admin-1",
@@ -54,7 +78,6 @@ const initialUsers = [
   },
 ];
 
-// Initial sample order for demonstration in Admin Portal
 const initialDemoOrder = {
   id: "US-2026-DEMO01",
   items: [
@@ -90,6 +113,19 @@ const initialDemoOrder = {
   date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
 };
 
+// Mongoose lifecycle listeners
+mongoose.connection.on("error", (err) => {
+  console.error("❌ MongoDB Atlas Connection Error:", err.message);
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.warn("⚠️ MongoDB Atlas Disconnected. Reconnecting...");
+});
+
+mongoose.connection.on("reconnected", () => {
+  console.log("🟢 MongoDB Atlas Reconnected!");
+});
+
 // Connect to MongoDB Atlas & seed default catalog
 async function connectDBAndSeed() {
   if (!MONGODB_URI) {
@@ -97,7 +133,10 @@ async function connectDBAndSeed() {
     return;
   }
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 10000,
+      autoIndex: true,
+    });
     console.log("🟢 Connected to MongoDB Atlas successfully!");
 
     // Seed products catalog if collection is empty
@@ -124,7 +163,7 @@ async function connectDBAndSeed() {
       console.log("✅ Seeded initial demo order into MongoDB Atlas!");
     }
   } catch (err) {
-    console.error("❌ MongoDB Atlas connection error:", err.message);
+    console.error("❌ MongoDB Atlas initial connection error:", err.message);
   }
 }
 
@@ -144,6 +183,7 @@ app.get("/api/health", async (req, res) => {
   res.json({
     status: "ok",
     service: "elow-backend",
+    environment: process.env.NODE_ENV || "development",
     database: dbStatus,
     timestamp: new Date().toISOString(),
   });
@@ -162,18 +202,26 @@ app.post("/api/auth/register", async (req, res) => {
       return res.status(400).json({ error: "Name, email, and password are required" });
     }
 
-    const existingUser = await User.findOne({ email: cleanEmail }).lean();
+    let existingUser = null;
+    if (mongoose.connection.readyState === 1) {
+      existingUser = await User.findOne({ email: cleanEmail }).lean();
+    }
     if (existingUser) {
       return res.status(400).json({ error: "An account with this email already exists" });
     }
 
-    const newUser = await User.create({
+    const userData = {
       id: `user-${Date.now()}`,
       name: cleanName,
       email: cleanEmail,
       password: cleanPass,
       role: role === "admin" ? "admin" : "user",
-    });
+    };
+
+    let newUser = userData;
+    if (mongoose.connection.readyState === 1) {
+      newUser = await User.create(userData);
+    }
 
     const token = `token_${newUser.id}_${Date.now()}`;
     tokensStore.set(token, newUser.id);
@@ -198,7 +246,12 @@ app.post("/api/auth/login", async (req, res) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email: cleanEmail, password: cleanPass }).lean();
+    let user = null;
+    if (mongoose.connection.readyState === 1) {
+      user = await User.findOne({ email: cleanEmail, password: cleanPass }).lean();
+    } else {
+      user = initialUsers.find((u) => u.email === cleanEmail && u.password === cleanPass);
+    }
 
     if (!user) {
       return res.status(401).json({ error: "Invalid email or password" });
@@ -229,7 +282,13 @@ app.get("/api/auth/me", async (req, res) => {
       return res.status(401).json({ error: "Invalid or expired session token" });
     }
 
-    const user = await User.findOne({ id: userId }).lean();
+    let user = null;
+    if (mongoose.connection.readyState === 1) {
+      user = await User.findOne({ id: userId }).lean();
+    } else {
+      user = initialUsers.find((u) => u.id === userId);
+    }
+
     if (!user) {
       return res.status(401).json({ error: "User profile not found" });
     }
@@ -255,7 +314,11 @@ app.patch("/api/auth/profile", async (req, res) => {
       return res.status(401).json({ error: "Invalid or expired session token" });
     }
 
-    const user = await User.findOne({ id: userId });
+    let user = null;
+    if (mongoose.connection.readyState === 1) {
+      user = await User.findOne({ id: userId });
+    }
+
     if (!user) {
       return res.status(401).json({ error: "User profile not found" });
     }
@@ -717,18 +780,25 @@ app.patch("/api/orders/:id/cancel", async (req, res) => {
 // Global catch-all 500 error handler middleware
 app.use((err, req, res, next) => {
   console.error("[Global Express Error]", err);
-  res.status(500).json({ error: err?.message || "Internal server error" });
+  res.status(500).json({ error: process.env.NODE_ENV === "production" ? "Internal server error" : err?.message });
 });
 
-// Global process exception safety handlers
-process.on("uncaughtException", (err) => {
-  console.error("[Uncaught Process Exception]", err);
+// Graceful termination handling for Render containers
+const server = app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Elow Backend Express API running on http://0.0.0.0:${PORT}`);
 });
 
-process.on("unhandledRejection", (reason) => {
-  console.error("[Unhandled Promise Rejection]", reason);
-});
+const gracefulShutdown = (signal) => {
+  console.log(`Received ${signal}. Shutting down server gracefully...`);
+  server.close(async () => {
+    console.log("HTTP server closed.");
+    if (mongoose.connection.readyState === 1) {
+      await mongoose.connection.close();
+      console.log("MongoDB connection closed.");
+    }
+    process.exit(0);
+  });
+};
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Elow Backend Express API running on http://localhost:${PORT}`);
-});
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));

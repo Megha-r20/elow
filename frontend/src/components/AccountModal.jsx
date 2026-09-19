@@ -3,6 +3,7 @@ import { useCart, useToast } from "../hooks";
 import { useAuth } from "../context/AuthContext";
 import { Icons, Divider } from "./ui";
 import { useNavigate } from "react-router";
+import { getApiUrl } from "../api/config";
 export function AccountModal({ isOpen, onClose }) {
     const { lastOrder } = useCart();
     const { user } = useAuth();
@@ -15,7 +16,7 @@ export function AccountModal({ isOpen, onClose }) {
             return;
         const fetchLiveOrder = async () => {
             try {
-                const res = await fetch("/api/orders", {
+                const res = await fetch(getApiUrl("/api/orders"), {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(lastOrder),
@@ -52,7 +53,7 @@ export function AccountModal({ isOpen, onClose }) {
         if (!window.confirm(`Are you sure you want to cancel Order #${id}?`))
             return;
         try {
-            const res = await fetch(`/api/orders/${id}/cancel`, { method: "PATCH" });
+            const res = await fetch(getApiUrl(`/api/orders/${id}/cancel`), { method: "PATCH" });
             const data = await res.json();
             if (res.ok) {
                 addToast(`Order #${id} has been cancelled`, "info");

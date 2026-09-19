@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { getApiUrl } from "../api/config";
 const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
@@ -20,7 +21,7 @@ export function AuthProvider({ children }) {
                 return;
             }
             try {
-                const res = await fetch("/api/auth/me", {
+                const res = await fetch(getApiUrl("/api/auth/me"), {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -47,7 +48,7 @@ export function AuthProvider({ children }) {
     }, [token]);
     const login = useCallback(async (email, password) => {
         try {
-            const res = await fetch("/api/auth/login", {
+            const res = await fetch(getApiUrl("/api/auth/login"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -71,7 +72,7 @@ export function AuthProvider({ children }) {
     }, []);
     const register = useCallback(async (name, email, password, role = "user") => {
         try {
-            const res = await fetch("/api/auth/register", {
+            const res = await fetch(getApiUrl("/api/auth/register"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email, password, role }),
@@ -97,7 +98,7 @@ export function AuthProvider({ children }) {
         if (!token)
             return { success: false, error: "Not authenticated" };
         try {
-            const res = await fetch("/api/auth/profile", {
+            const res = await fetch(getApiUrl("/api/auth/profile"), {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useToast } from "../hooks";
 import { Link, useNavigate } from "react-router";
 import { Icons, Divider } from "../components/ui";
+import { getApiUrl } from "../api/config";
 export function AdminDashboard() {
     const { user, isAdmin } = useAuth();
     const { addToast } = useToast();
@@ -68,7 +69,7 @@ export function AdminDashboard() {
             return;
         }
         try {
-            const res = await fetch(`/api/admin/products/${editingProduct.id}`, {
+            const res = await fetch(getApiUrl(`/api/admin/products/${editingProduct.id}`), {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -102,7 +103,7 @@ export function AdminDashboard() {
     const fetchProducts = async () => {
         setLoadingProducts(true);
         try {
-            const res = await fetch("/api/products");
+            const res = await fetch(getApiUrl("/api/products"));
             if (res.ok) {
                 const data = await res.json();
                 setProducts(data.products || []);
@@ -119,7 +120,7 @@ export function AdminDashboard() {
     const fetchOrders = async () => {
         setLoadingOrders(true);
         try {
-            const res = await fetch("/api/admin/orders");
+            const res = await fetch(getApiUrl("/api/admin/orders"));
             if (res.ok) {
                 const data = await res.json();
                 setOrders(data.orders || []);
@@ -144,7 +145,7 @@ export function AdminDashboard() {
             return;
         }
         try {
-            const res = await fetch("/api/admin/products", {
+            const res = await fetch(getApiUrl("/api/admin/products"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -191,7 +192,7 @@ export function AdminDashboard() {
         if (!window.confirm(`Are you sure you want to delete "${name}"?`))
             return;
         try {
-            const res = await fetch(`/api/admin/products/${id}`, {
+            const res = await fetch(getApiUrl(`/api/admin/products/${id}`), {
                 method: "DELETE",
             });
             if (res.ok) {
@@ -209,7 +210,7 @@ export function AdminDashboard() {
     // Update Order Status
     const handleUpdateOrderStatus = async (orderId, newStatus) => {
         try {
-            const res = await fetch(`/api/admin/orders/${orderId}/status`, {
+            const res = await fetch(getApiUrl(`/api/admin/orders/${orderId}/status`), {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: newStatus }),

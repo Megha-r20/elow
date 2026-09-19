@@ -4,6 +4,7 @@ import { Icons, Breadcrumb } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { PRODUCTS, CATEGORIES, SORT_OPTIONS, PRICE_RANGES } from "../data";
 import { useWishlist } from "../hooks";
+import { getApiUrl } from "../api/config";
 const T = {
     border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D",
     sand: "#F4EFE6", cream: "#FAF7F2", teal: "#5E8C77",
@@ -35,7 +36,7 @@ export default function Shop() {
     useEffect(() => {
         async function fetchLiveProducts() {
             try {
-                const res = await fetch("/api/products");
+                const res = await fetch(getApiUrl("/api/products"));
                 if (res.ok) {
                     const data = await res.json();
                     if (data.products && data.products.length > 0) {

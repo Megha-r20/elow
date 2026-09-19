@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useCart } from "../hooks";
 import { StepBar, Breadcrumb, Icons, Divider } from "../components/ui";
+import { getApiUrl } from "../api/config";
 const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#5E8C77" };
 const INIT_FORM = {
     firstName: "", lastName: "", email: "", phone: "",
@@ -100,7 +101,7 @@ export default function Checkout() {
             };
             let finalOrder = null;
             try {
-                const res = await fetch("/api/orders", {
+                const res = await fetch(getApiUrl("/api/orders"), {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(orderPayload),

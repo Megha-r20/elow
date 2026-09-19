@@ -4,6 +4,7 @@ import { Icons, Divider } from "../components/ui";
 import { PRODUCTS } from "../data";
 import { ProductCard } from "../components/ProductCard";
 import { useCart, useToast } from "../hooks";
+import { getApiUrl } from "../api/config";
 const T = { teal: "#5E8C77", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
 export default function OrderConfirmation() {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function OrderConfirmation() {
             return;
         const syncAndFetchStatus = async () => {
             try {
-                const res = await fetch("/api/orders", {
+                const res = await fetch(getApiUrl("/api/orders"), {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(lastOrder),
@@ -61,7 +62,7 @@ export default function OrderConfirmation() {
         if (!window.confirm(`Are you sure you want to cancel Order #${orderId}?`))
             return;
         try {
-            const res = await fetch(`/api/orders/${orderId}/cancel`, { method: "PATCH" });
+            const res = await fetch(getApiUrl(`/api/orders/${orderId}/cancel`), { method: "PATCH" });
             const data = await res.json();
             if (res.ok) {
                 addToast(`Order #${orderId} has been cancelled`, "info");
