@@ -72,9 +72,23 @@ const initialUsers = [
     role: "admin",
   },
   {
+    id: "user-admin-2",
+    name: "Elow Admin IN",
+    email: "admin@elow.in",
+    password: "admin123",
+    role: "admin",
+  },
+  {
     id: "user-cust-1",
     name: "Ritika Sharma",
     email: "ritika@example.com",
+    password: "password123",
+    role: "user",
+  },
+  {
+    id: "user-cust-2",
+    name: "Elow Customer",
+    email: "user@elow.com",
     password: "user123",
     role: "user",
   },

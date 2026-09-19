@@ -49,7 +49,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
     const fillDemoAdmin = () => {
         setRole("admin");
         setMode("login");
-        setEmail("admin@elow.in");
+        setEmail("admin@elow.com");
         setPassword("admin123");
         setError(null);
     };
