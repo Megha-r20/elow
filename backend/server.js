@@ -7,6 +7,7 @@ import { PRODUCTS, CATEGORIES, REVIEWS, PRICE_RANGES } from "./data/products.js"
 import { Product } from "./models/Product.js";
 import { Order } from "./models/Order.js";
 import { User } from "./models/User.js";
+import { Review } from "./models/Review.js";
 
 dotenv.config();
 
@@ -471,7 +472,14 @@ app.get("/api/products/:id", async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    const reviews = Array.isArray(REVIEWS) ? REVIEWS.filter((r) => r.productId === product.id) : [];
+    let reviews = Array.isArray(REVIEWS) ? REVIEWS.filter((r) => r.productId === product.id) : [];
+    if (mongoose.connection.readyState === 1) {
+      const dbReviews = await Review.find({ productId: product.id }).sort({ createdAt: -1 }).lean();
+      if (dbReviews && dbReviews.length > 0) {
+        reviews = [...dbReviews, ...reviews];
+      }
+    }
+
     res.json({ product, reviews, related });
   } catch (err) {
     console.error("[Get Product Detail Error]", err);
@@ -787,6 +795,91 @@ app.patch("/api/orders/:id/cancel", async (req, res) => {
   } catch (err) {
     console.error("[Cancel Order Error]", err);
     res.status(500).json({ error: "Failed to cancel order" });
+  }
+});
+
+// Customer Order History API (Fetch all orders for email or active user)
+app.get("/api/orders/my-orders", async (req, res) => {
+  try {
+    const { email } = req.query;
+    let cleanEmail = safeLower(email);
+
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.split(" ")[1];
+      const userId = tokensStore.get(token);
+      if (userId) {
+        const userDoc = await User.findOne({ id: userId }).lean();
+        if (userDoc?.email) {
+          cleanEmail = safeLower(userDoc.email);
+        }
+      }
+    }
+
+    let orders = [];
+    if (mongoose.connection.readyState === 1) {
+      if (cleanEmail) {
+        orders = await Order.find({ "deliveryAddress.email": cleanEmail }).sort({ createdAt: -1 }).lean();
+      } else {
+        orders = await Order.find({}).sort({ createdAt: -1 }).lean();
+      }
+    }
+
+    res.json({ orders, count: orders.length });
+  } catch (err) {
+    console.error("[Get Customer Orders Error]", err);
+    res.status(500).json({ error: "Failed to fetch order history" });
+  }
+});
+
+// Submit Product Review API
+app.post("/api/products/:id/reviews", async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const { rating, title, comment, userName, userEmail, orderId } = req.body || {};
+
+    const numRating = Number(rating);
+    const cleanTitle = safeStr(title);
+    const cleanComment = safeStr(comment);
+    const cleanName = safeStr(userName) || "Verified Buyer";
+    const cleanEmail = safeLower(userEmail);
+
+    if (isNaN(numRating) || numRating < 1 || numRating > 5) {
+      return res.status(400).json({ error: "Rating must be between 1 and 5 stars" });
+    }
+    if (!cleanTitle || !cleanComment) {
+      return res.status(400).json({ error: "Review title and comment are required" });
+    }
+
+    const reviewData = {
+      id: `rev-${Date.now()}`,
+      productId,
+      orderId: safeStr(orderId),
+      userName: cleanName,
+      userEmail: cleanEmail,
+      rating: numRating,
+      title: cleanTitle,
+      comment: cleanComment,
+      verifiedPurchase: true,
+    };
+
+    let newReview = reviewData;
+    if (mongoose.connection.readyState === 1) {
+      newReview = await Review.create(reviewData);
+
+      const productReviews = await Review.find({ productId }).lean();
+      const reviewCount = productReviews.length;
+      const totalRatingSum = productReviews.reduce((sum, r) => sum + r.rating, 0);
+      const avgRating = Number((totalRatingSum / reviewCount).toFixed(1));
+
+      await Product.findOneAndUpdate({ id: productId }, { rating: avgRating, reviewCount });
+    }
+
+    console.log(`[Review Submitted] Product: ${productId}, Rating: ${numRating}★ by ${cleanName}`);
+    res.status(201).json({ success: true, review: newReview, message: "Thank you for reviewing!" });
+  } catch (err) {
+    console.error("[Submit Review Error]", err);
+    res.status(500).json({ error: "Failed to submit product review" });
   }
 });
 

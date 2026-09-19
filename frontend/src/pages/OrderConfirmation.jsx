@@ -4,14 +4,23 @@ import { Icons, Divider } from "../components/ui";
 import { PRODUCTS } from "../data";
 import { ProductCard } from "../components/ProductCard";
 import { useCart, useToast } from "../hooks";
+import { useAuth } from "../context/AuthContext";
 import { getApiUrl } from "../api/config";
+import { ReviewModal } from "../components/ReviewModal";
+
 const T = { teal: "#5E8C77", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
+
 export default function OrderConfirmation() {
     const navigate = useNavigate();
     const { lastOrder } = useCart();
+    const { user } = useAuth();
     const { addToast } = useToast();
     const [show, setShow] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(lastOrder);
+
+    // Review Modal State
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
+    const [reviewProduct, setReviewProduct] = useState(null);
     useEffect(() => {
         const t = setTimeout(() => setShow(true), 100);
         return () => clearTimeout(t);
@@ -198,6 +207,28 @@ export default function OrderConfirmation() {
                       <p style={{ fontSize: 14, fontWeight: 600, color: T.txt }}>{p.name}</p>
                       <p style={{ fontSize: 12, color: T.light }}>{p.subcategory} · Qty: {qty}</p>
                     </div>
+                    {isDelivered && (
+                      <button
+                        onClick={() => {
+                          setReviewProduct(p);
+                          setReviewModalOpen(true);
+                        }}
+                        style={{
+                          background: "#FFF0F5",
+                          color: "#D81B60",
+                          border: "1px solid #FFB6C1",
+                          padding: "6px 12px",
+                          borderRadius: 8,
+                          fontSize: 11.5,
+                          fontWeight: 800,
+                          cursor: "pointer",
+                          fontFamily: "inherit",
+                          marginRight: 10
+                        }}
+                      >
+                        ⭐ Write a Review
+                      </button>
+                    )}
                     <p style={{ fontSize: 14.5, fontWeight: 700, color: T.txt }}>&#8377;{(p.price * qty).toLocaleString("en-IN")}</p>
                   </div>))}
               </div>
@@ -296,5 +327,14 @@ export default function OrderConfirmation() {
           </div>
         </div>
       </div>
+
+      {/* Review Modal */}
+      <ReviewModal
+        isOpen={reviewModalOpen}
+        onClose={() => setReviewModalOpen(false)}
+        product={reviewProduct}
+        orderId={orderId}
+        user={user}
+      />
     </div>);
 }

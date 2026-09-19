@@ -54,6 +54,15 @@ export function CartProvider({ children }) {
             return null;
         }
     });
+    const [myOrders, setMyOrders] = useState(() => {
+        try {
+            const stored = localStorage.getItem("myOrders");
+            return stored ? JSON.parse(stored) : [];
+        }
+        catch {
+            return [];
+        }
+    });
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(state));
     }, [state]);
@@ -67,6 +76,9 @@ export function CartProvider({ children }) {
         if (lastOrder)
             localStorage.setItem("lastOrder", JSON.stringify(lastOrder));
     }, [lastOrder]);
+    useEffect(() => {
+        localStorage.setItem("myOrders", JSON.stringify(myOrders));
+    }, [myOrders]);
     const addItem = useCallback((product, qty = 1) => dispatch({ type: "ADD", product, qty }), []);
     const removeItem = useCallback((id) => dispatch({ type: "REMOVE", id }), []);
     const setQty = useCallback((id, qty) => dispatch({ type: "SET_QTY", id, qty }), []);
@@ -96,10 +108,15 @@ export function CartProvider({ children }) {
     }
     const saveOrder = useCallback((order) => {
         setLastOrder(order);
+        setMyOrders(prev => {
+            const exists = prev.some(o => o.id === order.id);
+            if (exists) return prev.map(o => o.id === order.id ? order : o);
+            return [order, ...prev];
+        });
     }, []);
     return (<CartContext.Provider value={{
             items: state.items, count, subtotal, promoCode, discount, applyPromo, removePromo,
-            addItem, removeItem, setQty, clearCart, isInCart, lastOrder, saveOrder,
+            addItem, removeItem, setQty, clearCart, isInCart, lastOrder, myOrders, saveOrder,
         }}>
       {children}
     </CartContext.Provider>);
