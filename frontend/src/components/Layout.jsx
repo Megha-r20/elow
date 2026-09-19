@@ -93,7 +93,7 @@ export default function Layout() {
             <img
               src={logoImg}
               alt="elow"
-              style={{ height: 46, objectFit: "contain", borderRadius: 8 }}
+              style={{ height: 50, width: "auto", objectFit: "contain", borderRadius: 8 }}
               onError={(e) => {
                 e.currentTarget.style.display = "none";
                 if (e.currentTarget.nextSibling) e.currentTarget.nextSibling.style.display = "flex";
