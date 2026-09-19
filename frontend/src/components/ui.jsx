@@ -15,7 +15,7 @@ export const Icons = {
         <path d="M6 8V5.5a4 4 0 0 1 8 0V8"/><rect x="1.5" y="8" width="17" height="11.5" rx="2.5"/>
       </svg>
       {count !== undefined && count > 0 && (<span style={{
-                position: "absolute", top: -6, right: -8, background: "#5E8C77", color: "#fff",
+                position: "absolute", top: -6, right: -8, background: "#8192D4", color: "#fff",
                 fontSize: 9, fontWeight: 800, borderRadius: "50%", width: 17, height: 17,
                 display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #FAF7F2",
             }}>{count > 9 ? "9+" : count}</span>)}
@@ -74,7 +74,7 @@ export function Stars({ n, size = 12, showCount, count }) {
 }
 /* ─── Badge ─────────────────────────────────────────────────────── */
 const BADGE_STYLES = {
-    teal: { bg: "#5E8C77", color: "#fff" },
+    teal: { bg: "#8192D4", color: "#fff" },
     yellow: { bg: "#E59866", color: "#23201D" },
     red: { bg: "#D97762", color: "#fff" },
     pink: { bg: "#E8A598", color: "#fff" },
@@ -96,8 +96,8 @@ export function SectionHead({ eyebrow, title, sub, right, center, }) {
         }}>
       <div style={{ flex: 1 }}>
         {eyebrow && (<div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, justifyContent: center ? "center" : "flex-start" }}>
-            <span style={{ display: "inline-block", width: 18, height: 1.5, background: "#5E8C77" }}/>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#5E8C77", letterSpacing: "2px", textTransform: "uppercase" }}>{eyebrow}</span>
+            <span style={{ display: "inline-block", width: 18, height: 1.5, background: "#8192D4" }}/>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#8192D4", letterSpacing: "2px", textTransform: "uppercase" }}>{eyebrow}</span>
           </div>)}
         <h2 className="font-display" style={{ fontSize: 32, fontWeight: 400, color: "#23201D", lineHeight: 1.12, letterSpacing: "-0.3px" }}>
           {title}
@@ -118,7 +118,7 @@ export function Price({ price, original, size = "md" }) {
       <span style={{ fontSize: s.price, fontWeight: 700, color: "#23201D" }}>&#8377;{price.toLocaleString("en-IN")}</span>
       {original && original > price && (<>
           <span style={{ fontSize: s.og, color: "#9C968D", textDecoration: "line-through" }}>&#8377;{original.toLocaleString("en-IN")}</span>
-          <span style={{ fontSize: s.og, fontWeight: 700, color: "#5E8C77" }}>{disc}% OFF</span>
+          <span style={{ fontSize: s.og, fontWeight: 700, color: "#8192D4" }}>{disc}% OFF</span>
         </>)}
     </div>);
 }
@@ -145,7 +145,7 @@ export function Empty({ icon, title, sub, action }) {
 }
 /* ─── Link button ───────────────────────────────────────────────── */
 export function LinkBtn({ to, children, style: sx }) {
-    return (<Link to={to} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#5E8C77", textDecoration: "none", transition: "gap 0.15s", ...sx }} onMouseEnter={e => (e.currentTarget.style.gap = "10px")} onMouseLeave={e => (e.currentTarget.style.gap = "6px")}>
+    return (<Link to={to} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#8192D4", textDecoration: "none", transition: "gap 0.15s", ...sx }} onMouseEnter={e => (e.currentTarget.style.gap = "10px")} onMouseLeave={e => (e.currentTarget.style.gap = "6px")}>
       {children} <Icons.ArrowRight />
     </Link>);
 }
@@ -168,18 +168,18 @@ export function StepBar({ steps, current }) {
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, minWidth: 80 }}>
               <div style={{
                     width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
-                    background: done ? "#5E8C77" : active ? "#23201D" : "#F4EFE6",
+                    background: done ? "#8192D4" : active ? "#23201D" : "#F4EFE6",
                     color: done || active ? "#fff" : "#9C968D",
-                    fontWeight: 700, fontSize: 13, border: `2px solid ${active ? "#23201D" : done ? "#5E8C77" : "#EAE3D9"}`,
+                    fontWeight: 700, fontSize: 13, border: `2px solid ${active ? "#23201D" : done ? "#8192D4" : "#EAE3D9"}`,
                     transition: "all 0.2s",
                 }}>
                 {done ? <Icons.Check /> : <span>{i + 1}</span>}
               </div>
-              <span style={{ fontSize: 11, fontWeight: active ? 700 : 500, color: active ? "#23201D" : done ? "#5E8C77" : "#9C968D", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: 11, fontWeight: active ? 700 : 500, color: active ? "#23201D" : done ? "#8192D4" : "#9C968D", whiteSpace: "nowrap" }}>
                 {step}
               </span>
             </div>
-            {i < steps.length - 1 && (<div style={{ flex: 1, height: 1.5, background: done ? "#5E8C77" : "#EAE3D9", marginBottom: 22, transition: "background 0.3s" }}/>)}
+            {i < steps.length - 1 && (<div style={{ flex: 1, height: 1.5, background: done ? "#8192D4" : "#EAE3D9", marginBottom: 22, transition: "background 0.3s" }}/>)}
           </div>);
         })}
     </div>);
@@ -204,7 +204,7 @@ export function ShippingProgress({ subtotal, threshold = 999 }) {
         {rem === 0 ? "🎉 You have FREE shipping!" : `Add ₹${rem} more for FREE shipping`}
       </p>
       <div style={{ background: "#EAE3D9", borderRadius: 999, height: 5, overflow: "hidden" }}>
-        <div className="prog-bar" style={{ height: "100%", borderRadius: 999, background: rem === 0 ? "#5E8C77" : "#5E8C77", "--pw": `${pct}%`, width: `${pct}%` }}/>
+        <div className="prog-bar" style={{ height: "100%", borderRadius: 999, background: rem === 0 ? "#8192D4" : "#8192D4", "--pw": `${pct}%`, width: `${pct}%` }}/>
       </div>
     </div>);
 }

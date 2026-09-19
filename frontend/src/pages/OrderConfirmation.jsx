@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import { getApiUrl } from "../api/config";
 import { ReviewModal } from "../components/ReviewModal";
 
-const T = { teal: "#5E8C77", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
+const T = { teal: "#8192D4", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
 
 export default function OrderConfirmation() {
     const navigate = useNavigate();
@@ -120,7 +120,7 @@ export default function OrderConfirmation() {
             padding: "3px 10px",
             borderRadius: 999,
             background: isCancelled ? "#FDF2F2" : isDelivered ? "#F0FDF4" : isShipped ? "#EFF6FF" : "#F2F7F4",
-            color: isCancelled ? "#DC2626" : isDelivered ? "#16A34A" : isShipped ? "#2563EB" : "#5E8C77",
+            color: isCancelled ? "#DC2626" : isDelivered ? "#16A34A" : isShipped ? "#2563EB" : "#8192D4",
             border: `1px solid ${isCancelled ? "#F8B4B4" : isDelivered ? "#BBF7D0" : isShipped ? "#BFDBFE" : "#8EBAA3"}`,
         }}>
                 ● {orderStatus}
@@ -136,7 +136,7 @@ export default function OrderConfirmation() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, color: T.txt }}>Order Progress</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: "#5E8C77" }}>⚡ Live sync with Admin portal</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: "#8192D4" }}>⚡ Live sync with Admin portal</span>
               {isProcessing && (<button onClick={handleCancelOrder} style={{
                 background: "#FDF2F2",
                 color: "#DC2626",
@@ -175,7 +175,7 @@ export default function OrderConfirmation() {
                         alignItems: "center",
                         justifyContent: "center",
                         fontSize: 18,
-                        boxShadow: isCurrent ? "0 0 0 6px rgba(94,140,119,0.2)" : "none",
+                        boxShadow: isCurrent ? "0 0 0 6px rgba(129,146,212,0.2)" : "none",
                         transition: "all 0.3s ease",
                     }}>
                         {isDone ? <span style={{ color: "#fff", fontSize: 18, fontWeight: 700 }}>✓</span> : <span>{s.icon}</span>}

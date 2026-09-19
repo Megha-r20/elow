@@ -2,12 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { useCart, useToast, useDrawer } from "../hooks";
 
 const SECTORS = [
-  { label: "₹50 OFF", code: "SPIN50", bg: "#5E8C77", color: "#FAF7F2" },
+  { label: "₹50 OFF", code: "SPIN50", bg: "#8192D4", color: "#FAF7F2" },
   { label: "₹100 OFF", code: "SPIN100", bg: "#F4EFE6", color: "#23201D" },
-  { label: "NO LUCK", code: "TRY_AGAIN", bg: "#3B5F4F", color: "#FAF7F2" },
+  { label: "NO LUCK", code: "TRY_AGAIN", bg: "#5666AA", color: "#FAF7F2" },
   { label: "₹150 OFF", code: "SPIN150", bg: "#D4A359", color: "#23201D" },
-  { label: "₹50 OFF", code: "SPIN50", bg: "#4A7261", color: "#FAF7F2" },
-  { label: "₹250 OFF", code: "SPIN250", bg: "#FAF7F2", color: "#5E8C77" },
+  { label: "₹50 OFF", code: "SPIN50", bg: "#6C7CC1", color: "#FAF7F2" },
+  { label: "₹250 OFF", code: "SPIN250", bg: "#FAF7F2", color: "#8192D4" },
 ];
 
 export function SpinWheelModal({ isOpen, onClose }) {
@@ -128,7 +128,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
           zIndex: 910,
           width: "100%",
           maxWidth: 820,
-          background: "linear-gradient(135deg, #4A7261 0%, #5E8C77 50%, #3B5F4F 100%)",
+          background: "linear-gradient(135deg, #6C7CC1 0%, #8192D4 50%, #5666AA 100%)",
           borderRadius: 28,
           boxShadow: "0 25px 70px rgba(35, 32, 29, 0.45), 0 10px 30px rgba(0, 0, 0, 0.25)",
           overflow: "hidden",
@@ -239,7 +239,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   );
                 })}
 
-                <circle cx="50" cy="50" r="10" fill="#FAF7F2" stroke="#5E8C77" strokeWidth="2" />
+                <circle cx="50" cy="50" r="10" fill="#FAF7F2" stroke="#8192D4" strokeWidth="2" />
                 <text x="50" y="51" fontSize="9" textAnchor="middle" dominantBaseline="central">
                   🎁
                 </text>
@@ -305,7 +305,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 style={{
                   fontSize: 24,
                   fontWeight: 900,
-                  color: "#5E8C77",
+                  color: "#8192D4",
                   fontFamily: "'DM Serif Display', serif",
                 }}
               >
@@ -321,7 +321,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 <div
                   style={{
                     background: "#F4EFE6",
-                    border: "2px dashed #5E8C77",
+                    border: "2px dashed #8192D4",
                     borderRadius: 14,
                     padding: "12px",
                     margin: "18px 0",
@@ -341,14 +341,14 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   style={{
                     width: "100%",
                     padding: "14px",
-                    background: "#5E8C77",
+                    background: "#8192D4",
                     color: "#FAF7F2",
                     border: "none",
                     borderRadius: 14,
                     fontSize: 15,
                     fontWeight: 800,
                     cursor: "pointer",
-                    boxShadow: "0 6px 20px rgba(94, 140, 119, 0.35)",
+                    boxShadow: "0 6px 20px rgba(129, 146, 212, 0.35)",
                     transition: "all 0.18s ease",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
@@ -494,7 +494,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 style={{
                   width: "100%",
                   padding: "15px",
-                  background: isSpinning ? "#3B5F4F" : "#23201D",
+                  background: isSpinning ? "#5666AA" : "#23201D",
                   color: "#FAF7F2",
                   border: "none",
                   borderRadius: 16,

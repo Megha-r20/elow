@@ -191,7 +191,7 @@ export function AccountModal({ isOpen, onClose }) {
                         width: 42,
                         height: 42,
                         borderRadius: "50%",
-                        background: "#5E8C77",
+                        background: "#8192D4",
                         color: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
@@ -233,8 +233,8 @@ export function AccountModal({ isOpen, onClose }) {
                 background: "none",
                 cursor: "pointer",
                 fontFamily: "inherit",
-                color: tab === t.id ? "#5E8C77" : "#9C968D",
-                borderBottom: `2.5px solid ${tab === t.id ? "#5E8C77" : "transparent"}`,
+                color: tab === t.id ? "#8192D4" : "#9C968D",
+                borderBottom: `2.5px solid ${tab === t.id ? "#8192D4" : "transparent"}`,
                 transition: "all 0.15s",
               }}
             >
@@ -428,10 +428,10 @@ export function AccountModal({ isOpen, onClose }) {
 
           {tab === "addresses" && (
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div style={{ border: "1.5px solid #5E8C77", background: "#F2F7F4", borderRadius: 14, padding: "16px 18px" }}>
+              <div style={{ border: "1.5px solid #8192D4", background: "#F2F7F4", borderRadius: 14, padding: "16px 18px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: "#23201D" }}>Default Address</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "#5E8C77" }}>Primary</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#8192D4" }}>Primary</span>
                 </div>
                 <p style={{ fontSize: 13, color: "#6E6A63", lineHeight: 1.6 }}>
                   {user?.name || "Ritika Sharma"}

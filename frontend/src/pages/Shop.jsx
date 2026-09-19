@@ -7,7 +7,7 @@ import { useWishlist } from "../hooks";
 import { getApiUrl } from "../api/config";
 const T = {
     border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D",
-    sand: "#F4EFE6", cream: "#FAF7F2", teal: "#5E8C77",
+    sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4",
 };
 export default function Shop() {
     const [params, setParams] = useSearchParams();

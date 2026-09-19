@@ -4,7 +4,7 @@ import { Breadcrumb, QtyStepper, ShippingProgress, Icons, Divider } from "../com
 import { PRODUCTS } from "../data";
 import { ProductCard } from "../components/ProductCard";
 import { useState } from "react";
-const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#5E8C77" };
+const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4" };
 export default function Cart() {
     const navigate = useNavigate();
     const { items, count, subtotal, removeItem, setQty, clearCart, promoCode, discount, applyPromo, removePromo } = useCart();

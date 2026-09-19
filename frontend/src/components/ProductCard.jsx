@@ -45,7 +45,7 @@ export function ProductCard({ product, compact = false }) {
 
       {/* Info area */}
       <div style={{ padding: compact ? "12px 14px 14px" : "14px 16px 18px", display: "flex", flexDirection: "column", gap: 6, flex: 1 }}>
-        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#5E8C77", letterSpacing: "1px", textTransform: "uppercase" }}>
+        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#8192D4", letterSpacing: "1px", textTransform: "uppercase" }}>
           {product.subcategory}
         </p>
         <h3 style={{ fontSize: compact ? 13 : 14, fontWeight: 600, color: "#23201D", lineHeight: 1.38, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>

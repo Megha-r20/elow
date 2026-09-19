@@ -4,7 +4,7 @@ import { getProductById, PRODUCTS, REVIEWS } from "../data";
 import { useCart, useWishlist, useToast, useDrawer } from "../hooks";
 import { Stars, Badge, Price, Breadcrumb, QtyStepper, Divider, Icons, SectionHead } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
-const T = { teal: "#5E8C77", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
+const T = { teal: "#8192D4", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
 export default function ProductDetail() {
     const { id } = useParams();
     const navigate = useNavigate();

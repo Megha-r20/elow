@@ -317,14 +317,14 @@ export function AdminDashboard() {
             return { color: "#16A34A", bg: "rgba(22,163,74,0.12)", border: "rgba(22,163,74,0.3)" };
         if (s === "shipped")
             return { color: "#2563EB", bg: "rgba(37,99,235,0.12)", border: "rgba(37,99,235,0.3)" };
-        return { color: "#5E8C77", bg: "rgba(94,140,119,0.15)", border: "rgba(94,140,119,0.3)" };
+        return { color: "#8192D4", bg: "rgba(129,146,212,0.15)", border: "rgba(129,146,212,0.3)" };
     };
     return (<div style={{ background: "#FAF7F2", minHeight: "100vh", paddingBottom: 80 }}>
       {/* Banner */}
       <div style={{ background: "#1C1C1A", color: "#FAF7F2", padding: "48px 0 36px", borderBottom: "1px solid #383430", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
         <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
           <div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(94,140,119,0.22)", border: "1px solid rgba(94,140,119,0.4)", color: "#8EBAA3", padding: "5px 14px", borderRadius: 999, fontSize: 11.5, fontWeight: 700, letterSpacing: "1px", marginBottom: 12 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(129,146,212,0.22)", border: "1px solid rgba(129,146,212,0.4)", color: "#8EBAA3", padding: "5px 14px", borderRadius: 999, fontSize: 11.5, fontWeight: 700, letterSpacing: "1px", marginBottom: 12 }}>
               ⚡ ELOW ADMIN CONTROL CENTER
             </div>
             <h1 style={{ fontSize: 34, fontWeight: 700, color: "#FFFFFF", letterSpacing: "-0.5px" }}>
@@ -339,7 +339,7 @@ export function AdminDashboard() {
             <button onClick={() => { fetchOrders(); fetchProducts(); addToast("Refreshed live store data"); }} className="btn" style={{ background: "rgba(255,255,255,0.08)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.15)", padding: "12px 20px", borderRadius: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.15s" }}>
               🔄 Refresh Data
             </button>
-            <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#5E8C77", color: "#FFFFFF", padding: "12px 22px", borderRadius: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 8, border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(94,140,119,0.3)" }}>
+            <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "12px 22px", borderRadius: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 8, border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(129,146,212,0.3)" }}>
               + Add New Product
             </button>
             <Link to="/shop" className="btn" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.2)", color: "#FFFFFF", padding: "12px 20px", borderRadius: 12, fontWeight: 600, textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}>
@@ -355,13 +355,13 @@ export function AdminDashboard() {
           <div style={{ background: "#FFFFFF", borderRadius: 22, padding: "24px", border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.04)", transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)", cursor: "default" }} onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-3px)")} onMouseLeave={e => (e.currentTarget.style.transform = "translateY(0)")}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <span style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1.2px", textTransform: "uppercase" }}>TOTAL REVENUE</span>
-              <div style={{ width: 38, height: 38, borderRadius: 12, background: "#EBF3EF", color: "#5E8C77", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>💳</div>
+              <div style={{ width: 38, height: 38, borderRadius: 12, background: "#EBF3EF", color: "#8192D4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>💳</div>
             </div>
             <h3 style={{ fontSize: 32, fontWeight: 800, color: "#23201D", marginTop: 2, letterSpacing: "-0.5px" }}>
               &#8377;{totalRevenue.toLocaleString("en-IN")}
             </h3>
-            <p style={{ fontSize: 12.5, color: "#5E8C77", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ background: "rgba(94,140,119,0.18)", width: 18, height: 18, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10 }}>✓</span>
+            <p style={{ fontSize: 12.5, color: "#8192D4", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
+              <span style={{ background: "rgba(129,146,212,0.18)", width: 18, height: 18, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10 }}>✓</span>
               From {totalOrdersCount} store orders
             </p>
           </div>
@@ -374,8 +374,8 @@ export function AdminDashboard() {
             <h3 style={{ fontSize: 32, fontWeight: 800, color: "#23201D", marginTop: 2, letterSpacing: "-0.5px" }}>
               {totalOrdersCount} Orders
             </h3>
-            <p style={{ fontSize: 12.5, color: "#5E8C77", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#5E8C77", display: "inline-block" }}/>
+            <p style={{ fontSize: 12.5, color: "#8192D4", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#8192D4", display: "inline-block" }}/>
               Live customer tracking
             </p>
           </div>
@@ -438,7 +438,7 @@ export function AdminDashboard() {
                   <h3 style={{ fontSize: 19, fontWeight: 800, color: "#23201D" }}>Recent Customer Orders</h3>
                   <p style={{ fontSize: 12.5, color: "#9C968D", marginTop: 2 }}>Live activity across customer checkout sessions</p>
                 </div>
-                <button onClick={() => setTab("orders")} style={{ fontSize: 12.5, fontWeight: 700, color: "#5E8C77", background: "none", border: "none", cursor: "pointer" }}>
+                <button onClick={() => setTab("orders")} style={{ fontSize: 12.5, fontWeight: 700, color: "#8192D4", background: "none", border: "none", cursor: "pointer" }}>
                   View All Orders →
                 </button>
               </div>
@@ -486,10 +486,10 @@ export function AdminDashboard() {
                 return (<div key={cat} style={{ background: "#FAF7F2", padding: "12px 16px", borderRadius: 14, border: "1px solid #EAE3D9" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
                         <span style={{ textTransform: "capitalize", fontSize: 13.5, fontWeight: 700, color: "#23201D" }}>{cat}</span>
-                        <span style={{ fontSize: 12.5, fontWeight: 700, color: "#5E8C77" }}>{count} items ({pct}%)</span>
+                        <span style={{ fontSize: 12.5, fontWeight: 700, color: "#8192D4" }}>{count} items ({pct}%)</span>
                       </div>
                       <div style={{ height: 6, background: "#EAE3D9", borderRadius: 999, overflow: "hidden" }}>
-                        <div style={{ width: `${pct}%`, height: "100%", background: "#5E8C77", borderRadius: 999 }}/>
+                        <div style={{ width: `${pct}%`, height: "100%", background: "#8192D4", borderRadius: 999 }}/>
                       </div>
                     </div>);
             })}
@@ -517,7 +517,7 @@ export function AdminDashboard() {
                   <option value="accessories">Accessories</option>
                 </select>
 
-                <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#5E8C77", color: "#FFFFFF", padding: "10px 20px", borderRadius: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
+                <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "10px 20px", borderRadius: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
                   + Add Product
                 </button>
               </div>
@@ -556,7 +556,7 @@ export function AdminDashboard() {
                           {p.originalPrice && <span style={{ fontSize: 11.5, color: "#9C968D", textDecoration: "line-through", marginLeft: 6 }}>&#8377;{p.originalPrice}</span>}
                         </td>
                         <td style={{ padding: "14px 12px" }}>
-                          <span style={{ fontSize: 11.5, fontWeight: 800, color: p.inStock ? "#5E8C77" : "#DC2626", background: p.inStock ? "rgba(94,140,119,0.15)" : "rgba(220,38,38,0.15)", padding: "4px 10px", borderRadius: 999 }}>
+                          <span style={{ fontSize: 11.5, fontWeight: 800, color: p.inStock ? "#8192D4" : "#DC2626", background: p.inStock ? "rgba(129,146,212,0.15)" : "rgba(220,38,38,0.15)", padding: "4px 10px", borderRadius: 999 }}>
                             {p.inStock ? "In Stock" : "Out of Stock"}
                           </span>
                         </td>
@@ -568,7 +568,7 @@ export function AdminDashboard() {
                         </td>
                         <td style={{ padding: "14px 12px", textAlign: "right" }}>
                           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                            <button onClick={() => openEditModal(p)} style={{ background: "#FAF7F2", color: "#5E8C77", border: "1px solid #5E8C77", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }} onMouseEnter={e => { e.currentTarget.style.background = "#5E8C77"; e.currentTarget.style.color = "#FFFFFF"; }} onMouseLeave={e => { e.currentTarget.style.background = "#FAF7F2"; e.currentTarget.style.color = "#5E8C77"; }}>
+                            <button onClick={() => openEditModal(p)} style={{ background: "#FAF7F2", color: "#8192D4", border: "1px solid #8192D4", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }} onMouseEnter={e => { e.currentTarget.style.background = "#8192D4"; e.currentTarget.style.color = "#FFFFFF"; }} onMouseLeave={e => { e.currentTarget.style.background = "#FAF7F2"; e.currentTarget.style.color = "#8192D4"; }}>
                               ✏️ Edit
                             </button>
                             <button onClick={() => handleDeleteProduct(p.id, p.name)} style={{ background: "#FDF2F2", color: "#DC2626", border: "1px solid #F8B4B4", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }}>
@@ -646,7 +646,7 @@ export function AdminDashboard() {
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, marginBottom: 16 }}>
                         <div>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            <span style={{ fontSize: 11, fontWeight: 800, color: "#5E8C77", letterSpacing: "1px" }}>ORDER ID</span>
+                            <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>ORDER ID</span>
                             <span style={{ fontSize: 11, fontWeight: 800, color: bStyle.color, background: bStyle.bg, border: `1px solid ${bStyle.border}`, padding: "2px 10px", borderRadius: 999 }}>
                               ● {o.status || "Processing"}
                             </span>
@@ -712,7 +712,7 @@ export function AdminDashboard() {
                           <p style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1px", marginBottom: 6 }}>ORDER SUMMARY</p>
                           <p style={{ fontSize: 13, color: "#23201D", lineHeight: 1.6 }}>
                             Payment Method: <span style={{ fontWeight: 800, textTransform: "uppercase" }}>{o.payMethod}</span><br />
-                            Total Amount: <strong style={{ fontSize: 16, color: "#5E8C77" }}>&#8377;{o.total?.toLocaleString("en-IN")}</strong>
+                            Total Amount: <strong style={{ fontSize: 16, color: "#8192D4" }}>&#8377;{o.total?.toLocaleString("en-IN")}</strong>
                           </p>
                         </div>
                       </div>
@@ -726,7 +726,7 @@ export function AdminDashboard() {
                                   <p style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>{item.product?.name || "Product"}</p>
                                   <p style={{ fontSize: 11, color: "#9C968D" }}>&#8377;{item.product?.price || 0}</p>
                                 </div>
-                                <span style={{ fontSize: 11.5, fontWeight: 800, color: "#5E8C77", background: "rgba(94,140,119,0.12)", padding: "2px 8px", borderRadius: 6, marginLeft: 4 }}>
+                                <span style={{ fontSize: 11.5, fontWeight: 800, color: "#8192D4", background: "rgba(129,146,212,0.12)", padding: "2px 8px", borderRadius: 6, marginLeft: 4 }}>
                                   x{item.qty || 1}
                                 </span>
                               </div>))}
@@ -744,7 +744,7 @@ export function AdminDashboard() {
           <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 500, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#5E8C77", letterSpacing: "1px" }}>INVENTORY</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>INVENTORY</span>
                 <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>+ Add New Product</h3>
               </div>
               <button onClick={() => setShowAddModal(false)} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 34, height: 34, border: "none", cursor: "pointer" }}>
@@ -813,7 +813,7 @@ export function AdminDashboard() {
                 </label>
               </div>
 
-              <button type="submit" className="btn" style={{ background: "#5E8C77", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: "pointer" }}>
+              <button type="submit" className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: "pointer" }}>
                 Add Product to Store Catalog
               </button>
             </form>
@@ -826,7 +826,7 @@ export function AdminDashboard() {
           <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 500, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#5E8C77", letterSpacing: "1px" }}>EDIT PRODUCT</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>EDIT PRODUCT</span>
                 <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Edit #{editingProduct.id}</h3>
               </div>
               <button onClick={() => setEditingProduct(null)} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 34, height: 34, border: "none", cursor: "pointer" }}>
@@ -895,7 +895,7 @@ export function AdminDashboard() {
                 </label>
               </div>
 
-              <button type="submit" className="btn" style={{ background: "#5E8C77", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: "pointer" }}>
+              <button type="submit" className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: "pointer" }}>
                 Save Product Changes
               </button>
             </form>

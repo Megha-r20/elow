@@ -6,7 +6,7 @@ import { CATEGORIES, HERO_IMAGES, getFeatured, getBestSellers } from "../data";
 import { useCart, useToast } from "../hooks";
 import bgVideo from "../assets/Background_video.mp4";
 const T = {
-    teal: "#5E8C77",
+    teal: "#8192D4",
     cream: "#FAF7F2",
     sand: "#F4EFE6",
     border: "#EAE3D9",
@@ -41,7 +41,7 @@ export default function Home() {
 
         <div className="container" style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "rgba(94,140,119,0.12)", border: "1px solid rgba(94,140,119,0.30)", borderRadius: 999, padding: "6px 16px", marginBottom: 32 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "rgba(129,146,212,0.12)", border: "1px solid rgba(129,146,212,0.30)", borderRadius: 999, padding: "6px 16px", marginBottom: 32 }}>
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: T.teal, display: "inline-block" }}/>
             <span style={{ fontSize: 12, fontWeight: 600, color: T.teal, letterSpacing: "0.5px" }}>New collection — now live</span>
           </div>
@@ -293,7 +293,7 @@ export default function Home() {
               <img src={img} alt="" style={{ width: "100%", height: 320, objectFit: "cover" }}/>
             </div>))}
         </div>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(94,140,119,0.88) 0%, rgba(94,140,119,0.60) 40%, rgba(35,32,29,0.70) 100%)" }}/>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(129,146,212,0.88) 0%, rgba(129,146,212,0.60) 40%, rgba(35,32,29,0.70) 100%)" }}/>
         <div className="container" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
           <div>
             <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "3px", marginBottom: 16 }}>YOUR CREATIVE COMPANION</p>
@@ -313,7 +313,7 @@ export default function Home() {
           {[0, 1].map(k => (<span key={k} style={{ display: "flex", alignItems: "center" }}>
               {["A5 Dotted Journals", "Pastel Gel Pens", "Washi Tape Sets", "Kawaii Sticker Books", "Weekly Planners", "Desk Organizers", "Highlighter Sets", "Wax Seal Stamps"].map((item, i) => (<span key={item} style={{ display: "flex", alignItems: "center" }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.55)", whiteSpace: "nowrap", letterSpacing: "0.3px" }}>{item}</span>
-                  <span style={{ color: "#5E8C77", margin: "0 28px" }}>✦</span>
+                  <span style={{ color: "#8192D4", margin: "0 28px" }}>✦</span>
                 </span>))}
             </span>))}
         </div>

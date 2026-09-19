@@ -102,7 +102,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
             fontSize: 11,
             fontWeight: 700,
             letterSpacing: "1.5px",
-            color: "#5E8C77",
+            color: "#8192D4",
             textTransform: "uppercase",
         }}>
               Authentication
@@ -137,8 +137,8 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
             background: "none",
             cursor: "pointer",
             fontFamily: "inherit",
-            color: mode === "login" ? "#5E8C77" : "#9C968D",
-            borderBottom: `2.5px solid ${mode === "login" ? "#5E8C77" : "transparent"}`,
+            color: mode === "login" ? "#8192D4" : "#9C968D",
+            borderBottom: `2.5px solid ${mode === "login" ? "#8192D4" : "transparent"}`,
             transition: "all 0.2s ease",
         }}>
             Sign In
@@ -152,8 +152,8 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
             background: "none",
             cursor: "pointer",
             fontFamily: "inherit",
-            color: mode === "signup" ? "#5E8C77" : "#9C968D",
-            borderBottom: `2.5px solid ${mode === "signup" ? "#5E8C77" : "transparent"}`,
+            color: mode === "signup" ? "#8192D4" : "#9C968D",
+            borderBottom: `2.5px solid ${mode === "signup" ? "#8192D4" : "transparent"}`,
             transition: "all 0.2s ease",
         }}>
             Create Account
@@ -287,7 +287,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
             {/* Submit Button */}
             <button type="submit" disabled={loading} className="btn btn-dark btn-md btn-full" style={{
             marginTop: 8,
-            background: role === "admin" ? "#23201D" : "#5E8C77",
+            background: role === "admin" ? "#23201D" : "#8192D4",
             color: "#FFFFFF",
             borderRadius: 12,
             padding: "13px",

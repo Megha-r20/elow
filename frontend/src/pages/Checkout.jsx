@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useCart } from "../hooks";
 import { StepBar, Breadcrumb, Icons, Divider } from "../components/ui";
 import { getApiUrl } from "../api/config";
-const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#5E8C77" };
+const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4" };
 const INIT_FORM = {
     firstName: "", lastName: "", email: "", phone: "",
     address: "", city: "", state: "Maharashtra", pincode: "",
