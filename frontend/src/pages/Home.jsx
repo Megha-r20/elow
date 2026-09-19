@@ -26,6 +26,7 @@ export default function Home() {
         
         {/* Background Video */}
         <video autoPlay loop muted playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}>
+          <source src={bgVideo} type="video/mp4"/>
           <source src="/Background_video.mp4" type="video/mp4"/>
         </video>
         
