@@ -9,7 +9,7 @@ import { SpinWheelModal } from "./SpinWheelModal";
 import { SpinLauncher } from "./SpinLauncher";
 import { Icons } from "./ui";
 import { CATEGORIES } from "../data";
-import { logoDataUrl } from "../assets/logoBase64";
+import { logoDataUrl, fullLogoDataUrl } from "../assets/logoBase64";
 const ANNOUNCE = [
     "Free shipping on orders above ₹999",
     "New drops every Thursday ✦ Use code WRITE50 for ₹50 off",
@@ -398,8 +398,8 @@ export default function Layout() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 36, marginBottom: 40 }} className="footer-grid">
             {/* Brand Section */}
             <div style={{ maxWidth: 320 }}>
-              <div style={{ marginBottom: 16, background: "#fff", display: "inline-block", padding: "6px 12px", borderRadius: 10 }}>
-                <img src={logoDataUrl} alt="elow" style={{ height: 32, objectFit: "contain", display: "block" }}/>
+              <div style={{ marginBottom: 18, background: "#FFFFFF", display: "inline-block", padding: "10px 18px", borderRadius: 14, boxShadow: "0 4px 16px rgba(0,0,0,0.15)" }}>
+                <img src={fullLogoDataUrl || logoDataUrl} alt="elow" style={{ height: 48, width: "auto", objectFit: "contain", display: "block" }}/>
               </div>
               <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, marginBottom: 18 }}>
                 Your home for premium Korean and Japanese-inspired stationery. Beautiful things for beautiful routines.
