@@ -9,6 +9,7 @@ import { SpinWheelModal } from "./SpinWheelModal";
 import { SpinLauncher } from "./SpinLauncher";
 import { Icons } from "./ui";
 import { CATEGORIES } from "../data";
+import logoImg from "../assets/logo.png";
 const ANNOUNCE = [
     "Free shipping on orders above ₹999",
     "New drops every Thursday ✦ Use code WRITE50 for ₹50 off",
@@ -89,7 +90,27 @@ export default function Layout() {
         <div className="container" style={{ display: "flex", alignItems: "center", height: 66, gap: 24 }}>
           {/* Logo */}
           <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0, transition: "transform 0.15s ease" }} onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.02)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}>
-            <img src="/logo.png" alt="elow" style={{ height: 46, objectFit: "contain", borderRadius: 8 }}/>
+            <img
+              src={logoImg}
+              alt="elow"
+              style={{ height: 46, objectFit: "contain", borderRadius: 8 }}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+                if (e.currentTarget.nextSibling) e.currentTarget.nextSibling.style.display = "flex";
+              }}
+            />
+            <span
+              style={{
+                display: "none",
+                fontSize: 28,
+                fontWeight: 900,
+                color: "#5E8C77",
+                letterSpacing: "-0.5px",
+                fontFamily: "serif",
+              }}
+            >
+              elow
+            </span>
           </button>
 
           {/* Desktop nav */}
@@ -315,7 +336,7 @@ export default function Layout() {
                 padding: "24px", display: "flex", flexDirection: "column", gap: 20, boxShadow: "10px 0 40px rgba(0,0,0,0.15)"
             }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <img src="/logo.png" alt="elow" style={{ height: 40 }}/>
+              <img src={logoImg} alt="elow" style={{ height: 40, objectFit: "contain" }}/>
               <button onClick={() => setMobileNav(false)} className="icon-btn"><Icons.Close /></button>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 12 }}>
@@ -386,7 +407,7 @@ export default function Layout() {
             {/* Brand */}
             <div>
               <div style={{ marginBottom: 20, background: "#fff", display: "inline-block", padding: "8px 12px", borderRadius: 12 }}>
-                <img src="/logo.png" alt="elow" style={{ height: 38, objectFit: "contain", display: "block", borderRadius: 6 }}/>
+                <img src={logoImg} alt="elow" style={{ height: 38, objectFit: "contain", display: "block", borderRadius: 6 }}/>
               </div>
               <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.55)", lineHeight: 1.85, maxWidth: 230, marginBottom: 24 }}>
                 Your home for premium Korean and Japanese-inspired stationery. Beautiful things for beautiful routines.

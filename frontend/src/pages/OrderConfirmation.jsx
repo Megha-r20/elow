@@ -25,28 +25,30 @@ export default function OrderConfirmation() {
         const t = setTimeout(() => setShow(true), 100);
         return () => clearTimeout(t);
     }, []);
-    // Fetch live status from backend API via GET
+    // Sync order & fetch live status from backend API
     useEffect(() => {
-        const queryOrderId = new URLSearchParams(window.location.search).get("orderId");
-        const targetId = lastOrder?.id || queryOrderId;
-        if (!targetId) return;
-
-        const fetchStatus = async () => {
+        if (!lastOrder?.id)
+            return;
+        const syncAndFetchStatus = async () => {
             try {
-                const res = await fetch(getApiUrl(`/api/orders/${targetId}`));
+                const res = await fetch(getApiUrl("/api/orders"), {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(lastOrder),
+                });
                 if (res.ok) {
                     const data = await res.json();
-                    setCurrentOrder(data);
-                } else if (res.status === 404) {
-                    setCurrentOrder(null);
+                    if (data.order) {
+                        setCurrentOrder(data.order);
+                    }
                 }
             }
             catch (err) {
-                console.error("Error fetching live order status:", err);
+                console.error("Error syncing live order status:", err);
             }
         };
-        fetchStatus();
-        const timer = setInterval(fetchStatus, 3000);
+        syncAndFetchStatus();
+        const timer = setInterval(syncAndFetchStatus, 2000);
         return () => clearInterval(timer);
     }, [lastOrder]);
     const recommended = PRODUCTS.filter(p => p.isBestseller).slice(0, 4);
