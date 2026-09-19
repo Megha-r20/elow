@@ -63,6 +63,8 @@ export default function Layout() {
         { label: "SHOP", path: "/shop" },
         { label: "NEW IN", path: "/shop?filter=new", dim: true },
         { label: "GIFTING", path: "/shop?cat=gifting" },
+        { label: "SHIPPING POLICY", path: "/shipping" },
+        { label: "FAQ", path: "/faq" },
     ];
     if (isAdmin) {
         navLinks.push({ label: "⚡ ADMIN PORTAL", path: "/admin" });
@@ -331,6 +333,8 @@ export default function Layout() {
               <Link to="/shop" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Shop All</Link>
               <Link to="/shop?filter=new" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>New Arrivals</Link>
               <Link to="/shop?cat=gifting" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Gifting</Link>
+              <Link to="/shipping" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Shipping Policy</Link>
+              <Link to="/faq" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>FAQ</Link>
               <Link to="/shop?filter=wishlist" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Wishlist</Link>
               {isAdmin && (<Link to="/admin" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#8192D4", textDecoration: "none" }}>⚡ Admin Portal</Link>)}
               {user ? (<button onClick={() => { setMobileNav(false); logout(); addToast("Logged out"); }} style={{ fontSize: 16, fontWeight: 700, color: "#DC2626", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>Sign Out</button>) : (<button onClick={() => { setMobileNav(false); setAuthModalOpen(true); }} style={{ fontSize: 16, fontWeight: 700, color: "#8192D4", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>Sign In / Register</button>)}
