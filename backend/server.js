@@ -659,6 +659,38 @@ app.patch("/api/admin/orders/:id/status", async (req, res) => {
   }
 });
 
+// Admin Delete All Orders API (Deletes all orders from MongoDB Atlas)
+app.delete("/api/admin/orders", async (req, res) => {
+  try {
+    if (mongoose.connection.readyState === 1) {
+      await Order.deleteMany({});
+    }
+    console.log("[Admin Cleared All Orders from MongoDB Atlas]");
+    res.json({ success: true, message: "All orders cleared successfully" });
+  } catch (err) {
+    console.error("[Clear All Orders Error]", err);
+    res.status(500).json({ error: "Failed to clear store orders" });
+  }
+});
+
+// Admin Delete Single Order API (Deletes specific order from MongoDB Atlas)
+app.delete("/api/admin/orders/:id", async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    if (mongoose.connection.readyState === 1) {
+      const deleted = await Order.findOneAndDelete({ id: orderId });
+      if (!deleted) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+    }
+    console.log(`[Admin Deleted Order from MongoDB Atlas] ID: ${orderId}`);
+    res.json({ success: true, message: `Order #${orderId} deleted successfully` });
+  } catch (err) {
+    console.error("[Delete Single Order Error]", err);
+    res.status(500).json({ error: "Failed to delete order" });
+  }
+});
+
 // Stripe Payment Intent API
 app.post("/api/create-payment-intent", async (req, res) => {
   try {

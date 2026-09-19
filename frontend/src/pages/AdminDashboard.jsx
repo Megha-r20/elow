@@ -228,6 +228,46 @@ export function AdminDashboard() {
             addToast("Error updating order status", "error");
         }
     };
+
+    // Clear All Orders
+    const handleClearAllOrders = async () => {
+        if (!window.confirm("⚠️ Are you sure you want to clear ALL store orders from MongoDB Atlas? This action cannot be undone."))
+            return;
+        try {
+            const res = await fetch(getApiUrl("/api/admin/orders"), { method: "DELETE" });
+            const data = await res.json();
+            if (res.ok) {
+                addToast("All store orders cleared successfully!", "info");
+                setOrders([]);
+            }
+            else {
+                addToast(data.error || "Failed to clear orders", "error");
+            }
+        }
+        catch (err) {
+            addToast("Network error clearing orders", "error");
+        }
+    };
+
+    // Delete Single Order
+    const handleDeleteSingleOrder = async (orderId) => {
+        if (!window.confirm(`Are you sure you want to delete Order #${orderId}?`))
+            return;
+        try {
+            const res = await fetch(getApiUrl(`/api/admin/orders/${orderId}`), { method: "DELETE" });
+            const data = await res.json();
+            if (res.ok) {
+                addToast(`Order #${orderId} deleted successfully`);
+                setOrders(prev => prev.filter(o => o.id !== orderId));
+            }
+            else {
+                addToast(data.error || "Failed to delete order", "error");
+            }
+        }
+        catch (err) {
+            addToast("Network error deleting order", "error");
+        }
+    };
     if (!isAdmin) {
         return (<div style={{ background: "#FAF7F2", minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
         <div style={{ background: "#FFFFFF", padding: "40px 32px", borderRadius: 24, border: "1px solid #EAE3D9", textAlign: "center", maxWidth: 440, boxShadow: "0 12px 32px rgba(35,32,29,0.08)" }}>
@@ -550,9 +590,16 @@ export function AdminDashboard() {
                 <p style={{ fontSize: 13, color: "#9C968D", marginTop: 2 }}>Track orders, update fulfillment status in real-time, and inspect customer addresses.</p>
               </div>
 
-              <button onClick={() => { fetchOrders(); addToast("Refreshed orders list"); }} className="btn" style={{ background: "#FAF7F2", border: "1px solid #EAE3D9", color: "#23201D", padding: "8px 16px", borderRadius: 10, fontWeight: 700, cursor: "pointer" }}>
-                🔄 Refresh Orders
-              </button>
+              <div style={{ display: "flex", gap: 10 }}>
+                <button onClick={() => { fetchOrders(); addToast("Refreshed orders list"); }} className="btn" style={{ background: "#FAF7F2", border: "1px solid #EAE3D9", color: "#23201D", padding: "8px 16px", borderRadius: 10, fontWeight: 700, cursor: "pointer" }}>
+                  🔄 Refresh Orders
+                </button>
+                {orders.length > 0 && (
+                  <button onClick={handleClearAllOrders} className="btn" style={{ background: "#FDF2F2", border: "1px solid #F8B4B4", color: "#DC2626", padding: "8px 16px", borderRadius: 10, fontWeight: 700, cursor: "pointer" }}>
+                    🗑️ Clear All Orders
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Order Status Category Filter Bars */}
@@ -608,25 +655,43 @@ export function AdminDashboard() {
                           <p style={{ fontSize: 12, color: "#9C968D", marginTop: 2 }}>Placed on {o.date || "Today"}</p>
                         </div>
 
-                        {/* Status Change Dropdown */}
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#FFFFFF", padding: "8px 14px", borderRadius: 12, border: "1px solid #EAE3D9" }}>
-                          <span style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>Update Status:</span>
-                          <select value={o.status || "Processing"} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)} style={{
-                            padding: "6px 14px",
-                            borderRadius: 8,
-                            border: `1.5px solid ${bStyle.color}`,
-                            background: bStyle.bg,
-                            fontSize: 13,
-                            fontWeight: 800,
-                            color: bStyle.color,
-                            cursor: "pointer",
-                            outline: "none",
-                        }}>
-                            <option value="Processing">Processing</option>
-                            <option value="Shipped">Shipped</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
-                          </select>
+                        {/* Status Change Dropdown & Delete Order Action */}
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#FFFFFF", padding: "8px 14px", borderRadius: 12, border: "1px solid #EAE3D9" }}>
+                            <span style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>Update Status:</span>
+                            <select value={o.status || "Processing"} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)} style={{
+                              padding: "6px 14px",
+                              borderRadius: 8,
+                              border: `1.5px solid ${bStyle.color}`,
+                              background: bStyle.bg,
+                              fontSize: 13,
+                              fontWeight: 800,
+                              color: bStyle.color,
+                              cursor: "pointer",
+                              outline: "none",
+                          }}>
+                              <option value="Processing">Processing</option>
+                              <option value="Shipped">Shipped</option>
+                              <option value="Delivered">Delivered</option>
+                              <option value="Cancelled">Cancelled</option>
+                            </select>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteSingleOrder(o.id)}
+                            title="Delete Order"
+                            style={{
+                              background: "#FDF2F2",
+                              color: "#DC2626",
+                              border: "1px solid #F8B4B4",
+                              padding: "8px 14px",
+                              borderRadius: 12,
+                              fontSize: 12.5,
+                              fontWeight: 700,
+                              cursor: "pointer",
+                            }}
+                          >
+                            🗑️ Delete
+                          </button>
                         </div>
                       </div>
 
