@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import Stripe from "stripe";
 import { PRODUCTS, CATEGORIES, REVIEWS, PRICE_RANGES } from "./data/products.js";
 import { Product } from "./models/Product.js";
 import { Order } from "./models/Order.js";
@@ -12,6 +13,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5005;
 const MONGODB_URI = process.env.MONGODB_URI;
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
 // Dynamic CORS configuration for Production (Vercel) and Local Dev
 const allowedOrigins = process.env.FRONTEND_URL
@@ -658,6 +660,29 @@ app.patch("/api/admin/orders/:id/status", async (req, res) => {
   } catch (err) {
     console.error("[Update Status Error]", err);
     res.status(500).json({ error: "Failed to update order status" });
+  }
+});
+
+// Stripe Payment Intent API
+app.post("/api/create-payment-intent", async (req, res) => {
+  try {
+    const { amount, currency = "inr" } = req.body || {};
+    if (!stripe) {
+      return res.status(400).json({ error: "Stripe is not configured on backend." });
+    }
+    const numAmount = Math.round(Number(amount) * 100);
+    if (isNaN(numAmount) || numAmount <= 0) {
+      return res.status(400).json({ error: "Invalid payment amount" });
+    }
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: numAmount,
+      currency: currency.toLowerCase(),
+      automatic_payment_methods: { enabled: true },
+    });
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (err) {
+    console.error("[Stripe PaymentIntent Error]", err.message);
+    res.status(500).json({ error: err.message || "Failed to create Stripe payment intent" });
   }
 });
 
