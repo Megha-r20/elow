@@ -12,6 +12,7 @@ import ShippingPolicy from "./pages/ShippingPolicy";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import ReturnsPolicy from "./pages/ReturnsPolicy";
+import OrderTracking from "./pages/OrderTracking";
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
             { path: "faq", Component: FAQ },
             { path: "contact", Component: Contact },
             { path: "returns", Component: ReturnsPolicy },
+            { path: "tracking", Component: OrderTracking },
             { path: "*", Component: () => {
                     const n = globalThis.__reactRouterNavigate;
                     return (<div style={{ textAlign: "center", padding: "120px 24px" }}>
