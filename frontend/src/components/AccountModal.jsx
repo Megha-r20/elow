@@ -25,25 +25,48 @@ export function AccountModal({ isOpen, onClose }) {
   const fetchCustomerOrders = async () => {
     setLoadingOrders(true);
     try {
-      const email = user?.email || "ritika@example.com";
-      const res = await fetch(getApiUrl(`/api/orders/my-orders?email=${encodeURIComponent(email)}`));
+      const emailSet = new Set();
+      if (user?.email) emailSet.add(user.email);
+      if (lastOrder?.deliveryAddress?.email) emailSet.add(lastOrder.deliveryAddress.email);
+      (myOrders || []).forEach((o) => {
+        if (o.deliveryAddress?.email) emailSet.add(o.deliveryAddress.email);
+      });
+
+      const idSet = new Set();
+      if (lastOrder?.id) idSet.add(lastOrder.id);
+      (myOrders || []).forEach((o) => {
+        if (o.id) idSet.add(o.id);
+      });
+
+      const emailList = Array.from(emailSet);
+      const idList = Array.from(idSet);
+
+      const params = new URLSearchParams();
+      if (emailList.length) params.append("email", emailList.join(","));
+      if (idList.length) params.append("ids", idList.join(","));
+
+      const res = await fetch(getApiUrl(`/api/orders/my-orders?${params.toString()}`));
       if (res.ok) {
         const data = await res.json();
         const serverOrders = data.orders || [];
 
-        // Combine server orders & local context orders by unique ID
-        const combined = [...serverOrders];
+        // Map order ID -> order object, server state takes highest priority
+        const orderMap = new Map();
+        serverOrders.forEach((o) => orderMap.set(o.id, o));
+
         (myOrders || []).forEach((localOrd) => {
-          if (!combined.some((o) => o.id === localOrd.id)) {
-            combined.push(localOrd);
+          if (!orderMap.has(localOrd.id)) {
+            orderMap.set(localOrd.id, localOrd);
           }
         });
-        if (lastOrder && !combined.some((o) => o.id === lastOrder.id)) {
-          combined.unshift(lastOrder);
+        if (lastOrder && !orderMap.has(lastOrder.id)) {
+          orderMap.set(lastOrder.id, lastOrder);
         }
 
+        const combined = Array.from(orderMap.values());
+
         // Sort newest first
-        combined.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        combined.sort((a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0));
         setAllOrders(combined);
       }
     } catch (err) {
@@ -139,26 +162,35 @@ export function AccountModal({ isOpen, onClose }) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div
-              style={{
-                width: 42,
-                height: 42,
-                borderRadius: "50%",
-                background: "#5E8C77",
-                color: "#FFFFFF",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 800,
-                fontSize: 16,
-              }}
-            >
-              {user?.name ? user.name.charAt(0).toUpperCase() : "R"}
-            </div>
-            <div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: "#23201D" }}>{user?.name || "Ritika Sharma"}</h3>
-              <p style={{ fontSize: 12, color: "#9C968D" }}>{user?.email || "ritika@example.com"}</p>
-            </div>
+              {(() => {
+                const name = user?.name || (lastOrder?.deliveryAddress?.firstName ? `${lastOrder.deliveryAddress.firstName} ${lastOrder.deliveryAddress.lastName || ""}`.trim() : (allOrders[0]?.deliveryAddress?.firstName ? `${allOrders[0].deliveryAddress.firstName} ${allOrders[0].deliveryAddress.lastName || ""}`.trim() : "Megha R"));
+                const email = user?.email || lastOrder?.deliveryAddress?.email || allOrders[0]?.deliveryAddress?.email || "megha202005@gmail.com";
+                const initial = name.charAt(0).toUpperCase();
+                return (
+                  <>
+                    <div
+                      style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: "50%",
+                        background: "#5E8C77",
+                        color: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: 800,
+                        fontSize: 16,
+                      }}
+                    >
+                      {initial}
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#23201D" }}>{name}</h3>
+                      <p style={{ fontSize: 12, color: "#9C968D" }}>{email}</p>
+                    </div>
+                  </>
+                );
+              })()}
           </div>
           <button onClick={onClose} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 34, height: 34 }}>
             <Icons.Close />

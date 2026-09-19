@@ -752,6 +752,76 @@ app.post("/api/orders", async (req, res) => {
   }
 });
 
+// Customer Order History API (Fetch all orders for email list, order ID list, or authenticated user)
+app.get("/api/orders/my-orders", async (req, res) => {
+  try {
+    const { email, ids } = req.query;
+
+    const emailsArray = [];
+    if (email && typeof email === "string") {
+      email.split(",").forEach((e) => {
+        const clean = safeLower(e);
+        if (clean && !emailsArray.includes(clean)) {
+          emailsArray.push(clean);
+        }
+      });
+    }
+
+    const idsArray = [];
+    if (ids && typeof ids === "string") {
+      ids.split(",").forEach((id) => {
+        const clean = safeStr(id);
+        if (clean && !idsArray.includes(clean)) {
+          idsArray.push(clean);
+        }
+      });
+    }
+
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.split(" ")[1];
+      const userId = tokensStore.get(token);
+      if (userId) {
+        const userDoc = await User.findOne({ id: userId }).lean();
+        if (userDoc?.email) {
+          const userEmail = safeLower(userDoc.email);
+          if (userEmail && !emailsArray.includes(userEmail)) {
+            emailsArray.push(userEmail);
+          }
+        }
+      }
+    }
+
+    let orders = [];
+    if (mongoose.connection.readyState === 1) {
+      const conditions = [];
+
+      if (emailsArray.length > 0) {
+        const emailRegexes = emailsArray.map((e) => new RegExp("^" + e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "$", "i"));
+        conditions.push({ "deliveryAddress.email": { $in: emailRegexes } });
+      }
+
+      if (idsArray.length > 0) {
+        conditions.push({ id: { $in: idsArray } });
+      }
+
+      let mongoQuery = {};
+      if (conditions.length === 1) {
+        mongoQuery = conditions[0];
+      } else if (conditions.length > 1) {
+        mongoQuery = { $or: conditions };
+      }
+
+      orders = await Order.find(mongoQuery).sort({ createdAt: -1 }).lean();
+    }
+
+    res.json({ orders, count: orders.length });
+  } catch (err) {
+    console.error("[Get Customer Orders Error]", err);
+    res.status(500).json({ error: "Failed to fetch order history" });
+  }
+});
+
 // Orders API (Get Order Details from MongoDB Atlas)
 app.get("/api/orders/:id", async (req, res) => {
   try {
@@ -766,69 +836,6 @@ app.get("/api/orders/:id", async (req, res) => {
   } catch (err) {
     console.error("[Get Order Error]", err);
     res.status(500).json({ error: "Error fetching order details" });
-  }
-});
-
-// Orders API (Cancel Order by Customer in MongoDB Atlas)
-app.patch("/api/orders/:id/cancel", async (req, res) => {
-  try {
-    const orderId = req.params.id;
-    let order = null;
-
-    if (mongoose.connection.readyState === 1) {
-      order = await Order.findOne({ id: orderId });
-    }
-
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
-    }
-
-    if (order.status === "Shipped" || order.status === "Delivered") {
-      return res.status(400).json({ error: `Cannot cancel order after it has been ${order.status.toLowerCase()}` });
-    }
-
-    order.status = "Cancelled";
-    await order.save();
-    console.log(`[Order Cancelled in MongoDB Atlas] ID: ${orderId}`);
-
-    res.json({ success: true, message: "Order cancelled successfully", order });
-  } catch (err) {
-    console.error("[Cancel Order Error]", err);
-    res.status(500).json({ error: "Failed to cancel order" });
-  }
-});
-
-// Customer Order History API (Fetch all orders for email or active user)
-app.get("/api/orders/my-orders", async (req, res) => {
-  try {
-    const { email } = req.query;
-    let cleanEmail = safeLower(email);
-
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      const token = authHeader.split(" ")[1];
-      const userId = tokensStore.get(token);
-      if (userId) {
-        const userDoc = await User.findOne({ id: userId }).lean();
-        if (userDoc?.email) {
-          cleanEmail = safeLower(userDoc.email);
-        }
-      }
-    }
-
-    let orders = [];
-    if (mongoose.connection.readyState === 1) {
-      if (cleanEmail) {
-        orders = await Order.find({ "deliveryAddress.email": cleanEmail }).sort({ createdAt: -1 }).lean();
-      } else {
-        orders = await Order.find({}).sort({ createdAt: -1 }).lean();
-      }
-    }
-
-    res.json({ orders, count: orders.length });
-  } catch (err) {
-    console.error("[Get Customer Orders Error]", err);
-    res.status(500).json({ error: "Failed to fetch order history" });
   }
 });
 
