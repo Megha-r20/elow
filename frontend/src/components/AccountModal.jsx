@@ -7,7 +7,7 @@ import { getApiUrl } from "../api/config";
 import { ReviewModal } from "./ReviewModal";
 
 export function AccountModal({ isOpen, onClose }) {
-  const { lastOrder, myOrders } = useCart();
+  const { lastOrder, myOrders, clearCustomerOrders } = useCart();
   const { user } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
@@ -49,6 +49,13 @@ export function AccountModal({ isOpen, onClose }) {
       if (res.ok) {
         const data = await res.json();
         const serverOrders = data.orders || [];
+
+        // If backend has 0 orders, sync local storage to 0 orders as well
+        if (serverOrders.length === 0) {
+          clearCustomerOrders();
+          setAllOrders([]);
+          return;
+        }
 
         // Map order ID -> order object, server state takes highest priority
         const orderMap = new Map();

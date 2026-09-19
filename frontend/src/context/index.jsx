@@ -114,9 +114,18 @@ export function CartProvider({ children }) {
             return [order, ...prev];
         });
     }, []);
+    const clearCustomerOrders = useCallback(() => {
+        setLastOrder(null);
+        setMyOrders([]);
+        try {
+            localStorage.removeItem("lastOrder");
+            localStorage.removeItem("myOrders");
+        }
+        catch { }
+    }, []);
     return (<CartContext.Provider value={{
             items: state.items, count, subtotal, promoCode, discount, applyPromo, removePromo,
-            addItem, removeItem, setQty, clearCart, isInCart, lastOrder, myOrders, saveOrder,
+            addItem, removeItem, setQty, clearCart, isInCart, lastOrder, myOrders, saveOrder, clearCustomerOrders,
         }}>
       {children}
     </CartContext.Provider>);
