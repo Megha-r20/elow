@@ -40,41 +40,6 @@ const initialUsers = [
   },
 ];
 
-const initialDemoOrder = {
-  id: "US-2026-DEMO01",
-  items: [
-    {
-      product: {
-        id: "journal-01",
-        name: "Linen Hardcover Bullet Journal 160GSM",
-        price: 1299,
-        category: "journals",
-        subcategory: "Hardcover",
-        images: ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
-      },
-      qty: 1,
-    },
-  ],
-  deliveryAddress: {
-    firstName: "Ritika",
-    lastName: "Sharma",
-    email: "ritika@example.com",
-    phone: "9876543210",
-    address: "Flat 4B, Orchid Heights, MG Road",
-    city: "Mumbai",
-    state: "Maharashtra",
-    pincode: "400001",
-  },
-  payMethod: "upi",
-  subtotal: 1299,
-  discount: 0,
-  shipping: 0,
-  giftCost: 0,
-  total: 1299,
-  status: "Processing",
-  date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-};
-
 async function seedData() {
   if (!MONGODB_URI) {
     console.error("❌ MONGODB_URI is not set in backend/.env file");
@@ -86,7 +51,7 @@ async function seedData() {
     await mongoose.connect(MONGODB_URI);
     console.log("🟢 Connected successfully to MongoDB Atlas!");
 
-    console.log("🧹 Clearing old data (if any)...");
+    console.log("🧹 Clearing old data (including old demo orders)...");
     await Product.deleteMany({});
     await User.deleteMany({});
     await Order.deleteMany({});
@@ -97,10 +62,7 @@ async function seedData() {
     console.log("👤 Inserting default user accounts into collection 'users'...");
     await User.insertMany(initialUsers);
 
-    console.log("📦 Inserting initial demo order into collection 'orders'...");
-    await Order.create(initialDemoOrder);
-
-    console.log("✨ SUCCESS! All 150 products, user accounts, and orders are now stored in MongoDB Atlas!");
+    console.log("✨ SUCCESS! All 150 products and user accounts are now stored in MongoDB Atlas! (Orders reset to 0)");
     process.exit(0);
   } catch (err) {
     console.error("❌ Seeding Error:", err.message);

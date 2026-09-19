@@ -94,41 +94,6 @@ const initialUsers = [
   },
 ];
 
-const initialDemoOrder = {
-  id: "US-2026-DEMO01",
-  items: [
-    {
-      product: {
-        id: "journal-01",
-        name: "Linen Hardcover Bullet Journal 160GSM",
-        price: 1299,
-        category: "journals",
-        subcategory: "Hardcover",
-        images: ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
-      },
-      qty: 1,
-    },
-  ],
-  deliveryAddress: {
-    firstName: "Ritika",
-    lastName: "Sharma",
-    email: "ritika@example.com",
-    phone: "9876543210",
-    address: "Flat 4B, Orchid Heights, MG Road",
-    city: "Mumbai",
-    state: "Maharashtra",
-    pincode: "400001",
-  },
-  payMethod: "upi",
-  subtotal: 1299,
-  discount: 0,
-  shipping: 0,
-  giftCost: 0,
-  total: 1299,
-  status: "Processing",
-  date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-};
-
 // Mongoose lifecycle listeners
 mongoose.connection.on("error", (err) => {
   console.error("❌ MongoDB Atlas Connection Error:", err.message);
@@ -170,13 +135,6 @@ async function connectDBAndSeed() {
     if (userCount === 0) {
       await User.insertMany(initialUsers);
       console.log("✅ Seeded default admin/user accounts into MongoDB Atlas!");
-    }
-
-    // Seed initial demo order if collection is empty
-    const orderCount = await Order.countDocuments();
-    if (orderCount === 0) {
-      await Order.create(initialDemoOrder);
-      console.log("✅ Seeded initial demo order into MongoDB Atlas!");
     }
   } catch (err) {
     console.error("❌ MongoDB Atlas initial connection error:", err.message);
