@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { useCart } from "../hooks";
+import { useCart, useToast } from "../hooks";
 import { StepBar, Breadcrumb, Icons, Divider } from "../components/ui";
 import { getApiUrl } from "../api/config";
 const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4" };
@@ -22,13 +22,33 @@ function Field({ label, field, type = "text", placeholder, form, errors, set, ..
 }
 export default function Checkout() {
     const navigate = useNavigate();
-    const { items, subtotal, discount, clearCart, saveOrder } = useCart();
+    const { items, subtotal, discount, promoCode, applyPromo, removePromo, clearCart, saveOrder } = useCart();
+    const { addToast } = useToast();
     const [step, setStep] = useState(0);
     const [form, setForm] = useState(INIT_FORM);
     const [errors, setErrors] = useState({});
+    const [inputCoupon, setInputCoupon] = useState("");
+    const [couponError, setCouponError] = useState("");
+
+    useEffect(() => {
+        if (!promoCode) {
+            const saved = localStorage.getItem("spinWonPrize");
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.code && parsed.code !== "TRY_AGAIN") {
+                        applyPromo(parsed.code);
+                    }
+                } catch (e) {
+                    // ignore
+                }
+            }
+        }
+    }, [promoCode, applyPromo]);
+
     const shipping = subtotal >= 999 ? 0 : 79;
     const giftCost = form.giftWrap ? 49 : 0;
-    const total = subtotal - discount + shipping + giftCost;
+    const total = Math.max(0, subtotal - discount + shipping + giftCost);
     const set = (field) => (e) => {
         const val = e.target.type === "checkbox" ? e.target.checked : e.target.value;
         setForm(f => ({ ...f, [field]: val }));
@@ -342,6 +362,96 @@ export default function Checkout() {
                   </div>))}
               </div>
 
+              {/* Promo / Coupon Code Section */}
+              <div style={{ margin: "16px 0" }}>
+                {promoCode ? (
+                  <div
+                    style={{
+                      background: "#F2F7F4",
+                      border: "1px dashed #8192D4",
+                      borderRadius: 12,
+                      padding: "10px 14px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#8192D4", letterSpacing: "0.5px" }}>COUPON APPLIED</span>
+                      <p style={{ fontSize: 14, fontWeight: 800, color: T.txt }}>{promoCode} (-₹{discount.toLocaleString("en-IN")})</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        removePromo();
+                        addToast("Coupon removed");
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#D9381E",
+                        fontSize: 12,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <input
+                        type="text"
+                        placeholder="Promo code (e.g. SPIN150)"
+                        value={inputCoupon}
+                        onChange={(e) => {
+                          setInputCoupon(e.target.value);
+                          setCouponError("");
+                        }}
+                        style={{
+                          flex: 1,
+                          padding: "9px 12px",
+                          borderRadius: 10,
+                          border: `1px solid ${T.border}`,
+                          fontSize: 13,
+                          textTransform: "uppercase",
+                          outline: "none",
+                          background: T.cream,
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!inputCoupon.trim()) return;
+                          const success = applyPromo(inputCoupon);
+                          if (success) {
+                            addToast(`🎉 Applied coupon ${inputCoupon.toUpperCase()}!`, "success");
+                            setInputCoupon("");
+                            setCouponError("");
+                          } else {
+                            setCouponError("Invalid promo code");
+                          }
+                        }}
+                        style={{
+                          background: T.teal,
+                          color: "#FFFFFF",
+                          border: "none",
+                          borderRadius: 10,
+                          padding: "9px 16px",
+                          fontSize: 13,
+                          fontWeight: 700,
+                          cursor: "pointer",
+                        }}
+                      >
+                        Apply
+                      </button>
+                    </div>
+                    {couponError && <p style={{ fontSize: 11.5, color: "#D9381E" }}>⚠️ {couponError}</p>}
+                  </div>
+                )}
+              </div>
+
               <Divider margin={0}/>
 
               <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "16px 0" }}>
@@ -349,6 +459,16 @@ export default function Checkout() {
                   <span style={{ fontSize: 13.5, color: T.muted }}>Subtotal</span>
                   <span style={{ fontSize: 13.5, fontWeight: 600, color: T.txt }}>₹{subtotal.toLocaleString("en-IN")}</span>
                 </div>
+                {discount > 0 && (
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <span style={{ fontSize: 13.5, color: "#2E7D32", fontWeight: 600 }}>
+                      Discount ({promoCode})
+                    </span>
+                    <span style={{ fontSize: 13.5, fontWeight: 700, color: "#2E7D32" }}>
+                      -₹{discount.toLocaleString("en-IN")}
+                    </span>
+                  </div>
+                )}
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span style={{ fontSize: 13.5, color: T.muted }}>Shipping</span>
                   <span style={{ fontSize: 13.5, fontWeight: 600, color: shipping === 0 ? "#1a7a56" : T.txt }}>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
