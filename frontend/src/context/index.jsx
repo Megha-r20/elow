@@ -123,9 +123,28 @@ export function CartProvider({ children }) {
         }
         catch { }
     }, []);
+    const removeOrderFromHistory = useCallback((id) => {
+        setLastOrder(prev => (prev?.id === id ? null : prev));
+        setMyOrders(prev => prev.filter(o => o.id !== id));
+        try {
+            const storedLast = localStorage.getItem("lastOrder");
+            if (storedLast) {
+                const parsed = JSON.parse(storedLast);
+                if (parsed.id === id)
+                    localStorage.removeItem("lastOrder");
+            }
+            const storedMy = localStorage.getItem("myOrders");
+            if (storedMy) {
+                const parsed = JSON.parse(storedMy);
+                const filtered = parsed.filter(o => o.id !== id);
+                localStorage.setItem("myOrders", JSON.stringify(filtered));
+            }
+        }
+        catch { }
+    }, []);
     return (<CartContext.Provider value={{
             items: state.items, count, subtotal, promoCode, discount, applyPromo, removePromo,
-            addItem, removeItem, setQty, clearCart, isInCart, lastOrder, myOrders, saveOrder, clearCustomerOrders,
+            addItem, removeItem, setQty, clearCart, isInCart, lastOrder, myOrders, saveOrder, clearCustomerOrders, removeOrderFromHistory,
         }}>
       {children}
     </CartContext.Provider>);

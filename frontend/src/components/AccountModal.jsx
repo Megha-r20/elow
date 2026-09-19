@@ -7,7 +7,7 @@ import { getApiUrl } from "../api/config";
 import { ReviewModal } from "./ReviewModal";
 
 export function AccountModal({ isOpen, onClose }) {
-  const { lastOrder, myOrders, clearCustomerOrders } = useCart();
+  const { lastOrder, myOrders, clearCustomerOrders, removeOrderFromHistory } = useCart();
   const { user } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
@@ -90,6 +90,17 @@ export function AccountModal({ isOpen, onClose }) {
   }, [isOpen, user]);
 
   if (!isOpen) return null;
+
+  const handleRemoveOrder = async (id) => {
+    if (!window.confirm(`Are you sure you want to remove Order #${id} from your history?`)) return;
+    try {
+      await fetch(getApiUrl(`/api/admin/orders/${id}`), { method: "DELETE" }).catch(() => {});
+      await fetch(getApiUrl(`/api/orders/${id}/cancel`), { method: "PATCH" }).catch(() => {});
+    } catch (err) {}
+    removeOrderFromHistory(id);
+    setAllOrders((prev) => prev.filter((o) => o.id !== id));
+    addToast(`Order #${id} removed from history`, "info");
+  };
 
   const handleCancelOrder = async (id) => {
     if (!window.confirm(`Are you sure you want to cancel Order #${id}?`)) return;
@@ -384,6 +395,22 @@ export function AccountModal({ isOpen, onClose }) {
                               Cancel Order
                             </button>
                           )}
+                          <button
+                            onClick={() => handleRemoveOrder(ord.id)}
+                            title="Remove from history"
+                            style={{
+                              background: "#FAF7F2",
+                              color: "#6E6A63",
+                              border: "1px solid #EAE3D9",
+                              padding: "6px 12px",
+                              borderRadius: 8,
+                              fontSize: 12,
+                              fontWeight: 700,
+                              cursor: "pointer",
+                            }}
+                          >
+                            🗑️ Remove
+                          </button>
                         </div>
                       </div>
                     );
