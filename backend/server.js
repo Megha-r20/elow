@@ -179,6 +179,22 @@ const sanitizeUser = (user) => {
   return safeUser;
 };
 
+// Root API Welcome Endpoint
+app.get("/", (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
+  res.json({
+    status: "online",
+    name: "Elow Backend REST API",
+    database: dbStatus,
+    endpoints: {
+      health: "/api/health",
+      products: "/api/products",
+      categories: "/api/categories",
+    },
+    message: "🌸 Elow backend service is running smoothly on Render!",
+  });
+});
+
 // Health Check API
 app.get("/api/health", async (req, res) => {
   const dbStatus = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
