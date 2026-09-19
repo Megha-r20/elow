@@ -32,6 +32,10 @@ export default function Layout() {
     const [spinModalOpen, setSpinModalOpen] = useState(false);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location.pathname, location.search]);
+
+    useEffect(() => {
         const hasSpun = localStorage.getItem("spinWonPrize");
         if (!hasSpun) {
             const timer = setTimeout(() => {
