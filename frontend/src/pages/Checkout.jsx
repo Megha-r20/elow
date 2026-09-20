@@ -234,10 +234,10 @@ export default function Checkout() {
                 {/* Method selector */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 24 }}>
                   {[
-                { value: "upi", label: "UPI", sub: "Google Pay, PhonePe, BHIM, Paytm" },
-                { value: "card", label: "Debit / Credit Card", sub: "Visa, Mastercard, RuPay" },
-                { value: "wallet", label: "Wallet", sub: "Paytm, Amazon Pay, Mobikwik" },
-                { value: "cod", label: "Cash on Delivery", sub: "Available on orders up to ₹2999" },
+                { value: "upi", label: "Demo UPI / QR (Simulated)", sub: "Google Pay, PhonePe, Paytm — Demo Payment (Pending)" },
+                { value: "card", label: "Demo Card (Simulated)", sub: "Visa, Mastercard, RuPay — Demo Payment (Pending)" },
+                { value: "wallet", label: "Demo Wallet (Simulated)", sub: "Paytm, Amazon Pay — Demo Payment (Pending)" },
+                { value: "cod", label: "Cash on Delivery", sub: "Pay on delivery — Order marked as Pending (COD)" },
             ].map(m => (<label key={m.value} style={{ display: "flex", alignItems: "flex-start", gap: 14, padding: "16px 20px", borderRadius: 12, border: `1.5px solid ${form.payMethod === m.value ? "#1C1C1A" : T.border}`, cursor: "pointer", background: form.payMethod === m.value ? T.sand : "#fff", transition: "all 0.14s" }}>
                       <input type="radio" name="payMethod" value={m.value} checked={form.payMethod === m.value} onChange={set("payMethod")} style={{ marginTop: 2 }}/>
                       <div>

@@ -23,7 +23,7 @@ const orderSchema = new mongoose.Schema(
     payMethod: { type: String },
     promoCode: { type: String },
     paymentStatus: { type: String, default: "Pending", index: true },
-    stripePaymentIntentId: { type: String },
+    stripePaymentIntentId: { type: String, sparse: true, unique: true, index: true },
     subtotal: { type: Number },
     discount: { type: Number },
     shipping: { type: Number },

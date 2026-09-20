@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { PromoCode } from "../models/PromoCode.js";
+import { Product } from "../models/Product.js";
 import { logger } from "../config/logger.js";
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
@@ -80,25 +81,55 @@ export const validatePromoCode = async (req, res) => {
   });
 };
 
-// @desc    Create Stripe PaymentIntent
+// @desc    Create Stripe PaymentIntent with Server-Calculated Amount
 // @route   POST /api/create-payment-intent
-// @access  Public
+// @access  Private
 export const createPaymentIntent = async (req, res) => {
-  const { amount, currency = "inr" } = req.body || {};
-  if (!stripe) {
-    return res.status(400).json({ error: "Stripe is not configured on backend." });
+  const { items, promoCode, giftWrap, currency = "inr" } = req.body || {};
+
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: "Cart items are required to create payment intent" });
   }
 
-  const numAmount = Math.round(Number(amount) * 100);
-  if (isNaN(numAmount) || numAmount <= 0) {
-    return res.status(400).json({ error: "Invalid payment amount" });
+  const productIds = items.map((i) => i.product?.id || i.productId || i.id).filter(Boolean);
+  const dbProducts = await Product.find({ id: { $in: productIds } }).lean();
+
+  let serverSubtotal = 0;
+  for (const item of items) {
+    const prodId = item.product?.id || item.productId || item.id;
+    const qty = Math.max(1, Number(item.qty || item.quantity || 1));
+    const dbProduct = dbProducts.find((p) => p.id === prodId);
+    if (!dbProduct) {
+      return res.status(400).json({ error: `Product not found: ${prodId}` });
+    }
+    serverSubtotal += Number(dbProduct.price) * qty;
+  }
+
+  const serverDiscount = await calculatePromoDiscount(promoCode, serverSubtotal);
+  const serverShipping = serverSubtotal >= 999 ? 0 : 79;
+  const serverGiftCost = giftWrap ? 49 : 0;
+  const serverTotal = Math.max(0, serverSubtotal - serverDiscount + serverShipping + serverGiftCost);
+
+  const amountInCents = Math.round(serverTotal * 100);
+
+  if (!stripe) {
+    return res.status(200).json({
+      isDemo: true,
+      message: "Stripe is not configured. Demo payment mode active.",
+      serverTotal,
+    });
   }
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: numAmount,
+    amount: amountInCents,
     currency: currency.toLowerCase(),
     automatic_payment_methods: { enabled: true },
+    metadata: { userId: req.user?.id || "guest" },
   });
 
-  res.json({ clientSecret: paymentIntent.client_secret });
+  res.json({
+    clientSecret: paymentIntent.client_secret,
+    paymentIntentId: paymentIntent.id,
+    amount: serverTotal,
+  });
 };

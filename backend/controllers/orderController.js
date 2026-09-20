@@ -64,23 +64,42 @@ export const createOrder = async (req, res) => {
   const serverGiftCost = giftWrap ? 49 : 0;
   const serverTotal = Math.max(0, serverSubtotal - serverDiscount + serverShipping + serverGiftCost);
 
-  // Stripe Payment Status Verification
-  let paymentStatus = "Pending";
-  if (payMethod === "card") {
-    if (stripePaymentIntentId) {
+  // Payment Status & Strict Stripe Verification
+  let paymentStatus = "Demo Payment (Pending)";
+
+  if (stripePaymentIntentId) {
+    const cleanIntentId = safeStr(stripePaymentIntentId);
+    if (cleanIntentId) {
+      // 1. Prevent reuse of PaymentIntent
+      const existingOrder = await Order.findOne({ stripePaymentIntentId: cleanIntentId }).lean();
+      if (existingOrder) {
+        return res.status(400).json({ error: "Stripe PaymentIntent has already been used for another order." });
+      }
+
+      // 2. Verify Stripe configuration & status
       if (!stripe) {
         return res.status(400).json({ error: "Stripe payment service is not configured on backend." });
       }
-      const paymentIntent = await stripe.paymentIntents.retrieve(stripePaymentIntentId);
+
+      const paymentIntent = await stripe.paymentIntents.retrieve(cleanIntentId);
       if (!paymentIntent || paymentIntent.status !== "succeeded") {
-        return res.status(400).json({ error: "Payment verification failed. Stripe payment intent was not completed." });
+        return res.status(400).json({ error: "Payment verification failed. Stripe PaymentIntent was not completed." });
       }
-      paymentStatus = "Paid";
-    } else {
+
+      // 3. Verify paid amount matches server total
+      const expectedAmountCents = Math.round(serverTotal * 100);
+      if (paymentIntent.amount !== expectedAmountCents) {
+        return res.status(400).json({
+          error: `Payment verification failed. Paid amount (₹${paymentIntent.amount / 100}) does not match server order total (₹${serverTotal}).`,
+        });
+      }
+
       paymentStatus = "Paid";
     }
+  } else if (payMethod === "cod") {
+    paymentStatus = "Pending (COD)";
   } else {
-    paymentStatus = payMethod === "upi" ? "Paid" : "Pending";
+    paymentStatus = "Demo Payment (Pending)";
   }
 
   const orderId = safeStr(id) || `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;

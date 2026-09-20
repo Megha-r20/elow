@@ -64,6 +64,7 @@ describe("Order & Stock Integration Tests", () => {
     expect(order.shipping).toBe(0);    // >= 999 free shipping
     expect(order.total).toBe(950);     // 1000 - 50 = 950
     expect(order.userId).toBe(userRes.body.user.id);
+    expect(order.paymentStatus).toBe("Demo Payment (Pending)");
 
     // 4. Verify inventory stock count was reduced from 10 to 8 in database
     const updatedProduct = await Product.findOne({ id: testProduct.id }).lean();
