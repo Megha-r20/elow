@@ -137,6 +137,19 @@ export function AuthProvider({ children }) {
         setToken(null);
         setUser(null);
     }, []);
+
+    const authFetch = useCallback(async (url, options = {}) => {
+        const headers = { ...(options.headers || {}) };
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
+        const res = await fetch(url, { ...options, headers });
+        if (res.status === 401) {
+            logout();
+        }
+        return res;
+    }, [token, logout]);
+
     const isAdmin = user?.role === "admin";
     return (<AuthContext.Provider value={{
             user,
@@ -147,6 +160,7 @@ export function AuthProvider({ children }) {
             register,
             updateProfile,
             logout,
+            authFetch,
         }}>
       {children}
     </AuthContext.Provider>);

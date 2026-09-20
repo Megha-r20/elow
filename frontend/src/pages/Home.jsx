@@ -4,7 +4,7 @@ import { ProductCard } from "../components/ProductCard";
 import { Book, PenTool, Paperclip, Star, Calendar, Notebook, PenBox, Gift } from "lucide-react";
 import { CATEGORIES, HERO_IMAGES, getFeatured, getBestSellers } from "../data";
 import { useCart, useToast } from "../hooks";
-import bgVideo from "../assets/Background_video.mp4";
+const bgVideo = "/Background_video.mp4";
 const T = {
     teal: "#8192D4",
     cream: "#FAF7F2",

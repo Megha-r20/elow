@@ -86,18 +86,37 @@ export function CartProvider({ children }) {
     const isInCart = useCallback((id) => state.items.some(i => i.product.id === id), [state.items]);
     const count = state.items.reduce((s, i) => s + i.qty, 0);
     const subtotal = state.items.reduce((s, i) => s + i.product.price * i.qty, 0);
-    const applyPromo = useCallback((code) => {
+    const [serverDiscount, setServerDiscount] = useState(0);
+
+    const applyPromo = useCallback(async (code) => {
         const cleaned = code.trim().toUpperCase();
-        const validCodes = ["WRITE50", "ELOW10", "SPIN50", "SPIN100", "SPIN150", "SPIN250", "SPIN10"];
-        if (validCodes.includes(cleaned)) {
-            setPromoCode(cleaned);
-            return true;
+        try {
+            const res = await fetch(getApiUrl("/api/promo/validate"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code: cleaned, subtotal }),
+            });
+            const data = await res.json();
+            if (res.ok && data.valid) {
+                setPromoCode(cleaned);
+                setServerDiscount(data.discountAmount || 0);
+                return { success: true, message: data.message };
+            }
+            return { success: false, error: data.error || "Invalid promo code" };
+        } catch (err) {
+            const validCodes = ["WRITE50", "ELOW10", "SPIN50", "SPIN100", "SPIN150", "SPIN250", "SPIN10"];
+            if (validCodes.includes(cleaned)) {
+                setPromoCode(cleaned);
+                return { success: true };
+            }
+            return { success: false, error: "Error validating promo code" };
         }
-        return false;
-    }, []);
-    const removePromo = useCallback(() => { setPromoCode(null); }, []);
-    let discount = 0;
-    if (promoCode) {
+    }, [subtotal]);
+
+    const removePromo = useCallback(() => { setPromoCode(null); setServerDiscount(0); }, []);
+
+    let discount = serverDiscount;
+    if (promoCode && discount === 0) {
         const c = promoCode.toUpperCase();
         if (c === "SPIN50") discount = 50;
         else if (c === "SPIN100") discount = 100;

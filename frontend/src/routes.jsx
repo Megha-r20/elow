@@ -14,6 +14,8 @@ import Contact from "./pages/Contact";
 import ReturnsPolicy from "./pages/ReturnsPolicy";
 import OrderTracking from "./pages/OrderTracking";
 
+import { ProtectedRoute } from "./components/ProtectedRoute";
+
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -25,8 +27,8 @@ export const router = createBrowserRouter([
             { path: "cart", Component: Cart },
             { path: "checkout", Component: Checkout },
             { path: "order-confirmation", Component: OrderConfirmation },
-            { path: "admin", Component: AdminDashboard },
-            { path: "settings", Component: Settings },
+            { path: "admin", Component: () => <ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute> },
+            { path: "settings", Component: () => <ProtectedRoute><Settings /></ProtectedRoute> },
             { path: "shipping", Component: ShippingPolicy },
             { path: "faq", Component: FAQ },
             { path: "contact", Component: Contact },
