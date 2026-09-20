@@ -248,3 +248,47 @@ export const deleteSingleOrder = async (req, res) => {
   logger.info(`[Admin Deleted Order] ID: ${orderId}`);
   res.json({ success: true, message: `Order #${orderId} deleted successfully` });
 };
+
+// @desc    Cancel order (Customer / Admin)
+// @route   PATCH /api/orders/:id/cancel
+// @access  Private
+export const cancelOrder = async (req, res) => {
+  const orderId = req.params.id;
+  const order = await Order.findOne({ id: orderId });
+
+  if (!order) {
+    return res.status(404).json({ error: "Order not found" });
+  }
+
+  if (req.user.role !== "admin" && order.userId !== req.user.id && safeLower(order.deliveryAddress?.email) !== safeLower(req.user.email)) {
+    return res.status(403).json({ error: "Access denied. You can only cancel your own orders." });
+  }
+
+  if (order.status === "Cancelled") {
+    return res.status(400).json({ error: "Order is already cancelled" });
+  }
+  if (order.status === "Delivered") {
+    return res.status(400).json({ error: "Delivered orders cannot be cancelled" });
+  }
+
+  order.status = "Cancelled";
+  order.paymentStatus = "Cancelled";
+  await order.save();
+
+  // Restore inventory stock count
+  for (const item of order.items || []) {
+    const prodId = item.product?.id;
+    const qty = Number(item.qty || 1);
+    if (prodId) {
+      const prod = await Product.findOne({ id: prodId });
+      if (prod) {
+        prod.stockCount = (prod.stockCount ?? 10) + qty;
+        prod.inStock = true;
+        await prod.save();
+      }
+    }
+  }
+
+  logger.info(`[Order Cancelled] ID: ${orderId}, User: ${req.user.id}`);
+  res.json({ success: true, message: "Order cancelled successfully", order: typeof order.toObject === "function" ? order.toObject() : order });
+};

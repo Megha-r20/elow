@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { Search, Package, Truck, CheckCircle2, Clock, MapPin, ArrowLeft, ExternalLink, ShieldCheck } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { getApiUrl } from "../api/config";
 
 export default function OrderTracking() {
   const navigate = useNavigate();
@@ -67,46 +69,76 @@ export default function OrderTracking() {
     },
   };
 
+  const { authFetch } = useAuth();
+  const [notFound, setNotFound] = useState(false);
+
   useEffect(() => {
     if (searchParams.get("id")) {
       handleSearch(null, searchParams.get("id"));
     }
   }, []);
 
-  const handleSearch = (e, explicitId = null) => {
+  const handleSearch = async (e, explicitId = null) => {
     if (e) e.preventDefault();
     const queryId = (explicitId || orderId).trim().toUpperCase();
     if (!queryId) return;
 
     setLoading(true);
     setSearched(true);
+    setNotFound(false);
 
-    setTimeout(() => {
-      setLoading(false);
-      if (sampleTrackingData[queryId]) {
-        setActiveOrder(sampleTrackingData[queryId]);
-      } else {
-        // Fallback generated tracking for any order ID
-        setActiveOrder({
-          id: queryId,
-          date: "19 Sep 2026",
-          courier: "BlueDart Express",
-          awb: `BLD-${Math.floor(10000000 + Math.random() * 90000000)}`,
-          estimatedDelivery: "22 Sep 2026",
-          status: "Dispatched",
-          destination: "Customer Address",
-          items: [{ name: "Stationery Order Items", qty: 1, price: "₹999" }],
-          steps: [
-            { title: "Order Placed & Confirmed", date: "19 Sep, 09:00 AM", completed: true },
-            { title: "Packed with Care in Pastel Box", date: "19 Sep, 11:30 AM", completed: true },
-            { title: "Dispatched via Courier Partner", date: "19 Sep, 03:00 PM", completed: true, current: true },
-            { title: "In Transit to Regional Hub", date: "Expected 20 Sep", completed: false },
-            { title: "Out for Delivery", date: "Expected 22 Sep", completed: false },
-            { title: "Delivered", date: "Expected 22 Sep", completed: false },
-          ],
-        });
+    try {
+      const res = await authFetch(getApiUrl(`/api/orders/${queryId}`));
+      if (res.ok) {
+        const order = await res.json();
+        if (order && order.id) {
+          const status = order.status || "Processing";
+          const isCancelled = status.toLowerCase() === "cancelled";
+          const isProcessing = status.toLowerCase() === "processing" || status.toLowerCase() === "order placed";
+          const isShipped = status.toLowerCase() === "shipped";
+          const isDelivered = status.toLowerCase() === "delivered";
+
+          const dest = order.deliveryAddress?.city && order.deliveryAddress?.state
+            ? `${order.deliveryAddress.city}, ${order.deliveryAddress.state}`
+            : "Customer Address";
+
+          setActiveOrder({
+            id: order.id,
+            date: order.date || new Date(order.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
+            courier: "BlueDart Express",
+            awb: `BLD-${order.id.replace(/[^0-9]/g, "") || "984201928"}`,
+            estimatedDelivery: isDelivered ? "Delivered" : "In 1–3 working days",
+            status: status,
+            destination: dest,
+            items: (order.items || []).map(i => ({
+              name: i.product?.name || "Stationery Item",
+              qty: i.qty || 1,
+              price: `₹${(i.product?.price || 0) * (i.qty || 1)}`,
+            })),
+            steps: [
+              { title: "Order Placed & Confirmed", date: order.date || "Just now", completed: true },
+              { title: "Packed at Warehouse", date: isProcessing ? "In Progress" : "Done", completed: isProcessing || isShipped || isDelivered, current: isProcessing },
+              { title: "Dispatched via Courier", date: isShipped ? "In Transit" : isDelivered ? "Done" : "Pending", completed: isShipped || isDelivered, current: isShipped },
+              { title: "Out for Delivery", date: isDelivered ? "Done" : "Pending", completed: isDelivered },
+              { title: isCancelled ? "Order Cancelled" : "Delivered", date: isDelivered ? "Delivered" : isCancelled ? "Cancelled" : "Pending", completed: isDelivered || isCancelled, current: isDelivered || isCancelled },
+            ],
+          });
+          setLoading(false);
+          return;
+        }
       }
-    }, 600);
+    } catch (err) {
+      console.error("API tracking search error:", err);
+    }
+
+    if (sampleTrackingData[queryId]) {
+      setActiveOrder(sampleTrackingData[queryId]);
+      setLoading(false);
+    } else {
+      setActiveOrder(null);
+      setNotFound(true);
+      setLoading(false);
+    }
   };
 
   return (

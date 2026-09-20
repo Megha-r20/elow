@@ -8,7 +8,7 @@ import { ReviewModal } from "./ReviewModal";
 
 export function AccountModal({ isOpen, onClose }) {
   const { lastOrder, myOrders, clearCustomerOrders, removeOrderFromHistory } = useCart();
-  const { user, token } = useAuth();
+  const { user, token, authFetch } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -45,10 +45,7 @@ export function AccountModal({ isOpen, onClose }) {
       if (emailList.length) params.append("email", emailList.join(","));
       if (idList.length) params.append("ids", idList.join(","));
 
-      const headers = {};
-      if (token) headers["Authorization"] = `Bearer ${token}`;
-
-      const res = await fetch(getApiUrl(`/api/orders/my-orders?${params.toString()}`), { headers });
+      const res = await authFetch(getApiUrl(`/api/orders/my-orders?${params.toString()}`));
       if (res.ok) {
         const data = await res.json();
         const serverOrders = data.orders || [];
@@ -94,12 +91,8 @@ export function AccountModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleRemoveOrder = async (id) => {
+  const handleRemoveOrder = (id) => {
     if (!window.confirm(`Are you sure you want to remove Order #${id} from your history?`)) return;
-    try {
-      await fetch(getApiUrl(`/api/admin/orders/${id}`), { method: "DELETE" }).catch(() => {});
-      await fetch(getApiUrl(`/api/orders/${id}/cancel`), { method: "PATCH" }).catch(() => {});
-    } catch (err) {}
     removeOrderFromHistory(id);
     setAllOrders((prev) => prev.filter((o) => o.id !== id));
     addToast(`Order #${id} removed from history`, "info");
@@ -108,11 +101,11 @@ export function AccountModal({ isOpen, onClose }) {
   const handleCancelOrder = async (id) => {
     if (!window.confirm(`Are you sure you want to cancel Order #${id}?`)) return;
     try {
-      const res = await fetch(getApiUrl(`/api/orders/${id}/cancel`), { method: "PATCH" });
+      const res = await authFetch(getApiUrl(`/api/orders/${id}/cancel`), { method: "PATCH" });
       const data = await res.json();
       if (res.ok) {
         addToast(`Order #${id} has been cancelled`, "info");
-        setAllOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status: "Cancelled" } : o)));
+        setAllOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status: "Cancelled", paymentStatus: "Cancelled" } : o)));
       } else {
         addToast(data.error || "Failed to cancel order", "error");
       }

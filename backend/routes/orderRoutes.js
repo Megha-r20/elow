@@ -3,6 +3,7 @@ import {
   createOrder,
   getMyOrders,
   getOrderById,
+  cancelOrder,
   getAllOrders,
   updateOrderStatus,
   deleteAllOrders,
@@ -18,6 +19,7 @@ const router = express.Router();
 router.post("/orders", protect, validate(createOrderSchema), createOrder);
 router.get("/orders/my-orders", protect, getMyOrders);
 router.get("/orders/:id", protect, getOrderById);
+router.patch("/orders/:id/cancel", protect, cancelOrder);
 
 // Admin routes
 router.get("/admin/orders", protect, admin, getAllOrders);

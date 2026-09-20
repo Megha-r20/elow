@@ -13,7 +13,7 @@ const T = { teal: "#8192D4", txt: "#23201D", muted: "#6E6A63", light: "#9C968D",
 export default function OrderConfirmation() {
     const navigate = useNavigate();
     const { lastOrder } = useCart();
-    const { user } = useAuth();
+    const { user, token, authFetch } = useAuth();
     const { addToast } = useToast();
     const [show, setShow] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(lastOrder);
@@ -25,32 +25,28 @@ export default function OrderConfirmation() {
         const t = setTimeout(() => setShow(true), 100);
         return () => clearTimeout(t);
     }, []);
-    // Sync order & fetch live status from backend API
+    // Fetch live status from backend API using GET /api/orders/:id
     useEffect(() => {
         if (!lastOrder?.id)
             return;
-        const syncAndFetchStatus = async () => {
+        const fetchLiveStatus = async () => {
             try {
-                const res = await fetch(getApiUrl("/api/orders"), {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(lastOrder),
-                });
+                const res = await authFetch(getApiUrl(`/api/orders/${lastOrder.id}`));
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.order) {
-                        setCurrentOrder(data.order);
+                    if (data && data.id) {
+                        setCurrentOrder(data);
                     }
                 }
             }
             catch (err) {
-                console.error("Error syncing live order status:", err);
+                console.error("Error fetching live order status:", err);
             }
         };
-        syncAndFetchStatus();
-        const timer = setInterval(syncAndFetchStatus, 2000);
+        fetchLiveStatus();
+        const timer = setInterval(fetchLiveStatus, 5000);
         return () => clearInterval(timer);
-    }, [lastOrder]);
+    }, [lastOrder, authFetch]);
     const recommended = PRODUCTS.filter(p => p.isBestseller).slice(0, 4);
     const deliveryDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
     const activeOrder = currentOrder || lastOrder;
@@ -71,9 +67,9 @@ export default function OrderConfirmation() {
         if (!window.confirm(`Are you sure you want to cancel Order #${orderId}?`))
             return;
         try {
-            const res = await fetch(getApiUrl(`/api/orders/${orderId}/cancel`), { method: "PATCH" });
+            const res = await authFetch(getApiUrl(`/api/orders/${orderId}/cancel`), { method: "PATCH" });
             const data = await res.json();
-            if (res.ok) {
+            if (res.ok && data.order) {
                 addToast(`Order #${orderId} has been cancelled`, "info");
                 setCurrentOrder(data.order);
             }
