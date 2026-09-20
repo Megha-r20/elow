@@ -7,6 +7,7 @@ import { AccountModal } from "./AccountModal";
 import { AuthModal } from "./AuthModal";
 import { SpinWheelModal } from "./SpinWheelModal";
 import { SpinLauncher } from "./SpinLauncher";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { Icons } from "./ui";
 import { CATEGORIES } from "../data";
 import { logoDataUrl, fullLogoDataUrl } from "../assets/logoBase64";
@@ -392,7 +393,9 @@ export default function Layout() {
 
       {/* Main content */}
       <main style={{ flex: 1 }}>
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </main>
 
       {/* Footer */}

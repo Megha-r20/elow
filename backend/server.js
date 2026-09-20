@@ -1070,3 +1070,12 @@ const gracefulShutdown = (signal) => {
 
 process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+
+// Process-level crash prevention guards for high multi-user concurrency
+process.on("uncaughtException", (err) => {
+  console.error("⚠️ [Server Crash Guard] Uncaught Exception caught:", err?.message || err);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("⚠️ [Server Crash Guard] Unhandled Rejection at:", promise, "reason:", reason);
+});
