@@ -2,7 +2,10 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 import { logger } from "../config/logger.js";
 
-const JWT_SECRET = process.env.JWT_SECRET || "elow_jwt_secret_key_2026_super_secure_change_in_prod";
+if (!process.env.JWT_SECRET) {
+  throw new Error("FATAL: JWT_SECRET environment variable is missing. Set JWT_SECRET in environment variables.");
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const generateToken = (userId, role) => {
   return jwt.sign({ id: userId, role }, JWT_SECRET, { expiresIn: "30d" });
