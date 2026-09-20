@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 import { PRODUCTS } from "./data/products.js";
 import { Product } from "./models/Product.js";
 import { Order } from "./models/Order.js";
@@ -14,28 +15,28 @@ const initialUsers = [
     id: "user-admin-1",
     name: "Elow Admin",
     email: "admin@elow.com",
-    password: "admin123",
+    password: bcrypt.hashSync("admin123", 10),
     role: "admin",
   },
   {
     id: "user-admin-2",
     name: "Elow Admin IN",
     email: "admin@elow.in",
-    password: "admin123",
+    password: bcrypt.hashSync("admin123", 10),
     role: "admin",
   },
   {
     id: "user-cust-1",
     name: "Ritika Sharma",
     email: "ritika@example.com",
-    password: "password123",
+    password: bcrypt.hashSync("password123", 10),
     role: "user",
   },
   {
     id: "user-cust-2",
     name: "Elow Customer",
     email: "user@elow.com",
-    password: "user123",
+    password: bcrypt.hashSync("user123", 10),
     role: "user",
   },
 ];

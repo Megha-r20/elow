@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router";
 import { Icons, Divider } from "../components/ui";
 import { getApiUrl } from "../api/config";
 export function AdminDashboard() {
-    const { user, isAdmin } = useAuth();
+    const { user, token, isAdmin } = useAuth();
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [tab, setTab] = useState("overview");
@@ -25,10 +25,19 @@ export function AdminDashboard() {
     const [reviewSearch, setReviewSearch] = useState("");
     const [reviewStatusFilter, setReviewStatusFilter] = useState("all");
 
+    const getAuthHeaders = (contentType) => {
+        const headers = {};
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+        if (contentType) headers["Content-Type"] = contentType;
+        return headers;
+    };
+
     const fetchReviews = async () => {
         setLoadingReviews(true);
         try {
-            const res = await fetch(getApiUrl("/api/reviews"));
+            const res = await fetch(getApiUrl("/api/reviews"), {
+                headers: getAuthHeaders(),
+            });
             if (res.ok) {
                 const data = await res.json();
                 setReviews(data.reviews || []);
@@ -46,7 +55,7 @@ export function AdminDashboard() {
         try {
             const res = await fetch(getApiUrl(`/api/reviews/${id}/status`), {
                 method: "PATCH",
-                headers: { "Content-Type": "application/json" },
+                headers: getAuthHeaders("application/json"),
                 body: JSON.stringify({ status: "approved" }),
             });
             if (res.ok) {
@@ -68,6 +77,7 @@ export function AdminDashboard() {
         try {
             const res = await fetch(getApiUrl(`/api/reviews/${id}`), {
                 method: "DELETE",
+                headers: getAuthHeaders(),
             });
             if (res.ok) {
                 addToast("Deleted review successfully");
@@ -140,7 +150,7 @@ export function AdminDashboard() {
         try {
             const res = await fetch(getApiUrl(`/api/admin/products/${editingProduct.id}`), {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: getAuthHeaders("application/json"),
                 body: JSON.stringify({
                     name: editForm.name,
                     category: editForm.category,
@@ -189,7 +199,9 @@ export function AdminDashboard() {
     const fetchOrders = async () => {
         setLoadingOrders(true);
         try {
-            const res = await fetch(getApiUrl("/api/admin/orders"));
+            const res = await fetch(getApiUrl("/api/admin/orders"), {
+                headers: getAuthHeaders(),
+            });
             if (res.ok) {
                 const data = await res.json();
                 setOrders(data.orders || []);
@@ -216,7 +228,7 @@ export function AdminDashboard() {
         try {
             const res = await fetch(getApiUrl("/api/admin/products"), {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: getAuthHeaders("application/json"),
                 body: JSON.stringify({
                     name: newProd.name,
                     category: newProd.category,
@@ -263,6 +275,7 @@ export function AdminDashboard() {
         try {
             const res = await fetch(getApiUrl(`/api/admin/products/${id}`), {
                 method: "DELETE",
+                headers: getAuthHeaders(),
             });
             if (res.ok) {
                 addToast(`Deleted product "${name}"`);
@@ -281,7 +294,7 @@ export function AdminDashboard() {
         try {
             const res = await fetch(getApiUrl(`/api/admin/orders/${orderId}/status`), {
                 method: "PATCH",
-                headers: { "Content-Type": "application/json" },
+                headers: getAuthHeaders("application/json"),
                 body: JSON.stringify({ status: newStatus }),
             });
             if (res.ok) {
@@ -302,7 +315,10 @@ export function AdminDashboard() {
         if (!window.confirm("⚠️ Are you sure you want to clear ALL store orders from MongoDB Atlas? This action cannot be undone."))
             return;
         try {
-            const res = await fetch(getApiUrl("/api/admin/orders"), { method: "DELETE" });
+            const res = await fetch(getApiUrl("/api/admin/orders"), {
+                method: "DELETE",
+                headers: getAuthHeaders(),
+            });
             const data = await res.json();
             if (res.ok) {
                 addToast("All store orders cleared successfully!", "info");
@@ -322,7 +338,10 @@ export function AdminDashboard() {
         if (!window.confirm(`Are you sure you want to delete Order #${orderId}?`))
             return;
         try {
-            const res = await fetch(getApiUrl(`/api/admin/orders/${orderId}`), { method: "DELETE" });
+            const res = await fetch(getApiUrl(`/api/admin/orders/${orderId}`), {
+                method: "DELETE",
+                headers: getAuthHeaders(),
+            });
             const data = await res.json();
             if (res.ok) {
                 addToast(`Order #${orderId} deleted successfully`);

@@ -3,6 +3,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Stripe from "stripe";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { PRODUCTS, CATEGORIES, REVIEWS, PRICE_RANGES } from "./data/products.js";
 import { Product } from "./models/Product.js";
 import { Order } from "./models/Order.js";
@@ -14,17 +18,29 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5005;
 const MONGODB_URI = process.env.MONGODB_URI;
+const JWT_SECRET = process.env.JWT_SECRET || "elow_jwt_secret_key_2026_super_secure_change_in_prod";
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
+
+// Apply Helmet security headers
+app.use(helmet({ crossOriginResourcePolicy: false }));
+
+// Rate limiting for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  message: { error: "Too many authentication requests, please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Dynamic CORS configuration for Production (Vercel) and Local Dev
 const allowedOrigins = process.env.FRONTEND_URL
   ? process.env.FRONTEND_URL.split(",").map((url) => url.trim())
-  : ["http://localhost:5173", "http://127.0.0.1:5173"];
+  : ["http://localhost:5173", "http://127.0.0.1:5173", "https://elow-store.vercel.app"];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow non-browser agents or matching frontend origins or preview Vercel domains
       if (
         !origin ||
         allowedOrigins.includes("*") ||
@@ -34,7 +50,7 @@ app.use(
       ) {
         callback(null, true);
       } else {
-        callback(null, true); // Fallback permissive CORS for custom production client domains
+        callback(null, true);
       }
     },
     credentials: true,
@@ -60,32 +76,47 @@ const safeLower = (v) => safeStr(v).toLowerCase();
 // In-memory fallback stores
 let productsListMemory = Array.isArray(PRODUCTS) ? [...PRODUCTS] : [];
 let reviewsListMemory = Array.isArray(REVIEWS) ? [...REVIEWS] : [];
-const tokensStore = new Map([
-  ["token_admin_demo", "user-admin-1"],
-  ["token_cust_demo", "user-cust-1"],
-]);
 
-const getUserIdFromToken = (token) => {
-  if (!token) return null;
-  let userId = tokensStore.get(token);
-  if (userId) return userId;
+const generateToken = (userId, role) => {
+  return jwt.sign({ id: userId, role }, JWT_SECRET, { expiresIn: "30d" });
+};
 
-  if (token === "token_admin_demo") return "user-admin-1";
-  if (token === "token_cust_demo") return "user-cust-1";
-
-  if (typeof token === "string" && token.startsWith("token_")) {
-    const parts = token.split("_");
-    if (parts.length >= 3) {
-      userId = parts.slice(1, -1).join("_");
-    } else if (parts.length === 2) {
-      userId = parts[1];
+// Protect middleware (JWT verification)
+const protect = async (req, res, next) => {
+  try {
+    let token;
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
     }
-    if (userId) {
-      tokensStore.set(token, userId);
-      return userId;
+    if (!token) {
+      return res.status(401).json({ error: "Not authorized, no session token provided" });
     }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    let user = null;
+    if (mongoose.connection.readyState === 1) {
+      user = await User.findOne({ id: decoded.id }).lean();
+    } else {
+      user = initialUsers.find((u) => u.id === decoded.id);
+    }
+    if (!user) {
+      return res.status(401).json({ error: "User profile not found or expired session" });
+    }
+    req.user = sanitizeUser(user);
+    req.userRaw = user;
+    next();
+  } catch (err) {
+    console.error("[JWT Protect Error]", err.message);
+    return res.status(401).json({ error: "Not authorized, invalid session token" });
   }
-  return null;
+};
+
+// Admin middleware (checks role === "admin")
+const admin = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    res.status(403).json({ error: "Access denied. Administrator privileges required." });
+  }
 };
 
 const initialUsers = [
@@ -93,28 +124,28 @@ const initialUsers = [
     id: "user-admin-1",
     name: "Elow Admin",
     email: "admin@elow.com",
-    password: "admin123",
+    password: bcrypt.hashSync("admin123", 10),
     role: "admin",
   },
   {
     id: "user-admin-2",
     name: "Elow Admin IN",
     email: "admin@elow.in",
-    password: "admin123",
+    password: bcrypt.hashSync("admin123", 10),
     role: "admin",
   },
   {
     id: "user-cust-1",
     name: "Ritika Sharma",
     email: "ritika@example.com",
-    password: "password123",
+    password: bcrypt.hashSync("password123", 10),
     role: "user",
   },
   {
     id: "user-cust-2",
     name: "Elow Customer",
     email: "user@elow.com",
-    password: "user123",
+    password: bcrypt.hashSync("user123", 10),
     role: "user",
   },
 ];
@@ -205,9 +236,9 @@ app.get("/api/health", async (req, res) => {
 });
 
 // Auth API - Register
-app.post("/api/auth/register", async (req, res) => {
+app.post("/api/auth/register", authLimiter, async (req, res) => {
   try {
-    const { name, email, password, role } = req.body || {};
+    const { name, email, password } = req.body || {};
 
     const cleanName = safeStr(name);
     const cleanEmail = safeLower(email);
@@ -217,29 +248,38 @@ app.post("/api/auth/register", async (req, res) => {
       return res.status(400).json({ error: "Name, email, and password are required" });
     }
 
+    if (cleanPass.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters long" });
+    }
+
     let existingUser = null;
     if (mongoose.connection.readyState === 1) {
       existingUser = await User.findOne({ email: cleanEmail }).lean();
+    } else {
+      existingUser = initialUsers.find((u) => u.email === cleanEmail);
     }
     if (existingUser) {
       return res.status(400).json({ error: "An account with this email already exists" });
     }
 
+    const hashedPassword = await bcrypt.hash(cleanPass, 10);
+    const userId = `user-${Date.now()}`;
     const userData = {
-      id: `user-${Date.now()}`,
+      id: userId,
       name: cleanName,
       email: cleanEmail,
-      password: cleanPass,
-      role: role === "admin" ? "admin" : "user",
+      password: hashedPassword,
+      role: "user", // Stop accepting role from body, force user
     };
 
     let newUser = userData;
     if (mongoose.connection.readyState === 1) {
       newUser = await User.create(userData);
+    } else {
+      initialUsers.push(userData);
     }
 
-    const token = `token_${newUser.id}_${Date.now()}`;
-    tokensStore.set(token, newUser.id);
+    const token = generateToken(newUser.id, newUser.role);
 
     console.log(`[User Registered] ${newUser.name} (${newUser.email}) - Role: ${newUser.role}`);
     res.status(201).json({ success: true, user: sanitizeUser(newUser), token });
@@ -250,7 +290,7 @@ app.post("/api/auth/register", async (req, res) => {
 });
 
 // Auth API - Login
-app.post("/api/auth/login", async (req, res) => {
+app.post("/api/auth/login", authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body || {};
 
@@ -263,17 +303,23 @@ app.post("/api/auth/login", async (req, res) => {
 
     let user = null;
     if (mongoose.connection.readyState === 1) {
-      user = await User.findOne({ email: cleanEmail, password: cleanPass }).lean();
+      user = await User.findOne({ email: cleanEmail }).lean();
     } else {
-      user = initialUsers.find((u) => u.email === cleanEmail && u.password === cleanPass);
+      user = initialUsers.find((u) => u.email === cleanEmail);
     }
 
     if (!user) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    const token = `token_${user.id}_${Date.now()}`;
-    tokensStore.set(token, user.id);
+    // Verify password with bcrypt, falling back to string match if unhashed legacy
+    const isPasswordMatch = await bcrypt.compare(cleanPass, user.password).catch(() => false) || user.password === cleanPass;
+
+    if (!isPasswordMatch) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    const token = generateToken(user.id, user.role);
 
     console.log(`[User Logged In] ${user.name} (${user.email}) - Role: ${user.role}`);
     res.json({ success: true, user: sanitizeUser(user), token });
@@ -284,31 +330,9 @@ app.post("/api/auth/login", async (req, res) => {
 });
 
 // Auth API - Current User
-app.get("/api/auth/me", async (req, res) => {
+app.get("/api/auth/me", protect, async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const token = authHeader.split(" ")[1];
-    const userId = getUserIdFromToken(token);
-    if (!userId) {
-      return res.status(401).json({ error: "Invalid or expired session token" });
-    }
-
-    let user = null;
-    if (mongoose.connection.readyState === 1) {
-      user = await User.findOne({ id: userId }).lean();
-    } else {
-      user = initialUsers.find((u) => u.id === userId);
-    }
-
-    if (!user) {
-      return res.status(401).json({ error: "User profile not found" });
-    }
-
-    res.json({ user: sanitizeUser(user) });
+    res.json({ user: req.user });
   } catch (err) {
     console.error("[Auth Me Error]", err);
     res.status(500).json({ error: "Failed to fetch active user profile" });
@@ -316,22 +340,13 @@ app.get("/api/auth/me", async (req, res) => {
 });
 
 // Auth API - Update Profile & Password
-app.patch("/api/auth/profile", async (req, res) => {
+app.patch("/api/auth/profile", protect, async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const token = authHeader.split(" ")[1];
-    const userId = getUserIdFromToken(token);
-    if (!userId) {
-      return res.status(401).json({ error: "Invalid or expired session token" });
-    }
-
     let user = null;
     if (mongoose.connection.readyState === 1) {
-      user = await User.findOne({ id: userId });
+      user = await User.findOne({ id: req.user.id });
+    } else {
+      user = initialUsers.find((u) => u.id === req.user.id);
     }
 
     if (!user) {
@@ -348,7 +363,12 @@ app.patch("/api/auth/profile", async (req, res) => {
     if (email) {
       const cleanEmail = safeLower(email);
       if (cleanEmail && cleanEmail !== safeLower(user.email)) {
-        const existing = await User.findOne({ id: { $ne: user.id }, email: cleanEmail }).lean();
+        let existing = null;
+        if (mongoose.connection.readyState === 1) {
+          existing = await User.findOne({ id: { $ne: user.id }, email: cleanEmail }).lean();
+        } else {
+          existing = initialUsers.find((u) => u.id !== user.id && u.email === cleanEmail);
+        }
         if (existing) {
           return res.status(400).json({ error: "An account with this email already exists" });
         }
@@ -369,7 +389,8 @@ app.patch("/api/auth/profile", async (req, res) => {
         return res.status(400).json({ error: "Current password is required to set a new password" });
       }
 
-      if (String(user.password) !== cleanCurrent) {
+      const isCurrentValid = await bcrypt.compare(cleanCurrent, user.password).catch(() => false) || user.password === cleanCurrent;
+      if (!isCurrentValid) {
         return res.status(400).json({ error: "Incorrect current password" });
       }
 
@@ -377,10 +398,12 @@ app.patch("/api/auth/profile", async (req, res) => {
         return res.status(400).json({ error: "New password must be at least 6 characters long" });
       }
 
-      user.password = cleanNew;
+      user.password = await bcrypt.hash(cleanNew, 10);
     }
 
-    await user.save();
+    if (mongoose.connection.readyState === 1 && typeof user.save === "function") {
+      await user.save();
+    }
     console.log(`[User Updated Profile] ${user.name} (${user.email})`);
     res.json({ success: true, user: sanitizeUser(user), message: "Profile updated successfully" });
   } catch (err) {
@@ -512,7 +535,7 @@ app.get("/api/products/:id", async (req, res) => {
 });
 
 // Admin Product Create API (Saves to MongoDB Atlas)
-app.post("/api/admin/products", async (req, res) => {
+app.post("/api/admin/products", protect, admin, async (req, res) => {
   try {
     const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } =
       req.body || {};
@@ -562,7 +585,7 @@ app.post("/api/admin/products", async (req, res) => {
 });
 
 // Admin Product Delete API (Deletes from MongoDB Atlas)
-app.delete("/api/admin/products/:id", async (req, res) => {
+app.delete("/api/admin/products/:id", protect, admin, async (req, res) => {
   try {
     const prodId = req.params.id;
 
@@ -588,7 +611,7 @@ app.delete("/api/admin/products/:id", async (req, res) => {
 });
 
 // Admin Product Edit / Update API (Updates MongoDB Atlas)
-app.put("/api/admin/products/:id", async (req, res) => {
+app.put("/api/admin/products/:id", protect, admin, async (req, res) => {
   try {
     const prodId = req.params.id;
     const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } =
@@ -643,7 +666,7 @@ app.put("/api/admin/products/:id", async (req, res) => {
 });
 
 // Admin Get All Orders API (Reads from MongoDB Atlas)
-app.get("/api/admin/orders", async (req, res) => {
+app.get("/api/admin/orders", protect, admin, async (req, res) => {
   try {
     let orders = [];
     if (mongoose.connection.readyState === 1) {
@@ -657,7 +680,7 @@ app.get("/api/admin/orders", async (req, res) => {
 });
 
 // Admin Update Order Status API (Updates MongoDB Atlas)
-app.patch("/api/admin/orders/:id/status", async (req, res) => {
+app.patch("/api/admin/orders/:id/status", protect, admin, async (req, res) => {
   try {
     const { status } = req.body || {};
     const cleanStatus = safeStr(status);
@@ -684,7 +707,7 @@ app.patch("/api/admin/orders/:id/status", async (req, res) => {
 });
 
 // Admin Delete All Orders API (Deletes all orders from MongoDB Atlas)
-app.delete("/api/admin/orders", async (req, res) => {
+app.delete("/api/admin/orders", protect, admin, async (req, res) => {
   try {
     if (mongoose.connection.readyState === 1) {
       await Order.deleteMany({});
@@ -698,7 +721,7 @@ app.delete("/api/admin/orders", async (req, res) => {
 });
 
 // Admin Delete Single Order API (Deletes specific order from MongoDB Atlas)
-app.delete("/api/admin/orders/:id", async (req, res) => {
+app.delete("/api/admin/orders/:id", protect, admin, async (req, res) => {
   try {
     const orderId = req.params.id;
     if (mongoose.connection.readyState === 1) {
@@ -944,7 +967,7 @@ app.post("/api/products/:id/reviews", async (req, res) => {
 });
 
 // Fetch All Customer Reviews (Admin Dashboard)
-app.get("/api/reviews", async (req, res) => {
+app.get("/api/reviews", protect, admin, async (req, res) => {
   try {
     let reviews = [];
     if (mongoose.connection.readyState === 1) {
@@ -985,7 +1008,7 @@ app.get("/api/products/:id/reviews", async (req, res) => {
 });
 
 // Accept / Approve or Update Review Status (Admin Portal)
-app.patch("/api/reviews/:id/status", async (req, res) => {
+app.patch("/api/reviews/:id/status", protect, admin, async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body || {};
@@ -1028,7 +1051,7 @@ app.patch("/api/reviews/:id/status", async (req, res) => {
 });
 
 // Delete Review (Admin Portal)
-app.delete("/api/reviews/:id", async (req, res) => {
+app.delete("/api/reviews/:id", protect, admin, async (req, res) => {
   try {
     const { id } = req.params;
     if (mongoose.connection.readyState === 1) {
