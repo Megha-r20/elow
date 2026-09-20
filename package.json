@@ -3,10 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
+    "test": "npm --prefix backend test",
+    "test:backend": "npm --prefix backend test",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
     "install:all": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.1.0",
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.8"
   }
 }

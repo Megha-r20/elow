@@ -185,7 +185,7 @@ cd frontend && npm run dev
 The backend includes comprehensive integration tests powered by **Vitest**, **Supertest**, and **mongodb-memory-server**:
 
 ```bash
-cd backend
+# Run integration tests from the root directory or inside backend/
 npm test
 ```
 
