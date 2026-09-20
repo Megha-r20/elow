@@ -101,14 +101,20 @@ export default function Checkout() {
         if (step === 2) {
             if (isPlacingOrder)
                 return;
+
+            if (!token) {
+                addToast("Please sign in or register an account to place your order.", "error");
+                return;
+            }
+
             setIsPlacingOrder(true);
             const orderPayload = {
-                items,
-                subtotal,
-                discount,
-                shipping,
-                giftCost,
-                total,
+                items: items.map((i) => ({
+                    product: { id: i.product.id, name: i.product.name, price: i.product.price },
+                    qty: i.quantity,
+                })),
+                promoCode: promoCode || undefined,
+                giftWrap: form.giftWrap,
                 deliveryAddress: {
                     firstName: form.firstName,
                     lastName: form.lastName,
@@ -121,37 +127,35 @@ export default function Checkout() {
                 },
                 payMethod: form.payMethod,
             };
-            let finalOrder = null;
             try {
-                const reqHeaders = { "Content-Type": "application/json" };
-                if (token) reqHeaders["Authorization"] = `Bearer ${token}`;
+                const reqHeaders = {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                };
                 const res = await fetch(getApiUrl("/api/orders"), {
                     method: "POST",
                     headers: reqHeaders,
                     body: JSON.stringify(orderPayload),
                 });
-                if (res.ok) {
-                    const data = await res.json();
-                    finalOrder = data.order;
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    saveOrder(data.order);
+                    clearCart();
+                    setIsPlacingOrder(false);
+                    navigate("/order-confirmation");
+                    return;
+                } else {
+                    addToast(data.error || "Failed to place order. Please check item availability.", "error");
+                    setIsPlacingOrder(false);
+                    return;
                 }
             }
             catch (err) {
                 console.error("Failed to post order to server:", err);
+                addToast("Network error placing order. Please try again.", "error");
+                setIsPlacingOrder(false);
+                return;
             }
-            if (!finalOrder) {
-                const orderId = `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-                finalOrder = {
-                    id: orderId,
-                    ...orderPayload,
-                    status: "Processing",
-                    date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-                };
-            }
-            saveOrder(finalOrder);
-            clearCart();
-            setIsPlacingOrder(false);
-            navigate("/order-confirmation");
-            return;
         }
         setStep(s => s + 1);
     };

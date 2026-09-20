@@ -5,6 +5,7 @@ import { PRODUCTS } from "./data/products.js";
 import { Product } from "./models/Product.js";
 import { Order } from "./models/Order.js";
 import { User } from "./models/User.js";
+import { PromoCode } from "./models/PromoCode.js";
 
 dotenv.config();
 
@@ -41,6 +42,16 @@ const initialUsers = [
   },
 ];
 
+const initialPromoCodes = [
+  { code: "WRITE50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
+  { code: "ELOW10", discountType: "percentage", discountValue: 10, minOrderAmount: 0, isActive: true },
+  { code: "SPIN50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
+  { code: "SPIN100", discountType: "fixed", discountValue: 100, minOrderAmount: 0, isActive: true },
+  { code: "SPIN150", discountType: "fixed", discountValue: 150, minOrderAmount: 0, isActive: true },
+  { code: "SPIN250", discountType: "fixed", discountValue: 250, minOrderAmount: 0, isActive: true },
+  { code: "SPIN10", discountType: "fixed", discountValue: 10, minOrderAmount: 0, isActive: true },
+];
+
 async function seedData() {
   if (!MONGODB_URI) {
     console.error("❌ MONGODB_URI is not set in backend/.env file");
@@ -52,18 +63,22 @@ async function seedData() {
     await mongoose.connect(MONGODB_URI);
     console.log("🟢 Connected successfully to MongoDB Atlas!");
 
-    console.log("🧹 Clearing old data (including old demo orders)...");
+    console.log("🧹 Clearing old data...");
     await Product.deleteMany({});
     await User.deleteMany({});
     await Order.deleteMany({});
+    await PromoCode.deleteMany({});
 
-    console.log(`🌱 Inserting ${PRODUCTS.length} products into database 'elow' -> collection 'products'...`);
+    console.log(`🌱 Inserting ${PRODUCTS.length} products into collection 'products'...`);
     await Product.insertMany(PRODUCTS);
 
     console.log("👤 Inserting default user accounts into collection 'users'...");
     await User.insertMany(initialUsers);
 
-    console.log("✨ SUCCESS! All 150 products and user accounts are now stored in MongoDB Atlas! (Orders reset to 0)");
+    console.log("🎟️ Inserting promo codes into collection 'promocodes'...");
+    await PromoCode.insertMany(initialPromoCodes);
+
+    console.log("✨ SUCCESS! Catalog, users, and promo codes are now stored in MongoDB Atlas!");
     process.exit(0);
   } catch (err) {
     console.error("❌ Seeding Error:", err.message);

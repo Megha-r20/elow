@@ -8,7 +8,7 @@ import { ReviewModal } from "./ReviewModal";
 
 export function AccountModal({ isOpen, onClose }) {
   const { lastOrder, myOrders, clearCustomerOrders, removeOrderFromHistory } = useCart();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -45,7 +45,10 @@ export function AccountModal({ isOpen, onClose }) {
       if (emailList.length) params.append("email", emailList.join(","));
       if (idList.length) params.append("ids", idList.join(","));
 
-      const res = await fetch(getApiUrl(`/api/orders/my-orders?${params.toString()}`));
+      const headers = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const res = await fetch(getApiUrl(`/api/orders/my-orders?${params.toString()}`), { headers });
       if (res.ok) {
         const data = await res.json();
         const serverOrders = data.orders || [];

@@ -12,6 +12,7 @@ import { Product } from "./models/Product.js";
 import { Order } from "./models/Order.js";
 import { User } from "./models/User.js";
 import { Review } from "./models/Review.js";
+import { PromoCode } from "./models/PromoCode.js";
 
 dotenv.config();
 
@@ -761,32 +762,94 @@ app.post("/api/create-payment-intent", async (req, res) => {
   }
 });
 
+// Helper to calculate server-side promo discount
+const calculatePromoDiscount = async (code, subtotal) => {
+  if (!code) return 0;
+  const cleanCode = safeStr(code).toUpperCase();
+
+  let promo = null;
+  if (mongoose.connection.readyState === 1) {
+    promo = await PromoCode.findOne({ code: cleanCode, isActive: true }).lean();
+  }
+
+  if (!promo) {
+    const fallbackPromos = {
+      WRITE50: { discountType: "fixed", discountValue: 50, minOrderAmount: 0 },
+      ELOW10: { discountType: "percentage", discountValue: 10, minOrderAmount: 0 },
+      SPIN50: { discountType: "fixed", discountValue: 50, minOrderAmount: 0 },
+      SPIN100: { discountType: "fixed", discountValue: 100, minOrderAmount: 0 },
+      SPIN150: { discountType: "fixed", discountValue: 150, minOrderAmount: 0 },
+      SPIN250: { discountType: "fixed", discountValue: 250, minOrderAmount: 0 },
+      SPIN10: { discountType: "fixed", discountValue: 10, minOrderAmount: 0 },
+    };
+    promo = fallbackPromos[cleanCode];
+  }
+
+  if (!promo) return 0;
+  if (subtotal < (promo.minOrderAmount || 0)) return 0;
+
+  if (promo.discountType === "percentage") {
+    let disc = Math.round((subtotal * promo.discountValue) / 100);
+    if (promo.maxDiscount && disc > promo.maxDiscount) {
+      disc = promo.maxDiscount;
+    }
+    return Math.min(disc, subtotal);
+  } else {
+    return Math.min(promo.discountValue, subtotal);
+  }
+};
+
 // Promo Code Validation API
-app.post("/api/promo/validate", (req, res) => {
+app.post("/api/promo/validate", async (req, res) => {
   try {
-    const { code } = req.body || {};
+    const { code, subtotal = 0 } = req.body || {};
     const cleanCode = safeStr(code).toUpperCase();
 
     if (!cleanCode) {
-      return res.status(400).json({ valid: false, error: "Code is required" });
+      return res.status(400).json({ valid: false, error: "Promo code is required" });
     }
 
-    const validCodes = ["WRITE50", "ELOW10", "SPIN50", "SPIN100", "SPIN150", "SPIN250", "SPIN10"];
-    if (validCodes.includes(cleanCode)) {
-      return res.json({ valid: true, code: cleanCode, message: `Promo code ${cleanCode} applied!` });
+    let promo = null;
+    if (mongoose.connection.readyState === 1) {
+      promo = await PromoCode.findOne({ code: cleanCode, isActive: true }).lean();
     }
 
-    res.status(400).json({ valid: false, error: "Invalid promo code" });
+    if (!promo) {
+      const fallbackPromos = {
+        WRITE50: { discountType: "fixed", discountValue: 50, minOrderAmount: 0 },
+        ELOW10: { discountType: "percentage", discountValue: 10, minOrderAmount: 0 },
+        SPIN50: { discountType: "fixed", discountValue: 50, minOrderAmount: 0 },
+        SPIN100: { discountType: "fixed", discountValue: 100, minOrderAmount: 0 },
+        SPIN150: { discountType: "fixed", discountValue: 150, minOrderAmount: 0 },
+        SPIN250: { discountType: "fixed", discountValue: 250, minOrderAmount: 0 },
+        SPIN10: { discountType: "fixed", discountValue: 10, minOrderAmount: 0 },
+      };
+      promo = fallbackPromos[cleanCode];
+    }
+
+    if (!promo) {
+      return res.status(400).json({ valid: false, error: "Invalid promo code" });
+    }
+
+    const discountAmount = await calculatePromoDiscount(cleanCode, Number(subtotal) || 1000);
+    res.json({
+      valid: true,
+      code: cleanCode,
+      discountType: promo.discountType,
+      discountValue: promo.discountValue,
+      discountAmount,
+      message: `Promo code ${cleanCode} applied!`,
+    });
   } catch (err) {
     console.error("[Promo Error]", err);
     res.status(500).json({ valid: false, error: "Error validating promo code" });
   }
 });
 
-// Orders API (Create Order in MongoDB Atlas)
-app.post("/api/orders", async (req, res) => {
+// Orders API - Create Order (Requires Auth, Server-side pricing, Stock checking & reduction, Stripe verification)
+app.post("/api/orders", protect, async (req, res) => {
   try {
-    const { id, items, deliveryAddress, payMethod, subtotal, discount, shipping, giftCost, total, status } = req.body || {};
+    const { id, items, deliveryAddress, payMethod, promoCode, giftWrap, stripePaymentIntentId } = req.body || {};
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: "Cart items are required" });
@@ -795,35 +858,114 @@ app.post("/api/orders", async (req, res) => {
       return res.status(400).json({ error: "Valid delivery address and email are required" });
     }
 
-    const orderId = safeStr(id) || `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const productIds = items.map((i) => i.product?.id || i.productId || i.id).filter(Boolean);
 
+    let dbProducts = [];
     if (mongoose.connection.readyState === 1) {
-      const existing = await Order.findOne({ id: orderId }).lean();
-      if (existing) {
-        return res.json({ success: true, order: existing });
-      }
+      dbProducts = await Product.find({ id: { $in: productIds } }).lean();
+    } else {
+      dbProducts = productsListMemory.filter((p) => productIds.includes(p.id));
     }
+
+    let serverSubtotal = 0;
+    const sanitizedItems = [];
+
+    // Calculate subtotal from DB prices & verify stock
+    for (const item of items) {
+      const prodId = item.product?.id || item.productId || item.id;
+      const qty = Math.max(1, Number(item.qty || item.quantity || 1));
+      const dbProduct = dbProducts.find((p) => p.id === prodId);
+
+      if (!dbProduct) {
+        return res.status(400).json({ error: `Product not found: ${prodId}` });
+      }
+
+      // Stock verification
+      const currentStock = dbProduct.stockCount !== undefined ? Number(dbProduct.stockCount) : 10;
+      if (dbProduct.inStock === false || currentStock < qty) {
+        return res.status(400).json({
+          error: `Product "${dbProduct.name}" is out of stock or has insufficient quantity. (Requested: ${qty}, Available: ${currentStock})`,
+        });
+      }
+
+      const unitPrice = Number(dbProduct.price);
+      serverSubtotal += unitPrice * qty;
+
+      sanitizedItems.push({
+        product: {
+          id: dbProduct.id,
+          name: dbProduct.name,
+          price: unitPrice,
+          images: dbProduct.images || [],
+          category: dbProduct.category,
+        },
+        qty,
+      });
+    }
+
+    // Server-side financial calculations
+    const serverDiscount = await calculatePromoDiscount(promoCode, serverSubtotal);
+    const serverShipping = serverSubtotal >= 999 ? 0 : 79;
+    const serverGiftCost = giftWrap ? 49 : 0;
+    const serverTotal = Math.max(0, serverSubtotal - serverDiscount + serverShipping + serverGiftCost);
+
+    // Verify Stripe Payment Status if card payment
+    let paymentStatus = "Pending";
+    if (payMethod === "card") {
+      if (stripePaymentIntentId) {
+        if (!stripe) {
+          return res.status(400).json({ error: "Stripe payment service is not configured on backend." });
+        }
+        const paymentIntent = await stripe.paymentIntents.retrieve(stripePaymentIntentId);
+        if (!paymentIntent || paymentIntent.status !== "succeeded") {
+          return res.status(400).json({ error: "Payment verification failed. Stripe payment intent was not completed." });
+        }
+        paymentStatus = "Paid";
+      } else {
+        paymentStatus = "Paid";
+      }
+    } else {
+      paymentStatus = payMethod === "upi" ? "Paid" : "Pending";
+    }
+
+    const orderId = safeStr(id) || `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
     const orderData = {
       id: orderId,
-      items,
+      userId: req.user.id,
+      items: sanitizedItems,
       deliveryAddress,
       payMethod: safeStr(payMethod) || "upi",
-      subtotal: Number(subtotal) || 0,
-      discount: Number(discount) || 0,
-      shipping: Number(shipping) || 0,
-      giftCost: Number(giftCost) || 0,
-      total: Number(total) || 0,
-      status: safeStr(status) || "Processing",
+      promoCode: safeStr(promoCode),
+      paymentStatus,
+      stripePaymentIntentId: safeStr(stripePaymentIntentId),
+      subtotal: serverSubtotal,
+      discount: serverDiscount,
+      shipping: serverShipping,
+      giftCost: serverGiftCost,
+      total: serverTotal,
+      status: "Processing",
       date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
     };
 
     let newOrder = orderData;
     if (mongoose.connection.readyState === 1) {
       newOrder = await Order.create(orderData);
+
+      // Decrement stock in database after order creation
+      for (const item of sanitizedItems) {
+        const prod = await Product.findOne({ id: item.product.id });
+        if (prod) {
+          prod.stockCount = Math.max(0, (prod.stockCount ?? 10) - item.qty);
+          if (prod.stockCount === 0) {
+            prod.inStock = false;
+          }
+          await prod.save();
+        }
+      }
     }
 
-    console.log(`[Order Created in MongoDB Atlas] ID: ${orderId}, Total: ₹${newOrder.total}`);
+    console.log(`[Order Created in MongoDB Atlas] ID: ${orderId}, User: ${req.user.id}, Total: ₹${serverTotal}`);
     res.status(201).json({ success: true, order: newOrder });
   } catch (err) {
     console.error("[Create Order Error]", err);
@@ -831,66 +973,23 @@ app.post("/api/orders", async (req, res) => {
   }
 });
 
-// Customer Order History API (Fetch all orders for email list, order ID list, or authenticated user)
-app.get("/api/orders/my-orders", async (req, res) => {
+// Customer Order History API (Requires Auth, Admins see all, Users see only their own)
+app.get("/api/orders/my-orders", protect, async (req, res) => {
   try {
-    const { email, ids } = req.query;
+    let mongoQuery = {};
 
-    const emailsArray = [];
-    if (email && typeof email === "string") {
-      email.split(",").forEach((e) => {
-        const clean = safeLower(e);
-        if (clean && !emailsArray.includes(clean)) {
-          emailsArray.push(clean);
-        }
-      });
-    }
-
-    const idsArray = [];
-    if (ids && typeof ids === "string") {
-      ids.split(",").forEach((id) => {
-        const clean = safeStr(id);
-        if (clean && !idsArray.includes(clean)) {
-          idsArray.push(clean);
-        }
-      });
-    }
-
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      const token = authHeader.split(" ")[1];
-      const userId = getUserIdFromToken(token);
-      if (userId) {
-        const userDoc = await User.findOne({ id: userId }).lean();
-        if (userDoc?.email) {
-          const userEmail = safeLower(userDoc.email);
-          if (userEmail && !emailsArray.includes(userEmail)) {
-            emailsArray.push(userEmail);
-          }
-        }
-      }
+    if (req.user.role === "admin") {
+      // Admins see all orders
+      mongoQuery = {};
+    } else {
+      // Regular users see only their own orders (matched by userId or delivery email)
+      mongoQuery = {
+        $or: [{ userId: req.user.id }, { "deliveryAddress.email": safeLower(req.user.email) }],
+      };
     }
 
     let orders = [];
     if (mongoose.connection.readyState === 1) {
-      const conditions = [];
-
-      if (emailsArray.length > 0) {
-        const emailRegexes = emailsArray.map((e) => new RegExp("^" + e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "$", "i"));
-        conditions.push({ "deliveryAddress.email": { $in: emailRegexes } });
-      }
-
-      if (idsArray.length > 0) {
-        conditions.push({ id: { $in: idsArray } });
-      }
-
-      let mongoQuery = {};
-      if (conditions.length === 1) {
-        mongoQuery = conditions[0];
-      } else if (conditions.length > 1) {
-        mongoQuery = { $or: conditions };
-      }
-
       orders = await Order.find(mongoQuery).sort({ createdAt: -1 }).lean();
     }
 
@@ -901,8 +1000,8 @@ app.get("/api/orders/my-orders", async (req, res) => {
   }
 });
 
-// Orders API (Get Order Details from MongoDB Atlas)
-app.get("/api/orders/:id", async (req, res) => {
+// Orders API (Get Order Details with RBAC ownership check)
+app.get("/api/orders/:id", protect, async (req, res) => {
   try {
     let order = null;
     if (mongoose.connection.readyState === 1) {
@@ -911,6 +1010,12 @@ app.get("/api/orders/:id", async (req, res) => {
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
+
+    // RBAC ownership check
+    if (req.user.role !== "admin" && order.userId !== req.user.id && safeLower(order.deliveryAddress?.email) !== safeLower(req.user.email)) {
+      return res.status(403).json({ error: "Access denied. You can only view your own orders." });
+    }
+
     res.json(order);
   } catch (err) {
     console.error("[Get Order Error]", err);
