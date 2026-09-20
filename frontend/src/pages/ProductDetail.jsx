@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { getProductById, PRODUCTS, REVIEWS } from "../data";
 import { useCart, useWishlist, useToast, useDrawer } from "../hooks";
 import { Stars, Badge, Price, Breadcrumb, QtyStepper, Divider, Icons, SectionHead } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
+import { getApiUrl } from "../api/config";
 const T = { teal: "#8192D4", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
 export default function ProductDetail() {
     const { id } = useParams();
@@ -16,6 +17,24 @@ export default function ProductDetail() {
     const [imgIdx, setImgIdx] = useState(0);
     const [qty, setQty] = useState(1);
     const [tab, setTab] = useState(0);
+    const [apiReviews, setApiReviews] = useState([]);
+
+    useEffect(() => {
+        if (!product?.id) return;
+        const fetchApproved = async () => {
+            try {
+                const res = await fetch(getApiUrl(`/api/products/${product.id}/reviews`));
+                if (res.ok) {
+                    const data = await res.json();
+                    setApiReviews(data.reviews || []);
+                }
+            } catch (err) {
+                console.error("Error fetching product reviews:", err);
+            }
+        };
+        fetchApproved();
+    }, [product?.id]);
+
     if (!product) {
         return (<div className="container" style={{ padding: "80px 32px", textAlign: "center" }}>
         <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>Product not found</h2>
@@ -23,7 +42,19 @@ export default function ProductDetail() {
       </div>);
     }
     const wished = has(product.id);
-    const reviews = REVIEWS.filter(r => r.productId === product.id);
+    const staticReviews = REVIEWS.filter(r => r.productId === product.id);
+    const approvedApiReviews = apiReviews.map(r => ({
+        id: r.id || r._id,
+        productId: r.productId,
+        name: r.userName || "Verified Customer",
+        rating: r.rating,
+        title: r.title,
+        text: r.comment,
+        date: r.createdAt ? new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent",
+        verified: r.verifiedPurchase ?? true,
+        avatar: r.avatar,
+    }));
+    const reviews = [...approvedApiReviews, ...staticReviews.filter(s => !approvedApiReviews.some(a => a.id === s.id))];
     const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
     const disc = Math.round((1 - product.price / product.originalPrice) * 100);
     const handleAdd = () => {
@@ -196,17 +227,24 @@ export default function ProductDetail() {
                   </div>) : (<div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                     {reviews.map(r => (<div key={r.id} style={{ paddingBottom: 24, borderBottom: `1px solid ${T.border}` }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-                          <img src={r.avatar} alt={r.name} style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}/>
+                          {r.avatar ? (
+                            <img src={r.avatar} alt={r.name} style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", border: `1px solid ${T.border}` }}/>
+                          ) : (
+                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#8192D4", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 700 }}>
+                              {r.name?.[0] || "U"}
+                            </div>
+                          )}
                           <div>
                             <p style={{ fontSize: 14, fontWeight: 700, color: T.txt }}>{r.name}</p>
                             <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 2 }}>
                               <Stars n={r.rating} size={11}/>
                               <span style={{ fontSize: 11.5, color: T.light }}>{r.date}</span>
-                              {r.verified && <span style={{ fontSize: 10.5, fontWeight: 700, color: T.teal, background: "rgba(61,189,181,0.10)", borderRadius: 5, padding: "2px 7px" }}>✓ Verified</span>}
+                              {r.verified && <span style={{ fontSize: 10.5, fontWeight: 700, color: "#166534", background: "rgba(22,163,74,0.12)", border: "1px solid rgba(22,163,74,0.3)", borderRadius: 5, padding: "2px 7px" }}>✓ Verified Buyer</span>}
                             </div>
                           </div>
                         </div>
-                        <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.75 }}>{r.text}</p>
+                        {r.title && <h5 style={{ fontSize: 14, fontWeight: 700, color: T.txt, margin: "6px 0 4px" }}>"{r.title}"</h5>}
+                        <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.75, margin: 0 }}>{r.text}</p>
                       </div>))}
                   </div>)}
               </div>)}

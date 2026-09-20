@@ -901,25 +901,19 @@ app.post("/api/products/:id/reviews", async (req, res) => {
       title: cleanTitle,
       comment: cleanComment,
       verifiedPurchase: true,
+      status: "pending",
       createdAt: new Date().toISOString(),
     };
 
     let newReview = reviewData;
     if (mongoose.connection.readyState === 1) {
       newReview = await Review.create(reviewData);
-
-      const productReviews = await Review.find({ productId }).lean();
-      const reviewCount = productReviews.length;
-      const totalRatingSum = productReviews.reduce((sum, r) => sum + r.rating, 0);
-      const avgRating = Number((totalRatingSum / reviewCount).toFixed(1));
-
-      await Product.findOneAndUpdate({ id: productId }, { rating: avgRating, reviewCount });
     }
 
     reviewsListMemory.unshift(newReview);
 
-    console.log(`[Review Submitted] Product: ${productId}, Rating: ${numRating}★ by ${cleanName}`);
-    res.status(201).json({ success: true, review: newReview, message: "Thank you for reviewing!" });
+    console.log(`[Review Submitted] Product: ${productId}, Rating: ${numRating}★ by ${cleanName} (Pending Approval)`);
+    res.status(201).json({ success: true, review: newReview, message: "Thank you for reviewing! Your review has been submitted for approval." });
   } catch (err) {
     console.error("[Submit Review Error]", err);
     res.status(500).json({ error: "Failed to submit product review" });
@@ -945,23 +939,68 @@ app.get("/api/reviews", async (req, res) => {
   }
 });
 
-// Fetch Reviews for a Specific Product
+// Fetch Approved Reviews for a Specific Product (Public View)
 app.get("/api/products/:id/reviews", async (req, res) => {
   try {
     const { id } = req.params;
+    const showAll = req.query.all === "true";
     let reviews = [];
     if (mongoose.connection.readyState === 1) {
-      reviews = await Review.find({ productId: id }).sort({ createdAt: -1 }).lean();
-      if (reviews.length === 0) {
-        reviews = reviewsListMemory.filter((r) => r.productId === id);
+      const filter = showAll ? { productId: id } : { productId: id, status: "approved" };
+      reviews = await Review.find(filter).sort({ createdAt: -1 }).lean();
+      if (reviews.length === 0 && !showAll) {
+        reviews = reviewsListMemory.filter((r) => r.productId === id && (r.status === "approved" || !r.status));
       }
     } else {
-      reviews = reviewsListMemory.filter((r) => r.productId === id);
+      reviews = reviewsListMemory.filter((r) => r.productId === id && (showAll || r.status === "approved" || !r.status));
     }
     res.json({ success: true, reviews, count: reviews.length });
   } catch (err) {
     console.error("[Get Product Reviews Error]", err);
     res.status(500).json({ error: "Failed to fetch product reviews" });
+  }
+});
+
+// Accept / Approve or Update Review Status (Admin Portal)
+app.patch("/api/reviews/:id/status", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body || {};
+    const newStatus = status === "approved" ? "approved" : "pending";
+
+    let targetProductId = null;
+
+    if (mongoose.connection.readyState === 1) {
+      let rev = await Review.findOneAndUpdate({ id }, { status: newStatus }, { new: true });
+      if (!rev) {
+        rev = await Review.findByIdAndUpdate(id, { status: newStatus }, { new: true });
+      }
+      if (rev) {
+        targetProductId = rev.productId;
+      }
+    }
+
+    const memRev = reviewsListMemory.find((r) => r.id === id || String(r._id) === id);
+    if (memRev) {
+      memRev.status = newStatus;
+      targetProductId = targetProductId || memRev.productId;
+    }
+
+    // Recalculate average rating & review count for approved reviews
+    if (targetProductId && mongoose.connection.readyState === 1) {
+      const approvedReviews = await Review.find({ productId: targetProductId, status: "approved" }).lean();
+      const reviewCount = approvedReviews.length;
+      const totalSum = approvedReviews.reduce((sum, r) => sum + r.rating, 0);
+      const avgRating = reviewCount > 0 ? Number((totalSum / reviewCount).toFixed(1)) : 5.0;
+
+      await Product.findOneAndUpdate({ id: targetProductId }, { rating: avgRating, reviewCount });
+    }
+
+    console.log(`[Review Status Updated] Review ${id} -> ${newStatus}`);
+    res.json({ success: true, message: `Review status updated to ${newStatus}` });
+  } catch (err) {
+    console.error("[Update Review Status Error]", err);
+    res.status(500).json({ error: "Failed to update review status" });
   }
 });
 

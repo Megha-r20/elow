@@ -23,6 +23,7 @@ export function AdminDashboard() {
     const [reviews, setReviews] = useState([]);
     const [loadingReviews, setLoadingReviews] = useState(true);
     const [reviewSearch, setReviewSearch] = useState("");
+    const [reviewStatusFilter, setReviewStatusFilter] = useState("all");
 
     const fetchReviews = async () => {
         setLoadingReviews(true);
@@ -38,6 +39,26 @@ export function AdminDashboard() {
         }
         finally {
             setLoadingReviews(false);
+        }
+    };
+
+    const handleApproveReview = async (id) => {
+        try {
+            const res = await fetch(getApiUrl(`/api/reviews/${id}/status`), {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "approved" }),
+            });
+            if (res.ok) {
+                addToast("✓ Review accepted! It is now live on the customer product page.", "success");
+                setReviews(prev => prev.map(r => (r.id === id || r._id === id) ? { ...r, status: "approved" } : r));
+            }
+            else {
+                addToast("Failed to accept review", "error");
+            }
+        }
+        catch (err) {
+            addToast("Network error accepting review", "error");
         }
     };
 
@@ -789,7 +810,7 @@ export function AdminDashboard() {
         {/* TAB 4: REVIEWS */}
         {tab === "reviews" && (
           <div style={{ background: "#FFFFFF", padding: 28, borderRadius: 24, border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 16 }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Customer Product Reviews</h3>
@@ -798,14 +819,14 @@ export function AdminDashboard() {
                   </span>
                 </div>
                 <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>
-                  Manage customer submitted ratings, feedback, and verified buyer reviews.
+                  Approve or delete customer ratings and feedback. Accepted reviews will immediately show up on customer product pages.
                 </p>
               </div>
 
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                 <input
                   type="text"
-                  placeholder="🔍 Search reviews, customer, or product ID..."
+                  placeholder="🔍 Search reviews, customer, or product..."
                   value={reviewSearch}
                   onChange={(e) => setReviewSearch(e.target.value)}
                   style={{
@@ -814,7 +835,7 @@ export function AdminDashboard() {
                     border: "1px solid #EAE3D9",
                     fontSize: 13,
                     outline: "none",
-                    width: 280,
+                    width: 260,
                     background: "#FAF7F2",
                   }}
                 />
@@ -836,18 +857,51 @@ export function AdminDashboard() {
               </div>
             </div>
 
+            {/* Status Category Filter Pills */}
+            <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
+              {[
+                { id: "all", label: `All Reviews (${reviews.length})` },
+                { id: "pending", label: `Pending Approval ⏳ (${reviews.filter(r => r.status !== "approved").length})` },
+                { id: "approved", label: `Accepted & Live ✓ (${reviews.filter(r => r.status === "approved").length})` },
+              ].map(st => (
+                <button
+                  key={st.id}
+                  onClick={() => setReviewStatusFilter(st.id)}
+                  style={{
+                    background: reviewStatusFilter === st.id ? "#23201D" : "#FAF7F2",
+                    color: reviewStatusFilter === st.id ? "#FAF7F2" : "#6E6A63",
+                    border: `1.5px solid ${reviewStatusFilter === st.id ? "#23201D" : "#EAE3D9"}`,
+                    borderRadius: 999,
+                    padding: "8px 18px",
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                    transition: "all 0.15s ease",
+                    boxShadow: reviewStatusFilter === st.id ? "0 4px 12px rgba(35,32,29,0.12)" : "none",
+                  }}
+                >
+                  {st.label}
+                </button>
+              ))}
+            </div>
+
             {loadingReviews ? (
               <div style={{ padding: 40, textAlign: "center", color: "#9C968D" }}>Loading customer reviews...</div>
             ) : reviews.length === 0 ? (
               <div style={{ padding: "48px 24px", textAlign: "center", background: "#FAF7F2", borderRadius: 20, border: "1px dashed #EAE3D9" }}>
                 <div style={{ fontSize: 40, marginBottom: 12, opacity: 0.4 }}>⭐</div>
                 <h4 style={{ fontSize: 16, fontWeight: 800, color: "#23201D" }}>No customer reviews found</h4>
-                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>When customers write reviews on products, they will appear here live.</p>
+                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>When customers write reviews on products, they will appear here live for approval.</p>
               </div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {reviews
                   .filter((r) => {
+                    const isApproved = r.status === "approved";
+                    if (reviewStatusFilter === "pending" && isApproved) return false;
+                    if (reviewStatusFilter === "approved" && !isApproved) return false;
+
                     if (!reviewSearch.trim()) return true;
                     const q = reviewSearch.toLowerCase();
                     return (
@@ -861,14 +915,15 @@ export function AdminDashboard() {
                   .map((rev) => {
                     const prod = products.find((p) => p.id === rev.productId);
                     const dateStr = rev.createdAt ? new Date(rev.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent";
+                    const isApproved = rev.status === "approved";
                     return (
                       <div
                         key={rev.id || rev._id}
                         style={{
-                          border: "1px solid #EAE3D9",
+                          border: `1.5px solid ${isApproved ? "#BBF7D0" : "#FDE68A"}`,
                           borderRadius: 18,
                           padding: 20,
-                          background: "#FAF7F2",
+                          background: isApproved ? "#F0FDF4" : "#FFFBEB",
                           display: "flex",
                           flexDirection: "column",
                           gap: 12,
@@ -899,21 +954,30 @@ export function AdminDashboard() {
                               </div>
                             )}
                             <div>
-                              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                                 <span style={{ fontSize: 14, color: "#F59E0B", fontWeight: 800 }}>
                                   {"★".repeat(Math.min(5, Math.max(1, rev.rating)))}{"☆".repeat(5 - Math.min(5, Math.max(1, rev.rating)))}
                                 </span>
                                 <span style={{ fontSize: 12, fontWeight: 800, color: "#23201D" }}>
                                   {rev.rating}.0
                                 </span>
+                                {isApproved ? (
+                                  <span style={{ fontSize: 10.5, fontWeight: 800, color: "#166534", background: "#DCFCE7", border: "1px solid #BBF7D0", padding: "1px 8px", borderRadius: 999 }}>
+                                    ✓ Accepted & Live
+                                  </span>
+                                ) : (
+                                  <span style={{ fontSize: 10.5, fontWeight: 800, color: "#D97706", background: "#FEF3C7", border: "1px solid #FDE68A", padding: "1px 8px", borderRadius: 999 }}>
+                                    ⏳ Pending Approval
+                                  </span>
+                                )}
                                 {rev.verifiedPurchase && (
                                   <span
                                     style={{
                                       fontSize: 10.5,
                                       fontWeight: 800,
-                                      color: "#16A34A",
-                                      background: "rgba(22,163,74,0.12)",
-                                      border: "1px solid rgba(22,163,74,0.3)",
+                                      color: "#2563EB",
+                                      background: "rgba(37,99,235,0.1)",
+                                      border: "1px solid rgba(37,99,235,0.25)",
                                       padding: "1px 8px",
                                       borderRadius: 999,
                                     }}
@@ -928,24 +992,65 @@ export function AdminDashboard() {
                             </div>
                           </div>
 
-                          <button
-                            onClick={() => handleDeleteReview(rev.id || rev._id, rev.title)}
-                            style={{
-                              background: "#FDF2F2",
-                              color: "#DC2626",
-                              border: "1px solid #F8B4B4",
-                              padding: "6px 14px",
-                              borderRadius: 10,
-                              fontSize: 12,
-                              fontWeight: 700,
-                              cursor: "pointer",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 6,
-                            }}
-                          >
-                            🗑️ Delete Review
-                          </button>
+                          {/* Action Buttons: Accept & Delete */}
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            {!isApproved ? (
+                              <button
+                                onClick={() => handleApproveReview(rev.id || rev._id)}
+                                style={{
+                                  background: "#16A34A",
+                                  color: "#FFFFFF",
+                                  border: "none",
+                                  padding: "7px 16px",
+                                  borderRadius: 10,
+                                  fontSize: 12.5,
+                                  fontWeight: 800,
+                                  cursor: "pointer",
+                                  boxShadow: "0 2px 8px rgba(22,163,74,0.25)",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 6,
+                                }}
+                              >
+                                ✓ Accept Review
+                              </button>
+                            ) : (
+                              <span
+                                style={{
+                                  fontSize: 12,
+                                  fontWeight: 800,
+                                  color: "#166534",
+                                  background: "#DCFCE7",
+                                  border: "1px solid #86EFAC",
+                                  padding: "6px 14px",
+                                  borderRadius: 10,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 6,
+                                }}
+                              >
+                                ✓ Accepted
+                              </span>
+                            )}
+                            <button
+                              onClick={() => handleDeleteReview(rev.id || rev._id, rev.title)}
+                              style={{
+                                background: "#FDF2F2",
+                                color: "#DC2626",
+                                border: "1px solid #F8B4B4",
+                                padding: "6px 14px",
+                                borderRadius: 10,
+                                fontSize: 12,
+                                fontWeight: 700,
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 6,
+                              }}
+                            >
+                              🗑️ Delete Review
+                            </button>
+                          </div>
                         </div>
 
                         <div style={{ background: "#FFFFFF", padding: 14, borderRadius: 12, border: "1px solid #EAE3D9" }}>
