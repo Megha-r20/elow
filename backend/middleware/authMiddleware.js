@@ -2,10 +2,14 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 import { logger } from "../config/logger.js";
 
-if (!process.env.JWT_SECRET) {
-  throw new Error("FATAL: JWT_SECRET environment variable is missing. Set JWT_SECRET in environment variables.");
+import crypto from "crypto";
+
+let jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+  logger.warn("⚠️ [SECURITY WARNING] JWT_SECRET environment variable is not set. Generated a temporary random 256-bit secret key for runtime security.");
+  jwtSecret = crypto.randomBytes(32).toString("hex");
 }
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = jwtSecret;
 
 export const generateToken = (userId, role) => {
   return jwt.sign({ id: userId, role }, JWT_SECRET, { expiresIn: "30d" });
