@@ -18,7 +18,54 @@ export function AdminDashboard() {
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(true);
     const [adminOrderFilter, setAdminOrderFilter] = useState("all");
-    // New Product Form Modal
+
+    // Reviews State
+    const [reviews, setReviews] = useState([]);
+    const [loadingReviews, setLoadingReviews] = useState(true);
+    const [reviewSearch, setReviewSearch] = useState("");
+
+    const fetchReviews = async () => {
+        setLoadingReviews(true);
+        try {
+            const res = await fetch(getApiUrl("/api/reviews"));
+            if (res.ok) {
+                const data = await res.json();
+                setReviews(data.reviews || []);
+            }
+        }
+        catch (err) {
+            console.error("Error fetching reviews:", err);
+        }
+        finally {
+            setLoadingReviews(false);
+        }
+    };
+
+    const handleDeleteReview = async (id, title) => {
+        if (!window.confirm(`Are you sure you want to delete review "${title}"?`))
+            return;
+        try {
+            const res = await fetch(getApiUrl(`/api/reviews/${id}`), {
+                method: "DELETE",
+            });
+            if (res.ok) {
+                addToast("Deleted review successfully");
+                setReviews(prev => prev.filter(r => r.id !== id && r._id !== id));
+            }
+            else {
+                addToast("Failed to delete review", "error");
+            }
+        }
+        catch (err) {
+            addToast("Network error deleting review", "error");
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
+        fetchOrders();
+        fetchReviews();
+    }, [tab]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [newProd, setNewProd] = useState({
         name: "",
@@ -336,7 +383,7 @@ export function AdminDashboard() {
           </div>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <button onClick={() => { fetchOrders(); fetchProducts(); addToast("Refreshed live store data"); }} className="btn" style={{ background: "rgba(255,255,255,0.08)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.15)", padding: "12px 20px", borderRadius: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.15s" }}>
+            <button onClick={() => { fetchOrders(); fetchProducts(); fetchReviews(); addToast("Refreshed live store data"); }} className="btn" style={{ background: "rgba(255,255,255,0.08)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.15)", padding: "12px 20px", borderRadius: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.15s" }}>
               🔄 Refresh Data
             </button>
             <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "12px 22px", borderRadius: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 8, border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(129,146,212,0.3)" }}>
@@ -351,7 +398,7 @@ export function AdminDashboard() {
 
       <div className="container" style={{ marginTop: 32 }}>
         {/* Metric Cards Row */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 36 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20, marginBottom: 36 }}>
           <div style={{ background: "#FFFFFF", borderRadius: 22, padding: "24px", border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.04)", transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)", cursor: "default" }} onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-3px)")} onMouseLeave={e => (e.currentTarget.style.transform = "translateY(0)")}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <span style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1.2px", textTransform: "uppercase" }}>TOTAL REVENUE</span>
@@ -395,14 +442,15 @@ export function AdminDashboard() {
 
           <div style={{ background: "#FFFFFF", borderRadius: 22, padding: "24px", border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.04)", transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)", cursor: "default" }} onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-3px)")} onMouseLeave={e => (e.currentTarget.style.transform = "translateY(0)")}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1.2px", textTransform: "uppercase" }}>REGISTERED USERS</span>
-              <div style={{ width: 38, height: 38, borderRadius: 12, background: "#EBF1F7", color: "#2563EB", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>👥</div>
+              <span style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1.2px", textTransform: "uppercase" }}>CUSTOMER REVIEWS</span>
+              <div style={{ width: 38, height: 38, borderRadius: 12, background: "#FEF3C7", color: "#D97706", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>⭐</div>
             </div>
             <h3 style={{ fontSize: 32, fontWeight: 800, color: "#23201D", marginTop: 2, letterSpacing: "-0.5px" }}>
-              2 Accounts
+              {reviews.length} Reviews
             </h3>
-            <p style={{ fontSize: 12.5, color: "#9C968D", marginTop: 8, fontWeight: 600 }}>
-              Admin & Customer roles
+            <p style={{ fontSize: 12.5, color: "#D97706", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#F59E0B", display: "inline-block" }}/>
+              Customer ratings & feedback
             </p>
           </div>
         </div>
@@ -413,6 +461,7 @@ export function AdminDashboard() {
             { id: "overview", label: "📊 Store Overview" },
             { id: "products", label: `📦 Products (${products.length})` },
             { id: "orders", label: `🛒 Orders (${orders.length})` },
+            { id: "reviews", label: `⭐ Reviews (${reviews.length})` },
         ].map(t => (<button key={t.id} onClick={() => setTab(t.id)} style={{
                 padding: "11px 24px",
                 fontSize: 13.5,
@@ -736,6 +785,191 @@ export function AdminDashboard() {
                 })}
               </div>)}
           </div>)}
+
+        {/* TAB 4: REVIEWS */}
+        {tab === "reviews" && (
+          <div style={{ background: "#FFFFFF", padding: 28, borderRadius: 24, border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 16 }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Customer Product Reviews</h3>
+                  <span style={{ fontSize: 12, fontWeight: 800, background: "#FEF3C7", color: "#D97706", border: "1px solid #FDE68A", padding: "2px 10px", borderRadius: 999 }}>
+                    ⭐ {reviews.length} total
+                  </span>
+                </div>
+                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>
+                  Manage customer submitted ratings, feedback, and verified buyer reviews.
+                </p>
+              </div>
+
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <input
+                  type="text"
+                  placeholder="🔍 Search reviews, customer, or product ID..."
+                  value={reviewSearch}
+                  onChange={(e) => setReviewSearch(e.target.value)}
+                  style={{
+                    padding: "9px 16px",
+                    borderRadius: 12,
+                    border: "1px solid #EAE3D9",
+                    fontSize: 13,
+                    outline: "none",
+                    width: 280,
+                    background: "#FAF7F2",
+                  }}
+                />
+                <button
+                  onClick={fetchReviews}
+                  style={{
+                    background: "#FAF7F2",
+                    border: "1px solid #EAE3D9",
+                    borderRadius: 12,
+                    padding: "9px 16px",
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    color: "#23201D",
+                  }}
+                >
+                  🔄 Refresh
+                </button>
+              </div>
+            </div>
+
+            {loadingReviews ? (
+              <div style={{ padding: 40, textAlign: "center", color: "#9C968D" }}>Loading customer reviews...</div>
+            ) : reviews.length === 0 ? (
+              <div style={{ padding: "48px 24px", textAlign: "center", background: "#FAF7F2", borderRadius: 20, border: "1px dashed #EAE3D9" }}>
+                <div style={{ fontSize: 40, marginBottom: 12, opacity: 0.4 }}>⭐</div>
+                <h4 style={{ fontSize: 16, fontWeight: 800, color: "#23201D" }}>No customer reviews found</h4>
+                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>When customers write reviews on products, they will appear here live.</p>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {reviews
+                  .filter((r) => {
+                    if (!reviewSearch.trim()) return true;
+                    const q = reviewSearch.toLowerCase();
+                    return (
+                      (r.title && r.title.toLowerCase().includes(q)) ||
+                      (r.comment && r.comment.toLowerCase().includes(q)) ||
+                      (r.userName && r.userName.toLowerCase().includes(q)) ||
+                      (r.userEmail && r.userEmail.toLowerCase().includes(q)) ||
+                      (r.productId && r.productId.toLowerCase().includes(q))
+                    );
+                  })
+                  .map((rev) => {
+                    const prod = products.find((p) => p.id === rev.productId);
+                    const dateStr = rev.createdAt ? new Date(rev.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent";
+                    return (
+                      <div
+                        key={rev.id || rev._id}
+                        style={{
+                          border: "1px solid #EAE3D9",
+                          borderRadius: 18,
+                          padding: 20,
+                          background: "#FAF7F2",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 12,
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
+                          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+                            {prod?.images?.[0] ? (
+                              <img
+                                src={prod.images[0]}
+                                alt={prod.name}
+                                style={{ width: 48, height: 48, borderRadius: 12, objectFit: "cover", border: "1px solid #EAE3D9" }}
+                              />
+                            ) : (
+                              <div
+                                style={{
+                                  width: 48,
+                                  height: 48,
+                                  borderRadius: 12,
+                                  background: "#EAE3D9",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  fontSize: 20,
+                                }}
+                              >
+                                📓
+                              </div>
+                            )}
+                            <div>
+                              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                <span style={{ fontSize: 14, color: "#F59E0B", fontWeight: 800 }}>
+                                  {"★".repeat(Math.min(5, Math.max(1, rev.rating)))}{"☆".repeat(5 - Math.min(5, Math.max(1, rev.rating)))}
+                                </span>
+                                <span style={{ fontSize: 12, fontWeight: 800, color: "#23201D" }}>
+                                  {rev.rating}.0
+                                </span>
+                                {rev.verifiedPurchase && (
+                                  <span
+                                    style={{
+                                      fontSize: 10.5,
+                                      fontWeight: 800,
+                                      color: "#16A34A",
+                                      background: "rgba(22,163,74,0.12)",
+                                      border: "1px solid rgba(22,163,74,0.3)",
+                                      padding: "1px 8px",
+                                      borderRadius: 999,
+                                    }}
+                                  >
+                                    ✓ Verified Purchase
+                                  </span>
+                                )}
+                              </div>
+                              <h4 style={{ fontSize: 15, fontWeight: 800, color: "#23201D", margin: "4px 0 0" }}>
+                                {prod ? prod.name : `Product #${rev.productId}`}
+                              </h4>
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={() => handleDeleteReview(rev.id || rev._id, rev.title)}
+                            style={{
+                              background: "#FDF2F2",
+                              color: "#DC2626",
+                              border: "1px solid #F8B4B4",
+                              padding: "6px 14px",
+                              borderRadius: 10,
+                              fontSize: 12,
+                              fontWeight: 700,
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                            }}
+                          >
+                            🗑️ Delete Review
+                          </button>
+                        </div>
+
+                        <div style={{ background: "#FFFFFF", padding: 14, borderRadius: 12, border: "1px solid #EAE3D9" }}>
+                          <h5 style={{ fontSize: 14, fontWeight: 700, color: "#23201D", margin: "0 0 4px" }}>
+                            "{rev.title}"
+                          </h5>
+                          <p style={{ fontSize: 13, color: "#6E6A63", margin: 0, lineHeight: 1.5 }}>
+                            {rev.comment}
+                          </p>
+                        </div>
+
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, color: "#9C968D" }}>
+                          <span>
+                            By <strong style={{ color: "#23201D" }}>{rev.userName || "Verified Buyer"}</strong> ({rev.userEmail || "No email provided"})
+                          </span>
+                          <span>{dateStr}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ADD PRODUCT MODAL */}

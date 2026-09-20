@@ -59,6 +59,7 @@ const safeLower = (v) => safeStr(v).toLowerCase();
 
 // In-memory fallback stores
 let productsListMemory = Array.isArray(PRODUCTS) ? [...PRODUCTS] : [];
+let reviewsListMemory = Array.isArray(REVIEWS) ? [...REVIEWS] : [];
 const tokensStore = new Map([
   ["token_admin_demo", "user-admin-1"],
   ["token_cust_demo", "user-cust-1"],
@@ -900,6 +901,7 @@ app.post("/api/products/:id/reviews", async (req, res) => {
       title: cleanTitle,
       comment: cleanComment,
       verifiedPurchase: true,
+      createdAt: new Date().toISOString(),
     };
 
     let newReview = reviewData;
@@ -914,11 +916,70 @@ app.post("/api/products/:id/reviews", async (req, res) => {
       await Product.findOneAndUpdate({ id: productId }, { rating: avgRating, reviewCount });
     }
 
+    reviewsListMemory.unshift(newReview);
+
     console.log(`[Review Submitted] Product: ${productId}, Rating: ${numRating}★ by ${cleanName}`);
     res.status(201).json({ success: true, review: newReview, message: "Thank you for reviewing!" });
   } catch (err) {
     console.error("[Submit Review Error]", err);
     res.status(500).json({ error: "Failed to submit product review" });
+  }
+});
+
+// Fetch All Customer Reviews (Admin Dashboard)
+app.get("/api/reviews", async (req, res) => {
+  try {
+    let reviews = [];
+    if (mongoose.connection.readyState === 1) {
+      reviews = await Review.find().sort({ createdAt: -1 }).lean();
+      if (reviews.length === 0 && reviewsListMemory.length > 0) {
+        reviews = reviewsListMemory;
+      }
+    } else {
+      reviews = reviewsListMemory;
+    }
+    res.json({ success: true, reviews, count: reviews.length });
+  } catch (err) {
+    console.error("[Get Reviews Error]", err);
+    res.status(500).json({ error: "Failed to fetch reviews" });
+  }
+});
+
+// Fetch Reviews for a Specific Product
+app.get("/api/products/:id/reviews", async (req, res) => {
+  try {
+    const { id } = req.params;
+    let reviews = [];
+    if (mongoose.connection.readyState === 1) {
+      reviews = await Review.find({ productId: id }).sort({ createdAt: -1 }).lean();
+      if (reviews.length === 0) {
+        reviews = reviewsListMemory.filter((r) => r.productId === id);
+      }
+    } else {
+      reviews = reviewsListMemory.filter((r) => r.productId === id);
+    }
+    res.json({ success: true, reviews, count: reviews.length });
+  } catch (err) {
+    console.error("[Get Product Reviews Error]", err);
+    res.status(500).json({ error: "Failed to fetch product reviews" });
+  }
+});
+
+// Delete Review (Admin Portal)
+app.delete("/api/reviews/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (mongoose.connection.readyState === 1) {
+      const deleted = await Review.findOneAndDelete({ id });
+      if (!deleted) {
+        await Review.findByIdAndDelete(id).catch(() => null);
+      }
+    }
+    reviewsListMemory = reviewsListMemory.filter((r) => r.id !== id && String(r._id) !== id);
+    res.json({ success: true, message: "Review deleted successfully" });
+  } catch (err) {
+    console.error("[Delete Review Error]", err);
+    res.status(500).json({ error: "Failed to delete review" });
   }
 });
 
