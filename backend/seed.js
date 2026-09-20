@@ -6,6 +6,7 @@ import { Product } from "./models/Product.js";
 import { Order } from "./models/Order.js";
 import { User } from "./models/User.js";
 import { PromoCode } from "./models/PromoCode.js";
+import { logger } from "./config/logger.js";
 
 dotenv.config();
 
@@ -54,35 +55,34 @@ const initialPromoCodes = [
 
 async function seedData() {
   if (!MONGODB_URI) {
-    console.error("❌ MONGODB_URI is not set in backend/.env file");
+    logger.error("❌ MONGODB_URI is not set in backend/.env file");
     process.exit(1);
   }
 
   try {
-    console.log("📡 Connecting to MongoDB Atlas...");
+    logger.info("📡 Connecting to MongoDB Atlas...");
     await mongoose.connect(MONGODB_URI);
-    console.log("🟢 Connected successfully to MongoDB Atlas!");
+    logger.info("🟢 Connected successfully to MongoDB Atlas!");
 
-    console.log("🧹 Clearing old data...");
+    logger.info("🧹 Clearing old data...");
     await Product.deleteMany({});
     await User.deleteMany({});
     await Order.deleteMany({});
     await PromoCode.deleteMany({});
 
-    console.log(`🌱 Inserting ${PRODUCTS.length} products into collection 'products'...`);
+    logger.info(`🌱 Inserting ${PRODUCTS.length} products into collection 'products'...`);
     await Product.insertMany(PRODUCTS);
 
-    console.log("👤 Inserting default user accounts into collection 'users'...");
+    logger.info("👤 Inserting default user accounts into collection 'users'...");
     await User.insertMany(initialUsers);
 
-    console.log("🎟️ Inserting promo codes into collection 'promocodes'...");
+    logger.info("🎟️ Inserting promo codes into collection 'promocodes'...");
     await PromoCode.insertMany(initialPromoCodes);
 
-    console.log("✨ SUCCESS! Catalog, users, and promo codes are now stored in MongoDB Atlas!");
+    logger.info("✨ SUCCESS! Catalog, users, and promo codes are now stored in MongoDB Atlas!");
     process.exit(0);
   } catch (err) {
-    console.error("❌ Seeding Error:", err.message);
-    console.error("\n💡 SOLUTION: Make sure your IP address is whitelisted in MongoDB Atlas under 'Network Access' -> 'Add IP Address' -> 'Allow Access from Anywhere (0.0.0.0/0)'");
+    logger.error("❌ Seeding Error:", err.message);
     process.exit(1);
   }
 }
