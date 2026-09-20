@@ -64,7 +64,7 @@ export const loginUser = async (req, res) => {
     return res.status(401).json({ error: "Invalid email or password" });
   }
 
-  const isPasswordMatch = await bcrypt.compare(cleanPass, user.password).catch(() => false) || user.password === cleanPass;
+  const isPasswordMatch = await bcrypt.compare(cleanPass, user.password).catch(() => false);
   if (!isPasswordMatch) {
     return res.status(401).json({ error: "Invalid email or password" });
   }
@@ -122,7 +122,7 @@ export const updateProfile = async (req, res) => {
       return res.status(400).json({ error: "Current password is required to set a new password" });
     }
 
-    const isCurrentValid = await bcrypt.compare(cleanCurrent, user.password).catch(() => false) || user.password === cleanCurrent;
+    const isCurrentValid = await bcrypt.compare(cleanCurrent, user.password).catch(() => false);
     if (!isCurrentValid) {
       return res.status(400).json({ error: "Incorrect current password" });
     }
