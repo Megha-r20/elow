@@ -160,8 +160,30 @@ export const getOrderById = async (req, res) => {
 // @route   GET /api/admin/orders
 // @access  Private/Admin
 export const getAllOrders = async (req, res) => {
-  const orders = await Order.find({}).sort({ createdAt: -1 }).lean();
-  res.json({ orders });
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limitParam = req.query.limit !== undefined ? parseInt(req.query.limit, 10) : null;
+
+  const total = await Order.countDocuments({});
+
+  let ordersQuery = Order.find({}).sort({ createdAt: -1 });
+  let totalPages = 1;
+
+  if (limitParam && limitParam > 0) {
+    const limit = limitParam;
+    const skip = (page - 1) * limit;
+    ordersQuery = ordersQuery.skip(skip).limit(limit);
+    totalPages = Math.ceil(total / limit) || 1;
+  }
+
+  const orders = await ordersQuery.lean();
+
+  res.json({
+    orders,
+    count: orders.length,
+    total,
+    page,
+    totalPages,
+  });
 };
 
 // @desc    Update order status (Admin)

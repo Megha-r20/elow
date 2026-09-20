@@ -9,11 +9,13 @@ import {
   deleteSingleOrder,
 } from "../controllers/orderController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
+import { validate } from "../middleware/validationMiddleware.js";
+import { createOrderSchema } from "../middleware/schemas.js";
 
 const router = express.Router();
 
 // User routes
-router.post("/orders", protect, createOrder);
+router.post("/orders", protect, validate(createOrderSchema), createOrder);
 router.get("/orders/my-orders", protect, getMyOrders);
 router.get("/orders/:id", protect, getOrderById);
 

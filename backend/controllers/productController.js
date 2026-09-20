@@ -77,7 +77,27 @@ export const getProducts = async (req, res) => {
       break;
   }
 
-  res.json({ products: list, count: list.length });
+  const total = list.length;
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limitParam = req.query.limit !== undefined ? parseInt(req.query.limit, 10) : null;
+
+  let paginatedProducts = list;
+  let totalPages = 1;
+
+  if (limitParam && limitParam > 0) {
+    const limit = limitParam;
+    const skip = (page - 1) * limit;
+    paginatedProducts = list.slice(skip, skip + limit);
+    totalPages = Math.ceil(total / limit) || 1;
+  }
+
+  res.json({
+    products: paginatedProducts,
+    count: paginatedProducts.length,
+    total,
+    page,
+    totalPages,
+  });
 };
 
 // @desc    Get single product details
