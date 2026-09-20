@@ -36,7 +36,7 @@ export default function Layout() {
     }, [location.pathname, location.search]);
 
     useEffect(() => {
-        if (location.pathname.startsWith("/admin")) return;
+        if (isAdmin || location.pathname.startsWith("/admin")) return;
         const hasSpun = localStorage.getItem("spinWonPrize");
         if (!hasSpun) {
             const timer = setTimeout(() => {
@@ -44,7 +44,7 @@ export default function Layout() {
             }, 2500);
             return () => clearTimeout(timer);
         }
-    }, [location.pathname]);
+    }, [location.pathname, isAdmin]);
     const isActive = (path) => {
         const [p, q] = path.split("?");
         if (location.pathname !== p && !location.pathname.startsWith(p + "/"))
@@ -349,8 +349,8 @@ export default function Layout() {
       {/* Auth Modal */}
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)}/>
 
-      {/* Spin & Win Promo Modal (Hidden on Admin Portal) */}
-      {!location.pathname.startsWith("/admin") && (
+      {/* Spin & Win Promo Modal (Hidden for Admin users & Admin Portal) */}
+      {!isAdmin && !location.pathname.startsWith("/admin") && (
         <>
           <SpinWheelModal isOpen={spinModalOpen} onClose={() => setSpinModalOpen(false)}/>
           <SpinLauncher onClick={() => setSpinModalOpen(true)}/>
