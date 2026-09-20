@@ -1,189 +1,248 @@
 # ☁️ elow — stationery • lifestyle • little joys
 
-[![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![JavaScript](https://img.shields.io/badge/Language-JavaScript%2FJSX-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express-REST_API-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![Live Store](https://img.shields.io/badge/Live_Store-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://elow-store.vercel.app/)
+[![Backend API](https://img.shields.io/badge/Backend_API-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://elow.onrender.com)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB_Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/cloud/atlas)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-An aesthetic, full-stack e-commerce application inspired by Pinterest design principles. Built with **React (JavaScript / JSX)**, **Vite**, **Tailwind CSS**, and a **Node.js / Express** REST API backend.
-
----
-
-## ✨ Features
-
-### 🛍️ Storefront & Shopping Experience
-* **Pinterest-Inspired Aesthetic**: Soft pastel sage green (`#5E8C77`), warm cream (`#FAF7F2`), glassmorphism floating navbar, and subtle micro-interactions.
-* **Category-Matched Product Imagery**: 150 curated stationery items with category-accurate visuals (Journals, Pens & Writing Tools, Washi Tape & Stickers, Desk Organization, Art Supplies, Gift Bundles).
-* **Tactile Card Glow Effect**: Custom interactive background glow on `:hover` and `:active` click events across all product cards and category chips.
-* **Multi-Faceted Search & Filter System**: Real-time category filtering, price slider range selection, in-stock toggle, search query matching, and price sorting.
-* **Slide-Out Cart & Checkout**: Interactive cart drawer with item counter, dynamic subtotal calculation, discount coupon support (`ELOW10` for 10% off), and checkout flow.
-
-### 👤 User Account & Profile Settings
-* **Dedicated Profile Settings (`/settings`)**: Update personal details including Full Name, Phone Number, Short Bio, Avatar URL, and Default Shipping Address with instant backend REST API synchronization.
-* **Account Modal**: Access order history with itemized breakdowns, tracking updates, and saved delivery addresses.
-
-### ⚡ Admin Portal (`/admin`)
-* **Store Analytics Dashboard**: Real-time overview of total revenue, order count, total products, and low-stock alerts.
-* **Full Product Inventory Management**:
-  * **Add New Product**: Form modal with image preview, category selector, pricing, and stock assignment.
-  * **Edit Existing Product**: Live editor (`PUT /api/admin/products/:id`) allowing instant updates to title, description, category, price, stock levels, and imagery.
-  * **Delete Product**: One-click removal of discontinued items.
-* **Order Management**: Monitor customer orders and toggle fulfillment statuses.
+> **Live Deployment Links:**  
+> 🌐 **Frontend Storefront (Vercel):** [https://elow-store.vercel.app/](https://elow-store.vercel.app/)  
+> ⚡ **Backend REST API (Render):** [https://elow.onrender.com](https://elow.onrender.com)
 
 ---
 
-## 🛠️ Tech Stack
+## 📖 Overview
 
-| Layer | Technology |
-| :--- | :--- |
-| **Frontend Framework** | React 19 (JavaScript / JSX) |
-| **Build Tooling** | Vite 8 + ESNext |
-| **Routing** | React Router v7 |
-| **Styling & Icons** | Tailwind CSS v4 + Vanilla CSS Tokens + Lucide React Icons |
-| **Backend Environment** | Node.js + Express.js REST API |
-| **Middleware** | CORS, Express JSON Body Parser, Defensive Error Handling |
-| **State Management** | React Context API (`AuthContext`, `CartContext`) + LocalStorage |
+**elow** is a full-stack e-commerce application for curated stationery, lifestyle items, and desk accessories. Built with a **React 19** storefront and a secure **Node.js / Express / MongoDB Atlas** backend REST API, **elow** provides a seamless shopping experience for customers and a comprehensive management portal for administrators.
+
+Key production features include **Bcrypt password hashing**, **JWT session authentication**, **Role-Based Access Control (RBAC)**, **server-side financial calculations & inventory control**, **Stripe payment status verification**, **Admin review moderation**, **Helmet security headers**, **Express rate limiting**, and **React Error Boundaries**.
 
 ---
 
-## 📁 Clean Project Structure
+## 🔑 Demo Credentials
+
+Test the live store or local environment using these pre-seeded accounts:
+
+| Role | Email | Password | Access Privileges |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@elow.com` | `Admin123!` | Full access to `/admin` dashboard, product CRUD, review moderation & order management |
+| **Customer** | `customer@elow.com` | `Customer123!` | Storefront browsing, review submission, server-side checkout, order history & account settings (`/settings`) |
+
+---
+
+## ✨ Key Features
+
+### 🛍️ Customer Experience
+- **Aesthetic Pinterest Design**: Soft pastel palette, glassmorphism navigation, dynamic responsive layout, and tactile hover animations.
+- **Product Search & Filtering**: Real-time category filtering, search queries, price range slider, in-stock toggle, and paginated product catalog (`/api/products`).
+- **Product Reviews & Ratings**: Customers can write product reviews. Reviews undergo Admin moderation before being featured on customer product pages.
+- **Persistent Authenticated Sessions**: Automatic JWT token persistence using `localStorage` and request authorization header injection (`Authorization: Bearer <jwt>`).
+- **Server-Side Checkout & Pricing**: Subtotal, promo code discounts (e.g. `ELOW10`), shipping fees, and final totals are strictly computed on the server from MongoDB database prices to prevent client-side price tampering.
+- **Stripe Integration & Inventory Control**: Verifies Stripe payment status before confirming orders and automatically decrements stock levels upon checkout completion.
+- **Error Boundaries & Resiliency**: Built-in React Error Boundaries and robust backend middleware prevent application crashes under heavy concurrent usage.
+
+### 🛡️ Admin Portal (`/admin`)
+- **Real-Time Analytics Dashboard**: Displays revenue, order counts, product inventory stats, and stock alerts.
+- **Product Catalog Management**: Full CRUD operations for products (Create, Read, Update, Delete) with image URLs, category tags, price, and stock counts.
+- **Review Moderation**: Moderation workflow with **Accept** or **Delete** options. Accepted reviews are immediately published to the customer-facing storefront under the corresponding product.
+- **Store Order Fulfillment**: Track customer orders, inspect order items, view payment status, and manage fulfillment states.
+
+---
+
+## 🛠️ Architecture & Tech Stack
+
+```
+                     ┌─────────────────────────────────────────┐
+                     │          Vercel Frontend (React)        │
+                     │  - React 19 + Vite + React Router v7   │
+                     │  - Tailwind CSS v4 + Lucide Icons       │
+                     │  - Error Boundaries & Auth Context     │
+                     └────────────────────┬────────────────────┘
+                                          │
+                                HTTP / JWT Bearer
+                                          │
+                     ┌────────────────────▼────────────────────┐
+                     │         Render Backend (Node/Express)   │
+                     │  - Express REST Routes & Controllers   │
+                     │  - Bcrypt Password Hashing + JWT Auth   │
+                     │  - Server-side Financial Calculations   │
+                     │  - Stripe Payment Status Verification   │
+                     │  - Helmet + Rate Limiter Security      │
+                     └────────────────────┬────────────────────┘
+                                          │
+                                   Mongoose ODM
+                                          │
+                     ┌────────────────────▼────────────────────┐
+                     │      MongoDB Atlas Database Cluster     │
+                     │  - Users, Products, Orders, Reviews     │
+                     │  - Promos & Inventory Stock Control     │
+                     └─────────────────────────────────────────┘
+```
+
+| Component | Technology | Description |
+| :--- | :--- | :--- |
+| **Frontend Framework** | **React 19** | Modern UI framework with JSX & React Router v7 |
+| **Build & Tooling** | **Vite 8** | High-performance build setup and ESNext bundle execution |
+| **Styling** | **Tailwind CSS v4** | Utility-first responsive CSS styling and custom color tokens |
+| **Backend API** | **Node.js + Express** | Modular MVC backend (`routes/`, `controllers/`, `middleware/`, `config/`) |
+| **Database** | **MongoDB Atlas / Mongoose** | Cloud NoSQL database with Mongoose schema modeling |
+| **Authentication & Security** | **JWT + BcryptJS** | Signed JSON Web Tokens, hashed passwords, Helmet security headers, CORS protection |
+| **Payment Processing** | **Stripe API** | Payment status verification and server-controlled checkout |
+| **Testing Suite** | **Vitest + Supertest** | Automated integration tests running with `mongodb-memory-server` |
+
+---
+
+## 🖼️ Application Previews
+
+### Storefront & Catalog
+![Storefront Banner](frontend/public/banner-bg.png)
+
+### Brand Identity & UI Design
+![Elow Logo](frontend/public/logo.png)
+
+---
+
+## 📁 Repository Structure
 
 ```
 elow/
-├── backend/
-│   ├── data/
-│   │   └── products.js        # Seed catalog data (150 stationery items)
-│   ├── server.js              # Express REST API & admin endpoints
-│   └── package.json           # Backend dependencies
+├── backend/                    # Express REST API Server
+│   ├── config/                 # Database (db.js) and Logger configuration
+│   ├── controllers/            # Controller logic (auth, product, order, review)
+│   ├── data/                   # Seed catalog & pre-hashed user credentials
+│   ├── middleware/             # protect (JWT verification), admin (RBAC), errorMiddleware
+│   ├── models/                 # Mongoose Schemas (User, Product, Order, Review, Promo)
+│   ├── routes/                 # REST Route definitions
+│   ├── tests/                  # Integration tests (Vitest, Supertest, mongodb-memory-server)
+│   ├── app.js                  # Express app setup & route middleware registration
+│   ├── server.js               # Server entry point & DB connection initialization
+│   ├── seed.js                 # Database seed script
+│   └── .env.example            # Backend environment variable template
 │
-├── frontend/
-│   ├── public/
-│   │   └── logo.png           # Original elow brand logo
+├── frontend/                   # React 19 Frontend Application
+│   ├── public/                 # Static assets (logos, banners, product images)
 │   ├── src/
-│   │   ├── components/        # UI components (Layout, Modals, Cards, Cart)
-│   │   │   ├── AccountModal.jsx
-│   │   │   ├── AuthModal.jsx
-│   │   │   ├── CartDrawer.jsx
-│   │   │   ├── Layout.jsx
-│   │   │   ├── ProductCard.jsx
-│   │   │   └── ui.jsx
-│   │   ├── context/           # React Context state management
-│   │   │   ├── AuthContext.jsx
-│   │   │   └── index.jsx
-│   │   ├── data/              # Frontend product models & image maps
-│   │   │   └── index.js
-│   │   ├── hooks/             # Custom React hooks
-│   │   │   └── index.js
-│   │   ├── pages/             # Application pages
-│   │   │   ├── AdminDashboard.jsx
-│   │   │   ├── Cart.jsx
-│   │   │   ├── Checkout.jsx
-│   │   │   ├── Home.jsx
-│   │   │   ├── OrderConfirmation.jsx
-│   │   │   ├── ProductDetail.jsx
-│   │   │   ├── Settings.jsx
-│   │   │   └── Shop.jsx
-│   │   ├── App.jsx            # Application root
-│   │   ├── index.css          # Design system tokens & animations
-│   │   ├── main.jsx           # React entry point
-│   │   └── routes.jsx         # Client-side router definition
-│   ├── index.html             # HTML template
-│   ├── vite.config.js         # Vite dev server configuration & API proxy
-│   └── package.json           # Frontend dependencies
+│   │   ├── components/         # UI Components, Error Boundaries, Drawers, Modals
+│   │   ├── context/            # React Auth & Cart Context Providers
+│   │   ├── pages/              # Home, Shop, ProductDetail, Cart, Checkout, Admin, Settings
+│   │   ├── App.jsx             # Root App component with Error Boundary wrapper
+│   │   └── main.jsx            # React entry point
+│   ├── vercel.json             # Vercel SPA Routing Configuration
+│   └── .env.example            # Frontend environment variable template
 │
-├── .gitignore                 # Git ignore rules
-├── package.json               # Root monorepo workspace scripts
-└── README.md                  # Project documentation
+├── LICENSE                     # MIT Open Source License
+├── package.json                # Root Monorepo workspace configuration
+└── README.md                   # Project Documentation
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Local Development Setup
 
-### Prerequisites
-* **Node.js**: `v18.0.0` or higher
-* **npm**: `v9.0.0` or higher
+### 1. Prerequisites
+- **Node.js** v18.0.0 or higher
+- **MongoDB Atlas** cluster connection string (or local MongoDB)
 
-### 1. Clone the Repository
+### 2. Clone Repository
 ```bash
 git clone https://github.com/Megha-r20/elow.git
 cd elow
 ```
 
-### 2. Install Dependencies
-You can install dependencies for both `backend` and `frontend` using the root monorepo script:
+### 3. Install Dependencies
 ```bash
+# Install root, backend, and frontend dependencies
 npm run install:all
 ```
 
-Or install manually:
-```bash
-cd backend && npm install
-cd ../frontend && npm install
+### 4. Configure Environment Variables
+Copy the `.env.example` templates in both `backend` and `frontend`:
+
+**Backend (`backend/.env`):**
+```ini
+PORT=5005
+NODE_ENV=development
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/elow?retryWrites=true&w=majority
+JWT_SECRET=your_jwt_secret_key_here
+STRIPE_SECRET_KEY=sk_test_...
+FRONTEND_URL=http://localhost:5173
 ```
 
-### 3. Run Development Servers
+**Frontend (`frontend/.env`):**
+```ini
+VITE_API_URL=http://localhost:5005
+```
 
-#### Running Backend (`http://localhost:5005`)
+### 5. Seed the Database
 ```bash
-# Option A: From project root
-npm run dev:backend
-
-# Option B: Inside backend folder
 cd backend
-node server.js
+npm run seed
 ```
 
-#### Running Frontend (`http://127.0.0.1:5173`)
-In a second terminal window:
+### 6. Start Development Servers
 ```bash
-# Option A: From project root
-npm run dev:frontend
+# Terminal 1 (Backend - http://localhost:5005)
+cd backend && npm run dev
 
-# Option B: Inside frontend folder
-cd frontend
-npm run dev
+# Terminal 2 (Frontend - http://localhost:5173)
+cd frontend && npm run dev
 ```
 
 ---
 
-## 🔌 API Endpoints Reference
+## 🧪 Automated Testing
 
-### Public / Storefront
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/products` | Retrieve all 150 products |
-| `GET` | `/api/products/:id` | Retrieve single product details |
-| `POST` | `/api/auth/login` | Authenticate user or admin account |
-| `POST` | `/api/auth/register` | Register new customer account |
-| `PATCH` | `/api/auth/profile` | Update authenticated user profile |
+The backend includes comprehensive integration tests powered by **Vitest**, **Supertest**, and **mongodb-memory-server**:
 
-### Orders
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `POST` | `/api/orders` | Submit new order |
-| `GET` | `/api/orders/my-orders` | Fetch orders for current user |
+```bash
+cd backend
+npm test
+```
 
-### Admin Operations
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `POST` | `/api/admin/products` | Create new product |
-| `PUT` | `/api/admin/products/:id` | Edit existing product details |
-| `DELETE` | `/api/admin/products/:id` | Delete product from store |
-| `GET` | `/api/admin/orders` | Fetch all store orders |
+### Verified Test Suites:
+- 🔐 **Authentication & RBAC**: Register success/failure, bcrypt hashing, login success/failure, 401 Unauthorized for missing tokens, and 403 Forbidden for non-admin requests to `/api/admin/*`.
+- 🛍️ **Orders & Inventory**: Server-calculated subtotal, discount, shipping, and total calculations, user ID linking, and automatic DB stock reduction upon order creation.
+- 🏷️ **Promo Code Validation**: Server-side promo code verification and rejection of invalid codes (400 Bad Request).
 
 ---
 
-## 🔐 Demo Credentials
+## 🔌 REST API Reference
 
-| Role | Email | Password | Access |
+### Auth & User Management
+| Method | Endpoint | Protection | Description |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@elow.com` | `admin123` | Full access to `/admin` dashboard & product editor |
-| **User** | `user@elow.com` | `user123` | Access to storefront, cart, orders, and `/settings` |
+| `POST` | `/api/auth/register` | Public | Register new user (password hashed with bcrypt) |
+| `POST` | `/api/auth/login` | Public (Rate Limited) | Authenticate user and issue signed JWT |
+| `GET` | `/api/auth/profile` | `protect` | Fetch current user profile |
+| `PATCH` | `/api/auth/profile` | `protect` | Update profile information |
+
+### Products & Reviews
+| Method | Endpoint | Protection | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/products` | Public | Fetch paginated products with category/price filters |
+| `GET` | `/api/products/:id` | Public | Fetch single product details and accepted reviews |
+| `POST` | `/api/products/:id/reviews` | `protect` | Submit a product review (queued for moderation) |
+
+### Orders & Payments
+| Method | Endpoint | Protection | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/orders` | `protect` | Create order with server-calculated totals & stock reduction |
+| `GET` | `/api/orders/my-orders` | `protect` | Retrieve authenticated user's order history |
+| `GET` | `/api/orders/:id` | `protect` | Retrieve specific order details |
+
+### Admin Moderation & Management
+| Method | Endpoint | Protection | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/admin/products` | `protect`, `admin` | Create new product |
+| `PUT` | `/api/admin/products/:id` | `protect`, `admin` | Update product details and inventory |
+| `DELETE` | `/api/admin/products/:id` | `protect`, `admin` | Delete product from catalog |
+| `GET` | `/api/admin/orders` | `protect`, `admin` | Retrieve all customer orders |
+| `GET` | `/api/admin/reviews` | `protect`, `admin` | Retrieve pending reviews for moderation |
+| `PATCH` | `/api/admin/reviews/:id/approve` | `protect`, `admin` | Accept review and display on product page |
+| `DELETE` | `/api/admin/reviews/:id` | `protect`, `admin` | Delete rejected review |
 
 ---
 
 ## 📄 License
-This project is open source and available under the [MIT License](LICENSE).
+
+This project is licensed under the [MIT License](LICENSE).
