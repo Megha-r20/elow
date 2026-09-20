@@ -92,16 +92,6 @@ Test the live store or local environment using these pre-seeded accounts:
 
 ---
 
-## 🖼️ Application Previews
-
-### Storefront & Catalog
-![Storefront Banner](frontend/public/banner-bg.png)
-
-### Brand Identity & UI Design
-![Elow Logo](frontend/public/logo.png)
-
----
-
 ## 📁 Repository Structure
 
 ```
