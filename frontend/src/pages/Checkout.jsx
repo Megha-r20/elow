@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useCart, useToast } from "../hooks";
+import { useAuth } from "../context/AuthContext";
 import { StepBar, Breadcrumb, Icons, Divider } from "../components/ui";
 import { getApiUrl } from "../api/config";
 const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4" };
@@ -24,6 +25,7 @@ export default function Checkout() {
     const navigate = useNavigate();
     const { items, subtotal, discount, promoCode, applyPromo, removePromo, clearCart, saveOrder } = useCart();
     const { addToast } = useToast();
+    const { token } = useAuth();
     const [step, setStep] = useState(0);
     const [form, setForm] = useState(INIT_FORM);
     const [errors, setErrors] = useState({});
@@ -121,9 +123,11 @@ export default function Checkout() {
             };
             let finalOrder = null;
             try {
+                const reqHeaders = { "Content-Type": "application/json" };
+                if (token) reqHeaders["Authorization"] = `Bearer ${token}`;
                 const res = await fetch(getApiUrl("/api/orders"), {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: reqHeaders,
                     body: JSON.stringify(orderPayload),
                 });
                 if (res.ok) {
