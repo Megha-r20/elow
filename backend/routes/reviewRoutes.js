@@ -12,8 +12,8 @@ import { submitReviewSchema, updateReviewStatusSchema } from "../middleware/sche
 
 const router = express.Router();
 
-// Public review routes
-router.post("/products/:id/reviews", validate(submitReviewSchema), submitReview);
+// Public & Customer review routes
+router.post("/products/:id/reviews", protect, validate(submitReviewSchema), submitReview);
 router.get("/products/:id/reviews", getProductReviews);
 
 // Admin review moderation routes

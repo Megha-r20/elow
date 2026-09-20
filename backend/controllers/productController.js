@@ -115,7 +115,7 @@ export const getProductById = async (req, res) => {
     .limit(4)
     .lean();
 
-  const reviews = await Review.find({ productId: product.id }).sort({ createdAt: -1 }).lean();
+  const reviews = await Review.find({ productId: product.id, status: "approved" }).sort({ createdAt: -1 }).lean();
 
   res.json({ product, reviews, related });
 };

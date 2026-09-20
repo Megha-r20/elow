@@ -4,6 +4,7 @@ const reviewSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true, index: true },
     productId: { type: String, required: true, index: true },
+    userId: { type: String, index: true },
     orderId: { type: String },
     userName: { type: String, default: "Verified Buyer" },
     userEmail: { type: String, index: true },

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useToast } from "../hooks";
+import { useAuth } from "../context/AuthContext";
 import { getApiUrl } from "../api/config";
 
 export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
   const { addToast } = useToast();
+  const { authFetch } = useAuth();
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [title, setTitle] = useState("");
@@ -28,7 +30,7 @@ export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
     setSubmitting(true);
 
     try {
-      const res = await fetch(getApiUrl(`/api/products/${product.id}/reviews`), {
+      const res = await authFetch(getApiUrl(`/api/products/${product.id}/reviews`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -36,7 +38,6 @@ export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
           title: title.trim(),
           comment: comment.trim(),
           userName: user?.name || "Verified Customer",
-          userEmail: user?.email || "",
           orderId,
         }),
       });
