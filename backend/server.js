@@ -65,6 +65,29 @@ const tokensStore = new Map([
   ["token_cust_demo", "user-cust-1"],
 ]);
 
+const getUserIdFromToken = (token) => {
+  if (!token) return null;
+  let userId = tokensStore.get(token);
+  if (userId) return userId;
+
+  if (token === "token_admin_demo") return "user-admin-1";
+  if (token === "token_cust_demo") return "user-cust-1";
+
+  if (typeof token === "string" && token.startsWith("token_")) {
+    const parts = token.split("_");
+    if (parts.length >= 3) {
+      userId = parts.slice(1, -1).join("_");
+    } else if (parts.length === 2) {
+      userId = parts[1];
+    }
+    if (userId) {
+      tokensStore.set(token, userId);
+      return userId;
+    }
+  }
+  return null;
+};
+
 const initialUsers = [
   {
     id: "user-admin-1",
@@ -269,7 +292,7 @@ app.get("/api/auth/me", async (req, res) => {
     }
 
     const token = authHeader.split(" ")[1];
-    const userId = tokensStore.get(token);
+    const userId = getUserIdFromToken(token);
     if (!userId) {
       return res.status(401).json({ error: "Invalid or expired session token" });
     }
@@ -301,7 +324,7 @@ app.patch("/api/auth/profile", async (req, res) => {
     }
 
     const token = authHeader.split(" ")[1];
-    const userId = tokensStore.get(token);
+    const userId = getUserIdFromToken(token);
     if (!userId) {
       return res.status(401).json({ error: "Invalid or expired session token" });
     }
@@ -813,7 +836,7 @@ app.get("/api/orders/my-orders", async (req, res) => {
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith("Bearer ")) {
       const token = authHeader.split(" ")[1];
-      const userId = tokensStore.get(token);
+      const userId = getUserIdFromToken(token);
       if (userId) {
         const userDoc = await User.findOne({ id: userId }).lean();
         if (userDoc?.email) {

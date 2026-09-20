@@ -2,7 +2,14 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 import { getApiUrl } from "../api/config";
 const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        try {
+            const saved = localStorage.getItem("elow_user");
+            return saved ? JSON.parse(saved) : null;
+        } catch {
+            return null;
+        }
+    });
     const [token, setToken] = useState(() => {
         try {
             return localStorage.getItem("elow_token");
@@ -17,6 +24,7 @@ export function AuthProvider({ children }) {
         async function fetchMe() {
             if (!token) {
                 setUser(null);
+                localStorage.removeItem("elow_user");
                 setLoading(false);
                 return;
             }
@@ -29,16 +37,19 @@ export function AuthProvider({ children }) {
                 if (res.ok) {
                     const data = await res.json();
                     setUser(data.user);
+                    localStorage.setItem("elow_user", JSON.stringify(data.user));
                 }
-                else {
-                    // Token invalid or expired
+                else if (res.status === 401) {
+                    // Token explicitly rejected by backend
                     localStorage.removeItem("elow_token");
+                    localStorage.removeItem("elow_user");
                     setToken(null);
                     setUser(null);
                 }
             }
             catch (err) {
                 console.error("Failed to fetch user auth state:", err);
+                // Retain localStorage user session on network delay/error
             }
             finally {
                 setLoading(false);
@@ -62,6 +73,7 @@ export function AuthProvider({ children }) {
                 return { success: false, error: data.error || "Login failed" };
             }
             localStorage.setItem("elow_token", data.token);
+            localStorage.setItem("elow_user", JSON.stringify(data.user));
             setToken(data.token);
             setUser(data.user);
             return { success: true };
@@ -86,6 +98,7 @@ export function AuthProvider({ children }) {
                 return { success: false, error: data.error || "Registration failed" };
             }
             localStorage.setItem("elow_token", data.token);
+            localStorage.setItem("elow_user", JSON.stringify(data.user));
             setToken(data.token);
             setUser(data.user);
             return { success: true };
@@ -111,6 +124,7 @@ export function AuthProvider({ children }) {
                 return { success: false, error: resData.error || "Failed to update profile" };
             }
             setUser(resData.user);
+            localStorage.setItem("elow_user", JSON.stringify(resData.user));
             return { success: true };
         }
         catch (err) {
@@ -119,6 +133,7 @@ export function AuthProvider({ children }) {
     }, [token]);
     const logout = useCallback(() => {
         localStorage.removeItem("elow_token");
+        localStorage.removeItem("elow_user");
         setToken(null);
         setUser(null);
     }, []);
