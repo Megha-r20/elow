@@ -57,8 +57,8 @@ export const createOrderSchema = z.object({
             id: z.string().min(1, "Product ID is required"),
           }).passthrough().optional(),
           productId: z.string().optional(),
-          qty: z.number().positive("Quantity must be greater than 0").optional(),
-          quantity: z.number().positive("Quantity must be greater than 0").optional(),
+          qty: z.number().int("Quantity must be a positive integer").positive("Quantity must be greater than 0").optional(),
+          quantity: z.number().int("Quantity must be a positive integer").positive("Quantity must be greater than 0").optional(),
         })
       )
       .min(1, "Cart must contain at least one item"),

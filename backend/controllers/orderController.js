@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
+import { PromoCode } from "../models/PromoCode.js";
 import { calculatePromoDiscount } from "./paymentController.js";
 import { logger } from "../config/logger.js";
 
@@ -12,7 +13,7 @@ const safeLower = (v) => safeStr(v).toLowerCase();
 // @route   POST /api/orders
 // @access  Private
 export const createOrder = async (req, res) => {
-  const { id, items, deliveryAddress, payMethod, promoCode, giftWrap, stripePaymentIntentId } = req.body || {};
+  const { items, deliveryAddress, payMethod, promoCode, giftWrap, stripePaymentIntentId } = req.body || {};
 
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: "Cart items are required" });
@@ -27,10 +28,15 @@ export const createOrder = async (req, res) => {
   let serverSubtotal = 0;
   const sanitizedItems = [];
 
-  // Verify DB prices and stock
+  // Verify DB prices and strictly validate quantity
   for (const item of items) {
     const prodId = item.product?.id || item.productId || item.id;
-    const qty = Math.max(1, Number(item.qty || item.quantity || 1));
+    const rawQty = item.qty !== undefined ? item.qty : item.quantity;
+    if (rawQty === undefined || typeof rawQty !== "number" || !Number.isInteger(rawQty) || rawQty <= 0) {
+      return res.status(400).json({ error: "Item quantity must be a positive integer" });
+    }
+    const qty = rawQty;
+
     const dbProduct = dbProducts.find((p) => p.id === prodId);
 
     if (!dbProduct) {
@@ -102,7 +108,44 @@ export const createOrder = async (req, res) => {
     paymentStatus = "Demo Payment (Pending)";
   }
 
-  const orderId = safeStr(id) || `US-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+  // Atomic Stock Reservation (prevents concurrent overselling)
+  const reservedProducts = [];
+  try {
+    for (const item of sanitizedItems) {
+      const prodId = item.product.id;
+      const qty = item.qty;
+
+      const updatedProd = await Product.findOneAndUpdate(
+        { id: prodId, stockCount: { $gte: qty }, inStock: { $ne: false } },
+        { $inc: { stockCount: -qty } },
+        { new: true }
+      );
+
+      if (!updatedProd) {
+        // Rollback previously reserved items in this order
+        for (const resItem of reservedProducts) {
+          await Product.findOneAndUpdate({ id: resItem.id }, { $inc: { stockCount: resItem.qty }, $set: { inStock: true } });
+        }
+        return res.status(400).json({
+          error: `Product "${item.product.name}" is out of stock or has insufficient quantity.`,
+        });
+      }
+
+      if (updatedProd.stockCount === 0) {
+        await Product.findOneAndUpdate({ id: prodId }, { $set: { inStock: false } });
+      }
+
+      reservedProducts.push({ id: prodId, qty });
+    }
+  } catch (err) {
+    for (const resItem of reservedProducts) {
+      await Product.findOneAndUpdate({ id: resItem.id }, { $inc: { stockCount: resItem.qty }, $set: { inStock: true } });
+    }
+    throw err;
+  }
+
+  // Ignore client-sent order ID to prevent duplicate key collisions
+  const orderId = `US-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
   const orderData = {
     id: orderId,
@@ -122,18 +165,24 @@ export const createOrder = async (req, res) => {
     date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
   };
 
-  const newOrder = await Order.create(orderData);
-
-  // Decrement stock count
-  for (const item of sanitizedItems) {
-    const prod = await Product.findOne({ id: item.product.id });
-    if (prod) {
-      prod.stockCount = Math.max(0, (prod.stockCount ?? 10) - item.qty);
-      if (prod.stockCount === 0) {
-        prod.inStock = false;
-      }
-      await prod.save();
+  let newOrder;
+  try {
+    newOrder = await Order.create(orderData);
+  } catch (err) {
+    // Rollback reserved stock if order creation fails
+    for (const resItem of reservedProducts) {
+      await Product.findOneAndUpdate({ id: resItem.id }, { $inc: { stockCount: resItem.qty }, $set: { inStock: true } });
     }
+    throw err;
+  }
+
+  // Mark single-use promo code as used
+  if (orderData.promoCode) {
+    const cleanCode = safeStr(orderData.promoCode).toUpperCase();
+    await PromoCode.findOneAndUpdate(
+      { code: cleanCode, isSingleUse: true },
+      { $set: { isUsed: true, isActive: false, usedBy: req.user.id } }
+    );
   }
 
   logger.info(`[Order Created] ID: ${orderId}, User: ${req.user.id}, Total: ₹${serverTotal}`);
@@ -275,17 +324,15 @@ export const cancelOrder = async (req, res) => {
   order.paymentStatus = "Cancelled";
   await order.save();
 
-  // Restore inventory stock count
+  // Restore inventory stock count atomically
   for (const item of order.items || []) {
     const prodId = item.product?.id;
     const qty = Number(item.qty || 1);
     if (prodId) {
-      const prod = await Product.findOne({ id: prodId });
-      if (prod) {
-        prod.stockCount = (prod.stockCount ?? 10) + qty;
-        prod.inStock = true;
-        await prod.save();
-      }
+      await Product.findOneAndUpdate(
+        { id: prodId },
+        { $inc: { stockCount: qty }, $set: { inStock: true } }
+      );
     }
   }
 

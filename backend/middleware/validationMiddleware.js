@@ -9,8 +9,9 @@ export const validate = (schema) => (req, res, next) => {
     });
     next();
   } catch (err) {
-    if (err.errors) {
-      const messages = err.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ");
+    const issues = err.issues || err.errors;
+    if (issues && issues.length > 0) {
+      const messages = issues.map((e) => `${e.path ? e.path.join(".") : "field"}: ${e.message}`).join(", ");
       logger.warn(`[Validation Failed] ${req.method} ${req.originalUrl} - ${messages}`);
       return res.status(400).json({ error: `Validation error: ${messages}` });
     }

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useCart, useToast, useDrawer } from "../hooks";
+import { getApiUrl } from "../api/config";
 
 const SECTORS = [
   { label: "₹50 OFF", code: "SPIN50", bg: "#8192D4", color: "#FAF7F2" },
@@ -40,7 +41,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleSpin = (e) => {
+  const handleSpin = async (e) => {
     e.preventDefault();
     if (isSpinning) return;
 
@@ -60,8 +61,36 @@ export function SpinWheelModal({ isOpen, onClose }) {
     setErrorMsg("");
     setIsSpinning(true);
 
-    const winningOptions = [0, 1, 3, 4, 5];
-    const winningIndex = winningOptions[Math.floor(Math.random() * winningOptions.length)];
+    let prize;
+    let winningIndex = 0;
+
+    try {
+      const response = await fetch(getApiUrl("/api/promo/spin"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone }),
+      });
+      const data = await response.json();
+
+      if (response.ok && data) {
+        winningIndex = data.sectorIndex !== undefined ? data.sectorIndex : 0;
+        const baseSector = SECTORS[winningIndex] || SECTORS[0];
+        prize = {
+          label: data.label || baseSector.label,
+          code: data.code,
+          bg: baseSector.bg,
+          color: baseSector.color,
+        };
+      } else {
+        const winningOptions = [0, 1, 3, 4, 5];
+        winningIndex = winningOptions[Math.floor(Math.random() * winningOptions.length)];
+        prize = SECTORS[winningIndex];
+      }
+    } catch (err) {
+      const winningOptions = [0, 1, 3, 4, 5];
+      winningIndex = winningOptions[Math.floor(Math.random() * winningOptions.length)];
+      prize = SECTORS[winningIndex];
+    }
 
     const numSectors = SECTORS.length;
     const sectorAngle = 360 / numSectors;
@@ -78,7 +107,6 @@ export function SpinWheelModal({ isOpen, onClose }) {
 
     setTimeout(() => {
       setIsSpinning(false);
-      const prize = SECTORS[winningIndex];
       setWonPrize(prize);
       setHasSpun(true);
       localStorage.setItem("spinWonPrize", JSON.stringify(prize));

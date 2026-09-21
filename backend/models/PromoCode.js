@@ -9,6 +9,9 @@ const promoCodeSchema = new mongoose.Schema(
     maxDiscount: { type: Number },
     isActive: { type: Boolean, default: true, index: true },
     expiryDate: { type: Date },
+    isSingleUse: { type: Boolean, default: false },
+    isUsed: { type: Boolean, default: false },
+    usedBy: { type: String },
   },
   { timestamps: true }
 );
