@@ -193,7 +193,7 @@ export function AdminDashboard() {
     const fetchProducts = async () => {
         setLoadingProducts(true);
         try {
-            const res = await fetch(getApiUrl("/api/products"));
+            const res = await fetch(getApiUrl("/api/products?limit=all"));
             if (res.ok) {
                 const data = await res.json();
                 setProducts(data.products || []);
