@@ -156,4 +156,13 @@ describe("Auth & RBAC Integration Tests", () => {
     expect(validRes.body.success).toBe(true);
     expect(validRes.body.user.name).toBe("Profile Updated");
   });
+
+  it("should reject requests exceeding 10kb body payload limit", async () => {
+    const hugePayload = "x".repeat(11 * 1024); // 11KB string payload
+    const res = await request(app)
+      .post("/api/auth/login")
+      .send({ email: "test@example.com", password: hugePayload });
+
+    expect(res.status).toBe(413); // Payload Too Large
+  });
 });

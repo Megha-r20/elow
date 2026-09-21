@@ -6,6 +6,8 @@ import helmet from "helmet";
 import mongoose from "mongoose";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import { globalLimiter } from "./middleware/rateLimiter.js";
+import { mongoSanitizeMiddleware } from "./middleware/mongoSanitize.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -45,7 +47,12 @@ app.use(
   })
 );
 
-app.use(express.json());
+// Payload size limit & NoSQL input sanitization
+app.use(express.json({ limit: "10kb" }));
+app.use(mongoSanitizeMiddleware);
+
+// Global API Rate Limiter
+app.use("/api", globalLimiter);
 
 // Root API Welcome Endpoint
 app.get("/", (req, res) => {
