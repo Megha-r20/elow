@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { TrendingUp, ShoppingBag, PieChart, ArrowUpRight, BarChart2 } from "lucide-react";
+import { getApiUrl } from "../../api/config";
 
 export function AdminOverview({ orders = [], products = [], setTab, getStatusBadgeStyle, token }) {
   const [analytics, setAnalytics] = useState(null);
@@ -9,7 +10,7 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
     let isMounted = true;
     const fetchAnalytics = async () => {
       try {
-        const res = await fetch("/api/admin/analytics", {
+        const res = await fetch(getApiUrl("/api/admin/analytics"), {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         if (res.ok) {

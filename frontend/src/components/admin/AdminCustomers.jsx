@@ -1,5 +1,16 @@
 import { useState, useEffect } from "react";
 import { Users, Search, Shield, User, RefreshCw, ShoppingBag, DollarSign } from "lucide-react";
+import { getApiUrl } from "../../api/config";
+
+const T = {
+  border: "#EAE3D9",
+  txt: "#23201D",
+  muted: "#6E6A63",
+  light: "#9C968D",
+  sand: "#F4EFE6",
+  cream: "#FAF7F2",
+  teal: "#8192D4",
+};
 
 export default function AdminCustomers({ token, showToast }) {
   const [customers, setCustomers] = useState([]);
@@ -11,7 +22,7 @@ export default function AdminCustomers({ token, showToast }) {
     setLoading(true);
     try {
       const q = query.trim() ? `?q=${encodeURIComponent(query.trim())}` : "";
-      const res = await fetch(`/api/admin/users${q}`, {
+      const res = await fetch(getApiUrl(`/api/admin/users${q}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -40,7 +51,7 @@ export default function AdminCustomers({ token, showToast }) {
 
     setUpdatingId(customer.id || customer._id);
     try {
-      const res = await fetch(`/api/admin/users/${customer.id || customer._id}/role`, {
+      const res = await fetch(getApiUrl(`/api/admin/users/${customer.id || customer._id}/role`), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -63,112 +74,189 @@ export default function AdminCustomers({ token, showToast }) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-warm-grey-200 shadow-sm">
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Banner */}
+      <div
+        style={{
+          background: "#FFFFFF",
+          borderRadius: 24,
+          padding: "20px 24px",
+          border: `1px solid ${T.border}`,
+          boxShadow: "0 4px 20px rgba(35, 32, 29, 0.04)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
         <div>
-          <h2 className="text-xl font-serif text-charcoal font-semibold flex items-center gap-2">
-            <Users className="w-5 h-5 text-soft-lavender-600" /> Customer Directory
+          <h2 style={{ fontSize: 20, fontWeight: 800, color: T.txt, display: "flex", alignItems: "center", gap: 8 }}>
+            <Users style={{ width: 20, height: 20, color: T.teal }} /> Customer Directory
           </h2>
-          <p className="text-sm text-dusty-taupe font-sans mt-0.5">
+          <p style={{ fontSize: 13, color: T.muted, marginTop: 4 }}>
             View registered user profiles, purchase history, total spending, and role privileges.
           </p>
         </div>
         <button
           onClick={() => fetchCustomers(search)}
-          className="p-2.5 text-dusty-taupe hover:text-charcoal border border-warm-grey-200 rounded-xl hover:bg-cream-100 transition-all"
+          className="icon-btn"
+          style={{ background: T.sand, borderRadius: 12, padding: 10, border: "none", cursor: "pointer" }}
           title="Refresh"
         >
-          <RefreshCw className="w-4 h-4" />
+          <RefreshCw style={{ width: 16, height: 16, color: T.txt }} />
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-warm-grey-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-warm-grey-100 bg-cream-50/50">
-          <div className="relative max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-dusty-taupe" />
+      {/* Directory Table Card */}
+      <div
+        style={{
+          background: "#FFFFFF",
+          borderRadius: 24,
+          border: `1px solid ${T.border}`,
+          boxShadow: "0 8px 30px rgba(35, 32, 29, 0.04)",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ padding: 16, borderBottom: `1px solid ${T.border}`, background: T.cream }}>
+          <div style={{ position: "relative", maxWidth: 440 }}>
+            <Search style={{ width: 16, height: 16, position: "absolute", left: 12, top: 12, color: T.light }} />
             <input
               type="text"
               placeholder="Search customers by name, email, or phone..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-warm-grey-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-soft-lavender-400"
+              className="field field-sm"
+              style={{ width: "100%", paddingLeft: 36, boxSizing: "border-box" }}
             />
           </div>
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-dusty-taupe text-sm">Loading customer directory...</div>
+          <div style={{ padding: 48, textAlign: "center", color: T.muted, fontSize: 14 }}>
+            Loading customer directory...
+          </div>
         ) : customers.length === 0 ? (
-          <div className="p-12 text-center text-dusty-taupe text-sm">No customers found matching search query.</div>
+          <div style={{ padding: 48, textAlign: "center", color: T.muted, fontSize: 14 }}>
+            No customers found matching search query.
+          </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-charcoal">
-              <thead className="bg-warm-grey-50 text-xs uppercase tracking-wider text-dusty-taupe border-b border-warm-grey-200">
-                <tr>
-                  <th className="px-6 py-3 font-semibold">Customer</th>
-                  <th className="px-6 py-3 font-semibold">Contact Info</th>
-                  <th className="px-6 py-3 font-semibold">Orders</th>
-                  <th className="px-6 py-3 font-semibold">Total Spent</th>
-                  <th className="px-6 py-3 font-semibold">Role</th>
-                  <th className="px-6 py-3 font-semibold text-right">Actions</th>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 13 }}>
+              <thead>
+                <tr style={{ background: T.cream, borderBottom: `1px solid ${T.border}`, color: T.muted }}>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>CUSTOMER</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>JOINED</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>ORDERS</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>TOTAL SPENT</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>ROLE</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700, textAlign: "right" }}>ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-warm-grey-100">
-                {customers.map((user) => {
-                  const uid = user.id || user._id;
-                  const isUpdating = updatingId === uid;
+              <tbody>
+                {customers.map((c) => {
+                  const isAdmin = c.role === "admin";
                   return (
-                    <tr key={uid} className="hover:bg-cream-50/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-soft-lavender-100 text-soft-lavender-700 font-bold flex items-center justify-center text-sm border border-soft-lavender-200">
-                            {user.avatar ? (
-                              <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
-                            ) : (
-                              (user.name || user.email || "U").charAt(0).toUpperCase()
-                            )}
+                    <tr key={c.id || c._id} style={{ borderBottom: `1px solid ${T.border}` }}>
+                      <td style={{ padding: "14px 20px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                          <div
+                            style={{
+                              width: 40,
+                              height: 40,
+                              borderRadius: "50%",
+                              background: isAdmin ? "rgba(129, 146, 212, 0.2)" : T.sand,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              color: isAdmin ? T.teal : T.txt,
+                              fontWeight: 800,
+                              fontSize: 14,
+                            }}
+                          >
+                            {c.name ? c.name.charAt(0).toUpperCase() : "U"}
                           </div>
                           <div>
-                            <span className="font-medium text-charcoal block">{user.name || "Customer"}</span>
-                            <span className="text-xs text-dusty-taupe">Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "—"}</span>
+                            <p style={{ fontWeight: 700, color: T.txt, margin: 0 }}>{c.name || "Customer User"}</p>
+                            <p style={{ fontSize: 11, color: T.light, margin: "2px 0 0" }}>{c.email}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-xs">
-                        <div className="font-mono text-charcoal">{user.email}</div>
-                        {user.phone && <div className="text-dusty-taupe mt-0.5">{user.phone}</div>}
+                      <td style={{ padding: "14px 20px", color: T.muted }}>
+                        {c.createdAt
+                          ? new Date(c.createdAt).toLocaleDateString("en-IN", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })
+                          : "Recently"}
                       </td>
-                      <td className="px-6 py-4 font-medium text-charcoal">
-                        <div className="flex items-center gap-1.5 text-xs text-charcoal">
-                          <ShoppingBag className="w-3.5 h-3.5 text-dusty-taupe" />
-                          <span>{user.orderCount || 0} orders</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 font-semibold text-emerald-700">
-                        <div className="flex items-center gap-1 text-xs">
-                          <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>₹{(user.totalSpent || 0).toLocaleString("en-IN")}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
+                      <td style={{ padding: "14px 20px" }}>
                         <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${
-                            user.role === "admin"
-                              ? "bg-purple-100 text-purple-700 border border-purple-200"
-                              : "bg-warm-grey-100 text-dusty-taupe border border-warm-grey-200"
-                          }`}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 4,
+                            fontWeight: 700,
+                            color: T.txt,
+                          }}
                         >
-                          {user.role === "admin" ? <Shield className="w-3 h-3 text-purple-600" /> : <User className="w-3 h-3" />}
-                          {user.role === "admin" ? "Admin" : "Customer"}
+                          <ShoppingBag style={{ width: 14, height: 14, color: T.teal }} />
+                          {c.totalOrders ?? 0}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <button
-                          onClick={() => handleRoleToggle(user)}
-                          disabled={isUpdating}
-                          className="px-3 py-1.5 text-xs font-medium rounded-lg border border-warm-grey-200 text-dusty-taupe hover:text-charcoal hover:bg-cream-100 disabled:opacity-50 transition-colors"
+                      <td style={{ padding: "14px 20px" }}>
+                        <span
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 4,
+                            fontWeight: 700,
+                            color: "#276749",
+                          }}
                         >
-                          {isUpdating ? "Updating..." : user.role === "admin" ? "Demote to User" : "Make Admin"}
+                          <DollarSign style={{ width: 14, height: 14 }} />
+                          ₹{(c.totalSpent ?? 0).toLocaleString("en-IN")}
+                        </span>
+                      </td>
+                      <td style={{ padding: "14px 20px" }}>
+                        <span
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 4,
+                            padding: "4px 10px",
+                            borderRadius: 999,
+                            fontSize: 11,
+                            fontWeight: 700,
+                            background: isAdmin ? "rgba(129, 146, 212, 0.15)" : T.sand,
+                            color: isAdmin ? T.teal : T.muted,
+                          }}
+                        >
+                          {isAdmin ? <Shield style={{ width: 12, height: 12 }} /> : <User style={{ width: 12, height: 12 }} />}
+                          {isAdmin ? "Admin" : "Customer"}
+                        </span>
+                      </td>
+                      <td style={{ padding: "14px 20px", textAlign: "right" }}>
+                        <button
+                          onClick={() => handleRoleToggle(c)}
+                          disabled={updatingId === (c.id || c._id)}
+                          className="btn btn-sm"
+                          style={{
+                            background: isAdmin ? T.sand : T.teal,
+                            color: isAdmin ? T.txt : "#FFFFFF",
+                            borderRadius: 8,
+                            padding: "6px 12px",
+                            fontSize: 11,
+                            border: "none",
+                            cursor: updatingId === (c.id || c._id) ? "wait" : "pointer",
+                          }}
+                        >
+                          {updatingId === (c.id || c._id)
+                            ? "Updating..."
+                            : isAdmin
+                            ? "Demote to User"
+                            : "Promote to Admin"}
                         </button>
                       </td>
                     </tr>

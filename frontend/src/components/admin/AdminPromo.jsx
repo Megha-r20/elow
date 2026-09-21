@@ -1,5 +1,16 @@
 import { useState, useEffect } from "react";
-import { Ticket, Plus, Search, Trash2, Check, X, RefreshCw, Calendar, Sparkles } from "lucide-react";
+import { Ticket, Plus, Search, Trash2, Check, X, RefreshCw } from "lucide-react";
+import { getApiUrl } from "../../api/config";
+
+const T = {
+  border: "#EAE3D9",
+  txt: "#23201D",
+  muted: "#6E6A63",
+  light: "#9C968D",
+  sand: "#F4EFE6",
+  cream: "#FAF7F2",
+  teal: "#8192D4",
+};
 
 export default function AdminPromo({ token, showToast }) {
   const [promos, setPromos] = useState([]);
@@ -20,7 +31,7 @@ export default function AdminPromo({ token, showToast }) {
   const fetchPromos = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/promo", {
+      const res = await fetch(getApiUrl("/api/admin/promo"), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -49,7 +60,7 @@ export default function AdminPromo({ token, showToast }) {
     setSubmitting(true);
 
     try {
-      const res = await fetch("/api/admin/promo", {
+      const res = await fetch(getApiUrl("/api/admin/promo"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +94,8 @@ export default function AdminPromo({ token, showToast }) {
 
   const handleToggleStatus = async (promo) => {
     try {
-      const res = await fetch(`/api/admin/promo/${promo._id || promo.id || promo.code}`, {
+      const promoId = promo._id || promo.id || promo.code;
+      const res = await fetch(getApiUrl(`/api/admin/promo/${promoId}`), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -99,15 +111,16 @@ export default function AdminPromo({ token, showToast }) {
         showToast(data.error || "Failed to update promo status", "error");
       }
     } catch (_err) {
-      showToast("Network error updating status", "error");
+      showToast("Network error updating promo code", "error");
     }
   };
 
-  const handleDelete = async (promoId, code) => {
-    if (!window.confirm(`Are you sure you want to delete promo code "${code}"?`)) return;
+  const handleDelete = async (promo) => {
+    const promoId = promo._id || promo.id || promo.code;
+    if (!window.confirm(`Delete promo code "${promo.code}"?`)) return;
 
     try {
-      const res = await fetch(`/api/admin/promo/${promoId}`, {
+      const res = await fetch(getApiUrl(`/api/admin/promo/${promoId}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -128,255 +141,367 @@ export default function AdminPromo({ token, showToast }) {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-warm-grey-200 shadow-sm">
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Banner */}
+      <div
+        style={{
+          background: "#FFFFFF",
+          borderRadius: 24,
+          padding: "20px 24px",
+          border: `1px solid ${T.border}`,
+          boxShadow: "0 4px 20px rgba(35, 32, 29, 0.04)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
         <div>
-          <h2 className="text-xl font-serif text-charcoal font-semibold flex items-center gap-2">
-            <Ticket className="w-5 h-5 text-soft-lavender-600" /> Promo Code Admin
+          <h2 style={{ fontSize: 20, fontWeight: 800, color: T.txt, display: "flex", alignItems: "center", gap: 8 }}>
+            <Ticket style={{ width: 20, height: 20, color: T.teal }} /> Promo Code Admin
           </h2>
-          <p className="text-sm text-dusty-taupe font-sans mt-0.5">
+          <p style={{ fontSize: 13, color: T.muted, marginTop: 4 }}>
             Create discount vouchers, spin-wheel promos, and set minimum order thresholds.
           </p>
         </div>
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <button
             onClick={fetchPromos}
-            className="p-2.5 text-dusty-taupe hover:text-charcoal border border-warm-grey-200 rounded-xl hover:bg-cream-100 transition-all"
+            className="icon-btn"
+            style={{ background: T.sand, borderRadius: 12, padding: 10, border: "none", cursor: "pointer" }}
             title="Refresh"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw style={{ width: 16, height: 16, color: T.txt }} />
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 bg-soft-lavender-600 text-white font-medium rounded-xl hover:bg-soft-lavender-700 transition-all shadow-sm text-sm"
+            className="btn"
+            style={{
+              background: T.teal,
+              color: "#FFFFFF",
+              padding: "10px 20px",
+              borderRadius: 12,
+              fontWeight: 700,
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
           >
-            <Plus className="w-4 h-4" /> Create Promo Code
+            <Plus style={{ width: 16, height: 16 }} /> Create Promo Code
           </button>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-warm-grey-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-warm-grey-100 bg-cream-50/50">
-          <div className="relative max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-dusty-taupe" />
+      {/* Main Table Card */}
+      <div
+        style={{
+          background: "#FFFFFF",
+          borderRadius: 24,
+          border: `1px solid ${T.border}`,
+          boxShadow: "0 8px 30px rgba(35, 32, 29, 0.04)",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ padding: 16, borderBottom: `1px solid ${T.border}`, background: T.cream }}>
+          <div style={{ position: "relative", maxWidth: 400 }}>
+            <Search style={{ width: 16, height: 16, position: "absolute", left: 12, top: 12, color: T.light }} />
             <input
               type="text"
               placeholder="Search by promo code..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-warm-grey-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-soft-lavender-400"
+              className="field field-sm"
+              style={{ width: "100%", paddingLeft: 36, boxSizing: "border-box" }}
             />
           </div>
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-dusty-taupe text-sm">Loading promo codes...</div>
+          <div style={{ padding: 48, textAlign: "center", color: T.muted, fontSize: 14 }}>
+            Loading promo codes...
+          </div>
         ) : filteredPromos.length === 0 ? (
-          <div className="p-12 text-center text-dusty-taupe text-sm">No promo codes found.</div>
+          <div style={{ padding: 48, textAlign: "center", color: T.muted, fontSize: 14 }}>
+            No promo codes found.
+          </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-charcoal">
-              <thead className="bg-warm-grey-50 text-xs uppercase tracking-wider text-dusty-taupe border-b border-warm-grey-200">
-                <tr>
-                  <th className="px-6 py-3 font-semibold">Code</th>
-                  <th className="px-6 py-3 font-semibold">Discount</th>
-                  <th className="px-6 py-3 font-semibold">Min Order</th>
-                  <th className="px-6 py-3 font-semibold">Expiry</th>
-                  <th className="px-6 py-3 font-semibold">Usage</th>
-                  <th className="px-6 py-3 font-semibold">Status</th>
-                  <th className="px-6 py-3 font-semibold text-right">Actions</th>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: 13 }}>
+              <thead>
+                <tr style={{ background: T.cream, borderBottom: `1px solid ${T.border}`, color: T.muted }}>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>PROMO CODE</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>DISCOUNT</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>MIN ORDER</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>EXPIRY</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>USAGE</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700 }}>STATUS</th>
+                  <th style={{ padding: "14px 20px", fontWeight: 700, textAlign: "right" }}>ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-warm-grey-100">
-                {filteredPromos.map((p) => {
-                  const isExpired = p.expiryDate && new Date() > new Date(p.expiryDate);
-                  return (
-                    <tr key={p._id || p.id || p.code} className="hover:bg-cream-50/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono font-bold text-soft-lavender-700 bg-soft-lavender-50 px-2.5 py-1 rounded-lg border border-soft-lavender-200">
-                            {p.code}
-                          </span>
-                          {p.code.startsWith("SPIN-") && (
-                            <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-semibold flex items-center gap-0.5">
-                              <Sparkles className="w-2.5 h-2.5" /> Spin
-                            </span>
-                          )}
+              <tbody>
+                {filteredPromos.map((p) => (
+                  <tr key={p._id || p.id || p.code} style={{ borderBottom: `1px solid ${T.border}` }}>
+                    <td style={{ padding: "14px 20px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <div
+                          style={{
+                            padding: "6px 12px",
+                            borderRadius: 8,
+                            background: T.sand,
+                            color: T.txt,
+                            fontWeight: 800,
+                            fontFamily: "monospace",
+                            fontSize: 13,
+                            letterSpacing: "0.5px",
+                          }}
+                        >
+                          {p.code}
                         </div>
-                      </td>
-                      <td className="px-6 py-4 font-semibold text-charcoal">
-                        {p.discountType === "percentage" ? `${p.discountValue}% OFF` : `₹${p.discountValue} OFF`}
-                        {p.maxDiscount ? <span className="text-xs text-dusty-taupe block font-normal">(Max ₹{p.maxDiscount})</span> : null}
-                      </td>
-                      <td className="px-6 py-4 text-xs text-dusty-taupe">
-                        {p.minOrderAmount ? `₹${p.minOrderAmount}` : "No min order"}
-                      </td>
-                      <td className="px-6 py-4 text-xs text-dusty-taupe">
-                        {p.expiryDate ? (
-                          <div className={`flex items-center gap-1 ${isExpired ? "text-rose-600 font-medium" : ""}`}>
-                            <Calendar className="w-3.5 h-3.5" />
-                            <span>{new Date(p.expiryDate).toLocaleDateString()}</span>
-                            {isExpired && <span className="text-[10px] bg-rose-100 text-rose-700 px-1 rounded">(Expired)</span>}
-                          </div>
-                        ) : (
-                          "Never"
+                        {p.isSingleUse && (
+                          <span style={{ fontSize: 10, color: T.teal, fontWeight: 700 }}>SINGLE USE</span>
                         )}
-                      </td>
-                      <td className="px-6 py-4 text-xs text-dusty-taupe">
-                        {p.isSingleUse ? (
-                          <span className={`px-2 py-0.5 rounded text-[11px] font-medium ${p.isUsed ? "bg-warm-grey-100 text-dusty-taupe" : "bg-blue-50 text-blue-700"}`}>
-                            {p.isUsed ? "Used (Single Use)" : "Single-Use"}
-                          </span>
-                        ) : (
-                          "Multi-Use"
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
+                      </div>
+                    </td>
+                    <td style={{ padding: "14px 20px", fontWeight: 700, color: T.txt }}>
+                      {p.discountType === "percentage" ? `${p.discountValue}% OFF` : `₹${p.discountValue} OFF`}
+                      {p.maxDiscount ? ` (Max ₹${p.maxDiscount})` : ""}
+                    </td>
+                    <td style={{ padding: "14px 20px", color: T.muted }}>
+                      {p.minOrderAmount ? `₹${p.minOrderAmount}` : "No min limit"}
+                    </td>
+                    <td style={{ padding: "14px 20px", color: T.muted }}>
+                      {p.expiryDate
+                        ? new Date(p.expiryDate).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "Never expires"}
+                    </td>
+                    <td style={{ padding: "14px 20px", color: T.muted }}>
+                      {p.usedCount ?? 0} Uses
+                    </td>
+                    <td style={{ padding: "14px 20px" }}>
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          padding: "4px 10px",
+                          borderRadius: 999,
+                          fontSize: 11,
+                          fontWeight: 700,
+                          background: p.isActive !== false ? "rgba(129, 146, 212, 0.15)" : T.sand,
+                          color: p.isActive !== false ? T.teal : T.muted,
+                        }}
+                      >
+                        {p.isActive !== false ? <Check style={{ width: 12, height: 12 }} /> : <X style={{ width: 12, height: 12 }} />}
+                        {p.isActive !== false ? "Active" : "Disabled"}
+                      </span>
+                    </td>
+                    <td style={{ padding: "14px 20px", textAlign: "right" }}>
+                      <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
                         <button
                           onClick={() => handleToggleStatus(p)}
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
-                            p.isActive !== false && !isExpired
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
-                              : "bg-warm-grey-100 text-dusty-taupe hover:bg-warm-grey-200"
-                          }`}
+                          className="btn btn-sm"
+                          style={{
+                            background: p.isActive !== false ? T.sand : T.teal,
+                            color: p.isActive !== false ? T.txt : "#FFFFFF",
+                            borderRadius: 8,
+                            padding: "4px 10px",
+                            fontSize: 11,
+                            border: "none",
+                            cursor: "pointer",
+                          }}
                         >
-                          {p.isActive !== false && !isExpired ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
-                          {p.isActive !== false && !isExpired ? "Active" : "Inactive"}
+                          {p.isActive !== false ? "Disable" : "Enable"}
                         </button>
-                      </td>
-                      <td className="px-6 py-4 text-right">
                         <button
-                          onClick={() => handleDelete(p._id || p.id || p.code, p.code)}
-                          className="p-1.5 text-dusty-taupe hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                          title="Delete"
+                          onClick={() => handleDelete(p)}
+                          className="icon-btn"
+                          style={{ background: "#FDEFEF", borderRadius: 8, padding: 6, border: "none", cursor: "pointer" }}
+                          title="Delete Promo"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 style={{ width: 15, height: 15, color: "#D97762" }} />
                         </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         )}
       </div>
 
+      {/* Create Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-warm-grey-200 shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-warm-grey-100">
-              <h3 className="text-lg font-serif font-semibold text-charcoal">Create New Promo Code</h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-dusty-taupe hover:text-charcoal">
-                <X className="w-5 h-5" />
+        <>
+          <div
+            onClick={() => setIsModalOpen(false)}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 800, backdropFilter: "blur(4px)" }}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            style={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 480,
+              maxWidth: "92vw",
+              maxHeight: "90vh",
+              background: "#FFFFFF",
+              zIndex: 850,
+              borderRadius: 24,
+              padding: 28,
+              overflowY: "auto",
+              border: `1px solid ${T.border}`,
+              boxShadow: "0 24px 64px rgba(35,32,29,0.25)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div>
+                <span style={{ fontSize: 11, fontWeight: 800, color: T.teal, letterSpacing: "1px" }}>DISCOUNT VOUCHER</span>
+                <h3 style={{ fontSize: 20, fontWeight: 800, color: T.txt }}>+ Create Promo Code</h3>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="icon-btn"
+                style={{ background: T.sand, borderRadius: "50%", width: 34, height: 34, border: "none", cursor: "pointer" }}
+              >
+                <X style={{ width: 16, height: 16 }} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
-                <label className="block text-xs font-medium text-charcoal mb-1">Promo Code *</label>
+                <label style={{ fontSize: 12, fontWeight: 700, color: T.txt, display: "block", marginBottom: 6 }}>
+                  PROMO CODE *
+                </label>
                 <input
                   type="text"
                   required
+                  placeholder="e.g. FESTIVE20"
                   value={form.code}
                   onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
-                  placeholder="e.g. WELCOME10"
-                  className="w-full px-3 py-2 text-sm uppercase border border-warm-grey-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-soft-lavender-400 font-mono"
+                  className="field field-sm"
+                  style={{ width: "100%", boxSizing: "border-box", fontFamily: "monospace" }}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                 <div>
-                  <label className="block text-xs font-medium text-charcoal mb-1">Discount Type</label>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: T.txt, display: "block", marginBottom: 6 }}>
+                    DISCOUNT TYPE
+                  </label>
                   <select
                     value={form.discountType}
                     onChange={(e) => setForm({ ...form, discountType: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-warm-grey-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-soft-lavender-400"
+                    className="field field-sm"
+                    style={{ width: "100%", boxSizing: "border-box" }}
                   >
                     <option value="percentage">Percentage (%)</option>
                     <option value="fixed">Fixed Amount (₹)</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-charcoal mb-1">Discount Value *</label>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: T.txt, display: "block", marginBottom: 6 }}>
+                    DISCOUNT VALUE *
+                  </label>
                   <input
                     type="number"
                     required
                     min="1"
+                    placeholder="15"
                     value={form.discountValue}
                     onChange={(e) => setForm({ ...form, discountValue: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-warm-grey-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-soft-lavender-400"
+                    className="field field-sm"
+                    style={{ width: "100%", boxSizing: "border-box" }}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                 <div>
-                  <label className="block text-xs font-medium text-charcoal mb-1">Min Order Amount (₹)</label>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: T.txt, display: "block", marginBottom: 6 }}>
+                    MIN ORDER AMOUNT (₹)
+                  </label>
                   <input
                     type="number"
                     min="0"
+                    placeholder="499"
                     value={form.minOrderAmount}
                     onChange={(e) => setForm({ ...form, minOrderAmount: e.target.value })}
-                    placeholder="0"
-                    className="w-full px-3 py-2 text-sm border border-warm-grey-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-soft-lavender-400"
+                    className="field field-sm"
+                    style={{ width: "100%", boxSizing: "border-box" }}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-charcoal mb-1">Max Discount Cap (₹)</label>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: T.txt, display: "block", marginBottom: 6 }}>
+                    MAX DISCOUNT CAP (₹)
+                  </label>
                   <input
                     type="number"
                     min="0"
+                    placeholder="200"
                     value={form.maxDiscount}
                     onChange={(e) => setForm({ ...form, maxDiscount: e.target.value })}
-                    placeholder="Optional"
-                    className="w-full px-3 py-2 text-sm border border-warm-grey-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-soft-lavender-400"
+                    className="field field-sm"
+                    style={{ width: "100%", boxSizing: "border-box" }}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-charcoal mb-1">Expiry Date</label>
+                <label style={{ fontSize: 12, fontWeight: 700, color: T.txt, display: "block", marginBottom: 6 }}>
+                  EXPIRY DATE
+                </label>
                 <input
                   type="date"
                   value={form.expiryDate}
                   onChange={(e) => setForm({ ...form, expiryDate: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-warm-grey-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-soft-lavender-400"
+                  className="field field-sm"
+                  style={{ width: "100%", boxSizing: "border-box" }}
                 />
               </div>
 
-              <div className="flex items-center gap-2 pt-2">
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
                 <input
                   type="checkbox"
                   id="isSingleUse"
                   checked={form.isSingleUse}
                   onChange={(e) => setForm({ ...form, isSingleUse: e.target.checked })}
-                  className="rounded border-warm-grey-300 text-soft-lavender-600 focus:ring-soft-lavender-400"
                 />
-                <label htmlFor="isSingleUse" className="text-sm text-charcoal font-medium">
-                  Single-Use Only (Deactivates after 1 use)
+                <label htmlFor="isSingleUse" style={{ fontSize: 12.5, fontWeight: 700, color: T.txt, cursor: "pointer" }}>
+                  Single-use voucher per customer
                 </label>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-warm-grey-100">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-dusty-taupe hover:text-charcoal"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-5 py-2 text-sm font-medium bg-soft-lavender-600 text-white rounded-xl hover:bg-soft-lavender-700 disabled:opacity-50 transition-all shadow-sm"
-                >
-                  {submitting ? "Creating..." : "Create Promo Code"}
-                </button>
-              </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="btn"
+                style={{
+                  background: T.teal,
+                  color: "#FFFFFF",
+                  padding: "14px",
+                  borderRadius: 12,
+                  fontWeight: 700,
+                  border: "none",
+                  marginTop: 12,
+                  cursor: submitting ? "wait" : "pointer",
+                }}
+              >
+                {submitting ? "Creating..." : "Save Promo Code"}
+              </button>
             </form>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

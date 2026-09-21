@@ -1,28 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { useToast, useDocumentTitle } from "../hooks";
+import { getApiUrl } from "../api/config";
 
-export function ResetPassword() {
+export default function ResetPassword() {
   useDocumentTitle("Reset Password");
-  const [searchParams] = useSearchParams();
+  const [params] = useSearchParams();
+  const token = params.get("token") || "";
   const { addToast } = useToast();
 
-  const token = searchParams.get("token") || "";
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    if (!token) {
-      setError("Invalid or missing password reset token. Please request a new link.");
-    }
-  }, [token]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newPassword || newPassword.length < 8) {
+    if (!token) {
+      setError("Invalid or missing reset token. Please request a new link.");
+      return;
+    }
+    if (newPassword.length < 8) {
       setError("Password must be at least 8 characters long.");
       return;
     }
@@ -35,7 +34,7 @@ export function ResetPassword() {
     setError(null);
 
     try {
-      const res = await fetch("/api/auth/reset-password", {
+      const res = await fetch(getApiUrl("/api/auth/reset-password"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, newPassword }),
@@ -134,4 +133,3 @@ export function ResetPassword() {
   );
 }
 
-export default ResetPassword;

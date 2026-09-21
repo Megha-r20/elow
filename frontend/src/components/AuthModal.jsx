@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../hooks";
 import { Icons } from "./ui";
+import { getApiUrl } from "../api/config";
 
 export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
   const { login, register } = useAuth();
@@ -24,7 +25,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
 
     if (mode === "forgot") {
       try {
-        const res = await fetch("/api/auth/forgot-password", {
+        const res = await fetch(getApiUrl("/api/auth/forgot-password"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
