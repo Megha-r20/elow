@@ -155,6 +155,8 @@ export const createOrder = async (req, res) => {
   // Ignore client-sent order ID to prevent duplicate key collisions
   const orderId = `US-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
+  const cleanIntentId = safeStr(stripePaymentIntentId);
+
   const orderData = {
     id: orderId,
     userId: req.user.id,
@@ -163,7 +165,7 @@ export const createOrder = async (req, res) => {
     payMethod: safeStr(payMethod) || "upi",
     promoCode: safeStr(promoCode),
     paymentStatus,
-    stripePaymentIntentId: safeStr(stripePaymentIntentId),
+    ...(cleanIntentId ? { stripePaymentIntentId: cleanIntentId } : {}),
     subtotal: serverSubtotal,
     discount: serverDiscount,
     shipping: serverShipping,

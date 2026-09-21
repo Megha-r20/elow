@@ -258,4 +258,56 @@ describe("Order & Stock Integration Tests", () => {
     expect(accessRes.status).toBe(403);
     expect(accessRes.body.error).toContain("Access denied");
   });
+
+  it("should allow placing multiple consecutive COD orders without sparse index duplicate key errors", async () => {
+    const userRes = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "Multi COD Buyer", email: "multicod@example.com", password: "password123" });
+
+    const token = userRes.body.token;
+
+    // Order 1 (COD)
+    const order1 = await request(app)
+      .post("/api/orders")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        items: [{ product: { id: "prod-test-notebook" }, qty: 1 }],
+        payMethod: "cod",
+        deliveryAddress: {
+          firstName: "Multi",
+          lastName: "COD",
+          email: "multicod@example.com",
+          phone: "9876543210",
+          address: "123 St",
+          city: "Mumbai",
+          pincode: "400001",
+        },
+      });
+
+    expect(order1.status).toBe(201);
+    expect(order1.body.order.paymentStatus).toBe("Pending (COD)");
+    expect(order1.body.order.stripePaymentIntentId).toBeUndefined();
+
+    // Order 2 (COD) - Must not fail with duplicate key E11000 on stripePaymentIntentId: ""
+    const order2 = await request(app)
+      .post("/api/orders")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        items: [{ product: { id: "prod-test-notebook" }, qty: 1 }],
+        payMethod: "cod",
+        deliveryAddress: {
+          firstName: "Multi",
+          lastName: "COD",
+          email: "multicod@example.com",
+          phone: "9876543210",
+          address: "123 St",
+          city: "Mumbai",
+          pincode: "400001",
+        },
+      });
+
+    expect(order2.status).toBe(201);
+    expect(order2.body.order.paymentStatus).toBe("Pending (COD)");
+    expect(order2.body.order.stripePaymentIntentId).toBeUndefined();
+  });
 });
