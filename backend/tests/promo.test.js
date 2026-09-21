@@ -67,16 +67,34 @@ describe("Promo Code Integration Tests", () => {
     expect(res.body.error).toContain("inactive");
   });
 
-  it("should issue a single-use spin promo code from POST /api/promo/spin", async () => {
+  it("should reject POST /api/promo/spin for unauthenticated visitors (401 Unauthorized)", async () => {
+    const res = await request(app)
+      .post("/api/promo/spin")
+      .send({ email: "guest@example.com" });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toContain("authorized");
+  });
+
+  it("should issue a single-use spin promo code with minimum order amount and enforce 1 spin per 24 hours", async () => {
+    const userRes = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "Spinner User", email: "spinner@example.com", password: "password123" });
+
+    const token = userRes.body.token;
+
+    // Spin 1: Succeeds
     const spinRes = await request(app)
       .post("/api/promo/spin")
-      .send({ email: "spinner@example.com" });
+      .set("Authorization", `Bearer ${token}`)
+      .send({ name: "Spinner User", email: "spinner@example.com" });
 
     expect(spinRes.status).toBe(200);
     expect(spinRes.body.sectorIndex).toBeDefined();
 
     if (spinRes.body.code !== "TRY_AGAIN") {
       expect(spinRes.body.code).toMatch(/^SPIN-/);
+      expect(spinRes.body.minOrderAmount).toBeGreaterThan(0);
 
       const validateRes = await request(app)
         .post("/api/promo/validate")
@@ -85,5 +103,14 @@ describe("Promo Code Integration Tests", () => {
       expect(validateRes.status).toBe(200);
       expect(validateRes.body.valid).toBe(true);
     }
+
+    // Spin 2 (Same User within 24 hours): Rejects with 400
+    const secondSpinRes = await request(app)
+      .post("/api/promo/spin")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ name: "Spinner User", email: "spinner@example.com" });
+
+    expect(secondSpinRes.status).toBe(400);
+    expect(secondSpinRes.body.error).toContain("already spun");
   });
 });

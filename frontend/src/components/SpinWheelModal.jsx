@@ -1,17 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import { useCart, useToast, useDrawer } from "../hooks";
+import { useAuth } from "../context/AuthContext";
 import { getApiUrl } from "../api/config";
 
 const SECTORS = [
-  { label: "₹50 OFF", code: "SPIN50", bg: "#8192D4", color: "#FAF7F2" },
-  { label: "₹100 OFF", code: "SPIN100", bg: "#F4EFE6", color: "#23201D" },
-  { label: "NO LUCK", code: "TRY_AGAIN", bg: "#5666AA", color: "#FAF7F2" },
-  { label: "₹150 OFF", code: "SPIN150", bg: "#D4A359", color: "#23201D" },
-  { label: "₹50 OFF", code: "SPIN50", bg: "#6C7CC1", color: "#FAF7F2" },
-  { label: "₹250 OFF", code: "SPIN250", bg: "#FAF7F2", color: "#8192D4" },
+  { label: "₹50 OFF", bg: "#8192D4", color: "#FAF7F2" },
+  { label: "₹100 OFF", bg: "#F4EFE6", color: "#23201D" },
+  { label: "NO LUCK", bg: "#5666AA", color: "#FAF7F2" },
+  { label: "₹150 OFF", bg: "#D4A359", color: "#23201D" },
+  { label: "₹50 OFF", bg: "#6C7CC1", color: "#FAF7F2" },
+  { label: "₹250 OFF", bg: "#FAF7F2", color: "#8192D4" },
 ];
 
 export function SpinWheelModal({ isOpen, onClose }) {
+  const { user, token, authFetch } = useAuth();
   const { applyPromo } = useCart();
   const { addToast } = useToast();
   const { openCart } = useDrawer();
@@ -27,17 +29,11 @@ export function SpinWheelModal({ isOpen, onClose }) {
   const [hasSpun, setHasSpun] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("spinWonPrize");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setWonPrize(parsed);
-        setHasSpun(true);
-      } catch (e) {
-        // ignore
-      }
+    if (user) {
+      if (user.name) setName(user.name);
+      if (user.email) setEmail(user.email);
     }
-  }, []);
+  }, [user]);
 
   if (!isOpen) return null;
 
@@ -45,16 +41,17 @@ export function SpinWheelModal({ isOpen, onClose }) {
     e.preventDefault();
     if (isSpinning) return;
 
+    if (!user || !token) {
+      setErrorMsg("You must be logged in to spin the wheel.");
+      return;
+    }
+
     if (!name.trim()) {
       setErrorMsg("Please enter your name");
       return;
     }
     if (!email.trim() || !email.includes("@")) {
       setErrorMsg("Please enter a valid email address");
-      return;
-    }
-    if (!phone.trim() || phone.length < 8) {
-      setErrorMsg("Please enter a valid phone number");
       return;
     }
 
@@ -65,31 +62,32 @@ export function SpinWheelModal({ isOpen, onClose }) {
     let winningIndex = 0;
 
     try {
-      const response = await fetch(getApiUrl("/api/promo/spin"), {
+      const response = await authFetch(getApiUrl("/api/promo/spin"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, phone }),
       });
       const data = await response.json();
 
-      if (response.ok && data) {
-        winningIndex = data.sectorIndex !== undefined ? data.sectorIndex : 0;
-        const baseSector = SECTORS[winningIndex] || SECTORS[0];
-        prize = {
-          label: data.label || baseSector.label,
-          code: data.code,
-          bg: baseSector.bg,
-          color: baseSector.color,
-        };
-      } else {
-        const winningOptions = [0, 1, 3, 4, 5];
-        winningIndex = winningOptions[Math.floor(Math.random() * winningOptions.length)];
-        prize = SECTORS[winningIndex];
+      if (!response.ok) {
+        setErrorMsg(data.error || "Failed to spin wheel");
+        setIsSpinning(false);
+        return;
       }
+
+      winningIndex = data.sectorIndex !== undefined ? data.sectorIndex : 0;
+      const baseSector = SECTORS[winningIndex] || SECTORS[0];
+      prize = {
+        label: data.label || baseSector.label,
+        code: data.code,
+        minOrderAmount: data.minOrderAmount,
+        bg: baseSector.bg,
+        color: baseSector.color,
+      };
     } catch (err) {
-      const winningOptions = [0, 1, 3, 4, 5];
-      winningIndex = winningOptions[Math.floor(Math.random() * winningOptions.length)];
-      prize = SECTORS[winningIndex];
+      setErrorMsg("Network error connecting to spin wheel server");
+      setIsSpinning(false);
+      return;
     }
 
     const numSectors = SECTORS.length;
@@ -109,7 +107,6 @@ export function SpinWheelModal({ isOpen, onClose }) {
       setIsSpinning(false);
       setWonPrize(prize);
       setHasSpun(true);
-      localStorage.setItem("spinWonPrize", JSON.stringify(prize));
       if (prize.code !== "TRY_AGAIN") {
         addToast(`🎉 Congratulations! You won ${prize.label}!`, "success");
       }
@@ -346,21 +343,28 @@ export function SpinWheelModal({ isOpen, onClose }) {
               </p>
 
               {wonPrize.code !== "TRY_AGAIN" && (
-                <div
-                  style={{
-                    background: "#F4EFE6",
-                    border: "2px dashed #8192D4",
-                    borderRadius: 14,
-                    padding: "12px",
-                    margin: "18px 0",
-                    fontSize: 20,
-                    fontWeight: 900,
-                    letterSpacing: "1.5px",
-                    color: "#23201D",
-                  }}
-                >
-                  {wonPrize.code}
-                </div>
+                <>
+                  <div
+                    style={{
+                      background: "#F4EFE6",
+                      border: "2px dashed #8192D4",
+                      borderRadius: 14,
+                      padding: "12px",
+                      margin: "18px 0 8px",
+                      fontSize: 20,
+                      fontWeight: 900,
+                      letterSpacing: "1.5px",
+                      color: "#23201D",
+                    }}
+                  >
+                    {wonPrize.code}
+                  </div>
+                  {wonPrize.minOrderAmount ? (
+                    <p style={{ fontSize: 12.5, color: "#8192D4", fontWeight: 700, marginBottom: 16 }}>
+                      Min. order required: &#8377;{wonPrize.minOrderAmount}
+                    </p>
+                  ) : null}
+                </>
               )}
 
               {wonPrize.code !== "TRY_AGAIN" ? (

@@ -57,11 +57,6 @@ async function seedData() {
   const initialPromoCodes = [
     { code: "WRITE50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
     { code: "ELOW10", discountType: "percentage", discountValue: 10, minOrderAmount: 0, isActive: true },
-    { code: "SPIN50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
-    { code: "SPIN100", discountType: "fixed", discountValue: 100, minOrderAmount: 0, isActive: true },
-    { code: "SPIN150", discountType: "fixed", discountValue: 150, minOrderAmount: 0, isActive: true },
-    { code: "SPIN250", discountType: "fixed", discountValue: 250, minOrderAmount: 0, isActive: true },
-    { code: "SPIN10", discountType: "fixed", discountValue: 10, minOrderAmount: 0, isActive: true },
   ];
 
   try {

@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { PromoCode } from "../models/PromoCode.js";
 import { Product } from "../models/Product.js";
+import { User } from "../models/User.js";
 import { logger } from "../config/logger.js";
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
@@ -101,9 +102,24 @@ export const validatePromoCode = async (req, res) => {
 
 // @desc    Issue single-use promo code from spin wheel
 // @route   POST /api/promo/spin
-// @access  Public
+// @access  Private
 export const issueSpinPromoCode = async (req, res) => {
-  const { email } = req.body || {};
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ error: "Authentication required to spin the wheel" });
+  }
+
+  const user = await User.findOne({ id: req.user.id });
+  if (!user) {
+    return res.status(401).json({ error: "User session invalid or expired" });
+  }
+
+  const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+  if (user.lastSpinAt && Date.now() - new Date(user.lastSpinAt).getTime() < TWENTY_FOUR_HOURS) {
+    const hoursRemaining = Math.ceil((TWENTY_FOUR_HOURS - (Date.now() - new Date(user.lastSpinAt).getTime())) / (60 * 60 * 1000));
+    return res.status(400).json({
+      error: `You have already spun the wheel today! Please try again in ${hoursRemaining} hour(s).`,
+    });
+  }
 
   const SECTORS = [
     { label: "₹50 OFF", value: 50, sectorIndex: 0 },
@@ -114,9 +130,20 @@ export const issueSpinPromoCode = async (req, res) => {
     { label: "₹250 OFF", value: 250, sectorIndex: 5 },
   ];
 
+  const MIN_ORDER_AMOUNTS = {
+    50: 299,
+    100: 499,
+    150: 699,
+    250: 999,
+  };
+
   const winningIndices = [0, 1, 3, 4, 5];
   const winningIndex = winningIndices[Math.floor(Math.random() * winningIndices.length)];
   const prize = SECTORS[winningIndex];
+
+  // Record user's last spin timestamp
+  user.lastSpinAt = new Date();
+  await user.save();
 
   if (prize.value === 0) {
     return res.json({
@@ -127,29 +154,33 @@ export const issueSpinPromoCode = async (req, res) => {
     });
   }
 
+  const minOrderAmount = MIN_ORDER_AMOUNTS[prize.value] || 299;
+
   // Generate unique single-use code
   const randomSuffix = Math.random().toString(36).substring(2, 8).toUpperCase();
   const newCode = `SPIN-${randomSuffix}`;
-  const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const expiryDate = new Date(Date.now() + TWENTY_FOUR_HOURS);
 
   const spinPromo = await PromoCode.create({
     code: newCode,
     discountType: "fixed",
     discountValue: prize.value,
-    minOrderAmount: 0,
+    minOrderAmount,
     isActive: true,
     expiryDate,
     isSingleUse: true,
     isUsed: false,
+    usedBy: user.id,
   });
 
-  logger.info(`[Spin Promo Issued] Code: ${newCode}, Value: ₹${prize.value}, User: ${safeStr(email) || "guest"}`);
+  logger.info(`[Spin Promo Issued] Code: ${newCode}, Value: ₹${prize.value}, MinOrder: ₹${minOrderAmount}, User: ${user.email}`);
 
   res.json({
     sectorIndex: prize.sectorIndex,
     code: newCode,
     label: prize.label,
     discountValue: prize.value,
+    minOrderAmount,
     expiryDate: spinPromo.expiryDate,
   });
 };

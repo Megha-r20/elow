@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
     bio: { type: String, default: "" },
     avatar: { type: String, default: "" },
     address: { type: String, default: "" },
+    lastSpinAt: { type: Date },
   },
   { timestamps: true }
 );
