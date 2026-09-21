@@ -56,7 +56,7 @@ export const submitReview = async (req, res) => {
 
   // 2. Verified purchase check: verify user owns a Delivered, non-cancelled order containing this product
   const userOrders = await Order.find({
-    $or: [{ userId }, { "deliveryAddress.email": userEmail }],
+    userId,
     status: "Delivered",
     paymentStatus: { $nin: ["Cancelled", "Refunded"] },
   }).lean();

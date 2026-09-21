@@ -228,9 +228,7 @@ export const getMyOrders = async (req, res) => {
   if (req.user.role === "admin") {
     mongoQuery = {};
   } else {
-    mongoQuery = {
-      $or: [{ userId: req.user.id }, { "deliveryAddress.email": safeLower(req.user.email) }],
-    };
+    mongoQuery = { userId: req.user.id };
   }
 
   const orders = await Order.find(mongoQuery).sort({ createdAt: -1 }).lean();
@@ -247,7 +245,7 @@ export const getOrderById = async (req, res) => {
     return res.status(404).json({ error: "Order not found" });
   }
 
-  if (req.user.role !== "admin" && order.userId !== req.user.id && safeLower(order.deliveryAddress?.email) !== safeLower(req.user.email)) {
+  if (req.user.role !== "admin" && order.userId !== req.user.id) {
     return res.status(403).json({ error: "Access denied. You can only view your own orders." });
   }
 
@@ -340,7 +338,7 @@ export const cancelOrder = async (req, res) => {
     return res.status(404).json({ error: "Order not found" });
   }
 
-  if (req.user.role !== "admin" && order.userId !== req.user.id && safeLower(order.deliveryAddress?.email) !== safeLower(req.user.email)) {
+  if (req.user.role !== "admin" && order.userId !== req.user.id) {
     return res.status(403).json({ error: "Access denied. You can only cancel your own orders." });
   }
 
