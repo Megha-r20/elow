@@ -25,4 +25,11 @@ const productSchema = new mongoose.Schema(
   { timestamps: true, suppressReservedKeysWarning: true }
 );
 
+productSchema.index(
+  { name: "text", shortName: "text", description: "text", category: "text", subcategory: "text", tags: "text" },
+  { name: "ProductTextIndex", weights: { name: 10, shortName: 8, category: 5, tags: 5, description: 2 } }
+);
+productSchema.index({ category: 1, inStock: 1, price: 1 });
+productSchema.index({ isNew: 1, isBestseller: 1, price: 1 });
+
 export const Product = mongoose.models.Product || mongoose.model("Product", productSchema);

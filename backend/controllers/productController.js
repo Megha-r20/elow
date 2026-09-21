@@ -19,81 +19,88 @@ export const getCategories = (req, res) => {
 export const getProducts = async (req, res) => {
   const { cat, q, filter, priceRange, inStock, sort } = req.query;
 
-  let products = await Product.find({}).lean();
-  let list = [...products];
+  const mongoQuery = {};
 
   // Category filter
   if (cat && cat !== "all") {
-    list = list.filter((p) => p.category === cat);
+    mongoQuery.category = cat;
   }
 
-  // Search query
+  // Search query (using regex search across indexed text fields)
   if (q && typeof q === "string" && q.trim()) {
-    const query = safeLower(q);
-    list = list.filter((p) => {
-      const name = safeLower(p.name);
-      const desc = safeLower(p.description);
-      const subcat = safeLower(p.subcategory);
-      const tags = Array.isArray(p.tags) ? p.tags.map(safeLower) : [];
-      return (
-        name.includes(query) ||
-        desc.includes(query) ||
-        subcat.includes(query) ||
-        tags.some((t) => t.includes(query))
-      );
-    });
+    const cleanQ = q.trim();
+    mongoQuery.$or = [
+      { name: new RegExp(cleanQ, "i") },
+      { shortName: new RegExp(cleanQ, "i") },
+      { description: new RegExp(cleanQ, "i") },
+      { category: new RegExp(cleanQ, "i") },
+      { subcategory: new RegExp(cleanQ, "i") },
+      { tags: new RegExp(cleanQ, "i") },
+    ];
   }
 
   // Special Filter flags
-  if (filter === "new") list = list.filter((p) => Boolean(p.isNew));
-  if (filter === "bestseller") list = list.filter((p) => Boolean(p.isBestseller));
-  if (inStock === "true") list = list.filter((p) => Boolean(p.inStock));
+  if (filter === "new") mongoQuery.isNew = true;
+  if (filter === "bestseller") mongoQuery.isBestseller = true;
+  if (inStock === "true") mongoQuery.inStock = true;
 
   // Price range filter
   if (priceRange !== undefined && priceRange !== null && priceRange !== "") {
     const idx = parseInt(String(priceRange), 10);
     if (!isNaN(idx) && PRICE_RANGES && PRICE_RANGES[idx]) {
       const r = PRICE_RANGES[idx];
-      list = list.filter((p) => (p.price || 0) >= r.min && (p.price || 0) <= r.max);
+      mongoQuery.price = { $gte: r.min, $lte: r.max };
     }
   }
 
   // Sorting
+  let sortOption = { createdAt: -1 };
   switch (sort) {
     case "price-asc":
-      list.sort((a, b) => (a.price || 0) - (b.price || 0));
+      sortOption = { price: 1 };
       break;
     case "price-desc":
-      list.sort((a, b) => (b.price || 0) - (a.price || 0));
+      sortOption = { price: -1 };
       break;
     case "rating":
-      list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      sortOption = { rating: -1, reviewCount: -1 };
       break;
     case "newest":
-      list.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+      sortOption = { isNew: -1, createdAt: -1 };
       break;
     case "bestselling":
-      list.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0));
+      sortOption = { isBestseller: -1, createdAt: -1 };
       break;
   }
 
-  const total = list.length;
+  // Pagination (default page size: 20)
+  const total = await Product.countDocuments(mongoQuery);
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limitParam = req.query.limit !== undefined ? parseInt(req.query.limit, 10) : null;
+  const rawLimit = req.query.limit;
 
-  let paginatedProducts = list;
+  let limit = 20; // Default limit per requirements
+  if (rawLimit === "all" || rawLimit === "0") {
+    limit = 0;
+  } else if (rawLimit !== undefined && !isNaN(parseInt(rawLimit, 10))) {
+    limit = Math.max(1, parseInt(rawLimit, 10));
+  }
+
+  let productsQuery = Product.find(mongoQuery).sort(sortOption);
+
   let totalPages = 1;
+  let skip = 0;
 
-  if (limitParam && limitParam > 0) {
-    const limit = limitParam;
-    const skip = (page - 1) * limit;
-    paginatedProducts = list.slice(skip, skip + limit);
+  if (limit > 0) {
+    skip = (page - 1) * limit;
+    productsQuery = productsQuery.skip(skip).limit(limit);
     totalPages = Math.ceil(total / limit) || 1;
   }
 
+  const products = await productsQuery.lean();
+
   res.json({
-    products: paginatedProducts,
-    count: paginatedProducts.length,
+    products,
+    count: products.length,
     total,
     page,
     totalPages,
