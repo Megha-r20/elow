@@ -50,11 +50,11 @@ export function ProductCard({ product, compact = false }) {
 
     return (
         <div
-            className="group relative bg-white rounded-[16px] border border-[#EAE3D9] overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
+            className="group relative bg-white rounded-[20px] border border-[#EAE3D9] overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-md cursor-pointer"
             onClick={() => navigate(`/product/${product.id}`)}
         >
-            {/* 1. PRODUCT IMAGE AREA (Aspect ratio ~4:5) */}
-            <div className={`relative bg-[#F4EFE6] overflow-hidden shrink-0 ${compact ? "h-[200px]" : "aspect-[4/5] w-full"}`}>
+            {/* 1. PRODUCT IMAGE AREA (Aspect ratio ~1:1 square image) */}
+            <div className={`relative bg-[#F4EFE6] overflow-hidden shrink-0 ${compact ? "h-[190px]" : "aspect-square w-full"}`}>
                 <img
                     src={product.images?.[0]}
                     alt={product.name}
@@ -72,11 +72,11 @@ export function ProductCard({ product, compact = false }) {
                     </div>
                 )}
 
-                {/* 3. WISHLIST BUTTON */}
+                {/* 3. WISHLIST HEART BUTTON */}
                 <button
-                    className="absolute top-3 right-3 z-10 w-8.5 h-8.5 rounded-full bg-white/85 backdrop-blur-md border border-white/60 shadow-2xs flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95"
+                    className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
                     onClick={handleWish}
-                    style={{ color: wished ? "#E26D5C" : "#78726A" }}
+                    style={{ color: wished ? "#E26D5C" : "#23201D" }}
                     title={wished ? "Remove from wishlist" : "Save to wishlist"}
                     aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}
                 >
@@ -85,63 +85,65 @@ export function ProductCard({ product, compact = false }) {
             </div>
 
             {/* 4. PRODUCT INFORMATION */}
-            <div className={`flex flex-col flex-1 gap-1.5 ${compact ? "p-3" : "p-4"}`}>
-                <p className="text-[10px] font-semibold text-[#78726A] tracking-[1.2px] uppercase">
+            <div className={`flex flex-col flex-1 ${compact ? "p-3" : "p-4 pt-3.5"}`}>
+                <p className="text-[11px] font-bold text-[#9C968D] tracking-[1.2px] uppercase mb-0.5">
                     {cleanSubcategory}
                 </p>
 
-                <h3 className={`font-medium text-[#23201D] leading-snug line-clamp-2 ${compact ? "text-xs min-h-[32px]" : "text-[13.5px] min-h-[38px]"} group-hover:text-[#8192D4] transition-colors`}>
+                <h3 className={`font-semibold text-[#23201D] leading-snug line-clamp-1 ${compact ? "text-xs mb-1" : "text-[15px] mb-1"} group-hover:text-[#858BE4] transition-colors`}>
                     {product.name}
                 </h3>
 
                 {/* 5. SUBTLE RATING */}
-                <div className="flex items-center gap-1.5 my-0.5">
+                <div className="flex items-center gap-1.5 mb-2.5">
                     {product.reviewCount > 0 ? (
                         <>
-                            <Stars n={Math.floor(product.rating)} size={10} />
-                            <span className="text-[11px] text-[#9C968D] font-medium">
+                            <Stars n={Math.floor(product.rating)} size={11} />
+                            <span className="text-[12px] text-[#78726A] font-medium">
                                 {product.rating.toFixed(1)} ({product.reviewCount})
                             </span>
                         </>
                     ) : (
-                        <span className="text-[11px] text-[#9C968D] font-medium">
+                        <span className="text-[12px] text-[#78726A] font-medium">
                             No reviews yet
                         </span>
                     )}
                 </div>
 
                 {/* 6. PRICING */}
-                <div className="mt-0.5 mb-2">
+                <div className="mb-3.5">
                     <Price price={product.price} original={product.originalPrice} size="sm" />
                 </div>
 
-                {/* 7. REFINED ADD TO CART BUTTON */}
-                <button
-                    onClick={handleAdd}
-                    disabled={!product.inStock}
-                    className={`w-full h-10 mt-auto rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${
-                        inCart
-                            ? "bg-[#E5F5EC] text-[#1E6B43] border border-[#B8E6CB]"
-                            : product.inStock
-                            ? "bg-white text-[#23201D] border border-[#EAE3D9] hover:bg-[#23201D] hover:text-white hover:border-[#23201D] shadow-2xs"
-                            : "bg-[#F4EFE6] text-[#9C968D] border border-[#EAE3D9] cursor-not-allowed"
-                    }`}
-                >
-                    {inCart ? (
-                        <>
-                            <Check size={14} strokeWidth={2.2} /> In Cart
-                        </>
-                    ) : product.inStock ? (
-                        <>
-                            <ShoppingBag size={14} strokeWidth={2} /> Add to Cart
-                        </>
-                    ) : (
-                        "Out of Stock"
-                    )}
-                </button>
+                {/* 7. ADD TO CART / OUT OF STOCK BUTTON */}
+                {product.inStock ? (
+                    <button
+                        onClick={handleAdd}
+                        className={`w-full h-11 mt-auto rounded-[14px] text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${
+                            inCart
+                                ? "bg-[#E5F5EC] text-[#1E6B43] border border-[#B8E6CB]"
+                                : "bg-[#23201D] hover:bg-[#35312D] text-white shadow-2xs active:scale-[0.99]"
+                        }`}
+                    >
+                        {inCart ? (
+                            <>
+                                <Check size={15} strokeWidth={2.2} /> In Cart
+                            </>
+                        ) : (
+                            <>
+                                <ShoppingBag size={15} strokeWidth={2} /> Add to Cart
+                            </>
+                        )}
+                    </button>
+                ) : (
+                    <div className="w-full h-11 mt-auto rounded-[14px] bg-[#EDE8E0] text-[#9C968D] text-xs font-semibold flex items-center justify-center select-none cursor-not-allowed">
+                        Out of Stock
+                    </div>
+                )}
             </div>
         </div>
     );
 }
+
 
 

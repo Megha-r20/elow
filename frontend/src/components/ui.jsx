@@ -69,18 +69,18 @@ export function Stars({ n, size = 12, showCount, count }) {
             <Icons.Star filled={i <= n}/>
           </span>))}
       </div>
-      {showCount && count !== undefined && (<span style={{ fontSize: size + 1, color: "#9C968D", fontWeight: 500 }}>({count})</span>)}
+      {showCount && count !== undefined && (<span style={{ fontSize: size + 1, color: "#78726A", fontWeight: 500 }}>({count})</span>)}
     </div>);
 }
 /* ─── Badge ─────────────────────────────────────────────────────── */
 const BADGE_STYLES = {
-    teal: { bg: "#8192D4", color: "#fff" },
-    lavender: { bg: "#8192D4", color: "#fff" },
-    yellow: { bg: "#E59866", color: "#23201D" },
+    teal: { bg: "#858BE4", color: "#fff" },
+    lavender: { bg: "#858BE4", color: "#fff" },
+    yellow: { bg: "#858BE4", color: "#fff" },
     red: { bg: "#D97762", color: "#fff" },
     terracotta: { bg: "#D97762", color: "#fff" },
     pink: { bg: "#E8A598", color: "#fff" },
-    dark: { bg: "#23201D", color: "#FAF7F2" },
+    dark: { bg: "#2B2825", color: "#FAF7F2" },
     sage: { bg: "#D8E5DD", color: "#2E5242" },
 };
 export function Badge({ label, variant = "teal" }) {
@@ -88,12 +88,12 @@ export function Badge({ label, variant = "teal" }) {
     return (<span style={{
             background: bg,
             color,
-            fontSize: "10px",
+            fontSize: "10.5px",
             fontWeight: 700,
-            letterSpacing: "0.8px",
+            letterSpacing: "0.6px",
             textTransform: "uppercase",
-            padding: "3px 10px",
-            borderRadius: "9999px",
+            padding: "4px 10px",
+            borderRadius: "6px",
             display: "inline-block",
             lineHeight: 1.2,
             boxShadow: `0 2px 6px ${bg}25`,
@@ -110,8 +110,8 @@ export function SectionHead({ eyebrow, title, sub, right, center, }) {
         }}>
       <div style={{ flex: 1 }}>
         {eyebrow && (<div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, justifyContent: center ? "center" : "flex-start" }}>
-            <span style={{ display: "inline-block", width: 18, height: 1.5, background: "#8192D4" }}/>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#8192D4", letterSpacing: "2px", textTransform: "uppercase" }}>{eyebrow}</span>
+            <span style={{ display: "inline-block", width: 18, height: 1.5, background: "#858BE4" }}/>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#858BE4", letterSpacing: "2px", textTransform: "uppercase" }}>{eyebrow}</span>
           </div>)}
         <h2 className="font-display" style={{ fontSize: 32, fontWeight: 400, color: "#23201D", lineHeight: 1.12, letterSpacing: "-0.3px" }}>
           {title}
@@ -125,14 +125,14 @@ export function SectionHead({ eyebrow, title, sub, right, center, }) {
 }
 /* ─── Price display ─────────────────────────────────────────────── */
 export function Price({ price, original, size = "md" }) {
-    const sizes = { sm: { price: 15, og: 12 }, md: { price: 18, og: 13 }, lg: { price: 24, og: 16 } };
+    const sizes = { sm: { price: 18, og: 12 }, md: { price: 20, og: 13 }, lg: { price: 26, og: 16 } };
     const s = sizes[size];
     const disc = original && original > price ? Math.round((1 - price / original) * 100) : 0;
-    return (<div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+    return (<div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
       <span style={{ fontSize: s.price, fontWeight: 700, color: "#23201D" }}>&#8377;{price.toLocaleString("en-IN")}</span>
       {original && original > price && (<>
           <span style={{ fontSize: s.og, color: "#9C968D", textDecoration: "line-through" }}>&#8377;{original.toLocaleString("en-IN")}</span>
-          <span style={{ fontSize: s.og, fontWeight: 600, color: "#D97762" }}>{disc}% OFF</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#D97762", background: "#FDEFEF", padding: "2px 8px", borderRadius: 6 }}>{disc}% OFF</span>
         </>)}
     </div>);
 }
