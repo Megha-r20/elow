@@ -10,7 +10,8 @@
   "scripts": {
     "test": "npm --prefix backend test",
     "test:backend": "npm --prefix backend test",
-    "test:frontend": "npm --prefix backend exec vitest -- run frontend/src/__tests__/App.test.jsx",
+    "test:frontend": "npm --prefix frontend test",
+    "lint": "eslint . --ext .js,.jsx",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
@@ -18,6 +19,10 @@
     "install:all": "cd backend && npm install && cd ../frontend && npm install"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.2.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.4",
+    "jsdom": "^26.0.0",
     "mongodb-memory-server": "^10.1.0",
     "supertest": "^7.0.0",
     "vitest": "^2.1.8"

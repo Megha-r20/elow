@@ -23,11 +23,15 @@ const PageLoader = () => (
     </div>
 );
 
-const withSuspense = (Component) => (props) => (
-    <Suspense fallback={<PageLoader />}>
-        <Component {...props} />
-    </Suspense>
-);
+const withSuspense = (Component) => {
+    const SuspenseWrapper = (props) => (
+        <Suspense fallback={<PageLoader />}>
+            <Component {...props} />
+        </Suspense>
+    );
+    SuspenseWrapper.displayName = `WithSuspense(${Component.displayName || Component.name || "Component"})`;
+    return SuspenseWrapper;
+};
 
 export const router = createBrowserRouter([
     {

@@ -1,4 +1,5 @@
-import { createContext, useContext, useReducer, useState, useCallback, useEffect } from "react";
+import React, { createContext, useContext, useReducer, useState, useCallback, useEffect } from "react";
+import { getApiUrl } from "../api/config";
 function cartReducer(state, action) {
     switch (action.type) {
         case "ADD": {
@@ -64,20 +65,24 @@ export function CartProvider({ children }) {
         }
     });
     useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(state));
+        try { localStorage.setItem("cart", JSON.stringify(state)); } catch (_e) { /* ignore */ }
     }, [state]);
     useEffect(() => {
-        if (promoCode)
-            localStorage.setItem("promoCode", promoCode);
-        else
-            localStorage.removeItem("promoCode");
+        try {
+            if (promoCode)
+                localStorage.setItem("promoCode", promoCode);
+            else
+                localStorage.removeItem("promoCode");
+        } catch (_e) { /* ignore */ }
     }, [promoCode]);
     useEffect(() => {
-        if (lastOrder)
-            localStorage.setItem("lastOrder", JSON.stringify(lastOrder));
+        try {
+            if (lastOrder)
+                localStorage.setItem("lastOrder", JSON.stringify(lastOrder));
+        } catch (_e) { /* ignore */ }
     }, [lastOrder]);
     useEffect(() => {
-        localStorage.setItem("myOrders", JSON.stringify(myOrders));
+        try { localStorage.setItem("myOrders", JSON.stringify(myOrders)); } catch (_e) { /* ignore */ }
     }, [myOrders]);
     const addItem = useCallback((product, qty = 1) => dispatch({ type: "ADD", product, qty }), []);
     const removeItem = useCallback((id) => dispatch({ type: "REMOVE", id }), []);
@@ -140,7 +145,7 @@ export function CartProvider({ children }) {
             localStorage.removeItem("lastOrder");
             localStorage.removeItem("myOrders");
         }
-        catch { }
+        catch (_err) { /* ignore localStorage error */ }
     }, []);
     const removeOrderFromHistory = useCallback((id) => {
         setLastOrder(prev => (prev?.id === id ? null : prev));
@@ -159,7 +164,7 @@ export function CartProvider({ children }) {
                 localStorage.setItem("myOrders", JSON.stringify(filtered));
             }
         }
-        catch { }
+        catch (_err) { /* ignore localStorage error */ }
     }, []);
     return (<CartContext.Provider value={{
             items: state.items, count, subtotal, promoCode, discount, applyPromo, removePromo,

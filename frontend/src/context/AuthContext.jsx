@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { getApiUrl } from "../api/config";
 
 const AuthContext = createContext(null);
@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
                 const data = await res.json();
                 setToken(data.token);
                 setUser(data.user);
-                localStorage.setItem("elow_user", JSON.stringify(data.user));
+                try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
                 return data.token;
             }
         } catch (err) {
@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
                 const newToken = await refreshSession();
                 if (!newToken) {
                     setUser(null);
-                    localStorage.removeItem("elow_user");
+                    try { localStorage.removeItem("elow_user"); } catch (_e) { /* ignore */ }
                 }
                 setLoading(false);
                 return;
@@ -56,11 +56,11 @@ export function AuthProvider({ children }) {
                 if (res.ok) {
                     const data = await res.json();
                     setUser(data.user);
-                    localStorage.setItem("elow_user", JSON.stringify(data.user));
+                    try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
                 } else if (res.status === 401) {
                     const newToken = await refreshSession();
                     if (!newToken) {
-                        localStorage.removeItem("elow_user");
+                        try { localStorage.removeItem("elow_user"); } catch (_e) { /* ignore */ }
                         setToken(null);
                         setUser(null);
                     }
@@ -90,7 +90,7 @@ export function AuthProvider({ children }) {
             if (!res.ok) {
                 return { success: false, error: data.error || "Login failed" };
             }
-            localStorage.setItem("elow_user", JSON.stringify(data.user));
+            try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
             setToken(data.token);
             setUser(data.user);
             return { success: true };
@@ -115,7 +115,7 @@ export function AuthProvider({ children }) {
             if (!res.ok) {
                 return { success: false, error: data.error || "Registration failed" };
             }
-            localStorage.setItem("elow_user", JSON.stringify(data.user));
+            try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
             setToken(data.token);
             setUser(data.user);
             return { success: true };
@@ -142,7 +142,7 @@ export function AuthProvider({ children }) {
                 return { success: false, error: resData.error || "Failed to update profile" };
             }
             setUser(resData.user);
-            localStorage.setItem("elow_user", JSON.stringify(resData.user));
+            try { localStorage.setItem("elow_user", JSON.stringify(resData.user)); } catch (_e) { /* ignore */ }
             return { success: true };
         } catch (err) {
             return { success: false, error: err.message || "Network error updating profile" };
@@ -158,7 +158,7 @@ export function AuthProvider({ children }) {
         } catch (err) {
             console.error("Logout network error:", err);
         }
-        localStorage.removeItem("elow_user");
+        try { localStorage.removeItem("elow_user"); } catch (_e) { /* ignore */ }
         setToken(null);
         setUser(null);
     }, []);

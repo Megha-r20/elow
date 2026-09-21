@@ -24,8 +24,14 @@ jobs:
       - name: Install dependencies
         run: npm run install:all
 
+      - name: Run ESLint
+        run: npm run lint
+
       - name: Run Backend Integration Tests
         run: npm test
+
+      - name: Run Frontend Tests
+        run: npm run test:frontend
 
       - name: Build Frontend Application
         run: npm run build:frontend
