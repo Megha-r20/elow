@@ -130,6 +130,7 @@ export default function Shop() {
     };
 
     const currentCat = CATEGORIES.find((c) => c.id === activeCat);
+    const featuredCategories = CATEGORIES.slice(0, 6);
 
     // Sidebar Content Component
     const SidebarFilters = () => (
@@ -288,6 +289,30 @@ export default function Shop() {
 
             {/* 2. MAIN CATALOG AREA */}
             <div className="container mx-auto px-4 md:px-8 py-6 md:py-8">
+                <div className="mb-6 rounded-[28px] border border-[#EAE3D9] bg-gradient-to-r from-[#F7F2EA] via-[#F4EFE6] to-[#EDF4FF] p-4 md:p-5 shadow-[0_14px_40px_rgba(35,32,29,0.04)]">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                        <div className="flex-1">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8192D4] mb-2">Curated picks</p>
+                            <h2 className="font-display text-2xl md:text-3xl text-[#23201D] leading-none">Designed for your desk, rituals, and little joys.</h2>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {featuredCategories.map((cat) => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => changeCat(cat.id)}
+                                    className={`group rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-all ${
+                                        activeCat === cat.id
+                                            ? "border-[#23201D] bg-[#23201D] text-white shadow-sm"
+                                            : "border-[#EAE3D9] bg-white/70 text-[#4A4742] hover:border-[#8192D4] hover:text-[#23201D]"
+                                    }`}
+                                >
+                                    {cat.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
                 {/* TOP TOOLBAR */}
                 <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-[#EAE3D9] flex-wrap">
                     {/* Left: Filter Toggle & Product Count */}
@@ -422,10 +447,10 @@ export default function Shop() {
                             </div>
                         ) : (
                             <div
-                                className={`grid grid-cols-2 gap-3.5 sm:gap-5 ${
+                                className={`grid gap-4 sm:gap-5 ${
                                     gridView === 3
-                                        ? "md:grid-cols-3"
-                                        : "md:grid-cols-3 xl:grid-cols-4"
+                                        ? "grid-cols-2 md:grid-cols-3"
+                                        : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
                                 }`}
                             >
                                 {filtered.map((p) => (
