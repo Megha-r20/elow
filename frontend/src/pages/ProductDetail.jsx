@@ -124,9 +124,15 @@ export default function ProductDetail() {
 
             {/* Rating */}
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-              <Stars n={Math.floor(product.rating)} size={14}/>
-              <span style={{ fontSize: 13.5, fontWeight: 600, color: T.txt }}>{product.rating.toFixed(1)}</span>
-              <span style={{ fontSize: 13, color: T.light }}>({product.reviewCount} reviews)</span>
+              {product.reviewCount > 0 ? (
+                <>
+                  <Stars n={Math.floor(product.rating)} size={14}/>
+                  <span style={{ fontSize: 13.5, fontWeight: 600, color: T.txt }}>{product.rating.toFixed(1)}</span>
+                  <span style={{ fontSize: 13, color: T.light }}>({product.reviewCount} reviews)</span>
+                </>
+              ) : (
+                <span style={{ fontSize: 13, color: T.light, fontWeight: 500 }}>No reviews yet</span>
+              )}
               <span style={{ color: T.border }}>·</span>
               <span style={{ fontSize: 13, color: product.inStock ? "#1a7a56" : "#e05252", fontWeight: 600 }}>
                 {product.inStock ? `In Stock (${product.stockCount} left)` : "Out of Stock"}

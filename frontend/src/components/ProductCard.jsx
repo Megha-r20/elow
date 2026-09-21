@@ -52,10 +52,18 @@ export function ProductCard({ product, compact = false }) {
           {product.name}
         </h3>
         <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-          <Stars n={Math.floor(product.rating)} size={11}/>
-          <span style={{ fontSize: 11, color: "#9C968D", fontWeight: 500 }}>
-            {product.rating.toFixed(1)} ({product.reviewCount})
-          </span>
+          {product.reviewCount > 0 ? (
+            <>
+              <Stars n={Math.floor(product.rating)} size={11}/>
+              <span style={{ fontSize: 11, color: "#9C968D", fontWeight: 500 }}>
+                {product.rating.toFixed(1)} ({product.reviewCount})
+              </span>
+            </>
+          ) : (
+            <span style={{ fontSize: 11, color: "#9C968D", fontWeight: 500 }}>
+              No reviews yet
+            </span>
+          )}
         </div>
         <Price price={product.price} original={product.originalPrice} size="sm"/>
 

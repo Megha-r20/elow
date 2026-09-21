@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema(
     subcategory: { type: String },
     price: { type: Number, required: true, index: true },
     originalPrice: { type: Number },
-    rating: { type: Number, default: 4.5 },
+    rating: { type: Number, default: 0 },
     reviewCount: { type: Number, default: 0 },
     images: [{ type: String }],
     tags: [{ type: String }],

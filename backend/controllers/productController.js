@@ -172,7 +172,7 @@ export const createProduct = async (req, res) => {
         : ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
     inStock: computedInStock,
     stockCount: parsedStock,
-    rating: 5.0,
+    rating: 0,
     reviewCount: 0,
     isNew: isNew !== undefined ? Boolean(isNew) : true,
     isBestseller: Boolean(isBestseller),

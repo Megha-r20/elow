@@ -13,7 +13,7 @@ export const recalculateProductRating = async (productId) => {
   const approvedReviews = await Review.find({ productId, status: "approved" }).lean();
   const reviewCount = approvedReviews.length;
   const totalSum = approvedReviews.reduce((sum, r) => sum + Number(r.rating || 0), 0);
-  const avgRating = reviewCount > 0 ? Number((totalSum / reviewCount).toFixed(1)) : 5.0;
+  const avgRating = reviewCount > 0 ? Number((totalSum / reviewCount).toFixed(1)) : 0;
 
   await Product.findOneAndUpdate({ id: productId }, { rating: avgRating, reviewCount });
 };
@@ -54,32 +54,45 @@ export const submitReview = async (req, res) => {
     return res.status(400).json({ error: "You have already submitted a review for this product." });
   }
 
-  // 2. Verified purchase check: verify user owns an order containing this product
+  // 2. Verified purchase check: verify user owns a Delivered, non-cancelled order containing this product
   const userOrders = await Order.find({
     $or: [{ userId }, { "deliveryAddress.email": userEmail }],
+    status: "Delivered",
+    paymentStatus: { $nin: ["Cancelled", "Refunded"] },
   }).lean();
 
   const hasPurchased = userOrders.some(
-    (order) => Array.isArray(order.items) && order.items.some((item) => (item.product?.id || item.productId || item.id) === productId)
+    (order) =>
+      order.status === "Delivered" &&
+      Array.isArray(order.items) &&
+      order.items.some((item) => (item.product?.id || item.productId || item.id) === productId)
   );
 
   if (!hasPurchased) {
-    return res.status(400).json({ error: "You can only review products you have purchased." });
+    return res.status(400).json({ error: "You can only review products that have been purchased and delivered to you." });
   }
 
-  const newReview = await Review.create({
-    id: `rev-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
-    productId,
-    userId,
-    orderId: safeStr(orderId),
-    userName: cleanName,
-    userEmail,
-    rating: numRating,
-    title: cleanTitle,
-    comment: cleanComment,
-    verifiedPurchase: true,
-    status: "pending",
-  });
+  let newReview;
+  try {
+    newReview = await Review.create({
+      id: `rev-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
+      productId,
+      userId,
+      orderId: safeStr(orderId),
+      userName: cleanName,
+      userEmail,
+      rating: numRating,
+      title: cleanTitle,
+      comment: cleanComment,
+      verifiedPurchase: true,
+      status: "pending",
+    });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(400).json({ error: "You have already submitted a review for this product." });
+    }
+    throw err;
+  }
 
   logger.info(`[Review Submitted] Product: ${productId}, Rating: ${numRating}★ by ${cleanName} (${userId})`);
   res.status(201).json({ success: true, review: newReview, message: "Thank you for reviewing! Your review has been submitted for approval." });
