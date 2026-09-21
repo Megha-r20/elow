@@ -26,6 +26,7 @@ export default function Shop() {
     const [searchQ, setSearchQ] = useState(initQ);
     const [gridView, setGridView] = useState(4);
     const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(12);
 
     useEffect(() => {
         setActiveCat(params.get("cat") ?? "all");
@@ -34,6 +35,10 @@ export default function Shop() {
         setOnlyWishlist(params.get("filter") === "wishlist");
         setSearchQ(params.get("q") ?? "");
     }, [params]);
+
+    useEffect(() => {
+        setVisibleCount(12);
+    }, [activeCat, sort, priceRange, onlyInStock, onlyNew, onlyBest, onlyWishlist, searchQ]);
 
     const [liveProducts, setLiveProducts] = useState(PRODUCTS);
 
@@ -107,6 +112,10 @@ export default function Shop() {
         }
         return list;
     }, [activeCat, sort, priceRange, onlyInStock, onlyNew, onlyBest, onlyWishlist, searchQ, wishlist.ids, liveProducts]);
+
+    const visibleProducts = useMemo(() => {
+        return filtered.slice(0, visibleCount);
+    }, [filtered, visibleCount]);
 
     const activeFilters = [
         ...(activeCat !== "all" ? [{ label: CATEGORIES.find((c) => c.id === activeCat)?.label ?? activeCat, clear: () => changeCat("all") }] : []),
@@ -548,17 +557,64 @@ export default function Shop() {
                                 </button>
                             </div>
                         ) : (
-                            <div
-                                className={`grid gap-4 sm:gap-5 ${
-                                    gridView === 3
-                                        ? "grid-cols-2 md:grid-cols-3"
-                                        : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
-                                }`}
-                            >
-                                {filtered.map((p) => (
-                                    <ProductCard key={p.id} product={p} />
-                                ))}
-                            </div>
+                            <>
+                                <div
+                                    className={`grid gap-4 sm:gap-5 ${
+                                        gridView === 3
+                                            ? "grid-cols-2 md:grid-cols-3"
+                                            : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
+                                    }`}
+                                >
+                                    {visibleProducts.map((p) => (
+                                        <ProductCard key={p.id} product={p} />
+                                    ))}
+                                </div>
+
+                                {/* VIEW MORE PRODUCTS BUTTON */}
+                                {visibleCount < filtered.length && (
+                                    <div style={{ marginTop: 44, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+                                        <p style={{ fontSize: 13, color: "#78726A", fontWeight: 500, margin: 0 }}>
+                                            Showing <strong style={{ color: "#23201D" }}>{visibleProducts.length}</strong> of <strong style={{ color: "#23201D" }}>{filtered.length}</strong> products
+                                        </p>
+                                        <div style={{ width: 220, height: 4, background: "#EAE3D9", borderRadius: 2, overflow: "hidden" }}>
+                                            <div
+                                                style={{
+                                                    width: `${(visibleProducts.length / filtered.length) * 100}%`,
+                                                    height: "100%",
+                                                    background: "#23201D",
+                                                    borderRadius: 2,
+                                                    transition: "width 0.3s ease",
+                                                }}
+                                            />
+                                        </div>
+                                        <button
+                                            onClick={() => setVisibleCount((prev) => prev + 12)}
+                                            style={{
+                                                marginTop: 6,
+                                                padding: "12px 32px",
+                                                borderRadius: 14,
+                                                background: "#23201D",
+                                                color: "#FFFFFF",
+                                                fontSize: 13,
+                                                fontWeight: 600,
+                                                border: "none",
+                                                cursor: "pointer",
+                                                boxShadow: "0 4px 14px rgba(35, 32, 29, 0.12)",
+                                                transition: "all 0.2s ease",
+                                                display: "inline-flex",
+                                                alignItems: "center",
+                                                gap: 8,
+                                            }}
+                                            className="hover:bg-[#35312D] active:scale-[0.98]"
+                                        >
+                                            <span>View More Products</span>
+                                            <span style={{ fontSize: 11, background: "rgba(255,255,255,0.2)", padding: "2px 8px", borderRadius: 10 }}>
+                                                +{Math.min(12, filtered.length - visibleCount)}
+                                            </span>
+                                        </button>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>
