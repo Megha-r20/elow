@@ -493,7 +493,7 @@ export default function Shop() {
             </div>
 
             {/* 2. MAIN CATALOG AREA */}
-            <div className="container mx-auto px-4 md:px-8 py-6 md:py-8">
+            <div className="container mx-auto px-4 md:px-8 pt-6 pb-20 md:pb-28">
                 {/* ACTIVE FILTER PILLS */}
                 {activeFilters.length > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
@@ -572,18 +572,18 @@ export default function Shop() {
 
                                 {/* VIEW MORE PRODUCTS BUTTON */}
                                 {visibleCount < filtered.length && (
-                                    <div style={{ marginTop: 44, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+                                    <div style={{ marginTop: 52, marginBottom: 12, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
                                         <p style={{ fontSize: 13, color: "#78726A", fontWeight: 500, margin: 0 }}>
                                             Showing <strong style={{ color: "#23201D" }}>{visibleProducts.length}</strong> of <strong style={{ color: "#23201D" }}>{filtered.length}</strong> products
                                         </p>
-                                        <div style={{ width: 220, height: 4, background: "#EAE3D9", borderRadius: 2, overflow: "hidden" }}>
+                                        <div style={{ width: 220, height: 4, background: "#EAE3D9", borderRadius: 999, overflow: "hidden" }}>
                                             <div
                                                 style={{
                                                     width: `${(visibleProducts.length / filtered.length) * 100}%`,
                                                     height: "100%",
                                                     background: "#23201D",
-                                                    borderRadius: 2,
-                                                    transition: "width 0.3s ease",
+                                                    borderRadius: 999,
+                                                    transition: "width 0.4s ease",
                                                 }}
                                             />
                                         </div>
@@ -591,24 +591,24 @@ export default function Shop() {
                                             onClick={() => setVisibleCount((prev) => prev + 12)}
                                             style={{
                                                 marginTop: 6,
-                                                padding: "12px 32px",
-                                                borderRadius: 14,
-                                                background: "#23201D",
-                                                color: "#FFFFFF",
+                                                padding: "13px 36px",
+                                                borderRadius: 30,
+                                                background: "#FFFFFF",
+                                                color: "#23201D",
                                                 fontSize: 13,
                                                 fontWeight: 600,
-                                                border: "none",
+                                                border: "1.5px solid #23201D",
                                                 cursor: "pointer",
-                                                boxShadow: "0 4px 14px rgba(35, 32, 29, 0.12)",
+                                                boxShadow: "0 2px 10px rgba(35, 32, 29, 0.05)",
                                                 transition: "all 0.2s ease",
                                                 display: "inline-flex",
                                                 alignItems: "center",
-                                                gap: 8,
+                                                gap: 10,
                                             }}
-                                            className="hover:bg-[#35312D] active:scale-[0.98]"
+                                            className="hover:bg-[#23201D] hover:text-white active:scale-[0.98]"
                                         >
                                             <span>View More Products</span>
-                                            <span style={{ fontSize: 11, background: "rgba(255,255,255,0.2)", padding: "2px 8px", borderRadius: 10 }}>
+                                            <span style={{ fontSize: 11, background: "rgba(35, 32, 29, 0.08)", padding: "2px 8px", borderRadius: 10 }}>
                                                 +{Math.min(12, filtered.length - visibleCount)}
                                             </span>
                                         </button>
