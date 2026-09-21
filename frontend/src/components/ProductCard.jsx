@@ -39,13 +39,16 @@ export function ProductCard({ product, compact = false }) {
         />
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1">
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.badge && (<Badge label={product.badge} variant={product.badgeVariant ?? "teal"}/>)}
+          {product.originalPrice > product.price && (
+            <Badge label={`-${Math.round((1 - product.price / product.originalPrice) * 100)}%`} variant="yellow"/>
+          )}
           {!product.inStock && (<Badge label="OUT OF STOCK" variant="dark"/>)}
         </div>
 
         {/* Wishlist */}
-        <button className="wish-btn icon-btn absolute top-2.5 right-2.5 bg-white/90 rounded-full w-9 h-9 shadow-sm" onClick={handleWish} style={{ color: wished ? "#E26D5C" : "#6E6A63" }} title={wished ? "Remove from wishlist" : "Save to wishlist"} aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}>
+        <button className="wish-btn icon-btn absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-sm rounded-full w-9 h-9 shadow-sm flex items-center justify-center transition-all hover:scale-110 active:scale-95 z-10 cursor-pointer" onClick={handleWish} style={{ color: wished ? "#E26D5C" : "#6E6A63" }} title={wished ? "Remove from wishlist" : "Save to wishlist"} aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}>
           <Icons.Heart filled={wished}/>
         </button>
 
