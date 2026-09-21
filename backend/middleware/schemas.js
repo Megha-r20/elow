@@ -6,7 +6,7 @@ export const registerSchema = z.object({
     .object({
       name: z.string().min(2, "Name must be at least 2 characters long").max(100, "Name cannot exceed 100 characters"),
       email: z.string().email("Invalid email address format").max(255, "Email cannot exceed 255 characters"),
-      password: z.string().min(6, "Password must be at least 6 characters long").max(128, "Password cannot exceed 128 characters"),
+      password: z.string().min(8, "Password must be at least 8 characters long").max(128, "Password cannot exceed 128 characters"),
     })
     .strict(),
 });
@@ -30,7 +30,24 @@ export const updateProfileSchema = z.object({
       avatar: z.string().max(1000, "Avatar URL cannot exceed 1000 characters").optional(),
       address: z.string().max(500, "Address cannot exceed 500 characters").optional(),
       currentPassword: z.string().max(128, "Password cannot exceed 128 characters").optional(),
-      newPassword: z.string().min(6, "New password must be at least 6 characters long").max(128, "Password cannot exceed 128 characters").optional(),
+      newPassword: z.string().min(8, "New password must be at least 8 characters long").max(128, "Password cannot exceed 128 characters").optional(),
+    })
+    .strict(),
+});
+
+export const forgotPasswordSchema = z.object({
+  body: z
+    .object({
+      email: z.string().email("Invalid email address format").max(255, "Email cannot exceed 255 characters"),
+    })
+    .strict(),
+});
+
+export const resetPasswordSchema = z.object({
+  body: z
+    .object({
+      token: z.string().min(1, "Reset token is required").max(500, "Token too long"),
+      newPassword: z.string().min(8, "New password must be at least 8 characters long").max(128, "Password cannot exceed 128 characters"),
     })
     .strict(),
 });

@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema(
     avatar: { type: String, default: "" },
     address: { type: String, default: "" },
     lastSpinAt: { type: Date },
+    refreshTokens: [{ type: String }],
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   { timestamps: true }
 );

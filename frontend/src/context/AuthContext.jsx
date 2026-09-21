@@ -12,13 +12,7 @@ export function AuthProvider({ children }) {
             return null;
         }
     });
-    const [token, setToken] = useState(() => {
-        try {
-            return localStorage.getItem("elow_token");
-        } catch {
-            return null;
-        }
-    });
+    const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const refreshSession = useCallback(async () => {
@@ -31,7 +25,6 @@ export function AuthProvider({ children }) {
                 const data = await res.json();
                 setToken(data.token);
                 setUser(data.user);
-                localStorage.setItem("elow_token", data.token);
                 localStorage.setItem("elow_user", JSON.stringify(data.user));
                 return data.token;
             }
@@ -67,7 +60,6 @@ export function AuthProvider({ children }) {
                 } else if (res.status === 401) {
                     const newToken = await refreshSession();
                     if (!newToken) {
-                        localStorage.removeItem("elow_token");
                         localStorage.removeItem("elow_user");
                         setToken(null);
                         setUser(null);
@@ -98,7 +90,6 @@ export function AuthProvider({ children }) {
             if (!res.ok) {
                 return { success: false, error: data.error || "Login failed" };
             }
-            localStorage.setItem("elow_token", data.token);
             localStorage.setItem("elow_user", JSON.stringify(data.user));
             setToken(data.token);
             setUser(data.user);
@@ -124,7 +115,6 @@ export function AuthProvider({ children }) {
             if (!res.ok) {
                 return { success: false, error: data.error || "Registration failed" };
             }
-            localStorage.setItem("elow_token", data.token);
             localStorage.setItem("elow_user", JSON.stringify(data.user));
             setToken(data.token);
             setUser(data.user);
@@ -168,7 +158,6 @@ export function AuthProvider({ children }) {
         } catch (err) {
             console.error("Logout network error:", err);
         }
-        localStorage.removeItem("elow_token");
         localStorage.removeItem("elow_user");
         setToken(null);
         setUser(null);
