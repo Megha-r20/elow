@@ -26,7 +26,7 @@ Test the live store or local environment using these pre-seeded accounts:
 | Role | Email | Password | Access Privileges |
 | :--- | :--- | :--- | :--- |
 | **Admin** | `admin@elow.com` | `AdminSecret123!` | Full access to `/admin` dashboard, product CRUD, review moderation & order management |
-| **Customer** | `customer@elow.com` | `Customer123!` | Storefront browsing, review submission, server-side checkout, order history & account settings (`/settings`) |
+| **Customer** | `ritika@example.com` | `password123` | Storefront browsing, review submission, server-side checkout, order history & account settings (`/settings`) |
 
 ---
 
@@ -201,35 +201,40 @@ npm test
 ### Auth & User Management
 | Method | Endpoint | Protection | Description |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | Public | Register new user (password hashed with bcrypt) |
-| `POST` | `/api/auth/login` | Public (Rate Limited) | Authenticate user and issue signed JWT |
-| `GET` | `/api/auth/profile` | `protect` | Fetch current user profile |
+| `POST` | `/api/auth/register` | Public | Register new user (password hashed with bcrypt, assigned standard `user` role) |
+| `POST` | `/api/auth/login` | Public (Rate Limited) | Authenticate user, issue access token & httpOnly refresh cookie |
+| `POST` | `/api/auth/refresh` | Public | Refresh short-lived access token using valid httpOnly cookie |
+| `POST` | `/api/auth/logout` | Public | Clear httpOnly refresh token cookie |
+| `GET` | `/api/auth/me` | `protect` | Fetch currently authenticated user profile |
 | `PATCH` | `/api/auth/profile` | `protect` | Update profile information |
 
 ### Products & Reviews
 | Method | Endpoint | Protection | Description |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/products` | Public | Fetch paginated products with category/price filters |
-| `GET` | `/api/products/:id` | Public | Fetch single product details and accepted reviews |
-| `POST` | `/api/products/:id/reviews` | `protect` | Submit a product review (queued for moderation) |
+| `GET` | `/api/products` | Public | Fetch paginated products with category, price, search, and stock filters |
+| `GET` | `/api/products/:id` | Public | Fetch single product details, approved reviews, and related items |
+| `POST` | `/api/products/:id/reviews` | `protect` | Submit product review (requires verified purchase, queued for moderation) |
+| `GET` | `/api/products/:id/reviews` | Public | Fetch approved reviews for specific product |
 
 ### Orders & Payments
 | Method | Endpoint | Protection | Description |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/orders` | `protect` | Create order with server-calculated totals & stock reduction |
+| `POST` | `/api/orders` | `protect` | Create order with server-calculated totals, atomic stock reduction & Intent validation |
 | `GET` | `/api/orders/my-orders` | `protect` | Retrieve authenticated user's order history |
-| `GET` | `/api/orders/:id` | `protect` | Retrieve specific order details |
+| `GET` | `/api/orders/:id` | `protect` | Retrieve specific order details (restricted to order owner or admin) |
+| `PATCH` | `/api/orders/:id/cancel` | `protect` | Cancel active processing order and restore inventory stock |
 
 ### Admin Moderation & Management
 | Method | Endpoint | Protection | Description |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/admin/products` | `protect`, `admin` | Create new product |
+| `POST` | `/api/admin/products` | `protect`, `admin` | Create new product with stock count |
 | `PUT` | `/api/admin/products/:id` | `protect`, `admin` | Update product details and inventory |
 | `DELETE` | `/api/admin/products/:id` | `protect`, `admin` | Delete product from catalog |
 | `GET` | `/api/admin/orders` | `protect`, `admin` | Retrieve all customer orders |
-| `GET` | `/api/admin/reviews` | `protect`, `admin` | Retrieve pending reviews for moderation |
-| `PATCH` | `/api/admin/reviews/:id/approve` | `protect`, `admin` | Accept review and display on product page |
-| `DELETE` | `/api/admin/reviews/:id` | `protect`, `admin` | Delete rejected review |
+| `PATCH` | `/api/admin/orders/:id/status` | `protect`, `admin` | Update order status following state machine rules |
+| `GET` | `/api/reviews` | `protect`, `admin` | Retrieve all reviews for moderation |
+| `PATCH` | `/api/reviews/:id/status` | `protect`, `admin` | Update review status (approve or reject) |
+| `DELETE` | `/api/reviews/:id` | `protect`, `admin` | Delete review from system |
 
 ---
 

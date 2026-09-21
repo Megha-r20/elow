@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router";
-import { useCart } from "../hooks";
+import { useCart, useDocumentTitle } from "../hooks";
 import { Breadcrumb, QtyStepper, ShippingProgress, Icons, Divider } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { useState, useEffect } from "react";
 import { getApiUrl } from "../api/config";
 const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4" };
 export default function Cart() {
+    useDocumentTitle("Shopping Cart");
     const navigate = useNavigate();
     const { items, count, subtotal, removeItem, setQty, clearCart, promoCode, discount, applyPromo, removePromo } = useCart();
     const [inputCode, setInputCode] = useState(promoCode ?? "");

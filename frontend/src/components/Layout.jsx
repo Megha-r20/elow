@@ -97,18 +97,18 @@ export default function Layout() {
         }}>
         <div className="container" style={{ display: "flex", alignItems: "center", height: 70, gap: 28 }}>
           {/* Logo */}
-          <button onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0, transition: "transform 0.15s ease" }} onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}>
+          <button onClick={() => navigate("/")} aria-label="elow home" style={{ display: "flex", alignItems: "center", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0, transition: "transform 0.15s ease" }} onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}>
             <img
               src={logoDataUrl}
-              alt="elow"
+              alt="elow stationery logo"
               style={{ height: 54, width: "auto", objectFit: "contain" }}
             />
           </button>
 
           {/* Desktop nav */}
-          <nav className="hide-mobile" style={{ display: "flex", gap: 28, alignItems: "center", flex: 1 }}>
+          <nav className="hide-mobile" aria-label="Main Navigation" role="navigation" style={{ display: "flex", gap: 28, alignItems: "center", flex: 1 }}>
             {navLinks.map(link => (link.mega ? (<div key={link.label} className="mega-wrap">
-                  <button onClick={() => navigate(link.path)} className={`nav-link${isActive(link.path) ? " active" : ""}`} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 0", display: "flex", alignItems: "center", gap: 4, fontFamily: "inherit" }}>
+                  <button onClick={() => navigate(link.path)} aria-label={link.label} className={`nav-link${isActive(link.path) ? " active" : ""}`} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 0", display: "flex", alignItems: "center", gap: 4, fontFamily: "inherit" }}>
                     {link.label}
                     <span style={{ opacity: 0.5, display: "flex", alignItems: "center" }}><Icons.ChevronDown /></span>
                   </button>
@@ -142,7 +142,7 @@ export default function Layout() {
 
           {/* Right actions */}
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginLeft: "auto", flexShrink: 0, position: "relative" }}>
-            <button className="icon-btn" onClick={() => setSearchOpen(o => !o)} title="Search">
+            <button className="icon-btn" onClick={() => setSearchOpen(o => !o)} title="Search" aria-label="Toggle search bar" aria-expanded={searchOpen}>
               <Icons.Search />
             </button>
 

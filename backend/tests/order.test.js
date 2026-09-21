@@ -222,4 +222,40 @@ describe("Order & Stock Integration Tests", () => {
 
     expect(res.status).toBe(404);
   });
+
+  it("should return 403 Forbidden when user attempts to access another user's order", async () => {
+    const userA = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "User A", email: "usera@example.com", password: "password123" });
+
+    const userB = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "User B", email: "userb@example.com", password: "password123" });
+
+    const orderRes = await request(app)
+      .post("/api/orders")
+      .set("Authorization", `Bearer ${userA.body.token}`)
+      .send({
+        items: [{ product: { id: "prod-test-notebook" }, qty: 1 }],
+        deliveryAddress: {
+          firstName: "User",
+          lastName: "A",
+          email: "usera@example.com",
+          phone: "9876543210",
+          address: "123 St",
+          city: "Mumbai",
+          pincode: "400001",
+        },
+      });
+
+    const orderId = orderRes.body.order.id;
+
+    // User B attempts to view User A's order
+    const accessRes = await request(app)
+      .get(`/api/orders/${orderId}`)
+      .set("Authorization", `Bearer ${userB.body.token}`);
+
+    expect(accessRes.status).toBe(403);
+    expect(accessRes.body.error).toContain("Access denied");
+  });
 });

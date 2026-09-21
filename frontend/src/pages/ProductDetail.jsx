@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { REVIEWS } from "../data";
-import { useCart, useWishlist, useToast, useDrawer } from "../hooks";
+import { useCart, useWishlist, useToast, useDrawer, useDocumentTitle } from "../hooks";
 import { Stars, Badge, Price, Breadcrumb, QtyStepper, Divider, Icons, SectionHead } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { getApiUrl } from "../api/config";
@@ -12,6 +12,7 @@ export default function ProductDetail() {
     const [product, setProduct] = useState(null);
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);
+    useDocumentTitle(product?.name || "Product Details");
     const { addItem } = useCart();
     const { has, toggle } = useWishlist();
     const { addToast } = useToast();

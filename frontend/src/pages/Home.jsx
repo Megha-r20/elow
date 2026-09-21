@@ -4,7 +4,7 @@ import { SectionHead, Icons, Stars } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { Book, PenTool, Paperclip, Star, Calendar, Notebook, PenBox, Gift } from "lucide-react";
 import { CATEGORIES, HERO_IMAGES } from "../data";
-import { useCart, useToast } from "../hooks";
+import { useCart, useToast, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 const bgVideo = "/Background_video.mp4";
 const T = {
@@ -17,6 +17,7 @@ const T = {
     light: "#9C968D",
 };
 export default function Home() {
+    useDocumentTitle("Home — Beautiful Stationery");
     const navigate = useNavigate();
     const { addItem } = useCart();
     const { addToast } = useToast();

@@ -3,13 +3,14 @@ import { useSearchParams, useNavigate } from "react-router";
 import { Icons, Breadcrumb } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { CATEGORIES, SORT_OPTIONS, PRICE_RANGES } from "../data";
-import { useWishlist } from "../hooks";
+import { useWishlist, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 const T = {
     border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D",
     sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4",
 };
 export default function Shop() {
+    useDocumentTitle("Shop Catalog");
     const [params, setParams] = useSearchParams();
     const navigate = useNavigate();
     const wishlist = useWishlist();

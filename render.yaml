@@ -6,9 +6,8 @@ services:
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
-      - key: PORT
-        value: 5005
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI

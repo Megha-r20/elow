@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useToast } from "../hooks";
+import { useToast, useDocumentTitle } from "../hooks";
 import { Link, useNavigate } from "react-router";
 import { Icons, Divider } from "../components/ui";
 import { getApiUrl } from "../api/config";
+import { AdminOverview } from "../components/admin/AdminOverview";
+import { AdminProducts } from "../components/admin/AdminProducts";
+import { AdminOrders } from "../components/admin/AdminOrders";
+import { AdminReviews } from "../components/admin/AdminReviews";
+
 export function AdminDashboard() {
+    useDocumentTitle("Admin Portal Dashboard");
     const { user, token, isAdmin } = useAuth();
     const { addToast } = useToast();
     const navigate = useNavigate();
@@ -507,574 +513,64 @@ export function AdminDashboard() {
         </div>
 
         {/* TAB 1: OVERVIEW */}
-        {tab === "overview" && (<div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 24 }}>
-            <div style={{ background: "#FFFFFF", padding: 28, borderRadius: 24, border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-                <div>
-                  <h3 style={{ fontSize: 19, fontWeight: 800, color: "#23201D" }}>Recent Customer Orders</h3>
-                  <p style={{ fontSize: 12.5, color: "#9C968D", marginTop: 2 }}>Live activity across customer checkout sessions</p>
-                </div>
-                <button onClick={() => setTab("orders")} style={{ fontSize: 12.5, fontWeight: 700, color: "#8192D4", background: "none", border: "none", cursor: "pointer" }}>
-                  View All Orders →
-                </button>
-              </div>
-
-              {orders.length === 0 ? (<div style={{ padding: "40px 0", textAlign: "center", color: "#9C968D" }}>
-                  <div style={{ fontSize: 36, marginBottom: 12, opacity: 0.4 }}>🛒</div>
-                  <p style={{ fontSize: 15, fontWeight: 700, color: "#23201D" }}>No customer orders placed yet</p>
-                  <p style={{ fontSize: 13, marginTop: 4 }}>Place an order via Checkout to test real-time order tracking.</p>
-                </div>) : (<div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                  {orders.map(o => {
-                    const bStyle = getStatusBadgeStyle(o.status || "Processing");
-                    return (<div key={o.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", background: "#FAF7F2", borderRadius: 16, border: "1px solid #EAE3D9" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                          <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#23201D", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 15 }}>
-                            {o.deliveryAddress?.firstName ? o.deliveryAddress.firstName.charAt(0).toUpperCase() : "C"}
-                          </div>
-                          <div>
-                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                              <p style={{ fontSize: 14, fontWeight: 700, color: "#23201D", fontFamily: "monospace" }}>#{o.id}</p>
-                              <span style={{ fontSize: 10.5, fontWeight: 800, color: bStyle.color, background: bStyle.bg, border: `1px solid ${bStyle.border}`, padding: "2px 8px", borderRadius: 999 }}>
-                                ● {o.status || "Processing"}
-                              </span>
-                            </div>
-                            <p style={{ fontSize: 12, color: "#6E6A63", marginTop: 3 }}>
-                              {o.deliveryAddress?.firstName} {o.deliveryAddress?.lastName} ({o.deliveryAddress?.email}) · {o.items?.length || 0} item(s)
-                            </p>
-                          </div>
-                        </div>
-
-                        <div style={{ textAlign: "right" }}>
-                          <p style={{ fontSize: 16, fontWeight: 800, color: "#23201D" }}>&#8377;{o.total?.toLocaleString("en-IN")}</p>
-                          <p style={{ fontSize: 11.5, color: "#9C968D", marginTop: 2 }}>{o.date || "Today"}</p>
-                        </div>
-                      </div>);
-                })}
-                </div>)}
-            </div>
-
-            <div style={{ background: "#FFFFFF", padding: 28, borderRadius: 24, border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)" }}>
-              <h3 style={{ fontSize: 19, fontWeight: 800, color: "#23201D", marginBottom: 20 }}>Category Breakdown</h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {["journals", "planners", "pens", "workspace", "accessories"].map(cat => {
-                const count = products.filter(p => p.category === cat).length;
-                const pct = Math.round((count / (products.length || 1)) * 100);
-                return (<div key={cat} style={{ background: "#FAF7F2", padding: "12px 16px", borderRadius: 14, border: "1px solid #EAE3D9" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                        <span style={{ textTransform: "capitalize", fontSize: 13.5, fontWeight: 700, color: "#23201D" }}>{cat}</span>
-                        <span style={{ fontSize: 12.5, fontWeight: 700, color: "#8192D4" }}>{count} items ({pct}%)</span>
-                      </div>
-                      <div style={{ height: 6, background: "#EAE3D9", borderRadius: 999, overflow: "hidden" }}>
-                        <div style={{ width: `${pct}%`, height: "100%", background: "#8192D4", borderRadius: 999 }}/>
-                      </div>
-                    </div>);
-            })}
-              </div>
-            </div>
-          </div>)}
+        {tab === "overview" && (
+          <AdminOverview
+            orders={orders}
+            products={products}
+            setTab={setTab}
+            getStatusBadgeStyle={getStatusBadgeStyle}
+          />
+        )}
 
         {/* TAB 2: PRODUCTS MANAGEMENT */}
-        {tab === "products" && (<div style={{ background: "#FFFFFF", padding: 28, borderRadius: 24, border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, marginBottom: 24 }}>
-              <div>
-                <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Product Catalog Management</h3>
-                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 2 }}>Manage inventory, add custom products, or delete items from the live store.</p>
-              </div>
-
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <input type="text" placeholder="Search products…" value={productSearch} onChange={(e) => setProductSearch(e.target.value)} className="field field-sm" style={{ minWidth: 200 }}/>
-
-                <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="field field-sm">
-                  <option value="all">All Categories</option>
-                  <option value="journals">Journals</option>
-                  <option value="planners">Planners</option>
-                  <option value="pens">Pens</option>
-                  <option value="workspace">Workspace</option>
-                  <option value="accessories">Accessories</option>
-                </select>
-
-                <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "10px 20px", borderRadius: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
-                  + Add Product
-                </button>
-              </div>
-            </div>
-
-            {loadingProducts ? (<div style={{ padding: 40, textAlign: "center", color: "#9C968D" }}>Loading product inventory...</div>) : (<div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-                  <thead>
-                    <tr style={{ borderBottom: "2px solid #EAE3D9", fontSize: 11.5, fontWeight: 800, color: "#9C968D", letterSpacing: "1px" }}>
-                      <th style={{ padding: "14px 12px" }}>PRODUCT DETAILS</th>
-                      <th style={{ padding: "14px 12px" }}>CATEGORY</th>
-                      <th style={{ padding: "14px 12px" }}>PRICE</th>
-                      <th style={{ padding: "14px 12px" }}>STOCK</th>
-                      <th style={{ padding: "14px 12px" }}>BADGES</th>
-                      <th style={{ padding: "14px 12px", textAlign: "right" }}>ACTIONS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredProducts.map(p => (<tr key={p.id} style={{ borderBottom: "1px solid #F4EFE6", fontSize: 13.5 }}>
-                        <td style={{ padding: "14px 12px" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                            <img src={p.images?.[0]} alt={p.name} style={{ width: 48, height: 48, borderRadius: 10, objectFit: "cover", border: "1px solid #EAE3D9" }}/>
-                            <div>
-                              <p style={{ fontWeight: 700, color: "#23201D" }}>{p.name}</p>
-                              <p style={{ fontSize: 11.5, color: "#9C968D", fontFamily: "monospace" }}>ID: {p.id}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td style={{ padding: "14px 12px", textTransform: "capitalize", fontWeight: 600, color: "#6E6A63" }}>
-                          <span style={{ background: "#FAF7F2", border: "1px solid #EAE3D9", padding: "4px 10px", borderRadius: 8, fontSize: 12 }}>
-                            {p.category} / {p.subcategory}
-                          </span>
-                        </td>
-                        <td style={{ padding: "14px 12px", fontWeight: 800, color: "#23201D" }}>
-                          &#8377;{p.price}
-                          {p.originalPrice && <span style={{ fontSize: 11.5, color: "#9C968D", textDecoration: "line-through", marginLeft: 6 }}>&#8377;{p.originalPrice}</span>}
-                        </td>
-                        <td style={{ padding: "14px 12px" }}>
-                          <span style={{ fontSize: 11.5, fontWeight: 800, color: p.inStock ? "#8192D4" : "#DC2626", background: p.inStock ? "rgba(129,146,212,0.15)" : "rgba(220,38,38,0.15)", padding: "4px 10px", borderRadius: 999 }}>
-                            {p.inStock ? `In Stock (${p.stockCount ?? 0})` : `Out of Stock (${p.stockCount ?? 0})`}
-                          </span>
-                        </td>
-                        <td style={{ padding: "14px 12px" }}>
-                          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                            {p.isNew && <span style={{ fontSize: 10, fontWeight: 800, background: "#23201D", color: "#FFFFFF", padding: "3px 8px", borderRadius: 6 }}>NEW</span>}
-                            {p.isBestseller && <span style={{ fontSize: 10, fontWeight: 800, background: "#D97706", color: "#FFFFFF", padding: "3px 8px", borderRadius: 6 }}>BESTSELLER</span>}
-                          </div>
-                        </td>
-                        <td style={{ padding: "14px 12px", textAlign: "right" }}>
-                          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                            <button onClick={() => openEditModal(p)} style={{ background: "#FAF7F2", color: "#8192D4", border: "1px solid #8192D4", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }} onMouseEnter={e => { e.currentTarget.style.background = "#8192D4"; e.currentTarget.style.color = "#FFFFFF"; }} onMouseLeave={e => { e.currentTarget.style.background = "#FAF7F2"; e.currentTarget.style.color = "#8192D4"; }}>
-                              ✏️ Edit
-                            </button>
-                            <button onClick={() => handleDeleteProduct(p.id, p.name)} style={{ background: "#FDF2F2", color: "#DC2626", border: "1px solid #F8B4B4", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }}>
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>))}
-                  </tbody>
-                </table>
-              </div>)}
-          </div>)}
+        {tab === "products" && (
+          <AdminProducts
+            products={products}
+            loadingProducts={loadingProducts}
+            filteredProducts={filteredProducts}
+            productSearch={productSearch}
+            setProductSearch={setProductSearch}
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+            setShowAddModal={setShowAddModal}
+            openEditModal={openEditModal}
+            handleDeleteProduct={handleDeleteProduct}
+          />
+        )}
 
         {/* TAB 3: ORDERS MANAGEMENT */}
-        {tab === "orders" && (<div style={{ background: "#FFFFFF", padding: 28, borderRadius: 24, border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <div>
-                <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Customer Orders Fulfillment</h3>
-                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 2 }}>Track orders, update fulfillment status in real-time, and inspect customer addresses.</p>
-              </div>
-
-              <div style={{ display: "flex", gap: 10 }}>
-                <button onClick={() => { fetchOrders(); addToast("Refreshed orders list"); }} className="btn" style={{ background: "#FAF7F2", border: "1px solid #EAE3D9", color: "#23201D", padding: "8px 16px", borderRadius: 10, fontWeight: 700, cursor: "pointer" }}>
-                  🔄 Refresh Orders
-                </button>
-              </div>
-            </div>
-
-            {/* Order Status Category Filter Bars */}
-            <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
-              {[
-                { id: "all", label: `All Orders (${orders.length})` },
-                { id: "processing", label: `Processing 🟡 (${processingCount})` },
-                { id: "shipped", label: `Shipped 🔵 (${shippedCount})` },
-                { id: "delivered", label: `Delivered 🟢 (${deliveredCount})` },
-                { id: "cancelled", label: `Cancelled 🔴 (${cancelledCount})` },
-              ].map(st => (
-                <button
-                  key={st.id}
-                  onClick={() => setAdminOrderFilter(st.id)}
-                  style={{
-                    background: adminOrderFilter === st.id ? "#23201D" : "#FAF7F2",
-                    color: adminOrderFilter === st.id ? "#FAF7F2" : "#6E6A63",
-                    border: `1.5px solid ${adminOrderFilter === st.id ? "#23201D" : "#EAE3D9"}`,
-                    borderRadius: 999,
-                    padding: "8px 18px",
-                    fontSize: 13,
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    fontFamily: "inherit",
-                    transition: "all 0.15s ease",
-                    boxShadow: adminOrderFilter === st.id ? "0 4px 12px rgba(35,32,29,0.12)" : "none",
-                  }}
-                >
-                  {st.label}
-                </button>
-              ))}
-            </div>
-
-            {loadingOrders ? (<div style={{ padding: 40, textAlign: "center", color: "#9C968D" }}>Loading live orders...</div>) : filteredAdminOrders.length === 0 ? (
-              <div style={{ padding: "48px 24px", textAlign: "center", background: "#FAF7F2", borderRadius: 20, border: "1px dashed #EAE3D9" }}>
-                <div style={{ fontSize: 36, marginBottom: 12, opacity: 0.4 }}>📦</div>
-                <h4 style={{ fontSize: 16, fontWeight: 800, color: "#23201D" }}>No {adminOrderFilter !== "all" ? adminOrderFilter : ""} orders found</h4>
-                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>There are currently no orders in this status category.</p>
-              </div>
-            ) : (<div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                {filteredAdminOrders.map(o => {
-                    const bStyle = getStatusBadgeStyle(o.status || "Processing");
-                    return (<div key={o.id} style={{ border: "1px solid #EAE3D9", borderRadius: 20, padding: 24, background: "#FAF7F2" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, marginBottom: 16 }}>
-                        <div>
-                          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>ORDER ID</span>
-                            <span style={{ fontSize: 11, fontWeight: 800, color: bStyle.color, background: bStyle.bg, border: `1px solid ${bStyle.border}`, padding: "2px 10px", borderRadius: 999 }}>
-                              ● {o.status || "Processing"}
-                            </span>
-                          </div>
-                          <h4 style={{ fontSize: 18, fontWeight: 800, color: "#23201D", fontFamily: "monospace", marginTop: 4 }}>#{o.id}</h4>
-                          <p style={{ fontSize: 12, color: "#9C968D", marginTop: 2 }}>Placed on {o.date || "Today"}</p>
-                        </div>
-
-                        {/* Status Change Dropdown & Delete Order Action */}
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#FFFFFF", padding: "8px 14px", borderRadius: 12, border: "1px solid #EAE3D9" }}>
-                            <span style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>Update Status:</span>
-                            <select value={o.status || "Processing"} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)} style={{
-                              padding: "6px 14px",
-                              borderRadius: 8,
-                              border: `1.5px solid ${bStyle.color}`,
-                              background: bStyle.bg,
-                              fontSize: 13,
-                              fontWeight: 800,
-                              color: bStyle.color,
-                              cursor: "pointer",
-                              outline: "none",
-                          }}>
-                              <option value="Processing">Processing</option>
-                              <option value="Shipped">Shipped</option>
-                              <option value="Delivered">Delivered</option>
-                              <option value="Cancelled">Cancelled</option>
-                            </select>
-                          </div>
-                          <button
-                            onClick={() => handleDeleteSingleOrder(o.id)}
-                            title="Delete Order"
-                            style={{
-                              background: "#FDF2F2",
-                              color: "#DC2626",
-                              border: "1px solid #F8B4B4",
-                              padding: "8px 14px",
-                              borderRadius: 12,
-                              fontSize: 12.5,
-                              fontWeight: 700,
-                              cursor: "pointer",
-                            }}
-                          >
-                            🗑️ Delete
-                          </button>
-                        </div>
-                      </div>
-
-                      <Divider margin={14}/>
-
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-                        <div>
-                          <p style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1px", marginBottom: 6 }}>DELIVERY ADDRESS</p>
-                          <p style={{ fontSize: 13, color: "#23201D", lineHeight: 1.6 }}>
-                            <strong>{o.deliveryAddress?.firstName} {o.deliveryAddress?.lastName}</strong><br />
-                            {o.deliveryAddress?.email}<br />
-                            {o.deliveryAddress?.address}, {o.deliveryAddress?.city}<br />
-                            Phone: {o.deliveryAddress?.phone || "N/A"}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1px", marginBottom: 6 }}>ORDER SUMMARY</p>
-                          <p style={{ fontSize: 13, color: "#23201D", lineHeight: 1.6 }}>
-                            Payment Method: <span style={{ fontWeight: 800, textTransform: "uppercase" }}>{o.payMethod}</span><br />
-                            Total Amount: <strong style={{ fontSize: 16, color: "#8192D4" }}>&#8377;{o.total?.toLocaleString("en-IN")}</strong>
-                          </p>
-                        </div>
-                      </div>
-
-                      {o.items && o.items.length > 0 && (<div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px dashed #EAE3D9" }}>
-                          <p style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1px", marginBottom: 10 }}>ORDERED ITEMS ({o.items.length})</p>
-                          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                            {o.items.map((item, idx) => (<div key={idx} style={{ display: "flex", alignItems: "center", gap: 8, background: "#FFFFFF", padding: "6px 12px", borderRadius: 12, border: "1px solid #EAE3D9", boxShadow: "0 2px 6px rgba(0,0,0,0.02)" }}>
-                                {item.product?.images?.[0] && (<img src={item.product.images[0]} alt={item.product.name} style={{ width: 32, height: 32, borderRadius: 8, objectFit: "cover", border: "1px solid #EAE3D9" }}/>)}
-                                <div>
-                                  <p style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>{item.product?.name || "Product"}</p>
-                                  <p style={{ fontSize: 11, color: "#9C968D" }}>&#8377;{item.product?.price || 0}</p>
-                                </div>
-                                <span style={{ fontSize: 11.5, fontWeight: 800, color: "#8192D4", background: "rgba(129,146,212,0.12)", padding: "2px 8px", borderRadius: 6, marginLeft: 4 }}>
-                                  x{item.qty || 1}
-                                </span>
-                              </div>))}
-                          </div>
-                        </div>)}
-                    </div>);
-                })}
-              </div>)}
-          </div>)}
+        {tab === "orders" && (
+          <AdminOrders
+            orders={orders}
+            loadingOrders={loadingOrders}
+            filteredAdminOrders={filteredAdminOrders}
+            adminOrderFilter={adminOrderFilter}
+            setAdminOrderFilter={setAdminOrderFilter}
+            processingCount={processingCount}
+            shippedCount={shippedCount}
+            deliveredCount={deliveredCount}
+            cancelledCount={cancelledCount}
+            fetchOrders={fetchOrders}
+            addToast={addToast}
+            getStatusBadgeStyle={getStatusBadgeStyle}
+            handleUpdateOrderStatus={handleUpdateOrderStatus}
+            handleDeleteSingleOrder={handleDeleteSingleOrder}
+          />
+        )}
 
         {/* TAB 4: REVIEWS */}
         {tab === "reviews" && (
-          <div style={{ background: "#FFFFFF", padding: 28, borderRadius: 24, border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 16 }}>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Customer Product Reviews</h3>
-                  <span style={{ fontSize: 12, fontWeight: 800, background: "#FEF3C7", color: "#D97706", border: "1px solid #FDE68A", padding: "2px 10px", borderRadius: 999 }}>
-                    ⭐ {reviews.length} total
-                  </span>
-                </div>
-                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>
-                  Approve or delete customer ratings and feedback. Accepted reviews will immediately show up on customer product pages.
-                </p>
-              </div>
-
-              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                <input
-                  type="text"
-                  placeholder="🔍 Search reviews, customer, or product..."
-                  value={reviewSearch}
-                  onChange={(e) => setReviewSearch(e.target.value)}
-                  style={{
-                    padding: "9px 16px",
-                    borderRadius: 12,
-                    border: "1px solid #EAE3D9",
-                    fontSize: 13,
-                    outline: "none",
-                    width: 260,
-                    background: "#FAF7F2",
-                  }}
-                />
-                <button
-                  onClick={fetchReviews}
-                  style={{
-                    background: "#FAF7F2",
-                    border: "1px solid #EAE3D9",
-                    borderRadius: 12,
-                    padding: "9px 16px",
-                    fontSize: 13,
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    color: "#23201D",
-                  }}
-                >
-                  🔄 Refresh
-                </button>
-              </div>
-            </div>
-
-            {/* Status Category Filter Pills */}
-            <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
-              {[
-                { id: "all", label: `All Reviews (${reviews.length})` },
-                { id: "pending", label: `Pending Approval ⏳ (${reviews.filter(r => r.status !== "approved").length})` },
-                { id: "approved", label: `Accepted & Live ✓ (${reviews.filter(r => r.status === "approved").length})` },
-              ].map(st => (
-                <button
-                  key={st.id}
-                  onClick={() => setReviewStatusFilter(st.id)}
-                  style={{
-                    background: reviewStatusFilter === st.id ? "#23201D" : "#FAF7F2",
-                    color: reviewStatusFilter === st.id ? "#FAF7F2" : "#6E6A63",
-                    border: `1.5px solid ${reviewStatusFilter === st.id ? "#23201D" : "#EAE3D9"}`,
-                    borderRadius: 999,
-                    padding: "8px 18px",
-                    fontSize: 13,
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    fontFamily: "inherit",
-                    transition: "all 0.15s ease",
-                    boxShadow: reviewStatusFilter === st.id ? "0 4px 12px rgba(35,32,29,0.12)" : "none",
-                  }}
-                >
-                  {st.label}
-                </button>
-              ))}
-            </div>
-
-            {loadingReviews ? (
-              <div style={{ padding: 40, textAlign: "center", color: "#9C968D" }}>Loading customer reviews...</div>
-            ) : reviews.length === 0 ? (
-              <div style={{ padding: "48px 24px", textAlign: "center", background: "#FAF7F2", borderRadius: 20, border: "1px dashed #EAE3D9" }}>
-                <div style={{ fontSize: 40, marginBottom: 12, opacity: 0.4 }}>⭐</div>
-                <h4 style={{ fontSize: 16, fontWeight: 800, color: "#23201D" }}>No customer reviews found</h4>
-                <p style={{ fontSize: 13, color: "#9C968D", marginTop: 4 }}>When customers write reviews on products, they will appear here live for approval.</p>
-              </div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {reviews
-                  .filter((r) => {
-                    const isApproved = r.status === "approved";
-                    if (reviewStatusFilter === "pending" && isApproved) return false;
-                    if (reviewStatusFilter === "approved" && !isApproved) return false;
-
-                    if (!reviewSearch.trim()) return true;
-                    const q = reviewSearch.toLowerCase();
-                    return (
-                      (r.title && r.title.toLowerCase().includes(q)) ||
-                      (r.comment && r.comment.toLowerCase().includes(q)) ||
-                      (r.userName && r.userName.toLowerCase().includes(q)) ||
-                      (r.userEmail && r.userEmail.toLowerCase().includes(q)) ||
-                      (r.productId && r.productId.toLowerCase().includes(q))
-                    );
-                  })
-                  .map((rev) => {
-                    const prod = products.find((p) => p.id === rev.productId);
-                    const dateStr = rev.createdAt ? new Date(rev.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent";
-                    const isApproved = rev.status === "approved";
-                    return (
-                      <div
-                        key={rev.id || rev._id}
-                        style={{
-                          border: `1.5px solid ${isApproved ? "#BBF7D0" : "#FDE68A"}`,
-                          borderRadius: 18,
-                          padding: 20,
-                          background: isApproved ? "#F0FDF4" : "#FFFBEB",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 12,
-                        }}
-                      >
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
-                          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
-                            {prod?.images?.[0] ? (
-                              <img
-                                src={prod.images[0]}
-                                alt={prod.name}
-                                style={{ width: 48, height: 48, borderRadius: 12, objectFit: "cover", border: "1px solid #EAE3D9" }}
-                              />
-                            ) : (
-                              <div
-                                style={{
-                                  width: 48,
-                                  height: 48,
-                                  borderRadius: 12,
-                                  background: "#EAE3D9",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  fontSize: 20,
-                                }}
-                              >
-                                📓
-                              </div>
-                            )}
-                            <div>
-                              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                                <span style={{ fontSize: 14, color: "#F59E0B", fontWeight: 800 }}>
-                                  {"★".repeat(Math.min(5, Math.max(1, rev.rating)))}{"☆".repeat(5 - Math.min(5, Math.max(1, rev.rating)))}
-                                </span>
-                                <span style={{ fontSize: 12, fontWeight: 800, color: "#23201D" }}>
-                                  {rev.rating}.0
-                                </span>
-                                {isApproved ? (
-                                  <span style={{ fontSize: 10.5, fontWeight: 800, color: "#166534", background: "#DCFCE7", border: "1px solid #BBF7D0", padding: "1px 8px", borderRadius: 999 }}>
-                                    ✓ Accepted & Live
-                                  </span>
-                                ) : (
-                                  <span style={{ fontSize: 10.5, fontWeight: 800, color: "#D97706", background: "#FEF3C7", border: "1px solid #FDE68A", padding: "1px 8px", borderRadius: 999 }}>
-                                    ⏳ Pending Approval
-                                  </span>
-                                )}
-                                {rev.verifiedPurchase && (
-                                  <span
-                                    style={{
-                                      fontSize: 10.5,
-                                      fontWeight: 800,
-                                      color: "#2563EB",
-                                      background: "rgba(37,99,235,0.1)",
-                                      border: "1px solid rgba(37,99,235,0.25)",
-                                      padding: "1px 8px",
-                                      borderRadius: 999,
-                                    }}
-                                  >
-                                    ✓ Verified Purchase
-                                  </span>
-                                )}
-                              </div>
-                              <h4 style={{ fontSize: 15, fontWeight: 800, color: "#23201D", margin: "4px 0 0" }}>
-                                {prod ? prod.name : `Product #${rev.productId}`}
-                              </h4>
-                            </div>
-                          </div>
-
-                          {/* Action Buttons: Accept & Delete */}
-                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                            {!isApproved ? (
-                              <button
-                                onClick={() => handleApproveReview(rev.id || rev._id)}
-                                style={{
-                                  background: "#16A34A",
-                                  color: "#FFFFFF",
-                                  border: "none",
-                                  padding: "7px 16px",
-                                  borderRadius: 10,
-                                  fontSize: 12.5,
-                                  fontWeight: 800,
-                                  cursor: "pointer",
-                                  boxShadow: "0 2px 8px rgba(22,163,74,0.25)",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 6,
-                                }}
-                              >
-                                ✓ Accept Review
-                              </button>
-                            ) : (
-                              <span
-                                style={{
-                                  fontSize: 12,
-                                  fontWeight: 800,
-                                  color: "#166534",
-                                  background: "#DCFCE7",
-                                  border: "1px solid #86EFAC",
-                                  padding: "6px 14px",
-                                  borderRadius: 10,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 6,
-                                }}
-                              >
-                                ✓ Accepted
-                              </span>
-                            )}
-                            <button
-                              onClick={() => handleDeleteReview(rev.id || rev._id, rev.title)}
-                              style={{
-                                background: "#FDF2F2",
-                                color: "#DC2626",
-                                border: "1px solid #F8B4B4",
-                                padding: "6px 14px",
-                                borderRadius: 10,
-                                fontSize: 12,
-                                fontWeight: 700,
-                                cursor: "pointer",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 6,
-                              }}
-                            >
-                              🗑️ Delete Review
-                            </button>
-                          </div>
-                        </div>
-
-                        <div style={{ background: "#FFFFFF", padding: 14, borderRadius: 12, border: "1px solid #EAE3D9" }}>
-                          <h5 style={{ fontSize: 14, fontWeight: 700, color: "#23201D", margin: "0 0 4px" }}>
-                            "{rev.title}"
-                          </h5>
-                          <p style={{ fontSize: 13, color: "#6E6A63", margin: 0, lineHeight: 1.5 }}>
-                            {rev.comment}
-                          </p>
-                        </div>
-
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, color: "#9C968D" }}>
-                          <span>
-                            By <strong style={{ color: "#23201D" }}>{rev.userName || "Verified Buyer"}</strong> ({rev.userEmail || "No email provided"})
-                          </span>
-                          <span>{dateStr}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            )}
-          </div>
+          <AdminReviews
+            reviews={reviews}
+            loadingReviews={loadingReviews}
+            reviewSearch={reviewSearch}
+            setReviewSearch={setReviewSearch}
+            reviewStatusFilter={reviewStatusFilter}
+            setReviewStatusFilter={setReviewStatusFilter}
+            fetchReviews={fetchReviews}
+            handleApproveReview={handleApproveReview}
+            handleDeleteReview={handleDeleteReview}
+          />
         )}
       </div>
 

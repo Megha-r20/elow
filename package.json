@@ -10,6 +10,7 @@
   "scripts": {
     "test": "npm --prefix backend test",
     "test:backend": "npm --prefix backend test",
+    "test:frontend": "npm --prefix backend exec vitest -- run frontend/src/__tests__/App.test.jsx",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",

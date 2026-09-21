@@ -209,4 +209,52 @@ describe("Auth & RBAC Integration Tests", () => {
     expect(res.status).toBe(400);
     expect(res.body.error).toContain("Validation error");
   });
+
+  it("should reject forged JWT tokens (401 Unauthorized)", async () => {
+    const forgedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZvcmdlZCIsInJvbGUiOiJhZG1pbiJ9.invalid_signature_hash";
+    const res = await request(app)
+      .get("/api/auth/me")
+      .set("Authorization", `Bearer ${forgedToken}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toContain("Not authorized");
+  });
+
+  it("should reject expired JWT tokens (401 Unauthorized)", async () => {
+    const jwt = (await import("jsonwebtoken")).default;
+    const { JWT_SECRET } = await import("../middleware/authMiddleware.js");
+    const expiredToken = jwt.sign({ id: "user-123", role: "user", type: "access" }, JWT_SECRET, { expiresIn: "-1s" });
+
+    const res = await request(app)
+      .get("/api/auth/me")
+      .set("Authorization", `Bearer ${expiredToken}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toContain("Not authorized");
+  });
+
+  it("should reject login attempt when passing raw bcrypt hash as password (401 Unauthorized)", async () => {
+    const bcrypt = (await import("bcryptjs")).default;
+    const rawPassword = "mysecretpassword";
+    const hashedPassword = await bcrypt.hash(rawPassword, 10);
+
+    await request(app)
+      .post("/api/auth/register")
+      .send({
+        name: "Hash User",
+        email: "hashuser@example.com",
+        password: rawPassword,
+      });
+
+    // User attempts to log in using the bcrypt hash string instead of raw password
+    const res = await request(app)
+      .post("/api/auth/login")
+      .send({
+        email: "hashuser@example.com",
+        password: hashedPassword,
+      });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toBe("Invalid email or password");
+  });
 });
