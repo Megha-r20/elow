@@ -2,6 +2,16 @@ import { useState, useEffect } from "react";
 import { TrendingUp, ShoppingBag, PieChart, ArrowUpRight, BarChart2 } from "lucide-react";
 import { getApiUrl } from "../../api/config";
 
+const T = {
+  border: "#EAE3D9",
+  txt: "#23201D",
+  muted: "#6E6A63",
+  light: "#9C968D",
+  sand: "#F4EFE6",
+  cream: "#FAF7F2",
+  teal: "#8192D4",
+};
+
 export function AdminOverview({ orders = [], products = [], setTab, getStatusBadgeStyle, token }) {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +28,7 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
           if (isMounted) setAnalytics(data);
         }
       } catch (_err) {
-        // Fall back to client calculation if endpoint fails
+        // Fall back gracefully
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -29,11 +39,9 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
     };
   }, [token]);
 
-  // Extract sales trend or fallback
   const salesTrend = analytics?.salesTrend || [];
   const maxRevenue = Math.max(...salesTrend.map((d) => d.revenue), 100);
 
-  // SVG Chart Geometry parameters
   const chartHeight = 160;
   const chartWidth = 500;
   const points = salesTrend.map((d, index) => {
@@ -56,33 +64,58 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
   const maxCatRevenue = Math.max(...categorySales.map((c) => c.revenue), 1);
 
   return (
-    <div className="space-y-6">
-      {/* Interactive Analytics Charts Banner */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Sales & Revenue Trend SVG Area Chart */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-warm-grey-200 shadow-sm space-y-4">
-          <div className="flex items-center justify-between">
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Interactive Analytics Charts Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 24, flexWrap: "wrap" }}>
+        {/* Revenue & Order Trend Card */}
+        <div
+          style={{
+            background: "#FFFFFF",
+            borderRadius: 24,
+            padding: "24px 28px",
+            border: `1px solid ${T.border}`,
+            boxShadow: "0 8px 30px rgba(35, 32, 29, 0.04)",
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
-              <h3 className="text-lg font-serif font-semibold text-charcoal flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-soft-lavender-600" /> Revenue & Order Trend
+              <h3 style={{ fontSize: 18, fontWeight: 800, color: T.txt, display: "flex", alignItems: "center", gap: 8 }}>
+                <TrendingUp style={{ width: 20, height: 20, color: T.teal }} /> Revenue & Order Trend
               </h3>
-              <p className="text-xs text-dusty-taupe mt-0.5">Live store revenue trajectory over time</p>
+              <p style={{ fontSize: 13, color: T.muted, marginTop: 4 }}>Live store revenue trajectory over time</p>
             </div>
-            <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full flex items-center gap-1">
-              <ArrowUpRight className="w-3.5 h-3.5" /> Real-time
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                padding: "4px 12px",
+                background: "rgba(129, 146, 212, 0.15)",
+                color: T.teal,
+                borderRadius: 999,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              <ArrowUpRight style={{ width: 14, height: 14 }} /> Real-time
             </span>
           </div>
 
           {loading ? (
-            <div className="h-44 flex items-center justify-center text-xs text-dusty-taupe">Loading analytics...</div>
+            <div style={{ height: 180, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: T.muted }}>
+              Loading analytics...
+            </div>
           ) : points.length === 0 ? (
-            <div className="h-44 flex flex-col items-center justify-center text-xs text-dusty-taupe">
-              <BarChart2 className="w-8 h-8 mb-2 opacity-40 text-soft-lavender-500" />
+            <div style={{ height: 180, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontSize: 13, color: T.muted }}>
+              <BarChart2 style={{ width: 36, height: 36, opacity: 0.3, marginBottom: 8, color: T.teal }} />
               <span>No completed checkout trends recorded yet</span>
             </div>
           ) : (
-            <div className="w-full overflow-hidden">
-              <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-44 overflow-visible">
+            <div style={{ width: "100%", overflow: "hidden" }}>
+              <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} style={{ width: "100%", height: 160, overflow: "visible" }}>
                 <defs>
                   <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#8192D4" stopOpacity="0.35" />
@@ -90,24 +123,21 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
                   </linearGradient>
                 </defs>
 
-                {/* Grid Lines */}
                 <line x1="20" y1="30" x2={chartWidth - 20} y2="30" stroke="#EAE3D9" strokeDasharray="4 4" />
                 <line x1="20" y1={chartHeight / 2} x2={chartWidth - 20} y2={chartHeight / 2} stroke="#EAE3D9" strokeDasharray="4 4" />
                 <line x1="20" y1={chartHeight - 30} x2={chartWidth - 20} y2={chartHeight - 30} stroke="#EAE3D9" strokeDasharray="4 4" />
 
-                {/* Area and Line */}
                 <path d={areaPath} fill="url(#revenueGradient)" />
                 <path d={svgPath} fill="none" stroke="#8192D4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
 
-                {/* Point Indicators */}
                 {points.map((p, idx) => (
-                  <g key={idx} className="group cursor-pointer">
+                  <g key={idx} style={{ cursor: "pointer" }}>
                     <circle cx={p.x} cy={p.y} r="4" fill="#FFFFFF" stroke="#8192D4" strokeWidth="2.5" />
                     <title>{`${p.date}: ₹${p.revenue.toLocaleString("en-IN")}`}</title>
                   </g>
                 ))}
               </svg>
-              <div className="flex justify-between text-[11px] text-dusty-taupe font-mono pt-1 px-4">
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: T.light, fontFamily: "monospace", paddingTop: 8 }}>
                 <span>{points[0]?.date || ""}</span>
                 <span>{points[points.length - 1]?.date || ""}</span>
               </div>
@@ -115,30 +145,46 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
           )}
         </div>
 
-        {/* Category Sales Breakdown Chart */}
-        <div className="bg-white p-6 rounded-2xl border border-warm-grey-200 shadow-sm space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-serif font-semibold text-charcoal flex items-center gap-2">
-              <PieChart className="w-5 h-5 text-soft-lavender-600" /> Category Performance
-            </h3>
-          </div>
+        {/* Category Performance Card */}
+        <div
+          style={{
+            background: "#FFFFFF",
+            borderRadius: 24,
+            padding: "24px 28px",
+            border: `1px solid ${T.border}`,
+            boxShadow: "0 8px 30px rgba(35, 32, 29, 0.04)",
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+          }}
+        >
+          <h3 style={{ fontSize: 18, fontWeight: 800, color: T.txt, display: "flex", alignItems: "center", gap: 8 }}>
+            <PieChart style={{ width: 20, height: 20, color: T.teal }} /> Category Performance
+          </h3>
 
-          <div className="space-y-3 pt-1">
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {categorySales.length === 0 ? (
-              <div className="py-8 text-center text-xs text-dusty-taupe">No category sales recorded yet</div>
+              <div style={{ padding: "32px 0", textAlign: "center", fontSize: 13, color: T.muted }}>
+                No category sales recorded yet
+              </div>
             ) : (
               categorySales.slice(0, 5).map((cat) => {
                 const pct = Math.round((cat.revenue / maxCatRevenue) * 100);
                 return (
-                  <div key={cat.category} className="space-y-1">
-                    <div className="flex justify-between text-xs font-medium">
-                      <span className="capitalize text-charcoal">{cat.category}</span>
-                      <span className="text-soft-lavender-700 font-bold">₹{cat.revenue.toLocaleString("en-IN")}</span>
+                  <div key={cat.category} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, fontWeight: 700 }}>
+                      <span style={{ textTransform: "capitalize", color: T.txt }}>{cat.category}</span>
+                      <span style={{ color: T.teal }}>₹{cat.revenue.toLocaleString("en-IN")}</span>
                     </div>
-                    <div className="h-2 w-full bg-cream-100 rounded-full overflow-hidden">
+                    <div style={{ height: 8, width: "100%", background: T.sand, borderRadius: 999, overflow: "hidden" }}>
                       <div
-                        className="h-full bg-soft-lavender-600 rounded-full transition-all duration-500"
-                        style={{ width: `${pct}%` }}
+                        style={{
+                          height: "100%",
+                          background: T.teal,
+                          borderRadius: 999,
+                          width: `${pct}%`,
+                          transition: "width 0.5s ease",
+                        }}
                       />
                     </div>
                   </div>
@@ -149,62 +195,111 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
         </div>
       </div>
 
-      {/* Recent Customer Orders Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-warm-grey-200 shadow-sm">
-          <div className="flex items-center justify-between mb-5">
+      {/* Recent Orders and Inventory Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 24, flexWrap: "wrap" }}>
+        {/* Recent Customer Orders Card */}
+        <div
+          style={{
+            background: "#FFFFFF",
+            borderRadius: 24,
+            padding: "24px 28px",
+            border: `1px solid ${T.border}`,
+            boxShadow: "0 8px 30px rgba(35, 32, 29, 0.04)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
             <div>
-              <h3 className="text-lg font-serif font-semibold text-charcoal flex items-center gap-2">
-                <ShoppingBag className="w-5 h-5 text-soft-lavender-600" /> Recent Customer Orders
+              <h3 style={{ fontSize: 18, fontWeight: 800, color: T.txt, display: "flex", alignItems: "center", gap: 8 }}>
+                <ShoppingBag style={{ width: 20, height: 20, color: T.teal }} /> Recent Customer Orders
               </h3>
-              <p className="text-xs text-dusty-taupe mt-0.5">Live activity across customer checkout sessions</p>
+              <p style={{ fontSize: 13, color: T.muted, marginTop: 4 }}>Live activity across customer checkout sessions</p>
             </div>
             <button
               onClick={() => setTab("orders")}
-              className="text-xs font-semibold text-soft-lavender-600 hover:text-soft-lavender-700"
+              style={{
+                fontSize: 12.5,
+                fontWeight: 700,
+                color: T.teal,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
             >
               View All Orders →
             </button>
           </div>
 
           {orders.length === 0 ? (
-            <div className="py-12 text-center text-dusty-taupe">
-              <div className="text-3xl mb-2 opacity-40">🛒</div>
-              <p className="text-sm font-semibold text-charcoal">No customer orders placed yet</p>
-              <p className="text-xs mt-1">Place an order via Checkout to test real-time order tracking.</p>
+            <div style={{ padding: "40px 0", textAlign: "center", color: T.muted }}>
+              <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.5 }}>🛒</div>
+              <p style={{ fontSize: 14, fontWeight: 700, color: T.txt }}>No customer orders placed yet</p>
+              <p style={{ fontSize: 12, marginTop: 4 }}>Place an order via Checkout to test real-time tracking.</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {orders.slice(0, 5).map((o) => {
                 const bStyle = getStatusBadgeStyle(o.status || "Processing");
                 return (
                   <div
                     key={o.id}
-                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-cream-50/50 rounded-xl border border-warm-grey-200 gap-3"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: 14,
+                      background: T.cream,
+                      borderRadius: 16,
+                      border: `1px solid ${T.border}`,
+                      gap: 12,
+                    }}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-charcoal text-white flex items-center justify-center font-bold text-sm">
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <div
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: "50%",
+                          background: T.txt,
+                          color: "#FFFFFF",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontWeight: 800,
+                          fontSize: 14,
+                        }}
+                      >
                         {o.deliveryAddress?.firstName ? o.deliveryAddress.firstName.charAt(0).toUpperCase() : "C"}
                       </div>
                       <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-charcoal">#{o.id}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <span style={{ fontFamily: "monospace", fontSize: 12, fontWeight: 800, color: T.txt }}>
+                            #{o.id}
+                          </span>
                           <span
-                            className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                            style={{ color: bStyle.color, backgroundColor: bStyle.bg, border: `1px solid ${bStyle.border}` }}
+                            style={{
+                              fontSize: 10,
+                              fontWeight: 700,
+                              padding: "2px 8px",
+                              borderRadius: 999,
+                              color: bStyle.color,
+                              backgroundColor: bStyle.bg,
+                              border: `1px solid ${bStyle.border}`,
+                            }}
                           >
                             ● {o.status || "Processing"}
                           </span>
                         </div>
-                        <p className="text-xs text-dusty-taupe mt-0.5">
+                        <p style={{ fontSize: 12, color: T.muted, margin: "3px 0 0" }}>
                           {o.deliveryAddress?.firstName} {o.deliveryAddress?.lastName} ({o.deliveryAddress?.email}) · {o.items?.length || 0} item(s)
                         </p>
                       </div>
                     </div>
 
-                    <div className="sm:text-right">
-                      <p className="text-sm font-bold text-charcoal">₹{(o.total || o.totalAmount || 0).toLocaleString("en-IN")}</p>
-                      <p className="text-[11px] text-dusty-taupe mt-0.5">{o.date || "Today"}</p>
+                    <div style={{ textAlign: "right" }}>
+                      <p style={{ fontSize: 14, fontWeight: 800, color: T.txt, margin: 0 }}>
+                        ₹{(o.total || o.totalAmount || 0).toLocaleString("en-IN")}
+                      </p>
+                      <p style={{ fontSize: 11, color: T.light, margin: "2px 0 0" }}>{o.date || "Today"}</p>
                     </div>
                   </div>
                 );
@@ -213,21 +308,40 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
           )}
         </div>
 
-        {/* Static Product Catalog Breakdown */}
-        <div className="bg-white p-6 rounded-2xl border border-warm-grey-200 shadow-sm space-y-4">
-          <h3 className="text-lg font-serif font-semibold text-charcoal mb-4">Catalog Inventory</h3>
-          <div className="space-y-3">
+        {/* Catalog Inventory Card */}
+        <div
+          style={{
+            background: "#FFFFFF",
+            borderRadius: 24,
+            padding: "24px 28px",
+            border: `1px solid ${T.border}`,
+            boxShadow: "0 8px 30px rgba(35, 32, 29, 0.04)",
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+          }}
+        >
+          <h3 style={{ fontSize: 18, fontWeight: 800, color: T.txt }}>Catalog Inventory</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {["journals", "planners", "pens", "workspace", "accessories"].map((cat) => {
               const count = products.filter((p) => p.category === cat).length;
               const pct = Math.round((count / (products.length || 1)) * 100);
               return (
-                <div key={cat} className="bg-cream-50/50 p-3 rounded-xl border border-warm-grey-100">
-                  <div className="flex justify-between text-xs font-semibold mb-1">
-                    <span className="capitalize text-charcoal">{cat}</span>
-                    <span className="text-soft-lavender-700">{count} items ({pct}%)</span>
+                <div
+                  key={cat}
+                  style={{
+                    background: T.cream,
+                    padding: 12,
+                    borderRadius: 14,
+                    border: `1px solid ${T.border}`,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
+                    <span style={{ textTransform: "capitalize", color: T.txt }}>{cat}</span>
+                    <span style={{ color: T.teal }}>{count} items ({pct}%)</span>
                   </div>
-                  <div className="h-1.5 bg-warm-grey-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-soft-lavender-600 rounded-full" style={{ width: `${pct}%` }} />
+                  <div style={{ height: 6, background: T.sand, borderRadius: 999, overflow: "hidden" }}>
+                    <div style={{ height: "100%", background: T.teal, borderRadius: 999, width: `${pct}%` }} />
                   </div>
                 </div>
               );
