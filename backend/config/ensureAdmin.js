@@ -16,38 +16,71 @@ export const ensureAdminUser = async () => {
     return;
   }
 
-  const passwordToUse = adminPassword || "AdminSecret123!";
+  const adminPasswordToUse = adminPassword || "AdminSecret123!";
   const adminName = process.env.ADMIN_NAME || "Elow Admin";
 
+  const defaultUsers = [
+    {
+      email: adminEmail,
+      name: adminName,
+      password: adminPasswordToUse,
+      role: "admin",
+      idPrefix: "user-admin",
+    },
+    {
+      email: "ritika@example.com",
+      name: "Ritika Sharma",
+      password: "password123",
+      role: "user",
+      idPrefix: "user-cust",
+    },
+    {
+      email: "customer@elow.com",
+      name: "Elow Customer",
+      password: "password123",
+      role: "user",
+      idPrefix: "user-cust",
+    },
+    {
+      email: "user@elow.com",
+      name: "Elow Customer",
+      password: "password123",
+      role: "user",
+      idPrefix: "user-cust",
+    },
+  ];
+
   try {
-    const existingAdmin = await User.findOne({ email: adminEmail });
-    if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash(passwordToUse, 10);
-      await User.create({
-        id: `user-admin-${crypto.randomBytes(4).toString("hex")}`,
-        name: adminName,
-        email: adminEmail,
-        password: hashedPassword,
-        role: "admin",
-      });
-      logger.info(`[Admin Provisioned] Created admin account for ${adminEmail}`);
-    } else {
-      let needsSave = false;
-      if (existingAdmin.role !== "admin") {
-        existingAdmin.role = "admin";
-        needsSave = true;
-      }
-      const isMatch = await bcrypt.compare(passwordToUse, existingAdmin.password).catch(() => false);
-      if (!isMatch) {
-        existingAdmin.password = await bcrypt.hash(passwordToUse, 10);
-        needsSave = true;
-      }
-      if (needsSave) {
-        await existingAdmin.save();
-        logger.info(`[Admin Provisioned] Updated admin account credentials/role for ${adminEmail}`);
+    for (const u of defaultUsers) {
+      const existing = await User.findOne({ email: u.email });
+      if (!existing) {
+        const hashedPassword = await bcrypt.hash(u.password, 10);
+        await User.create({
+          id: `${u.idPrefix}-${crypto.randomBytes(4).toString("hex")}`,
+          name: u.name,
+          email: u.email,
+          password: hashedPassword,
+          role: u.role,
+        });
+        logger.info(`[User Provisioned] Created account for ${u.email} (${u.role})`);
+      } else {
+        let needsSave = false;
+        if (u.role === "admin" && existing.role !== "admin") {
+          existing.role = "admin";
+          needsSave = true;
+        }
+        const isMatch = await bcrypt.compare(u.password, existing.password).catch(() => false);
+        if (!isMatch) {
+          existing.password = await bcrypt.hash(u.password, 10);
+          needsSave = true;
+        }
+        if (needsSave) {
+          await existing.save();
+          logger.info(`[User Provisioned] Updated account credentials/role for ${u.email}`);
+        }
       }
     }
   } catch (err) {
-    logger.error(`❌ Error ensuring admin user: ${err.message}`);
+    logger.error(`❌ Error ensuring default users: ${err.message}`);
   }
 };
