@@ -15,7 +15,7 @@
 
 **elow** is a full-stack e-commerce application for curated stationery, lifestyle items, and desk accessories. Built with a **React 19** storefront and a secure **Node.js / Express / MongoDB Atlas** backend REST API, **elow** provides a seamless shopping experience for customers and a comprehensive management portal for administrators.
 
-Key production features include **Bcrypt password hashing**, **JWT session authentication**, **Role-Based Access Control (RBAC)**, **server-side financial calculations & inventory control**, **Stripe payment status verification**, **Admin review moderation**, **Helmet security headers**, **Express rate limiting**, and **React Error Boundaries**.
+Key production features include **Bcrypt password hashing**, **JWT session authentication & refresh token rotation**, **Role-Based Access Control (RBAC)**, **server-side financial calculations & inventory control**, **Stripe PaymentIntent & Webhook integration**, **Admin review moderation**, **Helmet security headers**, **Express rate limiting**, and **React Error Boundaries**.
 
 ---
 
@@ -44,9 +44,9 @@ Test the live store using the pre-seeded customer account or provision your own 
 - **Aesthetic Pinterest Design**: Soft pastel palette, glassmorphism navigation, dynamic responsive layout, and tactile hover animations.
 - **Product Search & Filtering**: Real-time category filtering, search queries, price range slider, in-stock toggle, and paginated product catalog (`/api/products`).
 - **Product Reviews & Ratings**: Customers can write product reviews. Reviews undergo Admin moderation before being featured on customer product pages.
-- **Persistent Authenticated Sessions**: Automatic JWT token persistence using `localStorage` and request authorization header injection (`Authorization: Bearer <jwt>`).
+- **In-Memory Authenticated Sessions**: Secure in-memory JWT access token storage with httpOnly refresh token cookie rotation and automatic request header injection (`Authorization: Bearer <jwt>`).
 - **Server-Side Checkout & Pricing**: Subtotal, promo code discounts (e.g. `ELOW10`), shipping fees, and final totals are strictly computed on the server from MongoDB database prices to prevent client-side price tampering.
-- **Stripe Integration & Inventory Control**: Verifies Stripe payment status before confirming orders and automatically decrements stock levels upon checkout completion.
+- **Payment & Inventory Control**: Server-side checkout calculations, atomic stock deduction, Cash-on-Delivery support, and backend Stripe PaymentIntent & Webhook integration.
 - **Error Boundaries & Resiliency**: Built-in React Error Boundaries and robust backend middleware prevent application crashes under heavy concurrent usage.
 
 ### 🛡️ Admin Portal (`/admin`)
@@ -74,7 +74,7 @@ Test the live store using the pre-seeded customer account or provision your own 
                      │  - Express REST Routes & Controllers   │
                      │  - Bcrypt Password Hashing + JWT Auth   │
                      │  - Server-side Financial Calculations   │
-                     │  - Stripe Payment Status Verification   │
+                     │  - Stripe PaymentIntent & Webhooks      │
                      │  - Helmet + Rate Limiter Security      │
                      └────────────────────┬────────────────────┘
                                           │
@@ -95,7 +95,7 @@ Test the live store using the pre-seeded customer account or provision your own 
 | **Backend API** | **Node.js + Express** | Modular MVC backend (`routes/`, `controllers/`, `middleware/`, `config/`) |
 | **Database** | **MongoDB Atlas / Mongoose** | Cloud NoSQL database with Mongoose schema modeling |
 | **Authentication & Security** | **JWT + BcryptJS** | Signed JSON Web Tokens, hashed passwords, Helmet security headers, CORS protection |
-| **Payment Processing** | **Stripe API** | Payment status verification and server-controlled checkout |
+| **Payment Processing** | **Stripe API & Server Checkout** | Server-side checkout pricing, Cash-on-Delivery, and Stripe PaymentIntent & Webhook handling |
 | **Testing Suite** | **Vitest + Supertest** | Automated integration tests running with `mongodb-memory-server` |
 
 ---
@@ -206,31 +206,43 @@ npm test
 
 ## 🔌 REST API Reference
 
+### System & Health
+| Method | Endpoint | Protection | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/health` | Public | Health check endpoint returning `200 OK` (connected) or `503 Service Unavailable` (DB disconnected) |
+
 ### Auth & User Management
 | Method | Endpoint | Protection | Description |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | Public | Register new user (password hashed with bcrypt, assigned standard `user` role) |
+| `POST` | `/api/auth/register` | Public (Rate Limited) | Register new user (password hashed with bcrypt, min 8 chars) |
 | `POST` | `/api/auth/login` | Public (Rate Limited) | Authenticate user, issue access token & httpOnly refresh cookie |
-| `POST` | `/api/auth/refresh` | Public | Refresh short-lived access token using valid httpOnly cookie |
-| `POST` | `/api/auth/logout` | Public | Clear httpOnly refresh token cookie |
+| `POST` | `/api/auth/refresh` | Public | Refresh access token with token rotation using httpOnly cookie |
+| `POST` | `/api/auth/logout` | Public | Revoke refresh token and clear httpOnly cookie |
+| `POST` | `/api/auth/forgot-password` | Public (Rate Limited) | Request password reset token via email instructions |
+| `POST` | `/api/auth/reset-password` | Public | Reset password using valid SHA-256 reset token |
 | `GET` | `/api/auth/me` | `protect` | Fetch currently authenticated user profile |
-| `PATCH` | `/api/auth/profile` | `protect` | Update profile information |
+| `PATCH` | `/api/auth/profile` | `protect` | Update profile details and password |
 
 ### Products & Reviews
 | Method | Endpoint | Protection | Description |
 | :--- | :--- | :--- | :--- |
+| `GET` | `/api/categories` | Public | Fetch distinct product categories |
 | `GET` | `/api/products` | Public | Fetch paginated products with category, price, search, and stock filters |
 | `GET` | `/api/products/:id` | Public | Fetch single product details, approved reviews, and related items |
-| `POST` | `/api/products/:id/reviews` | `protect` | Submit product review (requires verified purchase, queued for moderation) |
+| `POST` | `/api/products/:id/reviews` | `protect` (Rate Limited) | Submit product review (requires verified purchase, queued for moderation) |
 | `GET` | `/api/products/:id/reviews` | Public | Fetch approved reviews for specific product |
 
-### Orders & Payments
+### Promos, Payments & Orders
 | Method | Endpoint | Protection | Description |
 | :--- | :--- | :--- | :--- |
+| `POST` | `/api/promo/validate` | Public (Rate Limited) | Validate promo code and calculate discount |
+| `POST` | `/api/promo/spin` | `protect` (Rate Limited) | Claim single-use spin wheel discount code (1 spin per user/24h) |
+| `POST` | `/api/create-payment-intent` | `protect` (Rate Limited) | Create Stripe PaymentIntent with server-verified total |
+| `POST` | `/api/payments/webhook` | Public | Process Stripe webhooks (payment completion, refunds, cancellations) |
 | `POST` | `/api/orders` | `protect` | Create order with server-calculated totals, atomic stock reduction & Intent validation |
 | `GET` | `/api/orders/my-orders` | `protect` | Retrieve authenticated user's order history |
 | `GET` | `/api/orders/:id` | `protect` | Retrieve specific order details (restricted to order owner or admin) |
-| `PATCH` | `/api/orders/:id/cancel` | `protect` | Cancel active processing order and restore inventory stock |
+| `PATCH` | `/api/orders/:id/cancel` | `protect` | Cancel active processing order, issue refund (if paid), and restore stock |
 
 ### Admin Moderation & Management
 | Method | Endpoint | Protection | Description |
@@ -240,6 +252,7 @@ npm test
 | `DELETE` | `/api/admin/products/:id` | `protect`, `admin` | Delete product from catalog |
 | `GET` | `/api/admin/orders` | `protect`, `admin` | Retrieve all customer orders |
 | `PATCH` | `/api/admin/orders/:id/status` | `protect`, `admin` | Update order status following state machine rules |
+| `DELETE` | `/api/admin/orders/:id` | `protect`, `admin` | Delete customer order |
 | `GET` | `/api/reviews` | `protect`, `admin` | Retrieve all reviews for moderation |
 | `PATCH` | `/api/reviews/:id/status` | `protect`, `admin` | Update review status (approve or reject) |
 | `DELETE` | `/api/reviews/:id` | `protect`, `admin` | Delete review from system |

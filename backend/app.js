@@ -75,9 +75,12 @@ app.get("/", (req, res) => {
 
 // Health Check API
 app.get("/api/health", (req, res) => {
-  const dbStatus = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
-  res.json({
-    status: "ok",
+  const isDbConnected = mongoose.connection.readyState === 1;
+  const dbStatus = isDbConnected ? "connected" : "disconnected";
+  const statusCode = isDbConnected ? 200 : 503;
+
+  res.status(statusCode).json({
+    status: isDbConnected ? "ok" : "error",
     service: "elow-backend",
     environment: process.env.NODE_ENV || "development",
     database: dbStatus,

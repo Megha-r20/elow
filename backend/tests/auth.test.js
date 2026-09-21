@@ -1,5 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import request from "supertest";
+import mongoose from "mongoose";
 import app from "../app.js";
 
 describe("Auth & RBAC Integration Tests", () => {
@@ -134,6 +135,28 @@ describe("Auth & RBAC Integration Tests", () => {
       expect(deniedVercelRes.body.error).toBe("Internal Server Error");
     } finally {
       process.env.NODE_ENV = originalEnv;
+    }
+  });
+
+  it("should return 200 OK when DB is connected and 503 Service Unavailable when DB is disconnected", async () => {
+    const healthOkRes = await request(app).get("/api/health");
+    expect(healthOkRes.status).toBe(200);
+    expect(healthOkRes.body.status).toBe("ok");
+    expect(healthOkRes.body.database).toBe("connected");
+
+    // Temporarily override readyState on instance
+    Object.defineProperty(mongoose.connection, "readyState", {
+      get: () => 0,
+      configurable: true,
+    });
+
+    try {
+      const healthErrorRes = await request(app).get("/api/health");
+      expect(healthErrorRes.status).toBe(503);
+      expect(healthErrorRes.body.status).toBe("error");
+      expect(healthErrorRes.body.database).toBe("disconnected");
+    } finally {
+      delete mongoose.connection.readyState;
     }
   });
 
