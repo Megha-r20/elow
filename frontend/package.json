@@ -30,8 +30,13 @@
     "vitest": "^2.1.8"
   },
   "optionalDependencies": {
+    "@esbuild/linux-x64": "^0.21.5",
+    "@esbuild/win32-x64": "^0.21.5",
     "@rolldown/binding-linux-x64-gnu": "^1.2.6",
     "@rolldown/binding-linux-x64-musl": "^1.2.6",
-    "@rolldown/binding-win32-x64-msvc": "^1.2.6"
+    "@rolldown/binding-win32-x64-msvc": "^1.2.6",
+    "lightningcss-linux-x64-gnu": "^1.32.0",
+    "lightningcss-linux-x64-musl": "^1.32.0",
+    "lightningcss-win32-x64-msvc": "^1.32.0"
   }
 }
