@@ -17,6 +17,9 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
 
+// Trust reverse proxy (Render / Cloudflare) to extract true client IP for rate limiting
+app.set("trust proxy", 1);
+
 // Security headers with Helmet
 app.use(helmet({ crossOriginResourcePolicy: false }));
 
