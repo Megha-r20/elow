@@ -1,15 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useCart, useToast, useDrawer } from "../hooks";
 import { useAuth } from "../context/AuthContext";
 import { getApiUrl } from "../api/config";
 
 const SECTORS = [
-  { label: "₹50 OFF", bg: "#8192D4", color: "#FAF7F2" },
+  { label: "₹50 OFF", bg: "#5A6BAF", color: "#FAF7F2" },
   { label: "₹100 OFF", bg: "#F4EFE6", color: "#23201D" },
-  { label: "NO LUCK", bg: "#5666AA", color: "#FAF7F2" },
+  { label: "NO LUCK", bg: "#3D4977", color: "#FAF7F2" },
   { label: "₹150 OFF", bg: "#D4A359", color: "#23201D" },
-  { label: "₹50 OFF", bg: "#6C7CC1", color: "#FAF7F2" },
-  { label: "₹250 OFF", bg: "#FAF7F2", color: "#8192D4" },
+  { label: "₹50 OFF", bg: "#7485C9", color: "#FAF7F2" },
+  { label: "₹250 OFF", bg: "#FAF7F2", color: "#23201D" },
 ];
 
 export function SpinWheelModal({ isOpen, onClose }) {
@@ -140,9 +140,9 @@ export function SpinWheelModal({ isOpen, onClose }) {
         style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(35, 32, 29, 0.65)",
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
+          background: "rgba(20, 24, 40, 0.75)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
         }}
       />
 
@@ -153,13 +153,13 @@ export function SpinWheelModal({ isOpen, onClose }) {
           zIndex: 910,
           width: "100%",
           maxWidth: 820,
-          background: "linear-gradient(135deg, #6C7CC1 0%, #8192D4 50%, #5666AA 100%)",
+          background: "linear-gradient(135deg, #44538C 0%, #2D3766 100%)",
           borderRadius: 28,
-          boxShadow: "0 25px 70px rgba(35, 32, 29, 0.45), 0 10px 30px rgba(0, 0, 0, 0.25)",
+          boxShadow: "0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1)",
           overflow: "hidden",
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          border: "4px solid #FAF7F2",
+          border: "3px solid rgba(250,247,242,0.85)",
         }}
         className="hide-mobile-grid"
       >
@@ -180,7 +180,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
             fontSize: 18,
             fontWeight: "bold",
             cursor: "pointer",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -203,17 +203,20 @@ export function SpinWheelModal({ isOpen, onClose }) {
             position: "relative",
           }}
         >
-          {/* Wheel Container */}
+          {/* Outer Wheel Housing */}
           <div
             style={{
               position: "relative",
-              width: 310,
-              height: 310,
+              width: 320,
+              height: 320,
               borderRadius: "50%",
-              boxShadow: "0 12px 36px rgba(0,0,0,0.22), inset 0 0 0 6px #FAF7F2",
+              background: "#1E2442",
+              padding: 8,
+              boxShadow:
+                "0 20px 50px rgba(0,0,0,0.4), inset 0 0 20px rgba(0,0,0,0.5), 0 0 0 4px rgba(250,247,242,0.3)",
             }}
           >
-            {/* SVG Wheel Slices */}
+            {/* Spinning SVG Wheel */}
             <div
               style={{
                 width: "100%",
@@ -223,84 +226,97 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 transition: isSpinning
                   ? "transform 4.5s cubic-bezier(0.15, 0.9, 0.2, 1)"
                   : "none",
-                overflow: "hidden",
               }}
             >
-              <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%" }}>
+              <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%", display: "block" }}>
+                {/* Outer Decorative Dark Ring with Lights */}
+                <circle cx="50" cy="50" r="49" fill="#1E2442" stroke="#FAF7F2" strokeWidth="1.2" />
+
+                {/* Bulbs / Light Dots */}
+                {Array.from({ length: 12 }).map((_, bIdx) => {
+                  const bAngle = bIdx * 30;
+                  const bx = 50 + 47.2 * Math.cos((Math.PI * bAngle) / 180);
+                  const by = 50 + 47.2 * Math.sin((Math.PI * bAngle) / 180);
+                  return <circle key={bIdx} cx={bx} cy={by} r="1.1" fill="#FAF7F2" opacity="0.9" />;
+                })}
+
+                {/* Sectors */}
                 {SECTORS.map((sector, i) => {
                   const angle = 360 / SECTORS.length;
                   const startAngle = i * angle;
                   const endAngle = (i + 1) * angle;
 
-                  const x1 = 50 + 50 * Math.cos((Math.PI * startAngle) / 180);
-                  const y1 = 50 + 50 * Math.sin((Math.PI * startAngle) / 180);
-                  const x2 = 50 + 50 * Math.cos((Math.PI * endAngle) / 180);
-                  const y2 = 50 + 50 * Math.sin((Math.PI * endAngle) / 180);
+                  const r = 45;
+                  const x1 = 50 + r * Math.cos((Math.PI * startAngle) / 180);
+                  const y1 = 50 + r * Math.sin((Math.PI * startAngle) / 180);
+                  const x2 = 50 + r * Math.cos((Math.PI * endAngle) / 180);
+                  const y2 = 50 + r * Math.sin((Math.PI * endAngle) / 180);
 
-                  const pathData = `M 50 50 L ${x1} ${y1} A 50 50 0 0 1 ${x2} ${y2} Z`;
+                  const pathData = `M 50 50 L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z`;
 
                   const midAngle = startAngle + angle / 2;
-                  const textR = 34;
-                  const textX = 50 + textR * Math.cos((Math.PI * midAngle) / 180);
-                  const textY = 50 + textR * Math.sin((Math.PI * midAngle) / 180);
+                  const isLeftHalf = midAngle > 90 && midAngle < 270;
 
                   return (
                     <g key={i}>
-                      <path d={pathData} fill={sector.bg} stroke="#FAF7F2" strokeWidth="0.8" />
-                      <text
-                        x={textX}
-                        y={textY}
-                        fill={sector.color}
-                        fontSize="6.5"
-                        fontWeight="900"
-                        fontFamily="sans-serif"
-                        textAnchor="middle"
-                        dominantBaseline="central"
-                        transform={`rotate(${midAngle + 180}, ${textX}, ${textY})`}
-                      >
-                        {sector.label}
-                      </text>
+                      {/* Sector Slice */}
+                      <path d={pathData} fill={sector.bg} stroke="#FAF7F2" strokeWidth="1" />
+
+                      {/* Sector Text (Radially Aligned along Sector Ray) */}
+                      <g transform={`rotate(${midAngle}, 50, 50)`}>
+                        <text
+                          x="75"
+                          y="50"
+                          fill={sector.color}
+                          fontSize="4.5"
+                          fontWeight="800"
+                          fontFamily="system-ui, -apple-system, sans-serif"
+                          letterSpacing="0.4"
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          transform={isLeftHalf ? "rotate(180, 75, 50)" : ""}
+                        >
+                          {sector.label}
+                        </text>
+                      </g>
                     </g>
                   );
                 })}
 
-                <circle cx="50" cy="50" r="10" fill="#FAF7F2" stroke="#8192D4" strokeWidth="2" />
-                <text x="50" y="51" fontSize="9" textAnchor="middle" dominantBaseline="central">
+                {/* Center Hub Outer Ring */}
+                <circle cx="50" cy="50" r="12" fill="#1E2442" stroke="#FAF7F2" strokeWidth="1.2" />
+
+                {/* Center Hub Inner Badge */}
+                <circle cx="50" cy="50" r="9" fill="#FAF7F2" />
+                <text x="50" y="50.5" fontSize="8" textAnchor="middle" dominantBaseline="central">
                   🎁
                 </text>
               </svg>
             </div>
 
-            {/* Pointer / Pin Indicator (At 3 o'clock) */}
+            {/* Pointer / Flapper Indicator (At 3 o'clock pointing left into wheel) */}
             <div
               style={{
                 position: "absolute",
                 right: -14,
                 top: "50%",
                 transform: "translateY(-50%)",
-                width: 0,
-                height: 0,
-                borderTop: "14px solid transparent",
-                borderBottom: "14px solid transparent",
-                borderRight: "22px solid #D4A359",
-                filter: "drop-shadow(-2px 2px 4px rgba(0,0,0,0.25))",
-                zIndex: 15,
+                zIndex: 20,
+                filter: "drop-shadow(-3px 3px 6px rgba(0,0,0,0.35))",
+                pointerEvents: "none",
               }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                right: -16,
-                top: "50%",
-                transform: "translateY(-50%)",
-                width: 12,
-                height: 12,
-                borderRadius: "50%",
-                background: "#FAF7F2",
-                border: "2px solid #D4A359",
-                zIndex: 16,
-              }}
-            />
+            >
+              <svg width="40" height="32" viewBox="0 0 40 32">
+                <path
+                  d="M 36 16 L 4 2 L 12 16 L 4 30 Z"
+                  fill="#D4A359"
+                  stroke="#FAF7F2"
+                  strokeWidth="2.5"
+                  strokeLinejoin="round"
+                />
+                <circle cx="28" cy="16" r="3.5" fill="#FAF7F2" stroke="#23201D" strokeWidth="1" />
+              </svg>
+            </div>
           </div>
         </div>
 
@@ -330,7 +346,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 style={{
                   fontSize: 24,
                   fontWeight: 900,
-                  color: "#8192D4",
+                  color: "#5A6BAF",
                   fontFamily: "'DM Serif Display', serif",
                 }}
               >
@@ -347,7 +363,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   <div
                     style={{
                       background: "#F4EFE6",
-                      border: "2px dashed #8192D4",
+                      border: "2px dashed #5A6BAF",
                       borderRadius: 14,
                       padding: "12px",
                       margin: "18px 0 8px",
@@ -360,7 +376,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                     {wonPrize.code}
                   </div>
                   {wonPrize.minOrderAmount ? (
-                    <p style={{ fontSize: 12.5, color: "#8192D4", fontWeight: 700, marginBottom: 16 }}>
+                    <p style={{ fontSize: 12.5, color: "#5A6BAF", fontWeight: 700, marginBottom: 16 }}>
                       Min. order required: &#8377;{wonPrize.minOrderAmount}
                     </p>
                   ) : null}
@@ -373,14 +389,14 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   style={{
                     width: "100%",
                     padding: "14px",
-                    background: "#8192D4",
+                    background: "#5A6BAF",
                     color: "#FAF7F2",
                     border: "none",
                     borderRadius: 14,
                     fontSize: 15,
                     fontWeight: 800,
                     cursor: "pointer",
-                    boxShadow: "0 6px 20px rgba(129, 146, 212, 0.35)",
+                    boxShadow: "0 6px 20px rgba(90, 107, 175, 0.35)",
                     transition: "all 0.18s ease",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
@@ -526,7 +542,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 style={{
                   width: "100%",
                   padding: "15px",
-                  background: isSpinning ? "#5666AA" : "#23201D",
+                  background: isSpinning ? "#3D4977" : "#23201D",
                   color: "#FAF7F2",
                   border: "none",
                   borderRadius: 16,
@@ -558,3 +574,4 @@ export function SpinWheelModal({ isOpen, onClose }) {
     </div>
   );
 }
+
