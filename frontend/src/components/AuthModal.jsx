@@ -46,13 +46,6 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
             }
         }
     };
-    const fillDemoAdmin = () => {
-        setRole("admin");
-        setMode("login");
-        setEmail("admin@elow.com");
-        setPassword("AdminSecret123!");
-        setError(null);
-    };
     const fillDemoCustomer = () => {
         setRole("user");
         setMode("login");
@@ -181,22 +174,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
             textAlign: "center",
             transition: "all 0.15s",
         }}>
-                👤 Customer Demo
-              </button>
-              <button type="button" onClick={fillDemoAdmin} style={{
-            flex: 1,
-            padding: "8px 12px",
-            fontSize: 11.5,
-            fontWeight: 600,
-            borderRadius: 10,
-            border: "1px solid #EAE3D9",
-            background: role === "admin" && email === "admin@elow.com" ? "#F2F7F4" : "#FAF7F2",
-            color: "#23201D",
-            cursor: "pointer",
-            textAlign: "center",
-            transition: "all 0.15s",
-        }}>
-                ⚡ Admin Demo
+                👤 Customer Demo Account
               </button>
             </div>
           </div>

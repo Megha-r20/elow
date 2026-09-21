@@ -19,14 +19,22 @@ Key production features include **Bcrypt password hashing**, **JWT session authe
 
 ---
 
-## 🔑 Demo Credentials
+## 🔑 Demo & Reviewer Credentials
 
-Test the live store or local environment using these pre-seeded accounts:
+Test the live store using the pre-seeded customer account or provision your own administrator account locally:
 
 | Role | Email | Password | Access Privileges |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@elow.com` | `AdminSecret123!` | Full access to `/admin` dashboard, product CRUD, review moderation & order management |
 | **Customer** | `ritika@example.com` | `password123` | Storefront browsing, review submission, server-side checkout, order history & account settings (`/settings`) |
+
+> 🔒 **Admin Security Notice:**  
+> Production admin credentials are managed securely via the `ADMIN_PASSWORD` environment variable on the server deployment (Render) and are not exposed publicly in documentation.
+> 
+> - **For Reviewers & Evaluators**: To inspect the Admin Portal features (Product CRUD, Stock Control, Review Moderation, Order Tracking), you can view a full demonstration video or execute `npm run setup-admin` locally.
+> - **Local Admin Provisioning**: To set up an administrator account on your local development machine:
+>   ```bash
+>   ADMIN_EMAIL=admin@elow.com ADMIN_PASSWORD='YourStrongPasswordHere' npm run setup-admin
+>   ```
 
 ---
 

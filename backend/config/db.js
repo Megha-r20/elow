@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { logger } from "./logger.js";
-import { ensureAdminUser } from "./ensureAdmin.js";
 
 export const connectDB = async () => {
   const MONGODB_URI = process.env.MONGODB_URI;
@@ -15,7 +14,6 @@ export const connectDB = async () => {
       autoIndex: true,
     });
     logger.info(`🟢 Connected to MongoDB Atlas successfully! Host: ${conn.connection.host}`);
-    await ensureAdminUser();
   } catch (err) {
     logger.error(`❌ MongoDB Atlas Connection Error: ${err.message}`);
     process.exit(1);
