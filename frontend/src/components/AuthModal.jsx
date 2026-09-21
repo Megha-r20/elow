@@ -190,7 +190,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
             fontWeight: 600,
             borderRadius: 10,
             border: "1px solid #EAE3D9",
-            background: role === "admin" && email === "admin@elow.in" ? "#F2F7F4" : "#FAF7F2",
+            background: role === "admin" && email === "admin@elow.com" ? "#F2F7F4" : "#FAF7F2",
             color: "#23201D",
             cursor: "pointer",
             textAlign: "center",
@@ -260,7 +260,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
               <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>
                 EMAIL ADDRESS
               </label>
-              <input type="email" required placeholder={role === "admin" ? "admin@elow.in" : "you@example.com"} value={email} onChange={(e) => setEmail(e.target.value)} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}/>
+              <input type="email" required placeholder={role === "admin" ? "admin@elow.com" : "you@example.com"} value={email} onChange={(e) => setEmail(e.target.value)} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}/>
             </div>
 
             {/* Password Field */}

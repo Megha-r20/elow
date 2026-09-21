@@ -37,12 +37,10 @@ export const ensureAdminUser = async () => {
         existingAdmin.role = "admin";
         needsSave = true;
       }
-      if (adminPassword) {
-        const isMatch = await bcrypt.compare(adminPassword, existingAdmin.password).catch(() => false);
-        if (!isMatch) {
-          existingAdmin.password = await bcrypt.hash(adminPassword, 10);
-          needsSave = true;
-        }
+      const isMatch = await bcrypt.compare(passwordToUse, existingAdmin.password).catch(() => false);
+      if (!isMatch) {
+        existingAdmin.password = await bcrypt.hash(passwordToUse, 10);
+        needsSave = true;
       }
       if (needsSave) {
         await existingAdmin.save();
