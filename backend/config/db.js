@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { logger } from "./logger.js";
+import { ensureAdminUser } from "./ensureAdmin.js";
 
 /**
  * Utility function to redact credentials from MongoDB URIs in log output.
@@ -52,6 +53,10 @@ export const connectDB = async () => {
     const conn = await mongoose.connect(MONGODB_URI, options);
     const host = conn.connection.host || "Atlas Cluster";
     logger.info(`🟢 Connected to MongoDB Atlas successfully! Host: ${host}`);
+
+    // Ensure default admin & demo customer accounts exist
+    await ensureAdminUser();
+
     return conn.connection;
   } catch (err) {
     logger.error(`❌ MongoDB Atlas Connection Failed (${maskUri(MONGODB_URI)}): ${err.message}`);

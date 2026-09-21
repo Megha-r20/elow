@@ -1,5 +1,6 @@
-import React from "react";
+import { useState } from "react";
 import { Icons } from "../ui";
+import { resolvePinterestImage, normalizeImageUrl } from "../../utils/imageUtils";
 
 export function AdminProductModals({
   showAddModal,
@@ -13,13 +14,52 @@ export function AdminProductModals({
   setEditForm,
   handleUpdateProduct,
 }) {
+  const [resolvingAdd, setResolvingAdd] = useState(false);
+  const [resolvingEdit, setResolvingEdit] = useState(false);
+
+  const handleAddUrlChange = async (rawUrl) => {
+    setNewProd((prev) => ({ ...prev, imageUrl: rawUrl }));
+    const trimmed = rawUrl.trim();
+    if (trimmed.includes("pin.it") || trimmed.includes("pinterest.com/pin/")) {
+      setResolvingAdd(true);
+      const resolved = await resolvePinterestImage(trimmed);
+      setNewProd((prev) => ({ ...prev, imageUrl: resolved }));
+      setResolvingAdd(false);
+    }
+  };
+
+  const handleEditUrlChange = async (rawUrl) => {
+    setEditForm((prev) => ({ ...prev, imageUrl: rawUrl }));
+    const trimmed = rawUrl.trim();
+    if (trimmed.includes("pin.it") || trimmed.includes("pinterest.com/pin/")) {
+      setResolvingEdit(true);
+      const resolved = await resolvePinterestImage(trimmed);
+      setEditForm((prev) => ({ ...prev, imageUrl: resolved }));
+      setResolvingEdit(false);
+    }
+  };
+
+  const onAddSubmit = (e) => {
+    if (newProd.imageUrl) {
+      newProd.imageUrl = normalizeImageUrl(newProd.imageUrl);
+    }
+    handleAddProduct(e);
+  };
+
+  const onEditSubmit = (e) => {
+    if (editForm.imageUrl) {
+      editForm.imageUrl = normalizeImageUrl(editForm.imageUrl);
+    }
+    handleUpdateProduct(e);
+  };
+
   return (
     <>
       {/* ADD PRODUCT MODAL */}
       {showAddModal && (
         <>
           <div onClick={() => setShowAddModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 800, backdropFilter: "blur(4px)" }} />
-          <div role="dialog" aria-modal="true" aria-label="Add New Product" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 500, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
+          <div role="dialog" aria-modal="true" aria-label="Add New Product" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 520, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
                 <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>INVENTORY</span>
@@ -30,10 +70,10 @@ export function AdminProductModals({
               </button>
             </div>
 
-            <form onSubmit={handleAddProduct} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <form onSubmit={onAddSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>PRODUCT NAME *</label>
-                <input type="text" required placeholder="e.g. Linen Spiral Planner 2027" value={newProd.name} onChange={(e) => setNewProd({ ...newProd, name: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                <input type="text" required placeholder="e.g. Glass Dip Pen Set" value={newProd.name} onChange={(e) => setNewProd({ ...newProd, name: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -51,7 +91,7 @@ export function AdminProductModals({
                 </div>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>SUBCATEGORY</label>
-                  <input type="text" placeholder="e.g. Hardcover" value={newProd.subcategory} onChange={(e) => setNewProd({ ...newProd, subcategory: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                  <input type="text" placeholder="e.g. Calligraphy" value={newProd.subcategory} onChange={(e) => setNewProd({ ...newProd, subcategory: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
                 </div>
               </div>
 
@@ -71,8 +111,42 @@ export function AdminProductModals({
               </div>
 
               <div>
-                <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>IMAGE URL</label>
-                <input type="url" placeholder="https://images.unsplash.com/photo-..." value={newProd.imageUrl} onChange={(e) => setNewProd({ ...newProd, imageUrl: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                  <span>IMAGE URL (Pinterest supported)</span>
+                  {resolvingAdd && <span style={{ fontSize: 11, color: "#8192D4", fontWeight: 600 }}>✨ Resolving Pinterest Image...</span>}
+                </label>
+                <input
+                  type="text"
+                  placeholder="Paste direct URL or Pinterest link (e.g. pin.it/6eCArwtON)"
+                  value={newProd.imageUrl}
+                  onChange={(e) => handleAddUrlChange(e.target.value)}
+                  onBlur={(e) => handleAddUrlChange(e.target.value)}
+                  className="field field-sm"
+                  style={{ width: "100%", boxSizing: "border-box" }}
+                />
+
+                {/* Live Image Preview */}
+                {newProd.imageUrl && (
+                  <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 12, padding: 10, background: "#FAF7F2", borderRadius: 12, border: "1px solid #EAE3D9" }}>
+                    <img
+                      src={normalizeImageUrl(newProd.imageUrl)}
+                      alt="Preview"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop";
+                      }}
+                      style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 8, background: "#EAE3D9" }}
+                    />
+                    <div style={{ flex: 1, overflow: "hidden" }}>
+                      <p style={{ fontSize: 11, fontWeight: 700, color: "#23201D", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {newProd.imageUrl.includes("pinimg.com") ? "📌 Pinterest High-Res Image" : "Live Image Preview"}
+                      </p>
+                      <p style={{ fontSize: 10, color: "#6E6A63", margin: "2px 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {newProd.imageUrl}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -95,8 +169,8 @@ export function AdminProductModals({
                 </label>
               </div>
 
-              <button type="submit" className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: "pointer" }}>
-                Add Product to Store Catalog
+              <button type="submit" disabled={resolvingAdd} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: resolvingAdd ? "wait" : "pointer" }}>
+                {resolvingAdd ? "Resolving Pinterest Image..." : "Add Product to Store Catalog"}
               </button>
             </form>
           </div>
@@ -107,7 +181,7 @@ export function AdminProductModals({
       {editingProduct && (
         <>
           <div onClick={() => setEditingProduct(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 800, backdropFilter: "blur(4px)" }} />
-          <div role="dialog" aria-modal="true" aria-label="Edit Product" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 500, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
+          <div role="dialog" aria-modal="true" aria-label="Edit Product" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 520, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
                 <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>EDIT PRODUCT</span>
@@ -118,7 +192,7 @@ export function AdminProductModals({
               </button>
             </div>
 
-            <form onSubmit={handleUpdateProduct} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <form onSubmit={onEditSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>PRODUCT NAME *</label>
                 <input type="text" required placeholder="Product name" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
@@ -159,8 +233,42 @@ export function AdminProductModals({
               </div>
 
               <div>
-                <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>IMAGE URL</label>
-                <input type="url" placeholder="https://..." value={editForm.imageUrl} onChange={(e) => setEditForm({ ...editForm, imageUrl: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }} />
+                <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                  <span>IMAGE URL (Pinterest supported)</span>
+                  {resolvingEdit && <span style={{ fontSize: 11, color: "#8192D4", fontWeight: 600 }}>✨ Resolving Pinterest Image...</span>}
+                </label>
+                <input
+                  type="text"
+                  placeholder="Paste direct URL or Pinterest link (e.g. pin.it/6eCArwtON)"
+                  value={editForm.imageUrl}
+                  onChange={(e) => handleEditUrlChange(e.target.value)}
+                  onBlur={(e) => handleEditUrlChange(e.target.value)}
+                  className="field field-sm"
+                  style={{ width: "100%", boxSizing: "border-box" }}
+                />
+
+                {/* Live Image Preview */}
+                {editForm.imageUrl && (
+                  <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 12, padding: 10, background: "#FAF7F2", borderRadius: 12, border: "1px solid #EAE3D9" }}>
+                    <img
+                      src={normalizeImageUrl(editForm.imageUrl)}
+                      alt="Preview"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop";
+                      }}
+                      style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 8, background: "#EAE3D9" }}
+                    />
+                    <div style={{ flex: 1, overflow: "hidden" }}>
+                      <p style={{ fontSize: 11, fontWeight: 700, color: "#23201D", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {editForm.imageUrl.includes("pinimg.com") ? "📌 Pinterest High-Res Image" : "Live Image Preview"}
+                      </p>
+                      <p style={{ fontSize: 10, color: "#6E6A63", margin: "2px 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {editForm.imageUrl}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -183,8 +291,8 @@ export function AdminProductModals({
                 </label>
               </div>
 
-              <button type="submit" className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: "pointer" }}>
-                Save Product Changes
+              <button type="submit" disabled={resolvingEdit} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: resolvingEdit ? "wait" : "pointer" }}>
+                {resolvingEdit ? "Resolving Pinterest Image..." : "Save Product Changes"}
               </button>
             </form>
           </div>

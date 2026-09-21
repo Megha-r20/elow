@@ -8,6 +8,9 @@ import { AdminProducts } from "../components/admin/AdminProducts";
 import { AdminOrders } from "../components/admin/AdminOrders";
 import { AdminReviews } from "../components/admin/AdminReviews";
 import { AdminProductModals } from "../components/admin/AdminProductModals";
+import AdminCategories from "../components/admin/AdminCategories";
+import AdminCustomers from "../components/admin/AdminCustomers";
+import AdminPromo from "../components/admin/AdminPromo";
 
 export function AdminDashboard() {
     useDocumentTitle("Admin Portal Dashboard");
@@ -488,14 +491,17 @@ export function AdminDashboard() {
         </div>
 
         {/* Segmented Pill Tabs Navigation */}
-        <div style={{ background: "#EAE3D9", padding: 6, borderRadius: 16, display: "inline-flex", gap: 6, marginBottom: 32, border: "1px solid #DFD7CB" }}>
+        <div style={{ background: "#EAE3D9", padding: 6, borderRadius: 16, display: "inline-flex", gap: 6, marginBottom: 32, border: "1px solid #DFD7CB", flexWrap: "wrap" }}>
           {[
             { id: "overview", label: "📊 Store Overview" },
             { id: "products", label: `📦 Products (${products.length})` },
+            { id: "categories", label: "🏷️ Categories" },
+            { id: "customers", label: "👥 Customers" },
             { id: "orders", label: `🛒 Orders (${orders.length})` },
+            { id: "promo", label: "🎟️ Promo Codes" },
             { id: "reviews", label: `⭐ Reviews (${reviews.length})` },
-        ].map(t => (<button key={t.id} onClick={() => setTab(t.id)} style={{
-                padding: "11px 24px",
+          ].map(t => (<button key={t.id} onClick={() => setTab(t.id)} style={{
+                padding: "11px 20px",
                 fontSize: 13.5,
                 fontWeight: 700,
                 borderRadius: 12,
@@ -518,6 +524,7 @@ export function AdminDashboard() {
             products={products}
             setTab={setTab}
             getStatusBadgeStyle={getStatusBadgeStyle}
+            token={token}
           />
         )}
 
@@ -537,7 +544,17 @@ export function AdminDashboard() {
           />
         )}
 
-        {/* TAB 3: ORDERS MANAGEMENT */}
+        {/* TAB 3: CATEGORIES MANAGEMENT */}
+        {tab === "categories" && (
+          <AdminCategories token={token} showToast={addToast} />
+        )}
+
+        {/* TAB 4: CUSTOMER DIRECTORY */}
+        {tab === "customers" && (
+          <AdminCustomers token={token} showToast={addToast} />
+        )}
+
+        {/* TAB 5: ORDERS MANAGEMENT */}
         {tab === "orders" && (
           <AdminOrders
             orders={orders}
@@ -557,7 +574,12 @@ export function AdminDashboard() {
           />
         )}
 
-        {/* TAB 4: REVIEWS */}
+        {/* TAB 6: PROMO CODES */}
+        {tab === "promo" && (
+          <AdminPromo token={token} showToast={addToast} />
+        )}
+
+        {/* TAB 7: REVIEWS */}
         {tab === "reviews" && (
           <AdminReviews
             reviews={reviews}

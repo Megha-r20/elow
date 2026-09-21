@@ -14,6 +14,7 @@ import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 const app = express();
 
@@ -94,6 +95,7 @@ app.use("/api", productRoutes);
 app.use("/api", orderRoutes);
 app.use("/api", reviewRoutes);
 app.use("/api", paymentRoutes);
+app.use("/api", adminRoutes);
 
 // Single centralized Error Middleware
 app.use(notFound);

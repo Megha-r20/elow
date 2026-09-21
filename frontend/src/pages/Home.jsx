@@ -4,7 +4,8 @@ import { SectionHead, Icons, Stars } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { Book, PenTool, Paperclip, Star, Calendar, Notebook, PenBox, Gift } from "lucide-react";
 import { CATEGORIES, HERO_IMAGES } from "../data";
-import { useCart, useToast, useDocumentTitle } from "../hooks";
+import { PRODUCTS } from "../data/products.js";
+import { useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 const bgVideo = "/Background_video.mp4";
 const T = {
@@ -19,10 +20,8 @@ const T = {
 export default function Home() {
     useDocumentTitle("Home — Beautiful Stationery");
     const navigate = useNavigate();
-    const { addItem } = useCart();
-    const { addToast } = useToast();
-    const [featured, setFeatured] = useState([]);
-    const [bestSellers, setBestSellers] = useState([]);
+    const [featured, setFeatured] = useState(() => PRODUCTS.slice(0, 8));
+    const [bestSellers, setBestSellers] = useState(() => PRODUCTS.filter(p => p.isBestseller).slice(0, 8));
 
     useEffect(() => {
         async function fetchHomeProducts() {
@@ -33,11 +32,15 @@ export default function Home() {
                 ]);
                 if (featRes.ok) {
                     const featData = await featRes.json();
-                    setFeatured(featData.products || []);
+                    if (featData.products && featData.products.length > 0) {
+                        setFeatured(featData.products);
+                    }
                 }
                 if (bestRes.ok) {
                     const bestData = await bestRes.json();
-                    setBestSellers(bestData.products || []);
+                    if (bestData.products && bestData.products.length > 0) {
+                        setBestSellers(bestData.products);
+                    }
                 }
             } catch (_err) {
                 /* ignore fetch error */
@@ -338,7 +341,7 @@ export default function Home() {
       <section style={{ background: "#23201D", overflow: "hidden", padding: "18px 0", borderTop: `1px solid rgba(255,255,255,0.08)` }}>
         <div className="marquee-track">
           {[0, 1].map(k => (<span key={k} style={{ display: "flex", alignItems: "center" }}>
-              {["A5 Dotted Journals", "Pastel Gel Pens", "Washi Tape Sets", "Kawaii Sticker Books", "Weekly Planners", "Desk Organizers", "Highlighter Sets", "Wax Seal Stamps"].map((item, i) => (<span key={item} style={{ display: "flex", alignItems: "center" }}>
+              {["A5 Dotted Journals", "Pastel Gel Pens", "Washi Tape Sets", "Kawaii Sticker Books", "Weekly Planners", "Desk Organizers", "Highlighter Sets", "Wax Seal Stamps"].map((item, _i) => (<span key={item} style={{ display: "flex", alignItems: "center" }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.55)", whiteSpace: "nowrap", letterSpacing: "0.3px" }}>{item}</span>
                   <span style={{ color: "#8192D4", margin: "0 28px" }}>✦</span>
                 </span>))}

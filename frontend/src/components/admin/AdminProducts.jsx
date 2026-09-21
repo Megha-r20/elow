@@ -1,7 +1,5 @@
-import React from "react";
-
 export function AdminProducts({
-  products = [],
+  products: _products = [],
   loadingProducts = false,
   filteredProducts = [],
   productSearch = "",

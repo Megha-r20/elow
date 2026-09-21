@@ -68,7 +68,10 @@ export const parseCookies = (req) => {
 export const sanitizeUser = (user) => {
   if (!user) return null;
   const raw = typeof user.toObject === "function" ? user.toObject() : user;
-  const { password, _id, __v, ...safeUser } = raw;
+  const safeUser = { ...raw };
+  delete safeUser.password;
+  delete safeUser._id;
+  delete safeUser.__v;
   return safeUser;
 };
 

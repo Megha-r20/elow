@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { RefreshCw, ShieldCheck, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 export default function ReturnsPolicy() {
   const navigate = useNavigate();

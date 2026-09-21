@@ -1,17 +1,52 @@
 import crypto from "crypto";
 import { Product } from "../models/Product.js";
 import { Review } from "../models/Review.js";
-import { CATEGORIES, PRICE_RANGES } from "../data/products.js";
+import { Category } from "../models/Category.js";
+import { CATEGORIES as DEFAULT_CATEGORIES, PRICE_RANGES } from "../data/products.js";
 import { logger } from "../config/logger.js";
+import { resolvePinterestUrl } from "../utils/pinterestResolver.js";
 
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
-const safeLower = (v) => safeStr(v).toLowerCase();
+
+// Helper function to seed initial categories if DB collection is empty
+const seedCategoriesIfNeeded = async () => {
+  const count = await Category.countDocuments();
+  if (count === 0 && DEFAULT_CATEGORIES && DEFAULT_CATEGORIES.length > 0) {
+    const docs = DEFAULT_CATEGORIES.map((c) => ({
+      id: c.id,
+      name: c.label || c.name || c.id,
+      slug: (c.id || "").toLowerCase(),
+      description: c.desc || c.description || "",
+      image: c.image || c.imageUrl || "",
+      productCount: c.count || 0,
+      isActive: true,
+    }));
+    await Category.insertMany(docs);
+  }
+};
 
 // @desc    Get categories
 // @route   GET /api/categories
 // @access  Public
-export const getCategories = (req, res) => {
-  res.json(CATEGORIES || []);
+export const getCategories = async (req, res) => {
+  try {
+    await seedCategoriesIfNeeded();
+    const categories = await Category.find({ isActive: true }).sort({ name: 1 }).lean();
+    const formatted = categories.map((c) => ({
+      id: c.id,
+      label: c.name,
+      name: c.name,
+      slug: c.slug,
+      desc: c.description,
+      description: c.description,
+      image: c.image,
+      count: c.productCount,
+      isActive: c.isActive,
+    }));
+    res.json(formatted);
+  } catch (_err) {
+    res.json(DEFAULT_CATEGORIES || []);
+  }
 };
 
 const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -157,6 +192,11 @@ export const createProduct = async (req, res) => {
       : 10;
   const computedInStock = inStock !== undefined ? Boolean(inStock) : parsedStock > 0;
 
+  let rawImages = Array.isArray(images) && images.length > 0
+    ? images
+    : ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"];
+  const resolvedImages = await Promise.all(rawImages.map((img) => resolvePinterestUrl(img)));
+
   const newProduct = await Product.create({
     id: `prod-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
     name: cleanName,
@@ -166,10 +206,7 @@ export const createProduct = async (req, res) => {
     price: numPrice,
     originalPrice: originalPrice ? Number(originalPrice) : undefined,
     description: safeStr(description) || "Handcrafted aesthetic lifestyle product.",
-    images:
-      Array.isArray(images) && images.length > 0
-        ? images
-        : ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
+    images: resolvedImages,
     inStock: computedInStock,
     stockCount: parsedStock,
     rating: 0,
@@ -202,6 +239,11 @@ export const updateProduct = async (req, res) => {
   const hasStockCount = stockCount !== undefined && stockCount !== "" && !isNaN(Number(stockCount));
   const parsedStock = hasStockCount ? Math.max(0, parseInt(stockCount, 10)) : undefined;
 
+  let resolvedImages;
+  if (Array.isArray(images) && images.length > 0) {
+    resolvedImages = await Promise.all(images.map((img) => resolvePinterestUrl(img)));
+  }
+
   const updateFields = {
     name: cleanName,
     shortName: cleanName,
@@ -213,7 +255,7 @@ export const updateProduct = async (req, res) => {
         ? Number(originalPrice)
         : undefined,
     description: safeStr(description),
-    images: Array.isArray(images) && images.length > 0 ? images : undefined,
+    ...(resolvedImages ? { images: resolvedImages } : {}),
     inStock: inStock !== undefined ? Boolean(inStock) : (hasStockCount ? parsedStock > 0 : true),
     ...(hasStockCount ? { stockCount: parsedStock } : {}),
     isNew: isNew !== undefined ? Boolean(isNew) : false,
@@ -243,3 +285,98 @@ export const deleteProduct = async (req, res) => {
   logger.info(`[Admin Deleted Product] ID: ${prodId}`);
   res.json({ success: true, message: "Product deleted successfully" });
 };
+
+// @desc    Get all categories for admin (including inactive)
+// @route   GET /api/admin/categories
+// @access  Private/Admin
+export const getAllCategoriesAdmin = async (req, res) => {
+  await seedCategoriesIfNeeded();
+  const categories = await Category.find().sort({ createdAt: -1 }).lean();
+  res.json(categories);
+};
+
+// @desc    Create category (Admin)
+// @route   POST /api/admin/categories
+// @access  Private/Admin
+export const createCategory = async (req, res) => {
+  const { name, slug, description, image } = req.body;
+  if (!name || !name.trim()) {
+    return res.status(400).json({ error: "Category name is required" });
+  }
+
+  const cleanName = name.trim();
+  const catSlug = (slug || cleanName).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const catId = catSlug || `cat-${Date.now()}`;
+
+  const existing = await Category.findOne({ $or: [{ id: catId }, { slug: catSlug }] });
+  if (existing) {
+    return res.status(400).json({ error: "Category with this name or slug already exists" });
+  }
+
+  const resolvedImage = image ? await resolvePinterestUrl(safeStr(image)) : "";
+
+  const newCat = await Category.create({
+    id: catId,
+    name: cleanName,
+    slug: catSlug,
+    description: safeStr(description),
+    image: resolvedImage,
+    isActive: true,
+  });
+
+  logger.info(`[Admin Created Category] ${newCat.name} (${newCat.id})`);
+  res.status(201).json({ success: true, category: newCat });
+};
+
+// @desc    Update category (Admin)
+// @route   PUT /api/admin/categories/:id
+// @access  Private/Admin
+export const updateCategory = async (req, res) => {
+  const catId = req.params.id;
+  const { name, description, image, isActive } = req.body;
+
+  const updateData = {};
+  if (name && name.trim()) {
+    updateData.name = name.trim();
+    updateData.slug = updateData.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  }
+  if (description !== undefined) updateData.description = safeStr(description);
+  if (image !== undefined) updateData.image = await resolvePinterestUrl(safeStr(image));
+  if (isActive !== undefined) updateData.isActive = Boolean(isActive);
+
+  const updated = await Category.findOneAndUpdate({ id: catId }, updateData, { new: true }).lean();
+  if (!updated) {
+    return res.status(404).json({ error: "Category not found" });
+  }
+
+  logger.info(`[Admin Updated Category] ${updated.name} (${catId})`);
+  res.json({ success: true, category: updated });
+};
+
+// @desc    Delete category (Admin)
+// @route   DELETE /api/admin/categories/:id
+// @access  Private/Admin
+export const deleteCategoryAdmin = async (req, res) => {
+  const catId = req.params.id;
+  const deleted = await Category.findOneAndDelete({ id: catId });
+
+  if (!deleted) {
+    return res.status(404).json({ error: "Category not found" });
+  }
+
+  logger.info(`[Admin Deleted Category] ID: ${catId}`);
+  res.json({ success: true, message: "Category deleted successfully" });
+};
+
+// @desc    Resolve Pinterest/external URL to direct image URL (Admin)
+// @route   GET /api/admin/resolve-image
+// @access  Private/Admin
+export const resolveImageEndpoint = async (req, res) => {
+  const rawUrl = req.query.url;
+  if (!rawUrl) {
+    return res.status(400).json({ error: "URL query parameter is required" });
+  }
+  const resolved = await resolvePinterestUrl(rawUrl);
+  res.json({ original: rawUrl, resolved });
+};
+

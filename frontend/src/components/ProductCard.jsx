@@ -28,7 +28,15 @@ export function ProductCard({ product, compact = false }) {
     return (<div className="product-card h-full" onClick={() => navigate(`/product/${product.id}`)}>
       {/* Image area */}
       <div className="card-img relative overflow-hidden bg-[#F4EFE6] shrink-0" style={{ height: imgH }}>
-        <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover block"/>
+        <img
+          src={product.images?.[0]}
+          alt={product.name}
+          className="w-full h-full object-cover block"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop";
+          }}
+        />
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1">

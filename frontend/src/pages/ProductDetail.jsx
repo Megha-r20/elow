@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { REVIEWS } from "../data";
+import { PRODUCTS } from "../data/products.js";
 import { useCart, useWishlist, useToast, useDrawer, useDocumentTitle } from "../hooks";
 import { Stars, Badge, Price, Breadcrumb, QtyStepper, Divider, Icons, SectionHead } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
@@ -30,17 +31,24 @@ export default function ProductDetail() {
                 const res = await fetch(getApiUrl(`/api/products/${id}`));
                 if (res.ok) {
                     const data = await res.json();
-                    setProduct(data.product || null);
-                    setApiReviews(data.reviews || []);
-                    setRelated(data.related || []);
-                } else {
-                    setProduct(null);
+                    if (data.product) {
+                        setProduct(data.product);
+                        setApiReviews(data.reviews || []);
+                        setRelated(data.related || []);
+                        return;
+                    }
                 }
             } catch (_err) {
-                setProduct(null);
-            } finally {
-                setLoading(false);
+                /* fallback to static product */
             }
+            const staticProd = PRODUCTS.find(p => String(p.id) === String(id));
+            if (staticProd) {
+                setProduct(staticProd);
+                setRelated(PRODUCTS.filter(p => p.category === staticProd.category && String(p.id) !== String(id)).slice(0, 4));
+            } else {
+                setProduct(null);
+            }
+            setLoading(false);
         }
         fetchDetails();
     }, [id]);

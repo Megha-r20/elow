@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import Layout from "./components/Layout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -16,6 +16,7 @@ const FAQ = lazy(() => import("./pages/FAQ"));
 const Contact = lazy(() => import("./pages/Contact"));
 const ReturnsPolicy = lazy(() => import("./pages/ReturnsPolicy"));
 const OrderTracking = lazy(() => import("./pages/OrderTracking"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 
 const PageLoader = () => (
     <div style={{ padding: "80px 24px", textAlign: "center", color: "#6E6A63" }}>
@@ -51,6 +52,7 @@ export const router = createBrowserRouter([
             { path: "contact", Component: withSuspense(Contact) },
             { path: "returns", Component: withSuspense(ReturnsPolicy) },
             { path: "tracking", Component: withSuspense(OrderTracking) },
+            { path: "reset-password", Component: withSuspense(ResetPassword) },
             { path: "*", Component: () => (
                 <div style={{ textAlign: "center", padding: "120px 24px" }}>
                     <h1 style={{ fontSize: 36, fontWeight: 700, marginBottom: 12, fontFamily: "'DM Serif Display', serif" }}>Page not found</h1>

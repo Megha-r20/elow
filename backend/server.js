@@ -34,7 +34,7 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-process.on("unhandledRejection", (reason, promise) => {
+process.on("unhandledRejection", (reason, _promise) => {
   logger.error("⚠️ [Unhandled Rejection] Exiting process:", reason);
   process.exit(1);
 });

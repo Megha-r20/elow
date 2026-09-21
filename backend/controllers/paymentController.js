@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Stripe from "stripe";
 import { PromoCode } from "../models/PromoCode.js";
 import { Product } from "../models/Product.js";
@@ -305,4 +306,99 @@ export const handleStripeWebhook = async (req, res) => {
   }
 
   res.json({ received: true });
+};
+
+// @desc    Get all promo codes (Admin)
+// @route   GET /api/admin/promo
+// @access  Private/Admin
+export const getAllPromosAdmin = async (req, res) => {
+  const promos = await PromoCode.find().sort({ createdAt: -1 }).lean();
+  res.json(promos);
+};
+
+// @desc    Create promo code (Admin)
+// @route   POST /api/admin/promo
+// @access  Private/Admin
+export const createPromoAdmin = async (req, res) => {
+  const { code, discountType, discountValue, minOrderAmount, maxDiscount, expiryDate, isSingleUse } = req.body || {};
+
+  const cleanCode = safeStr(code).toUpperCase();
+  const numValue = Number(discountValue);
+
+  if (!cleanCode || isNaN(numValue) || numValue <= 0) {
+    return res.status(400).json({ error: "Valid code and discount value are required" });
+  }
+
+  const existing = await PromoCode.findOne({ code: cleanCode });
+  if (existing) {
+    return res.status(400).json({ error: `Promo code "${cleanCode}" already exists` });
+  }
+
+  const newPromo = await PromoCode.create({
+    code: cleanCode,
+    discountType: discountType === "percentage" ? "percentage" : "fixed",
+    discountValue: numValue,
+    minOrderAmount: Number(minOrderAmount) || 0,
+    maxDiscount: maxDiscount ? Number(maxDiscount) : undefined,
+    expiryDate: expiryDate ? new Date(expiryDate) : undefined,
+    isSingleUse: Boolean(isSingleUse),
+    isActive: true,
+  });
+
+  logger.info(`[Admin Created Promo] ${newPromo.code} (${newPromo.discountType}: ${newPromo.discountValue})`);
+  res.status(201).json({ success: true, promo: newPromo });
+};
+
+// @desc    Update promo code (Admin)
+// @route   PATCH /api/admin/promo/:id
+// @access  Private/Admin
+export const updatePromoAdmin = async (req, res) => {
+  const promoId = req.params.id;
+  const { code, discountType, discountValue, minOrderAmount, maxDiscount, expiryDate, isActive, isSingleUse } = req.body || {};
+
+  const updateFields = {};
+  if (code && safeStr(code)) updateFields.code = safeStr(code).toUpperCase();
+  if (discountType) updateFields.discountType = discountType === "percentage" ? "percentage" : "fixed";
+  if (discountValue !== undefined && !isNaN(Number(discountValue))) updateFields.discountValue = Number(discountValue);
+  if (minOrderAmount !== undefined) updateFields.minOrderAmount = Number(minOrderAmount) || 0;
+  if (maxDiscount !== undefined) updateFields.maxDiscount = maxDiscount ? Number(maxDiscount) : undefined;
+  if (expiryDate !== undefined) updateFields.expiryDate = expiryDate ? new Date(expiryDate) : undefined;
+  if (isActive !== undefined) updateFields.isActive = Boolean(isActive);
+  if (isSingleUse !== undefined) updateFields.isSingleUse = Boolean(isSingleUse);
+
+  const promoFilter = mongoose.Types.ObjectId.isValid(promoId)
+    ? { $or: [{ _id: promoId }, { id: promoId }, { code: promoId }] }
+    : { $or: [{ id: promoId }, { code: promoId }] };
+
+  const updatedPromo = await PromoCode.findOneAndUpdate(
+    promoFilter,
+    updateFields,
+    { new: true }
+  ).lean();
+
+  if (!updatedPromo) {
+    return res.status(404).json({ error: "Promo code not found" });
+  }
+
+  logger.info(`[Admin Updated Promo] ${updatedPromo.code}`);
+  res.json({ success: true, promo: updatedPromo });
+};
+
+// @desc    Delete promo code (Admin)
+// @route   DELETE /api/admin/promo/:id
+// @access  Private/Admin
+export const deletePromoAdmin = async (req, res) => {
+  const promoId = req.params.id;
+  const promoFilter = mongoose.Types.ObjectId.isValid(promoId)
+    ? { $or: [{ _id: promoId }, { id: promoId }, { code: promoId }] }
+    : { $or: [{ id: promoId }, { code: promoId }] };
+
+  const deleted = await PromoCode.findOneAndDelete(promoFilter);
+
+  if (!deleted) {
+    return res.status(404).json({ error: "Promo code not found" });
+  }
+
+  logger.info(`[Admin Deleted Promo] Code/ID: ${promoId}`);
+  res.json({ success: true, message: "Promo code deleted successfully" });
 };

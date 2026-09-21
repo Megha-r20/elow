@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { Search, Package, Truck, CheckCircle2, Clock, MapPin, ArrowLeft, ExternalLink, ShieldCheck } from "lucide-react";
+import { Search, Package, ArrowLeft } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { getApiUrl } from "../api/config";
 
@@ -8,10 +8,11 @@ export default function OrderTracking() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [orderId, setOrderId] = useState(searchParams.get("id") || "");
-  const [phoneOrEmail, setPhoneOrEmail] = useState("");
   const [activeOrder, setActiveOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [notFound, setNotFound] = useState(false);
+
 
   const T = {
     purple: "#8192D4",
@@ -70,7 +71,6 @@ export default function OrderTracking() {
   };
 
   const { authFetch } = useAuth();
-  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     if (searchParams.get("id")) {
@@ -287,6 +287,26 @@ export default function OrderTracking() {
             </form>
           </div>
         </div>
+
+        {/* Not Found Message */}
+        {searched && notFound && !activeOrder && (
+          <div
+            style={{
+              background: "#FFF5F5",
+              border: "1px solid #FEB2B2",
+              color: "#C53030",
+              borderRadius: 16,
+              padding: "20px 24px",
+              textAlign: "center",
+              margin: "0 auto 32px",
+              maxWidth: 600,
+              fontSize: 14.5,
+              fontWeight: 600,
+            }}
+          >
+            No order details found for &quot;{orderId}&quot;. Please check the Order ID and try again.
+          </div>
+        )}
 
         {/* Active Order Details Card */}
         {activeOrder && (

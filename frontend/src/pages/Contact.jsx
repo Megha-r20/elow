@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Mail, Phone, MapPin, ArrowLeft, Send } from "lucide-react";
+import { Mail, Phone, ArrowLeft } from "lucide-react";
 
 export default function Contact() {
   const navigate = useNavigate();

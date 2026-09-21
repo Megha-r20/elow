@@ -4,6 +4,7 @@ import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
 import { PromoCode } from "../models/PromoCode.js";
 import { calculatePromoDiscount } from "./paymentController.js";
+import { sendOrderConfirmationEmail } from "../services/emailService.js";
 import { logger } from "../config/logger.js";
 
 export const ORDER_STATUS_TRANSITIONS = {
@@ -15,7 +16,6 @@ export const ORDER_STATUS_TRANSITIONS = {
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
-const safeLower = (v) => safeStr(v).toLowerCase();
 
 const issueStripeRefund = async (intentId) => {
   if (!intentId || !stripe) return false;
@@ -216,6 +216,12 @@ export const createOrder = async (req, res) => {
   }
 
   logger.info(`[Order Created] ID: ${orderId}, User: ${req.user.id}, Total: ₹${serverTotal}`);
+
+  // Dispatch order confirmation email asynchronously
+  sendOrderConfirmationEmail(newOrder, deliveryAddress.email).catch((err) => {
+    logger.error(`[Email Dispatch Error] ${err.message}`);
+  });
+
   res.status(201).json({ success: true, order: newOrder });
 };
 

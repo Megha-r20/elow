@@ -8,7 +8,7 @@ import { ReviewModal } from "./ReviewModal";
 
 export function AccountModal({ isOpen, onClose }) {
   const { lastOrder, myOrders, clearCustomerOrders, removeOrderFromHistory } = useCart();
-  const { user, token, authFetch } = useAuth();
+  const { user, authFetch } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 

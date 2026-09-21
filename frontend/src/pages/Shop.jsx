@@ -1,8 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router";
+import { useSearchParams } from "react-router";
 import { Icons, Breadcrumb } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { CATEGORIES, SORT_OPTIONS, PRICE_RANGES } from "../data";
+import { PRODUCTS } from "../data/products.js";
 import { useWishlist, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 const T = {
@@ -12,7 +13,6 @@ const T = {
 export default function Shop() {
     useDocumentTitle("Shop Catalog");
     const [params, setParams] = useSearchParams();
-    const navigate = useNavigate();
     const wishlist = useWishlist();
     const initCat = params.get("cat") ?? "all";
     const initQ = params.get("q") ?? "";
@@ -33,14 +33,14 @@ export default function Shop() {
         setOnlyWishlist(params.get("filter") === "wishlist");
         setSearchQ(params.get("q") ?? "");
     }, [params]);
-    const [liveProducts, setLiveProducts] = useState([]);
+    const [liveProducts, setLiveProducts] = useState(PRODUCTS);
     useEffect(() => {
         async function fetchLiveProducts() {
             try {
                 const res = await fetch(getApiUrl("/api/products?limit=all"));
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.products) {
+                    if (data.products && data.products.length > 0) {
                         setLiveProducts(data.products);
                     }
                 }

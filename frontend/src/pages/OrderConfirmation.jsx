@@ -12,7 +12,7 @@ const T = { teal: "#8192D4", txt: "#23201D", muted: "#6E6A63", light: "#9C968D",
 export default function OrderConfirmation() {
     const navigate = useNavigate();
     const { lastOrder } = useCart();
-    const { user, token, authFetch } = useAuth();
+    const { user, authFetch } = useAuth();
     const { addToast } = useToast();
     const [show, setShow] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(lastOrder);

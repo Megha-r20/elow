@@ -1,4 +1,3 @@
-import React from "react";
 import { Stars } from "../ui";
 
 export function AdminReviews({
