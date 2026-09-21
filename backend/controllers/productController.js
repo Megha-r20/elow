@@ -14,6 +14,8 @@ export const getCategories = (req, res) => {
   res.json(CATEGORIES || []);
 };
 
+const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // @desc    Get product catalog with filters and search
 // @route   GET /api/products
 // @access  Public
@@ -27,16 +29,17 @@ export const getProducts = async (req, res) => {
     mongoQuery.category = cat;
   }
 
-  // Search query (using regex search across indexed text fields)
+  // Search query (safely escape regex characters to prevent ReDoS and invalid pattern 500 errors)
   if (q && typeof q === "string" && q.trim()) {
     const cleanQ = q.trim();
+    const safeRegex = new RegExp(escapeRegExp(cleanQ), "i");
     mongoQuery.$or = [
-      { name: new RegExp(cleanQ, "i") },
-      { shortName: new RegExp(cleanQ, "i") },
-      { description: new RegExp(cleanQ, "i") },
-      { category: new RegExp(cleanQ, "i") },
-      { subcategory: new RegExp(cleanQ, "i") },
-      { tags: new RegExp(cleanQ, "i") },
+      { name: safeRegex },
+      { shortName: safeRegex },
+      { description: safeRegex },
+      { category: safeRegex },
+      { subcategory: safeRegex },
+      { tags: safeRegex },
     ];
   }
 
@@ -74,16 +77,21 @@ export const getProducts = async (req, res) => {
       break;
   }
 
-  // Pagination (default page size: 20)
+  // Pagination (default page size: 20, max limit capped at 200)
   const total = await Product.countDocuments(mongoQuery);
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
   const rawLimit = req.query.limit;
 
-  let limit = 20; // Default limit per requirements
+  const MAX_LIMIT = 200;
+  let limit = 20;
+
   if (rawLimit === "all" || rawLimit === "0") {
-    limit = 0;
+    limit = MAX_LIMIT;
   } else if (rawLimit !== undefined && !isNaN(parseInt(rawLimit, 10))) {
-    limit = Math.max(1, parseInt(rawLimit, 10));
+    const parsed = parseInt(rawLimit, 10);
+    if (parsed > 0) {
+      limit = Math.min(parsed, MAX_LIMIT);
+    }
   }
 
   let productsQuery = Product.find(mongoQuery).sort(sortOption);

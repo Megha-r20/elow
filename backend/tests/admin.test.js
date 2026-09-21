@@ -120,4 +120,20 @@ describe("Admin CRUD & Moderation Integration Tests", () => {
     const checkReview = await Review.findOne({ id: review.id });
     expect(checkReview).toBeNull();
   });
+
+  it("should handle special regex characters in search query safely without 500 SyntaxError or ReDoS", async () => {
+    // Test invalid unescaped regex character like '(' or '(a+)+$'
+    const resUnmatched = await request(app).get("/api/products?q=(");
+    expect(resUnmatched.status).toBe(200);
+    expect(Array.isArray(resUnmatched.body.products)).toBe(true);
+
+    const resReDoS = await request(app).get("/api/products?q=(a+)+$");
+    expect(resReDoS.status).toBe(200);
+    expect(Array.isArray(resReDoS.body.products)).toBe(true);
+
+    // Test limit=all parameter capping
+    const resLimitAll = await request(app).get("/api/products?limit=all");
+    expect(resLimitAll.status).toBe(200);
+    expect(Array.isArray(resLimitAll.body.products)).toBe(true);
+  });
 });
