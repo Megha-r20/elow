@@ -20,10 +20,16 @@ const app = express();
 // Security headers with Helmet
 app.use(helmet({ crossOriginResourcePolicy: false }));
 
-// Dynamic CORS configuration for Production (Vercel) and Local Dev
+// Dynamic CORS configuration allowing ONLY exact allowed origins from FRONTEND_URL or defaults
+const defaultAllowedOrigins = [
+  "https://elow-store.vercel.app",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
+
 const allowedOrigins = process.env.FRONTEND_URL
-  ? process.env.FRONTEND_URL.split(",").map((url) => url.trim())
-  : ["http://localhost:5173", "http://127.0.0.1:5173", "https://elow-store.vercel.app"];
+  ? process.env.FRONTEND_URL.split(",").map((url) => url.trim().replace(/\/$/, "")).filter(Boolean)
+  : defaultAllowedOrigins;
 
 app.use(
   cors({
@@ -31,11 +37,10 @@ app.use(
       // Allow requests with no origin (like mobile apps, curl, server-to-server)
       if (!origin) return callback(null, true);
 
-      const isAllowedExplicitly = allowedOrigins.includes("*") || allowedOrigins.includes(origin);
-      const isVercelDeployment = origin.endsWith(".vercel.app");
-      const isDev = process.env.NODE_ENV !== "production";
+      const cleanOrigin = origin.trim().replace(/\/$/, "");
+      const isAllowed = allowedOrigins.includes(cleanOrigin);
 
-      if (isAllowedExplicitly || isVercelDeployment || isDev) {
+      if (isAllowed) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));

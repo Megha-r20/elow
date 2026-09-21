@@ -125,6 +125,13 @@ describe("Auth & RBAC Integration Tests", () => {
 
       expect(deniedRes.status).toBe(500);
       expect(deniedRes.body.error).toBe("Internal Server Error");
+
+      const deniedVercelRes = await request(app)
+        .get("/api/health")
+        .set("Origin", "https://arbitrary-attacker.vercel.app");
+
+      expect(deniedVercelRes.status).toBe(500);
+      expect(deniedVercelRes.body.error).toBe("Internal Server Error");
     } finally {
       process.env.NODE_ENV = originalEnv;
     }
