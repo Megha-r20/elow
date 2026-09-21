@@ -1,9 +1,11 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { SectionHead, Icons, Stars } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { Book, PenTool, Paperclip, Star, Calendar, Notebook, PenBox, Gift } from "lucide-react";
-import { CATEGORIES, HERO_IMAGES, getFeatured, getBestSellers } from "../data";
+import { CATEGORIES, HERO_IMAGES } from "../data";
 import { useCart, useToast } from "../hooks";
+import { getApiUrl } from "../api/config";
 const bgVideo = "/Background_video.mp4";
 const T = {
     teal: "#8192D4",
@@ -18,8 +20,30 @@ export default function Home() {
     const navigate = useNavigate();
     const { addItem } = useCart();
     const { addToast } = useToast();
-    const featured = getFeatured();
-    const bestSellers = getBestSellers();
+    const [featured, setFeatured] = useState([]);
+    const [bestSellers, setBestSellers] = useState([]);
+
+    useEffect(() => {
+        async function fetchHomeProducts() {
+            try {
+                const [featRes, bestRes] = await Promise.all([
+                    fetch(getApiUrl("/api/products?limit=8")),
+                    fetch(getApiUrl("/api/products?filter=bestseller&limit=8"))
+                ]);
+                if (featRes.ok) {
+                    const featData = await featRes.json();
+                    setFeatured(featData.products || []);
+                }
+                if (bestRes.ok) {
+                    const bestData = await bestRes.json();
+                    setBestSellers(bestData.products || []);
+                }
+            } catch (err) {
+                console.error("Failed to fetch home products:", err);
+            }
+        }
+        fetchHomeProducts();
+    }, []);
     return (<div>
       {/* ── Hero ────────────────────────────────────────────────── */}
       <section style={{ position: "relative", minHeight: "85vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", padding: "120px 0 80px" }}>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { getProductById, PRODUCTS, REVIEWS } from "../data";
+import { REVIEWS } from "../data";
 import { useCart, useWishlist, useToast, useDrawer } from "../hooks";
 import { Stars, Badge, Price, Breadcrumb, QtyStepper, Divider, Icons, SectionHead } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
@@ -9,7 +9,9 @@ const T = { teal: "#8192D4", txt: "#23201D", muted: "#6E6A63", light: "#9C968D",
 export default function ProductDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const product = getProductById(id ?? "");
+    const [product, setProduct] = useState(null);
+    const [related, setRelated] = useState([]);
+    const [loading, setLoading] = useState(true);
     const { addItem } = useCart();
     const { has, toggle } = useWishlist();
     const { addToast } = useToast();
@@ -20,20 +22,34 @@ export default function ProductDetail() {
     const [apiReviews, setApiReviews] = useState([]);
 
     useEffect(() => {
-        if (!product?.id) return;
-        const fetchApproved = async () => {
+        if (!id) return;
+        async function fetchDetails() {
+            setLoading(true);
             try {
-                const res = await fetch(getApiUrl(`/api/products/${product.id}/reviews`));
+                const res = await fetch(getApiUrl(`/api/products/${id}`));
                 if (res.ok) {
                     const data = await res.json();
+                    setProduct(data.product || null);
                     setApiReviews(data.reviews || []);
+                    setRelated(data.related || []);
+                } else {
+                    setProduct(null);
                 }
             } catch (err) {
-                console.error("Error fetching product reviews:", err);
+                console.error("Error fetching product details:", err);
+                setProduct(null);
+            } finally {
+                setLoading(false);
             }
-        };
-        fetchApproved();
-    }, [product?.id]);
+        }
+        fetchDetails();
+    }, [id]);
+
+    if (loading) {
+        return (<div className="container" style={{ padding: "80px 32px", textAlign: "center" }}>
+        <p style={{ fontSize: 16, color: T.muted }}>Loading product details...</p>
+      </div>);
+    }
 
     if (!product) {
         return (<div className="container" style={{ padding: "80px 32px", textAlign: "center" }}>
@@ -55,7 +71,6 @@ export default function ProductDetail() {
         avatar: r.avatar,
     }));
     const reviews = [...approvedApiReviews, ...staticReviews.filter(s => !approvedApiReviews.some(a => a.id === s.id))];
-    const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
     const disc = Math.round((1 - product.price / product.originalPrice) * 100);
     const handleAdd = () => {
         addItem(product, qty);

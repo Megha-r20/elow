@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router";
 import { Icons, Breadcrumb } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
-import { PRODUCTS, CATEGORIES, SORT_OPTIONS, PRICE_RANGES } from "../data";
+import { CATEGORIES, SORT_OPTIONS, PRICE_RANGES } from "../data";
 import { useWishlist } from "../hooks";
 import { getApiUrl } from "../api/config";
 const T = {
@@ -32,14 +32,14 @@ export default function Shop() {
         setOnlyWishlist(params.get("filter") === "wishlist");
         setSearchQ(params.get("q") ?? "");
     }, [params]);
-    const [liveProducts, setLiveProducts] = useState(PRODUCTS);
+    const [liveProducts, setLiveProducts] = useState([]);
     useEffect(() => {
         async function fetchLiveProducts() {
             try {
-                const res = await fetch(getApiUrl("/api/products"));
+                const res = await fetch(getApiUrl("/api/products?limit=all"));
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.products && data.products.length > 0) {
+                    if (data.products) {
                         setLiveProducts(data.products);
                     }
                 }
@@ -162,7 +162,7 @@ export default function Shop() {
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <button onClick={() => changeCat("all")} style={{ textAlign: "left", background: activeCat === "all" ? T.sand : "transparent", border: "none", borderRadius: 9, padding: "9px 12px", fontSize: 13.5, fontWeight: activeCat === "all" ? 700 : 500, color: T.txt, cursor: "pointer", fontFamily: "inherit", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "background 0.14s" }}>
                       <span>All Products</span>
-                      <span style={{ fontSize: 11.5, color: T.light }}>{PRODUCTS.length}</span>
+                      <span style={{ fontSize: 11.5, color: T.light }}>{liveProducts.length}</span>
                     </button>
                     {CATEGORIES.map(cat => (<button key={cat.id} onClick={() => changeCat(cat.id)} style={{ textAlign: "left", background: activeCat === cat.id ? T.sand : "transparent", border: "none", borderRadius: 9, padding: "9px 12px", fontSize: 13.5, fontWeight: activeCat === cat.id ? 700 : 500, color: activeCat === cat.id ? T.txt : T.muted, cursor: "pointer", fontFamily: "inherit", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "background 0.14s" }}>
                         <span>{cat.label}</span>
@@ -223,7 +223,7 @@ export default function Shop() {
                 <p style={{ fontSize: 13, color: T.light, fontWeight: 500 }}>
                   {onlyWishlist
             ? `You have ${filtered.length} items in your wishlist`
-            : `Showing ${filtered.length} of ${PRODUCTS.length} products`}
+            : `Showing ${filtered.length} of ${liveProducts.length} products`}
                 </p>
               </div>
               {/* Grid view toggle */}

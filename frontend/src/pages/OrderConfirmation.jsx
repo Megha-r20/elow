@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Icons, Divider } from "../components/ui";
-import { PRODUCTS } from "../data";
 import { ProductCard } from "../components/ProductCard";
 import { useCart, useToast } from "../hooks";
 import { useAuth } from "../context/AuthContext";
@@ -17,6 +16,7 @@ export default function OrderConfirmation() {
     const { addToast } = useToast();
     const [show, setShow] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(lastOrder);
+    const [recommended, setRecommended] = useState([]);
 
     // Review Modal State
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -47,7 +47,21 @@ export default function OrderConfirmation() {
         const timer = setInterval(fetchLiveStatus, 5000);
         return () => clearInterval(timer);
     }, [lastOrder, authFetch]);
-    const recommended = PRODUCTS.filter(p => p.isBestseller).slice(0, 4);
+
+    useEffect(() => {
+        async function fetchRecommended() {
+            try {
+                const res = await fetch(getApiUrl("/api/products?filter=bestseller&limit=4"));
+                if (res.ok) {
+                    const data = await res.json();
+                    setRecommended(data.products || []);
+                }
+            } catch (err) {
+                console.error("Error fetching recommended products:", err);
+            }
+        }
+        fetchRecommended();
+    }, []);
     const deliveryDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
     const activeOrder = currentOrder || lastOrder;
     const orderId = activeOrder?.id ?? `US-${new Date().getFullYear()}-DEMO88`;

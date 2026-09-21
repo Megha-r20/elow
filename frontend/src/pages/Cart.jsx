@@ -1,18 +1,35 @@
 import { useNavigate } from "react-router";
 import { useCart } from "../hooks";
 import { Breadcrumb, QtyStepper, ShippingProgress, Icons, Divider } from "../components/ui";
-import { PRODUCTS } from "../data";
 import { ProductCard } from "../components/ProductCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getApiUrl } from "../api/config";
 const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4" };
 export default function Cart() {
     const navigate = useNavigate();
     const { items, count, subtotal, removeItem, setQty, clearCart, promoCode, discount, applyPromo, removePromo } = useCart();
     const [inputCode, setInputCode] = useState(promoCode ?? "");
     const [promoError, setPromoError] = useState("");
+    const [related, setRelated] = useState([]);
     const shipping = subtotal >= 999 ? 0 : 79;
     const total = subtotal - discount + shipping;
-    const related = PRODUCTS.filter(p => !items.find(i => i.product.id === p.id)).slice(0, 4);
+
+    useEffect(() => {
+        async function fetchRelated() {
+            try {
+                const res = await fetch(getApiUrl("/api/products?limit=8"));
+                if (res.ok) {
+                    const data = await res.json();
+                    const prods = data.products || [];
+                    const filtered = prods.filter(p => !items.find(i => i.product?.id === p.id)).slice(0, 4);
+                    setRelated(filtered);
+                }
+            } catch (err) {
+                console.error("Failed to fetch related products for cart:", err);
+            }
+        }
+        fetchRelated();
+    }, [items]);
     const handleApplyPromo = () => {
         if (applyPromo(inputCode)) {
             setPromoError("");
