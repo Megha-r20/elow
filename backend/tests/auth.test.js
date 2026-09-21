@@ -129,4 +129,31 @@ describe("Auth & RBAC Integration Tests", () => {
       process.env.NODE_ENV = originalEnv;
     }
   });
+
+  it("should validate profile update and reject unrecognized extra fields via .strict()", async () => {
+    const regRes = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "Profile User", email: "prof@example.com", password: "password123" });
+
+    const token = regRes.body.token;
+
+    // Unknown extra field should be rejected by .strict()
+    const invalidRes = await request(app)
+      .patch("/api/auth/profile")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ name: "Profile Updated", unknownField: "hack" });
+
+    expect(invalidRes.status).toBe(400);
+    expect(invalidRes.body.error).toContain("Validation error");
+
+    // Valid update
+    const validRes = await request(app)
+      .patch("/api/auth/profile")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ name: "Profile Updated", bio: "Stationery lover" });
+
+    expect(validRes.status).toBe(200);
+    expect(validRes.body.success).toBe(true);
+    expect(validRes.body.user.name).toBe("Profile Updated");
+  });
 });
