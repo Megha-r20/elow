@@ -318,28 +318,7 @@ export function AdminDashboard() {
         }
     };
 
-    // Clear All Orders
-    const handleClearAllOrders = async () => {
-        if (!window.confirm("⚠️ Are you sure you want to clear ALL store orders from MongoDB Atlas? This action cannot be undone."))
-            return;
-        try {
-            const res = await fetch(getApiUrl("/api/admin/orders"), {
-                method: "DELETE",
-                headers: getAuthHeaders(),
-            });
-            const data = await res.json();
-            if (res.ok) {
-                addToast("All store orders cleared successfully!", "info");
-                setOrders([]);
-            }
-            else {
-                addToast(data.error || "Failed to clear orders", "error");
-            }
-        }
-        catch (err) {
-            addToast("Network error clearing orders", "error");
-        }
-    };
+
 
     // Delete Single Order
     const handleDeleteSingleOrder = async (orderId) => {
@@ -691,11 +670,6 @@ export function AdminDashboard() {
                 <button onClick={() => { fetchOrders(); addToast("Refreshed orders list"); }} className="btn" style={{ background: "#FAF7F2", border: "1px solid #EAE3D9", color: "#23201D", padding: "8px 16px", borderRadius: 10, fontWeight: 700, cursor: "pointer" }}>
                   🔄 Refresh Orders
                 </button>
-                {orders.length > 0 && (
-                  <button onClick={handleClearAllOrders} className="btn" style={{ background: "#FDF2F2", border: "1px solid #F8B4B4", color: "#DC2626", padding: "8px 16px", borderRadius: 10, fontWeight: 700, cursor: "pointer" }}>
-                    🗑️ Clear All Orders
-                  </button>
-                )}
               </div>
             </div>
 

@@ -1,9 +1,17 @@
+import crypto from "crypto";
 import Stripe from "stripe";
 import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
 import { PromoCode } from "../models/PromoCode.js";
 import { calculatePromoDiscount } from "./paymentController.js";
 import { logger } from "../config/logger.js";
+
+export const ORDER_STATUS_TRANSITIONS = {
+  Processing: ["Shipped", "Cancelled"],
+  Shipped: ["Delivered"],
+  Delivered: [],
+  Cancelled: [],
+};
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
@@ -145,7 +153,7 @@ export const createOrder = async (req, res) => {
   }
 
   // Ignore client-sent order ID to prevent duplicate key collisions
-  const orderId = `US-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  const orderId = `US-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
   const orderData = {
     id: orderId,
@@ -162,7 +170,7 @@ export const createOrder = async (req, res) => {
     giftCost: serverGiftCost,
     total: serverTotal,
     status: "Processing",
-    date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
+    date: new Date(),
   };
 
   let newOrder;
@@ -265,22 +273,23 @@ export const updateOrderStatus = async (req, res) => {
     return res.status(400).json({ error: "Order status is required" });
   }
 
-  const updatedOrder = await Order.findOneAndUpdate({ id: req.params.id }, { status: cleanStatus }, { new: true }).lean();
-  if (!updatedOrder) {
+  const order = await Order.findOne({ id: req.params.id });
+  if (!order) {
     return res.status(404).json({ error: "Order not found" });
   }
 
-  logger.info(`[Admin Updated Order Status] ID: ${updatedOrder.id} -> ${cleanStatus}`);
-  res.json({ success: true, order: updatedOrder });
-};
+  const allowed = ORDER_STATUS_TRANSITIONS[order.status] || [];
+  if (!allowed.includes(cleanStatus)) {
+    return res.status(400).json({
+      error: `Invalid status transition from "${order.status}" to "${cleanStatus}". Allowed transitions: ${allowed.length > 0 ? allowed.join(", ") : "None (Terminal State)"}`,
+    });
+  }
 
-// @desc    Delete all orders (Admin)
-// @route   DELETE /api/admin/orders
-// @access  Private/Admin
-export const deleteAllOrders = async (req, res) => {
-  await Order.deleteMany({});
-  logger.info("[Admin Cleared All Orders]");
-  res.json({ success: true, message: "All orders cleared successfully" });
+  order.status = cleanStatus;
+  await order.save();
+
+  logger.info(`[Admin Updated Order Status] ID: ${order.id} -> ${cleanStatus}`);
+  res.json({ success: true, order: typeof order.toObject === "function" ? order.toObject() : order });
 };
 
 // @desc    Delete single order (Admin)
@@ -313,11 +322,11 @@ export const cancelOrder = async (req, res) => {
     return res.status(403).json({ error: "Access denied. You can only cancel your own orders." });
   }
 
-  if (order.status === "Cancelled") {
-    return res.status(400).json({ error: "Order is already cancelled" });
-  }
-  if (order.status === "Delivered") {
-    return res.status(400).json({ error: "Delivered orders cannot be cancelled" });
+  const allowed = ORDER_STATUS_TRANSITIONS[order.status] || [];
+  if (!allowed.includes("Cancelled")) {
+    return res.status(400).json({
+      error: `Cannot cancel order with current status "${order.status}". Allowed transitions: ${allowed.length > 0 ? allowed.join(", ") : "None (Terminal State)"}`,
+    });
   }
 
   order.status = "Cancelled";

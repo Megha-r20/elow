@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { Review } from "../models/Review.js";
 import { Product } from "../models/Product.js";
 import { Order } from "../models/Order.js";
@@ -67,7 +68,7 @@ export const submitReview = async (req, res) => {
   }
 
   const newReview = await Review.create({
-    id: `rev-${Date.now()}`,
+    id: `rev-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
     productId,
     userId,
     orderId: safeStr(orderId),

@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { User } from "../models/User.js";
 import { generateToken, sanitizeUser } from "../middleware/authMiddleware.js";
 import { logger } from "../config/logger.js";
@@ -30,7 +31,7 @@ export const registerUser = async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(cleanPass, 10);
-  const userId = `user-${Date.now()}`;
+  const userId = `user-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
 
   const newUser = await User.create({
     id: userId,

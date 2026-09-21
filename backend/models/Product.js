@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import crypto from "crypto";
 
 const productSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true, index: true },
+    id: { type: String, required: true, unique: true, index: true, default: () => `prod-${Date.now()}-${crypto.randomBytes(4).toString("hex")}` },
     name: { type: String, required: true },
     shortName: { type: String },
     category: { type: String, required: true, index: true },

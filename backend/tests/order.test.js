@@ -148,4 +148,78 @@ describe("Order & Stock Integration Tests", () => {
     expect(res.body.order.id).not.toBe("CLIENT-PROPOSED-ID-123");
     expect(res.body.order.id).toMatch(/^US-\d{4}-/);
   });
+
+  it("should enforce order status state machine transitions and reject invalid transitions (400 Bad Request)", async () => {
+    const adminUser = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "Admin Test", email: "admin-statemachine@example.com", password: "password123" });
+
+    // Promote user to admin directly in DB for testing
+    const { User } = await import("../models/User.js");
+    await User.findOneAndUpdate({ email: "admin-statemachine@example.com" }, { role: "admin" });
+
+    const orderBuyer = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "SM Buyer", email: "smbuyer@example.com", password: "password123" });
+
+    const createRes = await request(app)
+      .post("/api/orders")
+      .set("Authorization", `Bearer ${orderBuyer.body.token}`)
+      .send({
+        items: [{ product: { id: "prod-test-notebook" }, qty: 1 }],
+        deliveryAddress: {
+          firstName: "SM",
+          lastName: "Buyer",
+          email: "smbuyer@example.com",
+          phone: "9876543210",
+          address: "123 St",
+          city: "Mumbai",
+          pincode: "400001",
+        },
+      });
+
+    const orderId = createRes.body.order.id;
+
+    // Transition 1: Processing -> Shipped (Valid)
+    const shipRes = await request(app)
+      .patch(`/api/admin/orders/${orderId}/status`)
+      .set("Authorization", `Bearer ${adminUser.body.token}`)
+      .send({ status: "Shipped" });
+
+    expect(shipRes.status).toBe(200);
+    expect(shipRes.body.order.status).toBe("Shipped");
+
+    // Transition 2: Shipped -> Delivered (Valid)
+    const deliverRes = await request(app)
+      .patch(`/api/admin/orders/${orderId}/status`)
+      .set("Authorization", `Bearer ${adminUser.body.token}`)
+      .send({ status: "Delivered" });
+
+    expect(deliverRes.status).toBe(200);
+    expect(deliverRes.body.order.status).toBe("Delivered");
+
+    // Transition 3: Delivered -> Processing (Invalid, terminal state!)
+    const invalidRes = await request(app)
+      .patch(`/api/admin/orders/${orderId}/status`)
+      .set("Authorization", `Bearer ${adminUser.body.token}`)
+      .send({ status: "Processing" });
+
+    expect(invalidRes.status).toBe(400);
+    expect(invalidRes.body.error).toContain("Invalid status transition");
+  });
+
+  it("should confirm DELETE /api/admin/orders (delete all) route is removed and returns 404", async () => {
+    const adminUser = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "Admin Delete", email: "admin-deleteall@example.com", password: "password123" });
+
+    const { User } = await import("../models/User.js");
+    await User.findOneAndUpdate({ email: "admin-deleteall@example.com" }, { role: "admin" });
+
+    const res = await request(app)
+      .delete("/api/admin/orders")
+      .set("Authorization", `Bearer ${adminUser.body.token}`);
+
+    expect(res.status).toBe(404);
+  });
 });

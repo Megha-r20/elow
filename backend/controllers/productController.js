@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { Product } from "../models/Product.js";
 import { Review } from "../models/Review.js";
 import { CATEGORIES, PRICE_RANGES } from "../data/products.js";
@@ -149,7 +150,7 @@ export const createProduct = async (req, res) => {
   const computedInStock = inStock !== undefined ? Boolean(inStock) : parsedStock > 0;
 
   const newProduct = await Product.create({
-    id: `prod-${Date.now()}`,
+    id: `prod-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
     name: cleanName,
     shortName: cleanName,
     category: cleanCategory,

@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import crypto from "crypto";
 
 const reviewSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true, index: true },
+    id: { type: String, required: true, unique: true, index: true, default: () => `rev-${Date.now()}-${crypto.randomBytes(4).toString("hex")}` },
     productId: { type: String, required: true, index: true },
     userId: { type: String, index: true },
     orderId: { type: String },
