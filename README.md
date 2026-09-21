@@ -25,7 +25,7 @@ Test the live store or local environment using these pre-seeded accounts:
 
 | Role | Email | Password | Access Privileges |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@elow.com` | `Admin123!` | Full access to `/admin` dashboard, product CRUD, review moderation & order management |
+| **Admin** | `admin@elow.com` | `AdminSecret123!` | Full access to `/admin` dashboard, product CRUD, review moderation & order management |
 | **Customer** | `customer@elow.com` | `Customer123!` | Storefront browsing, review submission, server-side checkout, order history & account settings (`/settings`) |
 
 ---

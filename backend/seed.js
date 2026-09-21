@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { PRODUCTS } from "./data/products.js";
 import { Product } from "./models/Product.js";
 import { Order } from "./models/Order.js";
@@ -12,59 +13,63 @@ dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-const initialUsers = [
-  {
-    id: "user-admin-1",
-    name: "Elow Admin",
-    email: "admin@elow.com",
-    password: bcrypt.hashSync("admin123", 10),
-    role: "admin",
-  },
-  {
-    id: "user-admin-2",
-    name: "Elow Admin IN",
-    email: "admin@elow.in",
-    password: bcrypt.hashSync("admin123", 10),
-    role: "admin",
-  },
-  {
-    id: "user-cust-1",
-    name: "Ritika Sharma",
-    email: "ritika@example.com",
-    password: bcrypt.hashSync("password123", 10),
-    role: "user",
-  },
-  {
-    id: "user-cust-2",
-    name: "Elow Customer",
-    email: "user@elow.com",
-    password: bcrypt.hashSync("user123", 10),
-    role: "user",
-  },
-];
-
-const initialPromoCodes = [
-  { code: "WRITE50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
-  { code: "ELOW10", discountType: "percentage", discountValue: 10, minOrderAmount: 0, isActive: true },
-  { code: "SPIN50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
-  { code: "SPIN100", discountType: "fixed", discountValue: 100, minOrderAmount: 0, isActive: true },
-  { code: "SPIN150", discountType: "fixed", discountValue: 150, minOrderAmount: 0, isActive: true },
-  { code: "SPIN250", discountType: "fixed", discountValue: 250, minOrderAmount: 0, isActive: true },
-  { code: "SPIN10", discountType: "fixed", discountValue: 10, minOrderAmount: 0, isActive: true },
-];
-
 async function seedData() {
-  if (!MONGODB_URI) {
-    logger.error("❌ MONGODB_URI is not set in backend/.env file");
+  // Production Guard: Prevent accidental DB wipe in production
+  if (process.env.NODE_ENV === "production" && !process.env.ALLOW_SEED_IN_PROD) {
+    logger.error("❌ Refusing to run seed script in production environment (NODE_ENV=production).");
+    console.error("❌ Database seeding wipes existing users, products, and orders. It is disabled in production. Set ALLOW_SEED_IN_PROD=true if you explicitly intend to wipe and re-seed production data.");
     process.exit(1);
   }
+
+  if (!MONGODB_URI) {
+    logger.error("❌ MONGODB_URI is not set in environment file");
+    process.exit(1);
+  }
+
+  // Admin and initial user configuration from environment variables
+  const adminEmail = (process.env.ADMIN_EMAIL || "admin@elow.com").toLowerCase().trim();
+  const adminPassword = process.env.ADMIN_PASSWORD || "AdminSecret123!";
+
+  const initialUsers = [
+    {
+      id: `user-admin-${crypto.randomBytes(4).toString("hex")}`,
+      name: process.env.ADMIN_NAME || "Elow Admin",
+      email: adminEmail,
+      password: bcrypt.hashSync(adminPassword, 10),
+      role: "admin",
+    },
+    {
+      id: `user-cust-${crypto.randomBytes(4).toString("hex")}`,
+      name: "Ritika Sharma",
+      email: "ritika@example.com",
+      password: bcrypt.hashSync("password123", 10),
+      role: "user",
+    },
+    {
+      id: `user-cust-${crypto.randomBytes(4).toString("hex")}`,
+      name: "Elow Customer",
+      email: "user@elow.com",
+      password: bcrypt.hashSync("user123", 10),
+      role: "user",
+    },
+  ];
+
+  const initialPromoCodes = [
+    { code: "WRITE50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
+    { code: "ELOW10", discountType: "percentage", discountValue: 10, minOrderAmount: 0, isActive: true },
+    { code: "SPIN50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
+    { code: "SPIN100", discountType: "fixed", discountValue: 100, minOrderAmount: 0, isActive: true },
+    { code: "SPIN150", discountType: "fixed", discountValue: 150, minOrderAmount: 0, isActive: true },
+    { code: "SPIN250", discountType: "fixed", discountValue: 250, minOrderAmount: 0, isActive: true },
+    { code: "SPIN10", discountType: "fixed", discountValue: 10, minOrderAmount: 0, isActive: true },
+  ];
 
   try {
     logger.info("📡 Connecting to MongoDB Atlas...");
     await mongoose.connect(MONGODB_URI);
     logger.info("🟢 Connected successfully to MongoDB Atlas!");
 
-    logger.info("🧹 Clearing old data...");
+    logger.info("🧹 Clearing old development data...");
     await Product.deleteMany({});
     await User.deleteMany({});
     await Order.deleteMany({});
