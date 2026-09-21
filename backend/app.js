@@ -26,16 +26,17 @@ const allowedOrigins = process.env.FRONTEND_URL
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (
-        !origin ||
-        allowedOrigins.includes("*") ||
-        allowedOrigins.includes(origin) ||
-        origin.endsWith(".vercel.app") ||
-        process.env.NODE_ENV !== "production"
-      ) {
+      // Allow requests with no origin (like mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+
+      const isAllowedExplicitly = allowedOrigins.includes("*") || allowedOrigins.includes(origin);
+      const isVercelDeployment = origin.endsWith(".vercel.app");
+      const isDev = process.env.NODE_ENV !== "production";
+
+      if (isAllowedExplicitly || isVercelDeployment || isDev) {
         callback(null, true);
       } else {
-        callback(null, true);
+        callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,

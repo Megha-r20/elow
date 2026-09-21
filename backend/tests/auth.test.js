@@ -107,4 +107,26 @@ describe("Auth & RBAC Integration Tests", () => {
     expect(res.status).toBe(403);
     expect(res.body.error).toContain("Access denied");
   });
+
+  it("should reject unauthorized origins in production mode via CORS middleware", async () => {
+    const originalEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = "production";
+
+    try {
+      const allowedRes = await request(app)
+        .get("/api/health")
+        .set("Origin", "https://elow-store.vercel.app");
+
+      expect(allowedRes.headers["access-control-allow-origin"]).toBe("https://elow-store.vercel.app");
+
+      const deniedRes = await request(app)
+        .get("/api/health")
+        .set("Origin", "https://malicious-hacker-site.com");
+
+      expect(deniedRes.status).toBe(500);
+      expect(deniedRes.body.error).toContain("CORS");
+    } finally {
+      process.env.NODE_ENV = originalEnv;
+    }
+  });
 });
