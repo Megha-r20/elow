@@ -1,7 +1,16 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
-import { generateToken, sanitizeUser } from "../middleware/authMiddleware.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  sendRefreshTokenCookie,
+  clearRefreshTokenCookie,
+  parseCookies,
+  sanitizeUser,
+  JWT_REFRESH_SECRET,
+} from "../middleware/authMiddleware.js";
 import { logger } from "../config/logger.js";
 
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
@@ -33,6 +42,7 @@ export const registerUser = async (req, res) => {
   const hashedPassword = await bcrypt.hash(cleanPass, 10);
   const userId = `user-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
 
+  // Enforce role: "user" on public registration (role parameter ignored)
   const newUser = await User.create({
     id: userId,
     name: cleanName,
@@ -41,10 +51,12 @@ export const registerUser = async (req, res) => {
     role: "user",
   });
 
-  const token = generateToken(newUser.id, newUser.role);
-  logger.info(`[User Registered] ${newUser.name} (${newUser.email})`);
+  const accessToken = generateAccessToken(newUser.id, newUser.role);
+  const refreshToken = generateRefreshToken(newUser.id, newUser.role);
+  sendRefreshTokenCookie(res, refreshToken);
 
-  res.status(201).json({ success: true, user: sanitizeUser(newUser), token });
+  logger.info(`[User Registered] ${newUser.name} (${newUser.email})`);
+  res.status(201).json({ success: true, user: sanitizeUser(newUser), token: accessToken });
 };
 
 // @desc    Authenticate user & get token
@@ -70,10 +82,51 @@ export const loginUser = async (req, res) => {
     return res.status(401).json({ error: "Invalid email or password" });
   }
 
-  const token = generateToken(user.id, user.role);
-  logger.info(`[User Logged In] ${user.name} (${user.email}) - Role: ${user.role}`);
+  const accessToken = generateAccessToken(user.id, user.role);
+  const refreshToken = generateRefreshToken(user.id, user.role);
+  sendRefreshTokenCookie(res, refreshToken);
 
-  res.json({ success: true, user: sanitizeUser(user), token });
+  logger.info(`[User Logged In] ${user.name} (${user.email}) - Role: ${user.role}`);
+  res.json({ success: true, user: sanitizeUser(user), token: accessToken });
+};
+
+// @desc    Refresh short-lived access token using httpOnly refresh cookie
+// @route   POST /api/auth/refresh
+// @access  Public (via httpOnly cookie)
+export const refreshTokenUser = async (req, res) => {
+  const cookies = parseCookies(req);
+  const refreshToken = cookies.refreshToken || req.body?.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ error: "Refresh token missing or expired" });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
+    const user = await User.findOne({ id: decoded.id }).lean();
+
+    if (!user) {
+      clearRefreshTokenCookie(res);
+      return res.status(401).json({ error: "User profile not found or session revoked" });
+    }
+
+    const newAccessToken = generateAccessToken(user.id, user.role);
+    const newRefreshToken = generateRefreshToken(user.id, user.role);
+    sendRefreshTokenCookie(res, newRefreshToken);
+
+    res.json({ success: true, user: sanitizeUser(user), token: newAccessToken });
+  } catch (err) {
+    clearRefreshTokenCookie(res);
+    return res.status(401).json({ error: "Invalid or expired refresh token" });
+  }
+};
+
+// @desc    Logout user & clear httpOnly refresh cookie
+// @route   POST /api/auth/logout
+// @access  Public
+export const logoutUser = async (req, res) => {
+  clearRefreshTokenCookie(res);
+  res.json({ success: true, message: "Logged out successfully" });
 };
 
 // @desc    Get current user profile

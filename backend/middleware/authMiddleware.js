@@ -9,10 +9,60 @@ if (!jwtSecret) {
   logger.warn("⚠️ [SECURITY WARNING] JWT_SECRET environment variable is not set. Generated a temporary random 256-bit secret key for runtime security.");
   jwtSecret = crypto.randomBytes(32).toString("hex");
 }
-const JWT_SECRET = jwtSecret;
+export const JWT_SECRET = jwtSecret;
+export const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || `${JWT_SECRET}_refresh`;
+
+// Short-lived Access Token (15 minutes)
+export const generateAccessToken = (userId, role) => {
+  return jwt.sign({ id: userId, role, type: "access" }, JWT_SECRET, { expiresIn: "15m" });
+};
+
+// Long-lived Refresh Token (7 days)
+export const generateRefreshToken = (userId, role) => {
+  return jwt.sign({ id: userId, role, type: "refresh" }, JWT_REFRESH_SECRET, { expiresIn: "7d" });
+};
 
 export const generateToken = (userId, role) => {
-  return jwt.sign({ id: userId, role }, JWT_SECRET, { expiresIn: "30d" });
+  return generateAccessToken(userId, role);
+};
+
+// Helper to set httpOnly Refresh Token cookie
+export const sendRefreshTokenCookie = (res, refreshToken) => {
+  const isProd = process.env.NODE_ENV === "production";
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+};
+
+// Helper to clear Refresh Token cookie
+export const clearRefreshTokenCookie = (res) => {
+  const isProd = process.env.NODE_ENV === "production";
+  res.cookie("refreshToken", "", {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+    path: "/",
+    expires: new Date(0),
+  });
+};
+
+// Zero-dependency Cookie Parser helper
+export const parseCookies = (req) => {
+  const list = {};
+  const rc = req.headers.cookie;
+  if (rc) {
+    rc.split(";").forEach((cookie) => {
+      const parts = cookie.split("=");
+      if (parts.length >= 2) {
+        list[parts.shift().trim()] = decodeURIComponent(parts.join("="));
+      }
+    });
+  }
+  return list;
 };
 
 export const sanitizeUser = (user) => {

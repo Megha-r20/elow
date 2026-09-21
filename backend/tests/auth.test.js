@@ -165,4 +165,48 @@ describe("Auth & RBAC Integration Tests", () => {
 
     expect(res.status).toBe(413); // Payload Too Large
   });
+
+  it("should issue httpOnly refreshToken cookie on login and allow refreshing access token via /api/auth/refresh", async () => {
+    const regRes = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "Refresh User", email: "refresh@example.com", password: "password123" });
+
+    expect(regRes.status).toBe(201);
+    expect(regRes.headers["set-cookie"]).toBeDefined();
+    const cookieHeader = regRes.headers["set-cookie"][0];
+    expect(cookieHeader).toContain("refreshToken=");
+    expect(cookieHeader).toContain("HttpOnly");
+
+    // Call /api/auth/refresh passing the cookie
+    const refreshRes = await request(app)
+      .post("/api/auth/refresh")
+      .set("Cookie", [cookieHeader]);
+
+    expect(refreshRes.status).toBe(200);
+    expect(refreshRes.body.success).toBe(true);
+    expect(refreshRes.body.token).toBeDefined();
+    expect(refreshRes.body.user.email).toBe("refresh@example.com");
+
+    // Test logout clears cookie
+    const logoutRes = await request(app)
+      .post("/api/auth/logout");
+
+    expect(logoutRes.status).toBe(200);
+    expect(logoutRes.headers["set-cookie"]).toBeDefined();
+  });
+
+  it("should reject attempts to set role: admin during registration", async () => {
+    const res = await request(app)
+      .post("/api/auth/register")
+      .send({
+        name: "Hacker",
+        email: "hacker@example.com",
+        password: "password123",
+        role: "admin",
+      });
+
+    // .strict() rejects unrecognized parameter 'role'
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain("Validation error");
+  });
 });

@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { getApiUrl } from "../api/config";
+
 const AuthContext = createContext(null);
+
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
         try {
@@ -13,18 +15,41 @@ export function AuthProvider({ children }) {
     const [token, setToken] = useState(() => {
         try {
             return localStorage.getItem("elow_token");
-        }
-        catch {
+        } catch {
             return null;
         }
     });
     const [loading, setLoading] = useState(true);
+
+    const refreshSession = useCallback(async () => {
+        try {
+            const res = await fetch(getApiUrl("/api/auth/refresh"), {
+                method: "POST",
+                credentials: "include",
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setToken(data.token);
+                setUser(data.user);
+                localStorage.setItem("elow_token", data.token);
+                localStorage.setItem("elow_user", JSON.stringify(data.user));
+                return data.token;
+            }
+        } catch (err) {
+            console.error("Refresh session error:", err);
+        }
+        return null;
+    }, []);
+
     // Check current authenticated user on load or token change
     useEffect(() => {
         async function fetchMe() {
             if (!token) {
-                setUser(null);
-                localStorage.removeItem("elow_user");
+                const newToken = await refreshSession();
+                if (!newToken) {
+                    setUser(null);
+                    localStorage.removeItem("elow_user");
+                }
                 setLoading(false);
                 return;
             }
@@ -33,35 +58,36 @@ export function AuthProvider({ children }) {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
+                    credentials: "include",
                 });
                 if (res.ok) {
                     const data = await res.json();
                     setUser(data.user);
                     localStorage.setItem("elow_user", JSON.stringify(data.user));
+                } else if (res.status === 401) {
+                    const newToken = await refreshSession();
+                    if (!newToken) {
+                        localStorage.removeItem("elow_token");
+                        localStorage.removeItem("elow_user");
+                        setToken(null);
+                        setUser(null);
+                    }
                 }
-                else if (res.status === 401) {
-                    // Token explicitly rejected by backend
-                    localStorage.removeItem("elow_token");
-                    localStorage.removeItem("elow_user");
-                    setToken(null);
-                    setUser(null);
-                }
-            }
-            catch (err) {
+            } catch (err) {
                 console.error("Failed to fetch user auth state:", err);
-                // Retain localStorage user session on network delay/error
-            }
-            finally {
+            } finally {
                 setLoading(false);
             }
         }
         fetchMe();
-    }, [token]);
+    }, [token, refreshSession]);
+
     const login = useCallback(async (email, password) => {
         try {
             const res = await fetch(getApiUrl("/api/auth/login"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({ email, password }),
             });
             const contentType = res.headers.get("content-type");
@@ -77,17 +103,18 @@ export function AuthProvider({ children }) {
             setToken(data.token);
             setUser(data.user);
             return { success: true };
-        }
-        catch (err) {
+        } catch (err) {
             return { success: false, error: err.message || "Network error. Please try again." };
         }
     }, []);
-    const register = useCallback(async (name, email, password, role = "user") => {
+
+    const register = useCallback(async (name, email, password) => {
         try {
             const res = await fetch(getApiUrl("/api/auth/register"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password, role }),
+                credentials: "include",
+                body: JSON.stringify({ name, email, password }),
             });
             const contentType = res.headers.get("content-type");
             if (!contentType || !contentType.includes("application/json")) {
@@ -102,11 +129,11 @@ export function AuthProvider({ children }) {
             setToken(data.token);
             setUser(data.user);
             return { success: true };
-        }
-        catch (err) {
+        } catch (err) {
             return { success: false, error: err.message || "Network error. Please try again." };
         }
     }, []);
+
     const updateProfile = useCallback(async (data) => {
         if (!token)
             return { success: false, error: "Not authenticated" };
@@ -117,6 +144,7 @@ export function AuthProvider({ children }) {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
+                credentials: "include",
                 body: JSON.stringify(data),
             });
             const resData = await res.json();
@@ -126,12 +154,20 @@ export function AuthProvider({ children }) {
             setUser(resData.user);
             localStorage.setItem("elow_user", JSON.stringify(resData.user));
             return { success: true };
-        }
-        catch (err) {
+        } catch (err) {
             return { success: false, error: err.message || "Network error updating profile" };
         }
     }, [token]);
-    const logout = useCallback(() => {
+
+    const logout = useCallback(async () => {
+        try {
+            await fetch(getApiUrl("/api/auth/logout"), {
+                method: "POST",
+                credentials: "include",
+            });
+        } catch (err) {
+            console.error("Logout network error:", err);
+        }
         localStorage.removeItem("elow_token");
         localStorage.removeItem("elow_user");
         setToken(null);
@@ -143,12 +179,18 @@ export function AuthProvider({ children }) {
         if (token) {
             headers["Authorization"] = `Bearer ${token}`;
         }
-        const res = await fetch(url, { ...options, headers });
+        let res = await fetch(url, { ...options, headers, credentials: "include" });
         if (res.status === 401) {
-            logout();
+            const newToken = await refreshSession();
+            if (newToken) {
+                headers["Authorization"] = `Bearer ${newToken}`;
+                res = await fetch(url, { ...options, headers, credentials: "include" });
+            } else {
+                logout();
+            }
         }
         return res;
-    }, [token, logout]);
+    }, [token, refreshSession, logout]);
 
     const isAdmin = user?.role === "admin";
     return (<AuthContext.Provider value={{
@@ -161,6 +203,7 @@ export function AuthProvider({ children }) {
             updateProfile,
             logout,
             authFetch,
+            refreshSession,
         }}>
       {children}
     </AuthContext.Provider>);

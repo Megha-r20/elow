@@ -35,10 +35,10 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
                 setLoading(false);
                 return;
             }
-            const res = await register(name, email, password, role);
+            const res = await register(name, email, password);
             setLoading(false);
             if (res.success) {
-                addToast(`Account created successfully! Logged in as ${role === "admin" ? "Admin" : "Customer"}.`);
+                addToast("Account created successfully!");
                 onClose();
             }
             else {

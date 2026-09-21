@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser, loginUser, getMe, updateProfile } from "../controllers/authController.js";
+import { registerUser, loginUser, refreshTokenUser, logoutUser, getMe, updateProfile } from "../controllers/authController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { authLimiter } from "../middleware/rateLimiter.js";
 import { validate } from "../middleware/validationMiddleware.js";
@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.post("/register", authLimiter, validate(registerSchema), registerUser);
 router.post("/login", authLimiter, validate(loginSchema), loginUser);
+router.post("/refresh", refreshTokenUser);
+router.post("/logout", logoutUser);
 router.get("/me", protect, getMe);
 router.patch("/profile", protect, validate(updateProfileSchema), updateProfile);
 
