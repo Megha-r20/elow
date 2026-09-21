@@ -6,7 +6,7 @@ import { CATEGORIES, SORT_OPTIONS, PRICE_RANGES } from "../data";
 import { PRODUCTS } from "../data/products.js";
 import { useWishlist, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
-import { SlidersHorizontal, X, Grid, List } from "lucide-react";
+import { SlidersHorizontal, X, Grid, LayoutGrid } from "lucide-react";
 
 export default function Shop() {
     useDocumentTitle("Shop Catalog | Elow");
@@ -134,14 +134,14 @@ export default function Shop() {
     // Sidebar Content Component
     const SidebarFilters = () => (
         <div className="flex flex-col gap-6">
-            {/* Search */}
-            <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 color-[#9C968D]">
+            {/* Search Input */}
+            <div className="relative w-full">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9C968D] pointer-events-none flex items-center">
                     <Icons.Search />
                 </span>
                 <input
                     type="text"
-                    className="w-full bg-white border border-[#EAE3D9] rounded-xl text-xs py-2.5 pl-9 pr-3 text-[#23201D] placeholder-[#9C968D] outline-none focus:border-[#8192D4] transition-colors"
+                    className="w-full bg-[#FAF7F2] border border-[#EAE3D9] rounded-xl text-xs py-2.5 pl-9 pr-3 text-[#23201D] placeholder-[#9C968D] outline-none focus:border-[#8192D4] focus:bg-white transition-all font-sans"
                     value={searchQ}
                     onChange={(e) => setSearchQ(e.target.value)}
                     placeholder="Search products..."
@@ -150,33 +150,37 @@ export default function Shop() {
 
             {/* Categories Accordion */}
             <div>
-                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-3 px-1">
+                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-2.5 px-1 font-sans">
                     CATEGORIES
                 </p>
                 <div className="flex flex-col gap-0.5">
                     <button
                         onClick={() => changeCat("all")}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors cursor-pointer ${
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-all cursor-pointer ${
                             activeCat === "all"
-                                ? "bg-[#F4EFE6] text-[#23201D] font-bold border-l-2 border-[#8192D4]"
+                                ? "bg-[#F4EFE6] text-[#23201D] font-bold border-l-2 border-[#8192D4] shadow-2xs"
                                 : "text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D]"
                         }`}
                     >
-                        <span>All Products</span>
-                        <span className="text-[11px] text-[#9C968D]">{liveProducts.length}</span>
+                        <span className="truncate pr-2">All Products</span>
+                        <span className="text-[11px] text-[#9C968D] font-medium font-mono shrink-0 bg-[#FAF7F2] px-2 py-0.5 rounded-full border border-[#EAE3D9]/60">
+                            {liveProducts.length}
+                        </span>
                     </button>
                     {CATEGORIES.map((cat) => (
                         <button
                             key={cat.id}
                             onClick={() => changeCat(cat.id)}
-                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors cursor-pointer ${
+                            className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-all cursor-pointer ${
                                 activeCat === cat.id
-                                    ? "bg-[#F4EFE6] text-[#23201D] font-bold border-l-2 border-[#8192D4]"
+                                    ? "bg-[#F4EFE6] text-[#23201D] font-bold border-l-2 border-[#8192D4] shadow-2xs"
                                     : "text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D]"
                             }`}
                         >
-                            <span>{cat.label}</span>
-                            <span className="text-[11px] text-[#9C968D]">{cat.productCount}</span>
+                            <span className="truncate pr-2">{cat.label}</span>
+                            <span className="text-[11px] text-[#9C968D] font-medium font-mono shrink-0 bg-[#FAF7F2] px-2 py-0.5 rounded-full border border-[#EAE3D9]/60">
+                                {cat.productCount}
+                            </span>
                         </button>
                     ))}
                 </div>
@@ -186,7 +190,7 @@ export default function Shop() {
 
             {/* Price Filter */}
             <div>
-                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-3 px-1">
+                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-2.5 px-1 font-sans">
                     PRICE RANGE
                 </p>
                 <div className="flex flex-col gap-1">
@@ -194,16 +198,16 @@ export default function Shop() {
                         <button
                             key={r.label}
                             onClick={() => setPriceRange(priceRange === i ? null : i)}
-                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition-colors cursor-pointer ${
+                            className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-3 transition-colors cursor-pointer ${
                                 priceRange === i
                                     ? "bg-[#F4EFE6] text-[#23201D] font-bold"
                                     : "text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D]"
                             }`}
                         >
                             <span
-                                className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 transition-colors ${
+                                className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 font-bold transition-all ${
                                     priceRange === i
-                                        ? "bg-[#23201D] border-[#23201D] text-white"
+                                        ? "bg-[#23201D] border-[#23201D] text-white shadow-2xs"
                                         : "border-[#EAE3D9] bg-white"
                                 }`}
                             >
@@ -219,7 +223,7 @@ export default function Shop() {
 
             {/* Other Filters */}
             <div>
-                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-3 px-1">
+                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-2.5 px-1 font-sans">
                     FILTER BY
                 </p>
                 <div className="flex flex-col gap-1">
@@ -231,13 +235,13 @@ export default function Shop() {
                     ].map((f) => (
                         <label
                             key={f.label}
-                            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D] cursor-pointer transition-colors"
+                            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D] cursor-pointer transition-colors"
                         >
                             <input
                                 type="checkbox"
                                 checked={f.v}
                                 onChange={(e) => f.set(e.target.checked)}
-                                className="w-4 h-4 rounded border-[#EAE3D9] text-[#23201D] focus:ring-0 cursor-pointer"
+                                className="w-4 h-4 rounded border-[#EAE3D9] text-[#23201D] accent-[#23201D] cursor-pointer shrink-0"
                             />
                             <span>{f.label}</span>
                         </label>
@@ -286,7 +290,7 @@ export default function Shop() {
             <div className="container mx-auto px-4 md:px-8 py-6 md:py-8">
                 {/* TOP TOOLBAR */}
                 <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-[#EAE3D9] flex-wrap">
-                    {/* Left: Filter Toggle & Count */}
+                    {/* Left: Filter Toggle & Product Count */}
                     <div className="flex items-center gap-3">
                         {/* Mobile Filter Button */}
                         <button
@@ -306,14 +310,14 @@ export default function Shop() {
                         {!onlyWishlist && (
                             <button
                                 onClick={() => setShowFilters((f) => !f)}
-                                className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#EAE3D9] text-xs font-semibold text-[#23201D] hover:bg-[#F4EFE6] transition-colors shadow-2xs"
+                                className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#EAE3D9] text-xs font-semibold text-[#23201D] hover:bg-[#F4EFE6] transition-colors shadow-2xs cursor-pointer"
                             >
                                 <SlidersHorizontal size={14} />
                                 <span>{showFilters ? "Hide Filters" : "Show Filters"}</span>
                             </button>
                         )}
 
-                        <span className="text-xs text-[#78726A] font-medium">
+                        <span className="text-xs text-[#78726A] font-medium font-sans">
                             {onlyWishlist
                                 ? `${filtered.length} saved item${filtered.length === 1 ? "" : "s"}`
                                 : `Showing ${filtered.length} of ${liveProducts.length} products`}
@@ -327,7 +331,7 @@ export default function Shop() {
                             <select
                                 value={sort}
                                 onChange={(e) => setSort(e.target.value)}
-                                className="bg-white border border-[#EAE3D9] rounded-xl text-xs py-2 px-3 text-[#23201D] font-medium outline-none focus:border-[#8192D4] cursor-pointer"
+                                className="bg-white border border-[#EAE3D9] rounded-xl text-xs py-2 px-3 text-[#23201D] font-medium outline-none focus:border-[#8192D4] cursor-pointer shadow-2xs"
                             >
                                 {SORT_OPTIONS.map((o) => (
                                     <option key={o.value} value={o.value}>
@@ -338,7 +342,7 @@ export default function Shop() {
                         </div>
 
                         {/* Grid View Icons */}
-                        <div className="hidden sm:flex border border-[#EAE3D9] bg-white rounded-xl overflow-hidden p-0.5">
+                        <div className="hidden sm:flex border border-[#EAE3D9] bg-white rounded-xl overflow-hidden p-0.5 shadow-2xs">
                             <button
                                 onClick={() => setGridView(3)}
                                 className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
@@ -346,7 +350,7 @@ export default function Shop() {
                                 }`}
                                 title="3 Columns"
                             >
-                                <Grid size={15} />
+                                <LayoutGrid size={15} />
                             </button>
                             <button
                                 onClick={() => setGridView(4)}
@@ -355,7 +359,7 @@ export default function Shop() {
                                 }`}
                                 title="4 Columns"
                             >
-                                <List size={15} />
+                                <Grid size={15} />
                             </button>
                         </div>
                     </div>
@@ -392,12 +396,12 @@ export default function Shop() {
                 {/* 3. CONTENT GRID & SIDEBAR */}
                 <div
                     className={`grid gap-8 items-start ${
-                        showFilters && !onlyWishlist ? "grid-cols-1 lg:grid-cols-[240px_1fr]" : "grid-cols-1"
+                        showFilters && !onlyWishlist ? "grid-cols-1 lg:grid-cols-[260px_1fr]" : "grid-cols-1"
                     }`}
                 >
                     {/* DESKTOP SIDEBAR */}
                     {showFilters && !onlyWishlist && (
-                        <aside className="hidden lg:block sticky top-24 bg-white p-5 rounded-2xl border border-[#EAE3D9]">
+                        <aside className="hidden lg:block sticky top-24 bg-white p-5 rounded-2xl border border-[#EAE3D9] shadow-2xs">
                             <SidebarFilters />
                         </aside>
                     )}
@@ -405,7 +409,7 @@ export default function Shop() {
                     {/* PRODUCT GRID */}
                     <div>
                         {filtered.length === 0 ? (
-                            <div className="bg-white rounded-2xl p-12 text-center border border-[#EAE3D9] my-4">
+                            <div className="bg-white rounded-2xl p-12 text-center border border-[#EAE3D9] my-4 shadow-2xs">
                                 <div className="text-4xl mb-3 opacity-30">🔍</div>
                                 <h3 className="text-lg font-bold text-[#23201D] mb-1">No products match your selection</h3>
                                 <p className="text-xs text-[#78726A] mb-6">Try adjusting your filters or search keywords</p>
@@ -474,4 +478,5 @@ export default function Shop() {
         </div>
     );
 }
+
 
