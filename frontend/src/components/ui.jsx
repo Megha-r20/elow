@@ -75,15 +75,29 @@ export function Stars({ n, size = 12, showCount, count }) {
 /* ─── Badge ─────────────────────────────────────────────────────── */
 const BADGE_STYLES = {
     teal: { bg: "#8192D4", color: "#fff" },
+    lavender: { bg: "#8192D4", color: "#fff" },
     yellow: { bg: "#E59866", color: "#23201D" },
     red: { bg: "#D97762", color: "#fff" },
+    terracotta: { bg: "#D97762", color: "#fff" },
     pink: { bg: "#E8A598", color: "#fff" },
     dark: { bg: "#23201D", color: "#FAF7F2" },
     sage: { bg: "#D8E5DD", color: "#2E5242" },
 };
 export function Badge({ label, variant = "teal" }) {
     const { bg, color } = BADGE_STYLES[variant] ?? BADGE_STYLES.teal;
-    return (<span className="badge" style={{ background: bg, color, boxShadow: `0 2px 8px ${bg}44` }}>
+    return (<span style={{
+            background: bg,
+            color,
+            fontSize: "10px",
+            fontWeight: 700,
+            letterSpacing: "0.8px",
+            textTransform: "uppercase",
+            padding: "3px 10px",
+            borderRadius: "9999px",
+            display: "inline-block",
+            lineHeight: 1.2,
+            boxShadow: `0 2px 6px ${bg}25`,
+        }}>
       {label}
     </span>);
 }
@@ -113,12 +127,12 @@ export function SectionHead({ eyebrow, title, sub, right, center, }) {
 export function Price({ price, original, size = "md" }) {
     const sizes = { sm: { price: 15, og: 12 }, md: { price: 18, og: 13 }, lg: { price: 24, og: 16 } };
     const s = sizes[size];
-    const disc = original ? Math.round((1 - price / original) * 100) : 0;
+    const disc = original && original > price ? Math.round((1 - price / original) * 100) : 0;
     return (<div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
       <span style={{ fontSize: s.price, fontWeight: 700, color: "#23201D" }}>&#8377;{price.toLocaleString("en-IN")}</span>
       {original && original > price && (<>
           <span style={{ fontSize: s.og, color: "#9C968D", textDecoration: "line-through" }}>&#8377;{original.toLocaleString("en-IN")}</span>
-          <span style={{ fontSize: s.og, fontWeight: 700, color: "#8192D4" }}>{disc}% OFF</span>
+          <span style={{ fontSize: s.og, fontWeight: 600, color: "#D97762" }}>{disc}% OFF</span>
         </>)}
     </div>);
 }
