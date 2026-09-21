@@ -25,7 +25,6 @@ export default function Shop() {
     const [onlyWishlist, setOnlyWishlist] = useState(params.get("filter") === "wishlist");
     const [searchQ, setSearchQ] = useState(initQ);
     const [gridView, setGridView] = useState(4);
-    const [showFilters, setShowFilters] = useState(true);
     const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
     useEffect(() => {
@@ -131,54 +130,95 @@ export default function Shop() {
 
     const currentCat = CATEGORIES.find((c) => c.id === activeCat);
 
-    // Sidebar Content Component
+    // Sidebar Filters Component
     const SidebarFilters = () => (
-        <div className="flex flex-col gap-6">
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {/* Search Input */}
-            <div className="relative w-full">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9C968D] pointer-events-none flex items-center">
+            <div style={{ position: "relative", width: "100%" }}>
+                <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#9C968D", pointerEvents: "none", display: "flex", alignItems: "center" }}>
                     <Icons.Search />
                 </span>
                 <input
                     type="text"
-                    className="w-full bg-[#FAF7F2] border border-[#EAE3D9] rounded-xl text-xs py-2.5 pl-9 pr-3 text-[#23201D] placeholder-[#9C968D] outline-none focus:border-[#8192D4] focus:bg-white transition-all font-sans"
+                    style={{
+                        width: "100%",
+                        boxSizing: "border-box",
+                        paddingLeft: 40,
+                        paddingRight: 14,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        background: "#FAF7F2",
+                        border: "1px solid #EAE3D9",
+                        borderRadius: 12,
+                        fontSize: 13,
+                        color: "#23201D",
+                        outline: "none",
+                        fontFamily: "inherit",
+                    }}
                     value={searchQ}
                     onChange={(e) => setSearchQ(e.target.value)}
                     placeholder="Search products..."
                 />
             </div>
 
-            {/* Categories Accordion */}
+            {/* Categories */}
             <div>
-                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-2.5 px-1 font-sans">
+                <p style={{ fontSize: 10.5, fontWeight: 700, color: "#9C968D", letterSpacing: "2px", textTransform: "uppercase", marginBottom: 12, paddingLeft: 4 }}>
                     CATEGORIES
                 </p>
-                <div className="flex flex-col gap-0.5">
+                <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <button
                         onClick={() => changeCat("all")}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-all cursor-pointer ${
-                            activeCat === "all"
-                                ? "bg-[#F4EFE6] text-[#23201D] font-bold border-l-2 border-[#8192D4] shadow-2xs"
-                                : "text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D]"
-                        }`}
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            width: "100%",
+                            padding: "9px 12px",
+                            borderRadius: 10,
+                            border: "none",
+                            background: activeCat === "all" ? "#F4EFE6" : "transparent",
+                            color: activeCat === "all" ? "#23201D" : "#6E6A63",
+                            fontWeight: activeCat === "all" ? 700 : 500,
+                            fontSize: 13,
+                            cursor: "pointer",
+                            transition: "all 0.15s ease",
+                            fontFamily: "inherit",
+                        }}
                     >
-                        <span className="truncate pr-2">All Products</span>
-                        <span className="text-[11px] text-[#9C968D] font-medium font-mono shrink-0 bg-[#FAF7F2] px-2 py-0.5 rounded-full border border-[#EAE3D9]/60">
+                        <span style={{ flex: 1, textAlign: "left", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginRight: 8 }}>
+                            All Products
+                        </span>
+                        <span style={{ fontSize: 11, fontWeight: 600, color: "#9C968D", background: "#FAF7F2", border: "1px solid #EAE3D9", borderRadius: 10, padding: "1px 7px", fontFamily: "monospace", flexShrink: 0 }}>
                             {liveProducts.length}
                         </span>
                     </button>
+
                     {CATEGORIES.map((cat) => (
                         <button
                             key={cat.id}
                             onClick={() => changeCat(cat.id)}
-                            className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-all cursor-pointer ${
-                                activeCat === cat.id
-                                    ? "bg-[#F4EFE6] text-[#23201D] font-bold border-l-2 border-[#8192D4] shadow-2xs"
-                                    : "text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D]"
-                            }`}
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                width: "100%",
+                                padding: "9px 12px",
+                                borderRadius: 10,
+                                border: "none",
+                                background: activeCat === cat.id ? "#F4EFE6" : "transparent",
+                                color: activeCat === cat.id ? "#23201D" : "#6E6A63",
+                                fontWeight: activeCat === cat.id ? 700 : 500,
+                                fontSize: 13,
+                                cursor: "pointer",
+                                transition: "all 0.15s ease",
+                                fontFamily: "inherit",
+                            }}
                         >
-                            <span className="truncate pr-2">{cat.label}</span>
-                            <span className="text-[11px] text-[#9C968D] font-medium font-mono shrink-0 bg-[#FAF7F2] px-2 py-0.5 rounded-full border border-[#EAE3D9]/60">
+                            <span style={{ flex: 1, textAlign: "left", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginRight: 8 }}>
+                                {cat.label}
+                            </span>
+                            <span style={{ fontSize: 11, fontWeight: 600, color: "#9C968D", background: "#FAF7F2", border: "1px solid #EAE3D9", borderRadius: 10, padding: "1px 7px", fontFamily: "monospace", flexShrink: 0 }}>
                                 {cat.productCount}
                             </span>
                         </button>
@@ -186,30 +226,50 @@ export default function Shop() {
                 </div>
             </div>
 
-            <div className="h-[1px] bg-[#EAE3D9]" />
+            <div style={{ height: 1, background: "#EAE3D9" }} />
 
-            {/* Price Filter */}
+            {/* Price Range */}
             <div>
-                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-2.5 px-1 font-sans">
+                <p style={{ fontSize: 10.5, fontWeight: 700, color: "#9C968D", letterSpacing: "2px", textTransform: "uppercase", marginBottom: 12, paddingLeft: 4 }}>
                     PRICE RANGE
                 </p>
-                <div className="flex flex-col gap-1">
+                <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     {PRICE_RANGES.map((r, i) => (
                         <button
                             key={r.label}
                             onClick={() => setPriceRange(priceRange === i ? null : i)}
-                            className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-3 transition-colors cursor-pointer ${
-                                priceRange === i
-                                    ? "bg-[#F4EFE6] text-[#23201D] font-bold"
-                                    : "text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D]"
-                            }`}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 10,
+                                width: "100%",
+                                padding: "8px 12px",
+                                borderRadius: 10,
+                                border: "none",
+                                background: priceRange === i ? "#F4EFE6" : "transparent",
+                                color: priceRange === i ? "#23201D" : "#6E6A63",
+                                fontWeight: priceRange === i ? 700 : 500,
+                                fontSize: 13,
+                                cursor: "pointer",
+                                transition: "all 0.15s ease",
+                                fontFamily: "inherit",
+                            }}
                         >
                             <span
-                                className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 font-bold transition-all ${
-                                    priceRange === i
-                                        ? "bg-[#23201D] border-[#23201D] text-white shadow-2xs"
-                                        : "border-[#EAE3D9] bg-white"
-                                }`}
+                                style={{
+                                    width: 16,
+                                    height: 16,
+                                    borderRadius: 4,
+                                    border: priceRange === i ? "1.5px solid #23201D" : "1.5px solid #EAE3D9",
+                                    background: priceRange === i ? "#23201D" : "#FFFFFF",
+                                    color: "#FFFFFF",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontSize: 10,
+                                    fontWeight: 700,
+                                    flexShrink: 0,
+                                }}
                             >
                                 {priceRange === i && "✓"}
                             </span>
@@ -219,14 +279,14 @@ export default function Shop() {
                 </div>
             </div>
 
-            <div className="h-[1px] bg-[#EAE3D9]" />
+            <div style={{ height: 1, background: "#EAE3D9" }} />
 
-            {/* Other Filters */}
+            {/* Filter By */}
             <div>
-                <p className="text-[10.5px] font-bold text-[#9C968D] tracking-[2px] uppercase mb-2.5 px-1 font-sans">
+                <p style={{ fontSize: 10.5, fontWeight: 700, color: "#9C968D", letterSpacing: "2px", textTransform: "uppercase", marginBottom: 12, paddingLeft: 4 }}>
                     FILTER BY
                 </p>
-                <div className="flex flex-col gap-1">
+                <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     {[
                         { label: "New Arrivals", v: onlyNew, set: setOnlyNew },
                         { label: "Best Sellers", v: onlyBest, set: setOnlyBest },
@@ -235,13 +295,24 @@ export default function Shop() {
                     ].map((f) => (
                         <label
                             key={f.label}
-                            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-[#6E6A63] hover:bg-[#FAF7F2] hover:text-[#23201D] cursor-pointer transition-colors"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 10,
+                                padding: "8px 12px",
+                                borderRadius: 10,
+                                fontSize: 13,
+                                color: "#6E6A63",
+                                fontWeight: f.v ? 700 : 500,
+                                cursor: "pointer",
+                                transition: "all 0.15s ease",
+                            }}
                         >
                             <input
                                 type="checkbox"
                                 checked={f.v}
                                 onChange={(e) => f.set(e.target.checked)}
-                                className="w-4 h-4 rounded border-[#EAE3D9] text-[#23201D] accent-[#23201D] cursor-pointer shrink-0"
+                                style={{ width: 16, height: 16, accentColor: "#23201D", cursor: "pointer", flexShrink: 0 }}
                             />
                             <span>{f.label}</span>
                         </label>
@@ -249,11 +320,22 @@ export default function Shop() {
                 </div>
             </div>
 
-            {/* Clear Filters Button */}
+            {/* Clear All Button */}
             {activeFilters.length > 0 && (
                 <button
                     onClick={clearAll}
-                    className="w-full py-2.5 rounded-xl border border-[#EAE3D9] text-xs font-semibold text-[#6E6A63] hover:bg-[#F4EFE6] hover:text-[#23201D] transition-colors cursor-pointer"
+                    style={{
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: 12,
+                        border: "1px solid #EAE3D9",
+                        background: "#FAF7F2",
+                        color: "#6E6A63",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        transition: "all 0.15s ease",
+                    }}
                 >
                     Clear all filters
                 </button>
@@ -262,9 +344,9 @@ export default function Shop() {
     );
 
     return (
-        <div className="bg-[#FAF7F2] min-h-screen">
+        <div style={{ background: "#FAF7F2", minHeight: "100vh" }}>
             {/* 1. EDITORIAL PAGE HEADER */}
-            <div className="bg-white border-b border-[#EAE3D9] py-8 md:py-10">
+            <div style={{ background: "#FFFFFF", borderBottom: "1px solid #EAE3D9", padding: "32px 0" }}>
                 <div className="container mx-auto px-4 md:px-8">
                     <Breadcrumb
                         items={[
@@ -273,52 +355,50 @@ export default function Shop() {
                             ...(currentCat ? [{ label: currentCat.label }] : []),
                         ]}
                     />
-                    <div className="mt-3 flex flex-col md:flex-row md:items-end justify-between gap-2">
-                        <div>
-                            <h1 className="font-display text-3xl md:text-4xl font-normal text-[#23201D] tracking-tight">
-                                {onlyWishlist ? "My Wishlist" : currentCat ? currentCat.label : "All Products"}
-                            </h1>
-                            <p className="text-xs md:text-sm text-[#78726A] mt-1 font-normal">
-                                Curated aesthetic stationery & workspace essentials
-                            </p>
-                        </div>
+                    <div style={{ marginTop: 12 }}>
+                        <h1 className="font-display" style={{ fontSize: 36, fontWeight: 400, color: "#23201D", letterSpacing: "-0.5px" }}>
+                            {onlyWishlist ? "My Wishlist" : currentCat ? currentCat.label : "All Products"}
+                        </h1>
+                        <p style={{ fontSize: 14, color: "#78726A", marginTop: 4 }}>
+                            Curated aesthetic stationery & workspace essentials
+                        </p>
                     </div>
                 </div>
             </div>
 
             {/* 2. MAIN CATALOG AREA */}
             <div className="container mx-auto px-4 md:px-8 py-6 md:py-8">
-
                 {/* TOP TOOLBAR */}
-                <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-[#EAE3D9] flex-wrap">
-                    {/* Left: Filter Toggle & Product Count */}
-                    <div className="flex items-center gap-3">
-                        {/* Mobile Filter Button */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, paddingBottom: 16, marginBottom: 24, borderBottom: "1px solid #EAE3D9", flexWrap: "wrap" }}>
+                    {/* Left: Product Count / Mobile Filter */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                         <button
                             onClick={() => setMobileFilterOpen(true)}
-                            className="md:hidden flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#EAE3D9] text-xs font-semibold text-[#23201D] hover:bg-[#F4EFE6] transition-colors shadow-2xs"
+                            className="md:hidden"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 8,
+                                padding: "8px 14px",
+                                borderRadius: 12,
+                                background: "#FFFFFF",
+                                border: "1px solid #EAE3D9",
+                                fontSize: 12,
+                                fontWeight: 600,
+                                color: "#23201D",
+                                cursor: "pointer",
+                            }}
                         >
                             <SlidersHorizontal size={14} />
                             <span>Filters</span>
                             {activeFilters.length > 0 && (
-                                <span className="w-5 h-5 rounded-full bg-[#8192D4] text-white text-[10px] font-bold flex items-center justify-center">
+                                <span style={{ width: 18, height: 18, borderRadius: "50%", background: "#8192D4", color: "#FFFFFF", fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>
                                     {activeFilters.length}
                                 </span>
                             )}
                         </button>
 
-                        {/* Desktop Filter Hide/Show Toggle */}
-                        {!onlyWishlist && (
-                            <button
-                                onClick={() => setShowFilters((f) => !f)}
-                                className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#EAE3D9] text-xs font-semibold text-[#23201D] hover:bg-[#F4EFE6] transition-colors shadow-2xs cursor-pointer"
-                            >
-                                <SlidersHorizontal size={14} />
-                                <span>{showFilters ? "Hide Filters" : "Show Filters"}</span>
-                            </button>
-                        )}
-
-                        <span className="text-xs text-[#78726A] font-medium font-sans">
+                        <span style={{ fontSize: 13, color: "#78726A", fontWeight: 500 }}>
                             {onlyWishlist
                                 ? `${filtered.length} saved item${filtered.length === 1 ? "" : "s"}`
                                 : `Showing ${filtered.length} of ${liveProducts.length} products`}
@@ -326,13 +406,23 @@ export default function Shop() {
                     </div>
 
                     {/* Right: Sort Dropdown & Grid View Toggle */}
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs text-[#78726A] font-medium hidden sm:inline">Sort by:</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <span style={{ fontSize: 12, color: "#78726A", fontWeight: 500 }} className="hidden sm:inline">Sort by:</span>
                             <select
                                 value={sort}
                                 onChange={(e) => setSort(e.target.value)}
-                                className="bg-white border border-[#EAE3D9] rounded-xl text-xs py-2 px-3 text-[#23201D] font-medium outline-none focus:border-[#8192D4] cursor-pointer shadow-2xs"
+                                style={{
+                                    background: "#FFFFFF",
+                                    border: "1px solid #EAE3D9",
+                                    borderRadius: 12,
+                                    fontSize: 12,
+                                    padding: "8px 12px",
+                                    color: "#23201D",
+                                    fontWeight: 500,
+                                    outline: "none",
+                                    cursor: "pointer",
+                                }}
                             >
                                 {SORT_OPTIONS.map((o) => (
                                     <option key={o.value} value={o.value}>
@@ -343,21 +433,37 @@ export default function Shop() {
                         </div>
 
                         {/* Grid View Icons */}
-                        <div className="hidden sm:flex border border-[#EAE3D9] bg-white rounded-xl overflow-hidden p-0.5 shadow-2xs">
+                        <div className="hidden sm:flex" style={{ border: "1px solid #EAE3D9", background: "#FFFFFF", borderRadius: 12, overflow: "hidden", padding: 2 }}>
                             <button
                                 onClick={() => setGridView(3)}
-                                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                    gridView === 3 ? "bg-[#23201D] text-white" : "text-[#78726A] hover:text-[#23201D]"
-                                }`}
+                                style={{
+                                    padding: 6,
+                                    borderRadius: 8,
+                                    border: "none",
+                                    cursor: "pointer",
+                                    background: gridView === 3 ? "#23201D" : "transparent",
+                                    color: gridView === 3 ? "#FFFFFF" : "#78726A",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
                                 title="3 Columns"
                             >
                                 <LayoutGrid size={15} />
                             </button>
                             <button
                                 onClick={() => setGridView(4)}
-                                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                    gridView === 4 ? "bg-[#23201D] text-white" : "text-[#78726A] hover:text-[#23201D]"
-                                }`}
+                                style={{
+                                    padding: 6,
+                                    borderRadius: 8,
+                                    border: "none",
+                                    cursor: "pointer",
+                                    background: gridView === 4 ? "#23201D" : "transparent",
+                                    color: gridView === 4 ? "#FFFFFF" : "#78726A",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
                                 title="4 Columns"
                             >
                                 <Grid size={15} />
@@ -368,17 +474,28 @@ export default function Shop() {
 
                 {/* ACTIVE FILTER PILLS */}
                 {activeFilters.length > 0 && (
-                    <div className="flex items-center gap-2 mb-6 flex-wrap">
-                        <span className="text-xs font-semibold text-[#78726A]">Active Filters:</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
+                        <span style={{ fontSize: 12, fontWeight: 600, color: "#78726A" }}>Active Filters:</span>
                         {activeFilters.map((f, i) => (
                             <span
                                 key={i}
-                                className="bg-white border border-[#EAE3D9] text-xs text-[#23201D] font-medium px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs"
+                                style={{
+                                    background: "#FFFFFF",
+                                    border: "1px solid #EAE3D9",
+                                    fontSize: 12,
+                                    color: "#23201D",
+                                    fontWeight: 500,
+                                    padding: "4px 12px",
+                                    borderRadius: 20,
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: 6,
+                                }}
                             >
                                 {f.label}
                                 <button
                                     onClick={f.clear}
-                                    className="hover:text-[#D97762] transition-colors cursor-pointer"
+                                    style={{ border: "none", background: "none", cursor: "pointer", padding: 0, color: "#9C968D", display: "flex", alignItems: "center" }}
                                     title="Remove filter"
                                 >
                                     <X size={12} />
@@ -387,7 +504,7 @@ export default function Shop() {
                         ))}
                         <button
                             onClick={clearAll}
-                            className="text-xs text-[#8192D4] font-semibold hover:underline cursor-pointer ml-1"
+                            style={{ border: "none", background: "none", color: "#8192D4", fontSize: 12, fontWeight: 600, cursor: "pointer", textDecoration: "underline", marginLeft: 4 }}
                         >
                             Clear all
                         </button>
@@ -395,14 +512,10 @@ export default function Shop() {
                 )}
 
                 {/* 3. CONTENT GRID & SIDEBAR */}
-                <div
-                    className={`grid gap-8 items-start ${
-                        showFilters && !onlyWishlist ? "grid-cols-1 lg:grid-cols-[260px_1fr]" : "grid-cols-1"
-                    }`}
-                >
+                <div style={{ display: "grid", gridTemplateColumns: (!onlyWishlist) ? "270px 1fr" : "1fr", gap: 32, alignItems: "start" }}>
                     {/* DESKTOP SIDEBAR */}
-                    {showFilters && !onlyWishlist && (
-                        <aside className="hidden lg:block sticky top-24 bg-white p-5 rounded-2xl border border-[#EAE3D9] shadow-2xs">
+                    {!onlyWishlist && (
+                        <aside className="hidden lg:block" style={{ sticky: "top 100px", background: "#FFFFFF", padding: 20, borderRadius: 20, border: "1px solid #EAE3D9", boxShadow: "0 4px 20px rgba(35, 32, 29, 0.03)" }}>
                             <SidebarFilters />
                         </aside>
                     )}
@@ -410,13 +523,13 @@ export default function Shop() {
                     {/* PRODUCT GRID */}
                     <div>
                         {filtered.length === 0 ? (
-                            <div className="bg-white rounded-2xl p-12 text-center border border-[#EAE3D9] my-4 shadow-2xs">
-                                <div className="text-4xl mb-3 opacity-30">🔍</div>
-                                <h3 className="text-lg font-bold text-[#23201D] mb-1">No products match your selection</h3>
-                                <p className="text-xs text-[#78726A] mb-6">Try adjusting your filters or search keywords</p>
+                            <div style={{ background: "#FFFFFF", borderRadius: 20, padding: 48, textAlign: "center", border: "1px solid #EAE3D9" }}>
+                                <div style={{ fontSize: 40, marginBottom: 12, opacity: 0.3 }}>🔍</div>
+                                <h3 style={{ fontSize: 18, fontWeight: 700, color: "#23201D", marginBottom: 4 }}>No products match your selection</h3>
+                                <p style={{ fontSize: 13, color: "#78726A", marginBottom: 24 }}>Try adjusting your filters or search keywords</p>
                                 <button
                                     onClick={clearAll}
-                                    className="px-5 py-2.5 rounded-xl bg-[#23201D] text-white text-xs font-semibold hover:bg-[#35312D] transition-colors cursor-pointer"
+                                    style={{ padding: "10px 20px", borderRadius: 12, background: "#23201D", color: "#FFFFFF", fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer" }}
                                 >
                                     Clear all filters
                                 </button>
@@ -479,5 +592,6 @@ export default function Shop() {
         </div>
     );
 }
+
 
 
