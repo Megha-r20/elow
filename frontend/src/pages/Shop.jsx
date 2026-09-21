@@ -380,11 +380,12 @@ export default function Shop() {
 
                     {/* TOP TOOLBAR INSIDE HEADER */}
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginTop: 24, flexWrap: "wrap" }}>
-                        {/* Left: Product Count & Filter Trigger */}
+                        {/* Left: Product Count & Mobile/Tablet Filter Trigger */}
                         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                             {!onlyWishlist && (
                                 <button
                                     onClick={() => setMobileFilterOpen(true)}
+                                    className="lg:hidden"
                                     style={{
                                         display: "inline-flex",
                                         alignItems: "center",
@@ -532,90 +533,42 @@ export default function Shop() {
                     </div>
                 )}
 
-                {/* 3. HORIZONTAL CATEGORY PILLS NAV */}
-                {!onlyWishlist && (
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, overflowX: "auto", paddingBottom: 12, marginBottom: 28 }} className="no-scrollbar">
-                        <button
-                            onClick={() => changeCat("all")}
-                            style={{
-                                padding: "9px 20px",
-                                borderRadius: 24,
-                                border: activeCat === "all" ? "1.5px solid #23201D" : "1px solid #EAE3D9",
-                                background: activeCat === "all" ? "#23201D" : "#FFFFFF",
-                                color: activeCat === "all" ? "#FFFFFF" : "#23201D",
-                                fontSize: 13,
-                                fontWeight: 600,
-                                cursor: "pointer",
-                                whiteSpace: "nowrap",
-                                boxShadow: "0 2px 8px rgba(35, 32, 29, 0.03)",
-                                transition: "all 0.15s ease",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 6,
-                            }}
-                        >
-                            <span>All Products</span>
-                            <span style={{ fontSize: 11, opacity: 0.7 }}>({liveProducts.length})</span>
-                        </button>
+                {/* 3. CONTENT GRID & SIDEBAR */}
+                <div style={{ display: "grid", gridTemplateColumns: (!onlyWishlist) ? "270px 1fr" : "1fr", gap: 32, alignItems: "start" }}>
+                    {/* DESKTOP SIDEBAR */}
+                    {!onlyWishlist && (
+                        <aside className="hidden lg:block" style={{ sticky: "top 100px", background: "#FFFFFF", padding: 20, borderRadius: 20, border: "1px solid #EAE3D9", boxShadow: "0 4px 20px rgba(35, 32, 29, 0.03)" }}>
+                            <SidebarFilters />
+                        </aside>
+                    )}
 
-                        {CATEGORIES.map((cat) => {
-                            const isActive = activeCat === cat.id;
-                            return (
+                    {/* PRODUCT GRID */}
+                    <div>
+                        {filtered.length === 0 ? (
+                            <div style={{ background: "#FFFFFF", borderRadius: 20, padding: 48, textAlign: "center", border: "1px solid #EAE3D9" }}>
+                                <div style={{ fontSize: 40, marginBottom: 12, opacity: 0.3 }}>🔍</div>
+                                <h3 style={{ fontSize: 18, fontWeight: 700, color: "#23201D", marginBottom: 4 }}>No products match your selection</h3>
+                                <p style={{ fontSize: 13, color: "#78726A", marginBottom: 24 }}>Try adjusting your filters or search keywords</p>
                                 <button
-                                    key={cat.id}
-                                    onClick={() => changeCat(cat.id)}
-                                    style={{
-                                        padding: "9px 20px",
-                                        borderRadius: 24,
-                                        border: isActive ? "1.5px solid #23201D" : "1px solid #EAE3D9",
-                                        background: isActive ? "#23201D" : "#FFFFFF",
-                                        color: isActive ? "#FFFFFF" : "#23201D",
-                                        fontSize: 13,
-                                        fontWeight: 600,
-                                        cursor: "pointer",
-                                        whiteSpace: "nowrap",
-                                        boxShadow: "0 2px 8px rgba(35, 32, 29, 0.03)",
-                                        transition: "all 0.15s ease",
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: 6,
-                                    }}
+                                    onClick={clearAll}
+                                    style={{ padding: "10px 20px", borderRadius: 12, background: "#23201D", color: "#FFFFFF", fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer" }}
                                 >
-                                    <span>{cat.label}</span>
-                                    <span style={{ fontSize: 11, opacity: 0.7 }}>({cat.productCount})</span>
+                                    Clear all filters
                                 </button>
-                            );
-                        })}
-                    </div>
-                )}
-
-                {/* 4. FULL WIDTH PRODUCT GRID */}
-                <div>
-                    {filtered.length === 0 ? (
-                        <div style={{ background: "#FFFFFF", borderRadius: 20, padding: 48, textAlign: "center", border: "1px solid #EAE3D9" }}>
-                            <div style={{ fontSize: 40, marginBottom: 12, opacity: 0.3 }}>🔍</div>
-                            <h3 style={{ fontSize: 18, fontWeight: 700, color: "#23201D", marginBottom: 4 }}>No products match your selection</h3>
-                            <p style={{ fontSize: 13, color: "#78726A", marginBottom: 24 }}>Try adjusting your filters or search keywords</p>
-                            <button
-                                onClick={clearAll}
-                                style={{ padding: "10px 20px", borderRadius: 12, background: "#23201D", color: "#FFFFFF", fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer" }}
-                            >
-                                Clear all filters
-                            </button>
-                        </div>
-                    ) : (
-                        <>
-                            <div
-                                className={`grid gap-5 sm:gap-6 ${
-                                    gridView === 3
-                                        ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3"
-                                        : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
-                                }`}
-                            >
-                                {visibleProducts.map((p) => (
-                                    <ProductCard key={p.id} product={p} />
-                                ))}
                             </div>
+                        ) : (
+                            <>
+                                <div
+                                    className={`grid gap-4 sm:gap-6 ${
+                                        gridView === 3
+                                            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                                            : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
+                                    }`}
+                                >
+                                    {visibleProducts.map((p) => (
+                                        <ProductCard key={p.id} product={p} />
+                                    ))}
+                                </div>
 
                                 {/* VIEW MORE PRODUCTS BUTTON */}
                                 {visibleCount < filtered.length && (
@@ -664,11 +617,12 @@ export default function Shop() {
                             </>
                         )}
                     </div>
+                </div>
             </div>
 
-            {/* 4. FILTER DRAWER MODAL */}
+            {/* 4. MOBILE FILTER DRAWER MODAL */}
             {mobileFilterOpen && (
-                <div className="fixed inset-0 z-50 flex justify-end">
+                <div className="fixed inset-0 z-50 flex justify-end md:hidden">
                     {/* Backdrop */}
                     <div
                         className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
