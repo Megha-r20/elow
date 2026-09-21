@@ -189,6 +189,10 @@ export const issueSpinPromoCode = async (req, res) => {
 // @route   POST /api/create-payment-intent
 // @access  Private
 export const createPaymentIntent = async (req, res) => {
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ error: "Authentication required to create payment intent" });
+  }
+
   const { items, promoCode, giftWrap, currency = "inr" } = req.body || {};
 
   if (!items || !Array.isArray(items) || items.length === 0) {
@@ -233,7 +237,7 @@ export const createPaymentIntent = async (req, res) => {
     amount: amountInCents,
     currency: currency.toLowerCase(),
     automatic_payment_methods: { enabled: true },
-    metadata: { userId: req.user?.id || "guest" },
+    metadata: { userId: req.user.id },
   });
 
   res.json({
@@ -241,4 +245,64 @@ export const createPaymentIntent = async (req, res) => {
     paymentIntentId: paymentIntent.id,
     amount: serverTotal,
   });
+};
+
+// @desc    Handle Stripe Webhooks
+// @route   POST /api/payments/webhook
+// @access  Public (Stripe Webhook Signature Verification)
+export const handleStripeWebhook = async (req, res) => {
+  const sig = req.headers["stripe-signature"];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  let event;
+
+  if (stripe && webhookSecret && sig) {
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    } catch (err) {
+      logger.error(`[Stripe Webhook Error] Signature verification failed: ${err.message}`);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  } else {
+    // Graceful fallback for development / test mode when webhook secret is omitted
+    event = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+  }
+
+  if (!event || !event.type) {
+    return res.status(400).json({ error: "Invalid webhook payload format" });
+  }
+
+  const { Order } = await import("../models/Order.js");
+
+  switch (event.type) {
+    case "payment_intent.succeeded": {
+      const paymentIntent = event.data.object;
+      const order = await Order.findOne({ stripePaymentIntentId: paymentIntent.id });
+      if (order && order.paymentStatus !== "Paid") {
+        order.paymentStatus = "Paid";
+        await order.save();
+        logger.info(`[Stripe Webhook] Order #${order.id} marked as Paid via payment_intent.succeeded`);
+      }
+      break;
+    }
+    case "charge.refunded":
+    case "payment_intent.canceled": {
+      const paymentIntent = event.data.object;
+      const intentId = paymentIntent.payment_intent || paymentIntent.id;
+      const order = await Order.findOne({ stripePaymentIntentId: intentId });
+      if (order) {
+        order.paymentStatus = "Refunded";
+        if (order.status !== "Cancelled") {
+          order.status = "Cancelled";
+        }
+        await order.save();
+        logger.info(`[Stripe Webhook] Order #${order.id} marked as Refunded via ${event.type}`);
+      }
+      break;
+    }
+    default:
+      logger.info(`[Stripe Webhook] Received unhandled event type: ${event.type}`);
+  }
+
+  res.json({ received: true });
 };

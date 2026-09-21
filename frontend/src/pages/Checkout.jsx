@@ -9,7 +9,7 @@ const INIT_FORM = {
     firstName: "", lastName: "", email: "", phone: "",
     address: "", city: "", state: "Maharashtra", pincode: "",
     payMethod: "upi",
-    upiId: "", cardNum: "", cardExp: "", cardCvv: "", cardName: "",
+    upiId: "",
     saveInfo: false, giftWrap: false, giftNote: "",
 };
 const STEPS = ["Delivery", "Payment", "Review"];
@@ -79,16 +79,6 @@ export default function Checkout() {
         const e = {};
         if (form.payMethod === "upi" && !form.upiId.match(/^.+@.+$/))
             e.upiId = "Enter a valid UPI ID (e.g. name@upi)";
-        if (form.payMethod === "card") {
-            if (!form.cardNum.replace(/\s/g, "").match(/^\d{16}$/))
-                e.cardNum = "Enter 16-digit card number";
-            if (!form.cardExp.match(/^\d{2}\/\d{2}$/))
-                e.cardExp = "Format: MM/YY";
-            if (!form.cardCvv.match(/^\d{3,4}$/))
-                e.cardCvv = "3–4 digit CVV";
-            if (!form.cardName.trim())
-                e.cardName = "Required";
-        }
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -254,31 +244,15 @@ export default function Checkout() {
                     {errors.upiId && <p style={{ fontSize: 11.5, color: "#e05252", marginTop: 5 }}>{errors.upiId}</p>}
                   </div>)}
 
-                {/* Card inputs */}
-                {form.payMethod === "card" && (<div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <div>
-                      <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: T.light, letterSpacing: "1px", marginBottom: 6 }}>CARD NUMBER</label>
-                      <input className={`field${errors.cardNum ? " error" : ""}`} value={form.cardNum} onChange={set("cardNum")} placeholder="1234 5678 9012 3456" maxLength={19}/>
-                      {errors.cardNum && <p style={{ fontSize: 11.5, color: "#e05252", marginTop: 5 }}>{errors.cardNum}</p>}
-                    </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                      <div>
-                        <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: T.light, letterSpacing: "1px", marginBottom: 6 }}>EXPIRY DATE</label>
-                        <input className={`field${errors.cardExp ? " error" : ""}`} value={form.cardExp} onChange={set("cardExp")} placeholder="MM/YY" maxLength={5}/>
-                        {errors.cardExp && <p style={{ fontSize: 11.5, color: "#e05252", marginTop: 5 }}>{errors.cardExp}</p>}
-                      </div>
-                      <div>
-                        <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: T.light, letterSpacing: "1px", marginBottom: 6 }}>CVV</label>
-                        <input className={`field${errors.cardCvv ? " error" : ""}`} value={form.cardCvv} onChange={set("cardCvv")} placeholder="•••" maxLength={4} type="password"/>
-                        {errors.cardCvv && <p style={{ fontSize: 11.5, color: "#e05252", marginTop: 5 }}>{errors.cardCvv}</p>}
-                      </div>
-                    </div>
-                    <div>
-                      <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: T.light, letterSpacing: "1px", marginBottom: 6 }}>CARDHOLDER NAME</label>
-                      <input className={`field${errors.cardName ? " error" : ""}`} value={form.cardName} onChange={set("cardName")} placeholder="RITIKA SHARMA"/>
-                      {errors.cardName && <p style={{ fontSize: 11.5, color: "#e05252", marginTop: 5 }}>{errors.cardName}</p>}
-                    </div>
-                  </div>)}
+                {/* Card notice */}
+                {form.payMethod === "card" && (
+                  <div style={{ background: "#F0FDF8", border: "1px solid #10B98130", borderRadius: 12, padding: "16px 20px" }}>
+                    <p style={{ fontSize: 14, color: "#065f46", fontWeight: 700 }}>Demo Card Mode (Test Mode)</p>
+                    <p style={{ fontSize: 13, color: "#047857", marginTop: 4 }}>
+                      No raw card details required. Click Continue to review and place your order safely in demo mode.
+                    </p>
+                  </div>
+                )}
 
                 {form.payMethod === "cod" && (<div style={{ background: "#FFF8E7", border: "1px solid #F59E0B30", borderRadius: 12, padding: "14px 18px" }}>
                     <p style={{ fontSize: 13.5, color: "#92400e", fontWeight: 600 }}>Cash on delivery available</p>
@@ -317,7 +291,7 @@ export default function Checkout() {
                   </div>
                   <p style={{ fontSize: 13.5, color: T.muted }}>
                     {form.payMethod === "upi" ? `UPI — ${form.upiId}` :
-                form.payMethod === "card" ? `Card ending in ${form.cardNum.slice(-4)}` :
+                form.payMethod === "card" ? "Demo Card (Simulated)" :
                     form.payMethod === "wallet" ? "Wallet payment" : "Cash on Delivery"}
                   </p>
                 </div>

@@ -17,6 +17,18 @@ const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SEC
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
 const safeLower = (v) => safeStr(v).toLowerCase();
 
+const issueStripeRefund = async (intentId) => {
+  if (!intentId || !stripe) return false;
+  try {
+    await stripe.refunds.create({ payment_intent: intentId });
+    logger.info(`[Stripe Auto Refund] Successfully refunded PaymentIntent: ${intentId}`);
+    return true;
+  } catch (err) {
+    logger.error(`[Stripe Auto Refund Error] Failed to refund ${intentId}: ${err.message}`);
+    return false;
+  }
+};
+
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
@@ -80,36 +92,35 @@ export const createOrder = async (req, res) => {
 
   // Payment Status & Strict Stripe Verification
   let paymentStatus = "Demo Payment (Pending)";
+  const cleanIntentId = safeStr(stripePaymentIntentId);
 
-  if (stripePaymentIntentId) {
-    const cleanIntentId = safeStr(stripePaymentIntentId);
-    if (cleanIntentId) {
-      // 1. Prevent reuse of PaymentIntent
-      const existingOrder = await Order.findOne({ stripePaymentIntentId: cleanIntentId }).lean();
-      if (existingOrder) {
-        return res.status(400).json({ error: "Stripe PaymentIntent has already been used for another order." });
-      }
-
-      // 2. Verify Stripe configuration & status
-      if (!stripe) {
-        return res.status(400).json({ error: "Stripe payment service is not configured on backend." });
-      }
-
-      const paymentIntent = await stripe.paymentIntents.retrieve(cleanIntentId);
-      if (!paymentIntent || paymentIntent.status !== "succeeded") {
-        return res.status(400).json({ error: "Payment verification failed. Stripe PaymentIntent was not completed." });
-      }
-
-      // 3. Verify paid amount matches server total
-      const expectedAmountCents = Math.round(serverTotal * 100);
-      if (paymentIntent.amount !== expectedAmountCents) {
-        return res.status(400).json({
-          error: `Payment verification failed. Paid amount (₹${paymentIntent.amount / 100}) does not match server order total (₹${serverTotal}).`,
-        });
-      }
-
-      paymentStatus = "Paid";
+  if (cleanIntentId) {
+    // 1. Prevent reuse of PaymentIntent
+    const existingOrder = await Order.findOne({ stripePaymentIntentId: cleanIntentId }).lean();
+    if (existingOrder) {
+      return res.status(400).json({ error: "Stripe PaymentIntent has already been used for another order." });
     }
+
+    // 2. Verify Stripe configuration & status
+    if (!stripe) {
+      return res.status(400).json({ error: "Stripe payment service is not configured on backend." });
+    }
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(cleanIntentId);
+    if (!paymentIntent || paymentIntent.status !== "succeeded") {
+      return res.status(400).json({ error: "Payment verification failed. Stripe PaymentIntent was not completed." });
+    }
+
+    // 3. Verify paid amount matches server total
+    const expectedAmountCents = Math.round(serverTotal * 100);
+    if (paymentIntent.amount !== expectedAmountCents) {
+      await issueStripeRefund(cleanIntentId);
+      return res.status(400).json({
+        error: `Payment verification failed. Paid amount (₹${paymentIntent.amount / 100}) does not match server order total (₹${serverTotal}). A full refund has been issued to your card.`,
+      });
+    }
+
+    paymentStatus = "Paid";
   } else if (payMethod === "cod") {
     paymentStatus = "Pending (COD)";
   } else {
@@ -134,8 +145,13 @@ export const createOrder = async (req, res) => {
         for (const resItem of reservedProducts) {
           await Product.findOneAndUpdate({ id: resItem.id }, { $inc: { stockCount: resItem.qty }, $set: { inStock: true } });
         }
+
+        if (paymentStatus === "Paid" && cleanIntentId) {
+          await issueStripeRefund(cleanIntentId);
+        }
+
         return res.status(400).json({
-          error: `Product "${item.product.name}" is out of stock or has insufficient quantity.`,
+          error: `Product "${item.product.name}" is out of stock or has insufficient quantity. ${paymentStatus === "Paid" ? "A full refund has been issued to your card." : ""}`,
         });
       }
 
@@ -149,13 +165,14 @@ export const createOrder = async (req, res) => {
     for (const resItem of reservedProducts) {
       await Product.findOneAndUpdate({ id: resItem.id }, { $inc: { stockCount: resItem.qty }, $set: { inStock: true } });
     }
+    if (paymentStatus === "Paid" && cleanIntentId) {
+      await issueStripeRefund(cleanIntentId);
+    }
     throw err;
   }
 
   // Ignore client-sent order ID to prevent duplicate key collisions
   const orderId = `US-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
-
-  const cleanIntentId = safeStr(stripePaymentIntentId);
 
   const orderData = {
     id: orderId,
@@ -182,6 +199,9 @@ export const createOrder = async (req, res) => {
     // Rollback reserved stock if order creation fails
     for (const resItem of reservedProducts) {
       await Product.findOneAndUpdate({ id: resItem.id }, { $inc: { stockCount: resItem.qty }, $set: { inStock: true } });
+    }
+    if (paymentStatus === "Paid" && cleanIntentId) {
+      await issueStripeRefund(cleanIntentId);
     }
     throw err;
   }
@@ -331,8 +351,15 @@ export const cancelOrder = async (req, res) => {
     });
   }
 
+  let refundIssued = false;
+  if (order.stripePaymentIntentId && order.paymentStatus === "Paid") {
+    refundIssued = await issueStripeRefund(order.stripePaymentIntentId);
+    order.paymentStatus = "Refunded";
+  } else {
+    order.paymentStatus = "Cancelled";
+  }
+
   order.status = "Cancelled";
-  order.paymentStatus = "Cancelled";
   await order.save();
 
   // Restore inventory stock count atomically
@@ -348,5 +375,9 @@ export const cancelOrder = async (req, res) => {
   }
 
   logger.info(`[Order Cancelled] ID: ${orderId}, User: ${req.user.id}`);
-  res.json({ success: true, message: "Order cancelled successfully", order: typeof order.toObject === "function" ? order.toObject() : order });
+  res.json({
+    success: true,
+    message: refundIssued ? "Order cancelled and payment refunded successfully" : "Order cancelled successfully",
+    order: typeof order.toObject === "function" ? order.toObject() : order,
+  });
 };
