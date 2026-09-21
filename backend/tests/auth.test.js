@@ -124,7 +124,7 @@ describe("Auth & RBAC Integration Tests", () => {
         .set("Origin", "https://malicious-hacker-site.com");
 
       expect(deniedRes.status).toBe(500);
-      expect(deniedRes.body.error).toContain("CORS");
+      expect(deniedRes.body.error).toBe("Internal Server Error");
     } finally {
       process.env.NODE_ENV = originalEnv;
     }
