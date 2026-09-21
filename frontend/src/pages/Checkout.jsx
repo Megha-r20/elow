@@ -140,8 +140,7 @@ export default function Checkout() {
                     return;
                 }
             }
-            catch (err) {
-                console.error("Failed to post order to server:", err);
+            catch (_err) {
                 addToast("Network error placing order. Please try again.", "error");
                 setIsPlacingOrder(false);
                 return;

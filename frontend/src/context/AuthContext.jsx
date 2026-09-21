@@ -28,8 +28,8 @@ export function AuthProvider({ children }) {
                 try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
                 return data.token;
             }
-        } catch (err) {
-            console.error("Refresh session error:", err);
+        } catch (_err) {
+            /* ignore refresh network error */
         }
         return null;
     }, []);
@@ -65,8 +65,8 @@ export function AuthProvider({ children }) {
                         setUser(null);
                     }
                 }
-            } catch (err) {
-                console.error("Failed to fetch user auth state:", err);
+            } catch (_err) {
+                /* ignore fetch user error */
             } finally {
                 setLoading(false);
             }
@@ -155,8 +155,8 @@ export function AuthProvider({ children }) {
                 method: "POST",
                 credentials: "include",
             });
-        } catch (err) {
-            console.error("Logout network error:", err);
+        } catch (_err) {
+            /* ignore logout network error */
         }
         try { localStorage.removeItem("elow_user"); } catch (_e) { /* ignore */ }
         setToken(null);

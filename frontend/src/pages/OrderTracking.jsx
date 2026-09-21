@@ -127,8 +127,8 @@ export default function OrderTracking() {
           return;
         }
       }
-    } catch (err) {
-      console.error("API tracking search error:", err);
+    } catch (_err) {
+      /* ignore search API error and fallback to mock data */
     }
 
     if (sampleTrackingData[queryId]) {

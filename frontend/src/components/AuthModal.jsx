@@ -64,7 +64,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
         }}/>
 
       {/* Modal Dialog */}
-      <div style={{
+      <div role="dialog" aria-modal="true" aria-label="Account Login or Registration" style={{
             position: "fixed",
             top: "50%",
             left: "50%",
@@ -104,7 +104,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
               {mode === "login" ? "Welcome Back to Elow" : "Join the Elow Club"}
             </h2>
           </div>
-          <button onClick={onClose} className="icon-btn" style={{
+          <button onClick={onClose} aria-label="Close authentication modal" className="icon-btn" style={{
             background: "#F4EFE6",
             borderRadius: "50%",
             width: 34,

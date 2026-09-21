@@ -45,8 +45,8 @@ export default function Shop() {
                     }
                 }
             }
-            catch (err) {
-                console.error("Failed to fetch live products in Shop:", err);
+            catch (_err) {
+                /* ignore fetch error */
             }
         }
         fetchLiveProducts();

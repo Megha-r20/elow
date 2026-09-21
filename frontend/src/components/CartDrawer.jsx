@@ -12,7 +12,7 @@ export function CartDrawer() {
       {cartOpen && (<div onClick={closeCart} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.42)", zIndex: 600, backdropFilter: "blur(3px)" }}/>)}
 
       {/* Drawer */}
-      <div style={{
+      <div role="dialog" aria-modal="true" aria-label="Shopping Cart Drawer" aria-hidden={!cartOpen} style={{
             position: "fixed", top: 0, right: 0, bottom: 0, width: 420, maxWidth: "100vw",
             background: "#fff", zIndex: 700, display: "flex", flexDirection: "column",
             transform: cartOpen ? "translateX(0)" : "translateX(100%)",
@@ -29,7 +29,7 @@ export function CartDrawer() {
               {count} {count === 1 ? "item" : "items"}
             </p>
           </div>
-          <button onClick={closeCart} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 36, height: 36, color: "#6E6A63" }}>
+          <button onClick={closeCart} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 36, height: 36, color: "#6E6A63" }} aria-label="Close cart drawer">
             <Icons.Close />
           </button>
         </div>

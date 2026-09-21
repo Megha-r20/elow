@@ -29,6 +29,14 @@ export default function OrderConfirmation() {
     useEffect(() => {
         if (!lastOrder?.id)
             return;
+
+        const isTerminalStatus = (status) => {
+            const s = (status || "").toLowerCase();
+            return s === "delivered" || s === "cancelled";
+        };
+
+        let timer = null;
+
         const fetchLiveStatus = async () => {
             try {
                 const res = await authFetch(getApiUrl(`/api/orders/${lastOrder.id}`));
@@ -36,17 +44,28 @@ export default function OrderConfirmation() {
                     const data = await res.json();
                     if (data && data.id) {
                         setCurrentOrder(data);
+                        if (isTerminalStatus(data.status) && timer) {
+                            clearInterval(timer);
+                        }
                     }
                 }
             }
-            catch (err) {
-                console.error("Error fetching live order status:", err);
+            catch (_err) {
+                /* ignore status fetch error */
             }
         };
+
         fetchLiveStatus();
-        const timer = setInterval(fetchLiveStatus, 5000);
-        return () => clearInterval(timer);
-    }, [lastOrder, authFetch]);
+
+        const activeStatus = currentOrder?.status || lastOrder?.status || "";
+        if (!isTerminalStatus(activeStatus)) {
+            timer = setInterval(fetchLiveStatus, 5000);
+        }
+
+        return () => {
+            if (timer) clearInterval(timer);
+        };
+    }, [lastOrder, authFetch, currentOrder?.status]);
 
     useEffect(() => {
         async function fetchRecommended() {
@@ -56,8 +75,8 @@ export default function OrderConfirmation() {
                     const data = await res.json();
                     setRecommended(data.products || []);
                 }
-            } catch (err) {
-                console.error("Error fetching recommended products:", err);
+            } catch (_err) {
+                /* ignore fetch error */
             }
         }
         fetchRecommended();

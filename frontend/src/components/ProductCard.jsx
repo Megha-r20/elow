@@ -25,49 +25,49 @@ export function ProductCard({ product, compact = false }) {
         toggle(product.id);
         addToast(wished ? "Removed from wishlist" : "Saved to wishlist", "info");
     };
-    return (<div className="product-card" onClick={() => navigate(`/product/${product.id}`)} style={{ height: "100%" }}>
+    return (<div className="product-card h-full" onClick={() => navigate(`/product/${product.id}`)}>
       {/* Image area */}
-      <div className="card-img" style={{ position: "relative", overflow: "hidden", height: imgH, background: "#F4EFE6", flexShrink: 0 }}>
-        <img src={product.images[0]} alt={product.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}/>
+      <div className="card-img relative overflow-hidden bg-[#F4EFE6] shrink-0" style={{ height: imgH }}>
+        <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover block"/>
 
         {/* Badges */}
-        <div style={{ position: "absolute", top: 12, left: 12, display: "flex", flexDirection: "column", gap: 5 }}>
+        <div className="absolute top-3 left-3 flex flex-col gap-1">
           {product.badge && (<Badge label={product.badge} variant={product.badgeVariant ?? "teal"}/>)}
           {!product.inStock && (<Badge label="OUT OF STOCK" variant="dark"/>)}
         </div>
 
         {/* Wishlist */}
-        <button className="wish-btn icon-btn" onClick={handleWish} style={{ position: "absolute", top: 10, right: 10, background: "rgba(255,255,255,0.92)", borderRadius: "50%", width: 36, height: 36, color: wished ? "#E26D5C" : "#6E6A63", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }} title={wished ? "Remove from wishlist" : "Save to wishlist"}>
+        <button className="wish-btn icon-btn absolute top-2.5 right-2.5 bg-white/90 rounded-full w-9 h-9 shadow-sm" onClick={handleWish} style={{ color: wished ? "#E26D5C" : "#6E6A63" }} title={wished ? "Remove from wishlist" : "Save to wishlist"} aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}>
           <Icons.Heart filled={wished}/>
         </button>
 
       </div>
 
       {/* Info area */}
-      <div style={{ padding: compact ? "12px 14px 14px" : "14px 16px 18px", display: "flex", flexDirection: "column", gap: 6, flex: 1 }}>
-        <p style={{ fontSize: 10.5, fontWeight: 700, color: "#8192D4", letterSpacing: "1px", textTransform: "uppercase" }}>
+      <div className={`flex flex-col gap-1.5 flex-1 ${compact ? "p-3.5" : "p-4"}`}>
+        <p className="text-[10.5px] font-bold text-[#8192D4] tracking-widest uppercase">
           {product.subcategory}
         </p>
-        <h3 style={{ fontSize: compact ? 13 : 14, fontWeight: 600, color: "#23201D", lineHeight: 1.38, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+        <h3 className={`font-semibold text-[#23201D] leading-snug line-clamp-2 ${compact ? "text-xs" : "text-sm"}`}>
           {product.name}
         </h3>
-        <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+        <div className="flex items-center gap-1">
           {product.reviewCount > 0 ? (
             <>
               <Stars n={Math.floor(product.rating)} size={11}/>
-              <span style={{ fontSize: 11, color: "#9C968D", fontWeight: 500 }}>
+              <span className="text-[11px] text-[#9C968D] font-medium">
                 {product.rating.toFixed(1)} ({product.reviewCount})
               </span>
             </>
           ) : (
-            <span style={{ fontSize: 11, color: "#9C968D", fontWeight: 500 }}>
+            <span className="text-[11px] text-[#9C968D] font-medium">
               No reviews yet
             </span>
           )}
         </div>
         <Price price={product.price} original={product.originalPrice} size="sm"/>
 
-        <button onClick={handleAdd} disabled={!product.inStock} className="btn btn-dark btn-sm btn-full" style={{ marginTop: "auto" }}>
+        <button onClick={handleAdd} disabled={!product.inStock} className="btn btn-dark btn-sm btn-full mt-auto">
           {inCart ? "✔ In Cart" : product.inStock ? <><ShoppingBag size={14} strokeWidth={2.5}/> Add to Cart</> : "Out of Stock"}
         </button>
       </div>

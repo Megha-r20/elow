@@ -76,8 +76,8 @@ export function AccountModal({ isOpen, onClose }) {
         combined.sort((a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0));
         setAllOrders(combined);
       }
-    } catch (err) {
-      console.error("Error fetching order history:", err);
+    } catch (_err) {
+      /* ignore fetch error */
     } finally {
       setLoadingOrders(false);
     }

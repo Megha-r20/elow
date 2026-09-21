@@ -148,7 +148,7 @@ export default function Layout() {
 
             {/* Account / User Menu */}
             {user ? (<div style={{ position: "relative" }}>
-                <button className="hide-mobile" onClick={() => setUserDropdownOpen(o => !o)} style={{
+                <button className="hide-mobile" onClick={() => setUserDropdownOpen(o => !o)} aria-label="User account menu" aria-expanded={userDropdownOpen} style={{
                 display: "flex",
                 alignItems: "center",
                 gap: 8,
@@ -300,18 +300,18 @@ export default function Layout() {
                       </button>
                     </div>
                   </>)}
-              </div>) : (<button className="icon-btn hide-mobile" title="Sign In / Register" onClick={() => setAuthModalOpen(true)}>
+              </div>) : (<button className="icon-btn hide-mobile" title="Sign In / Register" aria-label="Sign in or register" onClick={() => setAuthModalOpen(true)}>
                 <Icons.User />
               </button>)}
 
-            <button className="icon-btn hide-mobile" title="Wishlist" onClick={() => navigate("/shop?filter=wishlist")}>
+            <button className="icon-btn hide-mobile" title="Wishlist" aria-label="Wishlist" onClick={() => navigate("/shop?filter=wishlist")}>
               <Icons.Heart />
             </button>
-            <button className="icon-btn" onClick={openCart} title="Cart" style={{ padding: "8px 10px" }}>
+            <button className="icon-btn" onClick={openCart} title="Cart" aria-label={`Shopping cart containing ${count} items`} style={{ padding: "8px 10px" }}>
               <Icons.Bag count={count}/>
             </button>
             {/* Mobile Hamburger toggle */}
-            <button className="icon-btn show-mobile-only" onClick={() => setMobileNav(o => !o)} title="Menu">
+            <button className="icon-btn show-mobile-only" onClick={() => setMobileNav(o => !o)} title="Menu" aria-label="Toggle mobile menu" aria-expanded={mobileNav}>
               <svg width="22" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M1 1h20M1 8h20M1 15h20"/>
               </svg>

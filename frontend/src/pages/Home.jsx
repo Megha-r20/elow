@@ -39,8 +39,8 @@ export default function Home() {
                     const bestData = await bestRes.json();
                     setBestSellers(bestData.products || []);
                 }
-            } catch (err) {
-                console.error("Failed to fetch home products:", err);
+            } catch (_err) {
+                /* ignore fetch error */
             }
         }
         fetchHomeProducts();

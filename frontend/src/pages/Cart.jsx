@@ -25,8 +25,8 @@ export default function Cart() {
                     const filtered = prods.filter(p => !items.find(i => i.product?.id === p.id)).slice(0, 4);
                     setRelated(filtered);
                 }
-            } catch (err) {
-                console.error("Failed to fetch related products for cart:", err);
+            } catch (_err) {
+                /* ignore fetch error */
             }
         }
         fetchRelated();

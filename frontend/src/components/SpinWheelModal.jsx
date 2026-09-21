@@ -148,6 +148,9 @@ export function SpinWheelModal({ isOpen, onClose }) {
 
       {/* Modal Card */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Spin and Win Wheel Modal"
         style={{
           position: "relative",
           zIndex: 910,
@@ -166,6 +169,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
         {/* Close button */}
         <button
           onClick={onClose}
+          aria-label="Close spin wheel modal"
           style={{
             position: "absolute",
             top: 16,

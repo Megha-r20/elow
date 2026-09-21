@@ -53,8 +53,7 @@ export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
       } else {
         setErrorMsg(data.error || "Failed to submit review");
       }
-    } catch (err) {
-      console.error("Error submitting review:", err);
+    } catch (_err) {
       setErrorMsg("Network error submitting review. Please try again.");
     } finally {
       setSubmitting(false);
@@ -87,6 +86,9 @@ export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
 
       {/* Modal Card */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Product Review Modal"
         style={{
           position: "relative",
           zIndex: 960,
@@ -102,6 +104,7 @@ export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
         {/* Close Button */}
         <button
           onClick={onClose}
+          aria-label="Close review modal"
           style={{
             position: "absolute",
             top: 20,
