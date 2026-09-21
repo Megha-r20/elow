@@ -24,7 +24,7 @@ export default function Shop() {
     const [onlyBest, setOnlyBest] = useState(params.get("filter") === "bestseller");
     const [onlyWishlist, setOnlyWishlist] = useState(params.get("filter") === "wishlist");
     const [searchQ, setSearchQ] = useState(initQ);
-    const [gridView, setGridView] = useState(4);
+    const [gridView, setGridView] = useState(3);
     const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
     const [visibleCount, setVisibleCount] = useState(12);
 
@@ -559,9 +559,9 @@ export default function Shop() {
                         ) : (
                             <>
                                 <div
-                                    className={`grid gap-4 sm:gap-5 ${
+                                    className={`grid gap-4 sm:gap-6 ${
                                         gridView === 3
-                                            ? "grid-cols-2 md:grid-cols-3"
+                                            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                                             : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
                                     }`}
                                 >
