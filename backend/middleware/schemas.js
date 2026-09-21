@@ -47,6 +47,7 @@ export const createProductSchema = z.object({
       description: z.string().max(2000, "Description cannot exceed 2000 characters").optional(),
       images: z.array(z.string().max(1000)).optional(),
       inStock: z.boolean().optional(),
+      stockCount: z.number().int("Stock count must be an integer").min(0, "Stock count cannot be negative").optional(),
       isNew: z.boolean().optional(),
       isBestseller: z.boolean().optional(),
     })
@@ -64,6 +65,7 @@ export const updateProductSchema = z.object({
       description: z.string().max(2000).optional(),
       images: z.array(z.string().max(1000)).optional(),
       inStock: z.boolean().optional(),
+      stockCount: z.number().int("Stock count must be an integer").min(0, "Stock count cannot be negative").optional(),
       isNew: z.boolean().optional(),
       isBestseller: z.boolean().optional(),
     })

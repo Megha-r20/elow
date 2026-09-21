@@ -131,7 +131,7 @@ export const getProductById = async (req, res) => {
 // @route   POST /api/admin/products
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
-  const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } =
+  const { name, category, subcategory, price, originalPrice, description, images, inStock, stockCount, isNew, isBestseller } =
     req.body || {};
 
   const cleanName = safeStr(name);
@@ -141,6 +141,12 @@ export const createProduct = async (req, res) => {
   if (!cleanName || !cleanCategory || isNaN(numPrice) || numPrice <= 0) {
     return res.status(400).json({ error: "Valid name, category, and price are required" });
   }
+
+  const parsedStock =
+    stockCount !== undefined && stockCount !== "" && !isNaN(Number(stockCount))
+      ? Math.max(0, parseInt(stockCount, 10))
+      : 10;
+  const computedInStock = inStock !== undefined ? Boolean(inStock) : parsedStock > 0;
 
   const newProduct = await Product.create({
     id: `prod-${Date.now()}`,
@@ -155,7 +161,8 @@ export const createProduct = async (req, res) => {
       Array.isArray(images) && images.length > 0
         ? images
         : ["https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop"],
-    inStock: inStock !== undefined ? Boolean(inStock) : true,
+    inStock: computedInStock,
+    stockCount: parsedStock,
     rating: 5.0,
     reviewCount: 0,
     isNew: isNew !== undefined ? Boolean(isNew) : true,
@@ -172,7 +179,7 @@ export const createProduct = async (req, res) => {
 // @access  Private/Admin
 export const updateProduct = async (req, res) => {
   const prodId = req.params.id;
-  const { name, category, subcategory, price, originalPrice, description, images, inStock, isNew, isBestseller } =
+  const { name, category, subcategory, price, originalPrice, description, images, inStock, stockCount, isNew, isBestseller } =
     req.body || {};
 
   const cleanName = safeStr(name);
@@ -182,6 +189,9 @@ export const updateProduct = async (req, res) => {
   if (!cleanName || !cleanCategory || isNaN(numPrice) || numPrice <= 0) {
     return res.status(400).json({ error: "Valid name, category, and price are required" });
   }
+
+  const hasStockCount = stockCount !== undefined && stockCount !== "" && !isNaN(Number(stockCount));
+  const parsedStock = hasStockCount ? Math.max(0, parseInt(stockCount, 10)) : undefined;
 
   const updateFields = {
     name: cleanName,
@@ -195,7 +205,8 @@ export const updateProduct = async (req, res) => {
         : undefined,
     description: safeStr(description),
     images: Array.isArray(images) && images.length > 0 ? images : undefined,
-    inStock: inStock !== undefined ? Boolean(inStock) : true,
+    inStock: inStock !== undefined ? Boolean(inStock) : (hasStockCount ? parsedStock > 0 : true),
+    ...(hasStockCount ? { stockCount: parsedStock } : {}),
     isNew: isNew !== undefined ? Boolean(isNew) : false,
     isBestseller: isBestseller !== undefined ? Boolean(isBestseller) : false,
   };

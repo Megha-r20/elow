@@ -107,6 +107,7 @@ export function AdminDashboard() {
         description: "",
         imageUrl: "",
         inStock: true,
+        stockCount: "10",
         isNew: true,
         isBestseller: false,
     });
@@ -121,6 +122,7 @@ export function AdminDashboard() {
         description: "",
         imageUrl: "",
         inStock: true,
+        stockCount: "10",
         isNew: false,
         isBestseller: false,
     });
@@ -135,6 +137,7 @@ export function AdminDashboard() {
             description: p.description || "",
             imageUrl: p.images?.[0] || "",
             inStock: p.inStock ?? true,
+            stockCount: p.stockCount !== undefined ? String(p.stockCount) : "10",
             isNew: p.isNew ?? false,
             isBestseller: p.isBestseller ?? false,
         });
@@ -148,6 +151,7 @@ export function AdminDashboard() {
             return;
         }
         try {
+            const parsedStock = editForm.stockCount !== "" && !isNaN(Number(editForm.stockCount)) ? Math.max(0, parseInt(editForm.stockCount, 10)) : 0;
             const res = await fetch(getApiUrl(`/api/admin/products/${editingProduct.id}`), {
                 method: "PUT",
                 headers: getAuthHeaders("application/json"),
@@ -159,7 +163,8 @@ export function AdminDashboard() {
                     originalPrice: editForm.originalPrice ? Number(editForm.originalPrice) : undefined,
                     description: editForm.description,
                     images: editForm.imageUrl ? [editForm.imageUrl] : editingProduct.images,
-                    inStock: editForm.inStock,
+                    inStock: parsedStock > 0 ? editForm.inStock : false,
+                    stockCount: parsedStock,
                     isNew: editForm.isNew,
                     isBestseller: editForm.isBestseller,
                 }),
@@ -226,6 +231,7 @@ export function AdminDashboard() {
             return;
         }
         try {
+            const parsedStock = newProd.stockCount !== "" && !isNaN(Number(newProd.stockCount)) ? Math.max(0, parseInt(newProd.stockCount, 10)) : 10;
             const res = await fetch(getApiUrl("/api/admin/products"), {
                 method: "POST",
                 headers: getAuthHeaders("application/json"),
@@ -237,7 +243,8 @@ export function AdminDashboard() {
                     originalPrice: newProd.originalPrice ? Number(newProd.originalPrice) : undefined,
                     description: newProd.description,
                     images: newProd.imageUrl ? [newProd.imageUrl] : undefined,
-                    inStock: newProd.inStock,
+                    inStock: parsedStock > 0 ? newProd.inStock : false,
+                    stockCount: parsedStock,
                     isNew: newProd.isNew,
                     isBestseller: newProd.isBestseller,
                 }),
@@ -255,6 +262,7 @@ export function AdminDashboard() {
                     description: "",
                     imageUrl: "",
                     inStock: true,
+                    stockCount: "10",
                     isNew: true,
                     isBestseller: false,
                 });
@@ -646,7 +654,7 @@ export function AdminDashboard() {
                         </td>
                         <td style={{ padding: "14px 12px" }}>
                           <span style={{ fontSize: 11.5, fontWeight: 800, color: p.inStock ? "#8192D4" : "#DC2626", background: p.inStock ? "rgba(129,146,212,0.15)" : "rgba(220,38,38,0.15)", padding: "4px 10px", borderRadius: 999 }}>
-                            {p.inStock ? "In Stock" : "Out of Stock"}
+                            {p.inStock ? `In Stock (${p.stockCount ?? 0})` : `Out of Stock (${p.stockCount ?? 0})`}
                           </span>
                         </td>
                         <td style={{ padding: "14px 12px" }}>
@@ -1135,7 +1143,7 @@ export function AdminDashboard() {
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>PRICE (&#8377;) *</label>
                   <input type="number" required placeholder="1299" value={newProd.price} onChange={e => setNewProd({ ...newProd, price: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}/>
@@ -1143,6 +1151,10 @@ export function AdminDashboard() {
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>ORIGINAL PRICE (&#8377;)</label>
                   <input type="number" placeholder="1599" value={newProd.originalPrice} onChange={e => setNewProd({ ...newProd, originalPrice: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}/>
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>STOCK COUNT</label>
+                  <input type="number" min="0" placeholder="10" value={newProd.stockCount} onChange={e => setNewProd({ ...newProd, stockCount: e.target.value, inStock: Number(e.target.value) > 0 })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}/>
                 </div>
               </div>
 
@@ -1217,7 +1229,7 @@ export function AdminDashboard() {
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>PRICE (&#8377;) *</label>
                   <input type="number" required placeholder="Price" value={editForm.price} onChange={e => setEditForm({ ...editForm, price: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}/>
@@ -1225,6 +1237,10 @@ export function AdminDashboard() {
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>ORIGINAL PRICE (&#8377;)</label>
                   <input type="number" placeholder="Original price" value={editForm.originalPrice} onChange={e => setEditForm({ ...editForm, originalPrice: e.target.value })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}/>
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "block", marginBottom: 6 }}>STOCK COUNT</label>
+                  <input type="number" min="0" placeholder="Stock count" value={editForm.stockCount} onChange={e => setEditForm({ ...editForm, stockCount: e.target.value, inStock: Number(e.target.value) > 0 })} className="field field-sm" style={{ width: "100%", boxSizing: "border-box" }}/>
                 </div>
               </div>
 
