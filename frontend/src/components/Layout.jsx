@@ -131,11 +131,13 @@ export default function Layout() {
                       </div>
                     </div>
                   </div>
-                </div>) : (<Link key={link.label} to={link.path} className={`nav-link${isActive(link.path) ? " active" : ""}`} style={link.path === "/admin"
-                ? { color: isActive(link.path) ? "#AB88CD" : "#AB88CD", fontWeight: 700 }
-                : link.dim
-                    ? { color: "#8C8880", fontWeight: 400 }
-                    : {}}>
+                </div>) : (<Link key={link.label} to={link.path} className={`nav-link${isActive(link.path) ? " active" : ""}`} style={isActive(link.path)
+                ? { color: "#AB88CD", fontWeight: 700 }
+                : link.path === "/admin"
+                    ? { color: "#AB88CD", fontWeight: 700 }
+                    : link.dim
+                        ? { color: "#8C8880", fontWeight: 400 }
+                        : {}}>
                   {link.label}
                 </Link>)))}
           </nav>
