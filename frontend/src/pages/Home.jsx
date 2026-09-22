@@ -20,15 +20,17 @@ const T = {
 export default function Home() {
     useDocumentTitle("Home — Beautiful Stationery");
     const navigate = useNavigate();
+    const [categories, setCategories] = useState(() => CATEGORIES);
     const [featured, setFeatured] = useState(() => PRODUCTS.slice(0, 8));
     const [bestSellers, setBestSellers] = useState(() => PRODUCTS.filter(p => p.isBestseller).slice(0, 8));
 
     useEffect(() => {
         async function fetchHomeProducts() {
             try {
-                const [featRes, bestRes] = await Promise.all([
+                const [featRes, bestRes, catRes] = await Promise.all([
                     fetch(getApiUrl("/api/products?limit=8")),
-                    fetch(getApiUrl("/api/products?filter=bestseller&limit=8"))
+                    fetch(getApiUrl("/api/products?filter=bestseller&limit=8")),
+                    fetch(getApiUrl("/api/categories"))
                 ]);
                 if (featRes.ok) {
                     const featData = await featRes.json();
@@ -40,6 +42,34 @@ export default function Home() {
                     const bestData = await bestRes.json();
                     if (bestData.products && bestData.products.length > 0) {
                         setBestSellers(bestData.products);
+                    }
+                }
+                if (catRes.ok) {
+                    const catData = await catRes.json();
+                    if (Array.isArray(catData) && catData.length > 0) {
+                        const merged = catData.map(c => {
+                            const matchId = (c.id || c.slug || "").toLowerCase();
+                            const defaultCat = CATEGORIES.find(d => {
+                                const did = (d.id || "").toLowerCase();
+                                return did === matchId || matchId.includes(did) || did.includes(matchId);
+                            }) || {};
+                            const rawImg = c.image || defaultCat.image || "";
+                            let finalImg = rawImg.trim();
+                            if (finalImg && !/^https?:\/\//i.test(finalImg) && !finalImg.startsWith("/") && !finalImg.startsWith("data:")) {
+                                finalImg = `https://${finalImg}`;
+                            }
+                            return {
+                                ...defaultCat,
+                                ...c,
+                                id: c.id || c.slug || defaultCat.id,
+                                label: c.label || c.name || defaultCat.label || c.id,
+                                image: finalImg || defaultCat.image,
+                                fallbackImage: defaultCat.fallbackImage || defaultCat.image,
+                                productCount: c.count !== undefined ? c.count : (c.productCount || defaultCat.productCount || 0),
+                                color: defaultCat.color || "#EEE8F8"
+                            };
+                        });
+                        setCategories(merged);
                     }
                 }
             } catch (_err) {
@@ -132,9 +162,10 @@ export default function Home() {
         <div className="container">
           <SectionHead eyebrow="Browse" title="Shop by Category" sub="Find exactly what you need — from journals to desk accessories." right={<button onClick={() => navigate("/shop")} className="btn btn-ghost btn-md" style={{ border: `1px solid ${T.border}` }}>View all <Icons.ArrowRight /></button>}/>
           
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: 16 }}>
-            {CATEGORIES.map(cat => {
-            // Map category ID to lucide icon
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.max(categories.length, 1)}, 1fr)`, gap: 16 }}>
+            {categories.map(cat => {
+            // Map category ID or slug to lucide icon
+            const iconKey = (cat.id || cat.slug || "").toLowerCase();
             const IconComp = {
                 journals: Book,
                 pens: PenTool,
@@ -144,7 +175,12 @@ export default function Home() {
                 notebooks: Notebook,
                 desk: PenBox,
                 gifting: Gift
-            }[cat.id] || Book;
+            }[iconKey] || {
+                "pens-markers": PenTool,
+                "washi-tape": Paperclip,
+                "desk-accessories": PenBox,
+                "gift-combos": Gift
+            }[iconKey] || Book;
             return (<button key={cat.id} className="hover-card" onClick={() => navigate(`/shop?cat=${cat.id}`)} style={{
                     border: "none",
                     background: "#fff",
