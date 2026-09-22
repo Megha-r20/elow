@@ -4,11 +4,11 @@ import { useAuth } from "../context/AuthContext";
 import { getApiUrl } from "../api/config";
 
 const SECTORS = [
-  { label: "₹50 OFF", bg: "#5A6BAF", color: "#FAF7F2" },
+  { label: "₹50 OFF", bg: "#8192D4", color: "#FFFFFF" },
   { label: "₹100 OFF", bg: "#F4EFE6", color: "#23201D" },
-  { label: "NO LUCK", bg: "#3D4977", color: "#FAF7F2" },
+  { label: "NO LUCK", bg: "#9C968D", color: "#FFFFFF" },
   { label: "₹150 OFF", bg: "#D4A359", color: "#23201D" },
-  { label: "₹50 OFF", bg: "#7485C9", color: "#FAF7F2" },
+  { label: "₹50 OFF", bg: "#858BE4", color: "#FFFFFF" },
   { label: "₹250 OFF", bg: "#FAF7F2", color: "#23201D" },
 ];
 
@@ -140,9 +140,9 @@ export function SpinWheelModal({ isOpen, onClose }) {
         style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(20, 24, 40, 0.75)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
+          background: "rgba(35, 32, 29, 0.45)",
+          backdropFilter: "blur(6px)",
+          WebkitBackdropFilter: "blur(6px)",
         }}
       />
 
@@ -156,13 +156,13 @@ export function SpinWheelModal({ isOpen, onClose }) {
           zIndex: 910,
           width: "100%",
           maxWidth: 820,
-          background: "linear-gradient(135deg, #44538C 0%, #2D3766 100%)",
+          background: "#FFFFFF",
           borderRadius: 28,
-          boxShadow: "0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1)",
+          boxShadow: "0 24px 70px rgba(35, 32, 29, 0.18)",
           overflow: "hidden",
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          border: "3px solid rgba(250,247,242,0.85)",
+          border: "1px solid #EAE3D9",
         }}
         className="hide-mobile-grid"
       >
@@ -178,13 +178,13 @@ export function SpinWheelModal({ isOpen, onClose }) {
             width: 36,
             height: 36,
             borderRadius: "50%",
-            background: "#FAF7F2",
-            border: "none",
+            background: "#FFFFFF",
+            border: "1px solid #EAE3D9",
             color: "#23201D",
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: "bold",
             cursor: "pointer",
-            boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
+            boxShadow: "0 4px 12px rgba(35, 32, 29, 0.08)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -205,6 +205,8 @@ export function SpinWheelModal({ isOpen, onClose }) {
             alignItems: "center",
             justifyContent: "center",
             position: "relative",
+            background: "#FAF7F2",
+            borderRight: "1px solid #EAE3D9",
           }}
         >
           {/* Outer Wheel Housing */}
@@ -214,10 +216,11 @@ export function SpinWheelModal({ isOpen, onClose }) {
               width: 320,
               height: 320,
               borderRadius: "50%",
-              background: "#1E2442",
+              background: "#FFFFFF",
               padding: 8,
               boxShadow:
-                "0 20px 50px rgba(0,0,0,0.4), inset 0 0 20px rgba(0,0,0,0.5), 0 0 0 4px rgba(250,247,242,0.3)",
+                "0 14px 40px rgba(35, 32, 29, 0.08), inset 0 0 15px rgba(35, 32, 29, 0.04), 0 0 0 4px #FAF7F2",
+              border: "1px solid #EAE3D9",
             }}
           >
             {/* Spinning SVG Wheel */}
@@ -234,14 +237,14 @@ export function SpinWheelModal({ isOpen, onClose }) {
             >
               <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%", display: "block" }}>
                 {/* Outer Decorative Dark Ring with Lights */}
-                <circle cx="50" cy="50" r="49" fill="#1E2442" stroke="#FAF7F2" strokeWidth="1.2" />
+                <circle cx="50" cy="50" r="49" fill="#FAF7F2" stroke="#EAE3D9" strokeWidth="1.2" />
 
                 {/* Bulbs / Light Dots */}
                 {Array.from({ length: 12 }).map((_, bIdx) => {
                   const bAngle = bIdx * 30;
                   const bx = 50 + 47.2 * Math.cos((Math.PI * bAngle) / 180);
                   const by = 50 + 47.2 * Math.sin((Math.PI * bAngle) / 180);
-                  return <circle key={bIdx} cx={bx} cy={by} r="1.1" fill="#FAF7F2" opacity="0.9" />;
+                  return <circle key={bIdx} cx={bx} cy={by} r="1.1" fill="#8192D4" opacity="0.9" />;
                 })}
 
                 {/* Sectors */}
@@ -264,9 +267,9 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   return (
                     <g key={i}>
                       {/* Sector Slice */}
-                      <path d={pathData} fill={sector.bg} stroke="#FAF7F2" strokeWidth="1" />
+                      <path d={pathData} fill={sector.bg} stroke="#FFFFFF" strokeWidth="1" />
 
-                      {/* Sector Text (Radially Aligned along Sector Ray) */}
+                      {/* Sector Text */}
                       <g transform={`rotate(${midAngle}, 50, 50)`}>
                         <text
                           x="75"
@@ -288,7 +291,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 })}
 
                 {/* Center Hub Outer Ring */}
-                <circle cx="50" cy="50" r="12" fill="#1E2442" stroke="#FAF7F2" strokeWidth="1.2" />
+                <circle cx="50" cy="50" r="12" fill="#23201D" stroke="#FFFFFF" strokeWidth="1.2" />
 
                 {/* Center Hub Inner Badge */}
                 <circle cx="50" cy="50" r="9" fill="#FAF7F2" />
@@ -298,7 +301,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
               </svg>
             </div>
 
-            {/* Pointer / Flapper Indicator (At 3 o'clock pointing left into wheel) */}
+            {/* Pointer / Flapper Indicator */}
             <div
               style={{
                 position: "absolute",
@@ -306,7 +309,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 top: "50%",
                 transform: "translateY(-50%)",
                 zIndex: 20,
-                filter: "drop-shadow(-3px 3px 6px rgba(0,0,0,0.35))",
+                filter: "drop-shadow(-3px 3px 6px rgba(0,0,0,0.15))",
                 pointerEvents: "none",
               }}
             >
@@ -314,11 +317,11 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 <path
                   d="M 36 16 L 4 2 L 12 16 L 4 30 Z"
                   fill="#D4A359"
-                  stroke="#FAF7F2"
+                  stroke="#FFFFFF"
                   strokeWidth="2.5"
                   strokeLinejoin="round"
                 />
-                <circle cx="28" cy="16" r="3.5" fill="#FAF7F2" stroke="#23201D" strokeWidth="1" />
+                <circle cx="28" cy="16" r="3.5" fill="#FFFFFF" stroke="#23201D" strokeWidth="1" />
               </svg>
             </div>
           </div>
@@ -327,11 +330,12 @@ export function SpinWheelModal({ isOpen, onClose }) {
         {/* RIGHT COLUMN: FORM OR WIN STATE */}
         <div
           style={{
-            padding: "40px 36px 40px 20px",
+            padding: "40px 36px 40px 24px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            color: "#FAF7F2",
+            color: "#23201D",
+            background: "#FFFFFF",
           }}
         >
           {wonPrize && hasSpun ? (
@@ -342,7 +346,8 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 padding: "28px 24px",
                 color: "#23201D",
                 textAlign: "center",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+                border: "1px solid #EAE3D9",
+                boxShadow: "0 10px 30px rgba(35,32,29,0.06)",
               }}
             >
               <div style={{ fontSize: 44, marginBottom: 8 }}>🎉 🥳</div>
@@ -350,13 +355,13 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 style={{
                   fontSize: 24,
                   fontWeight: 900,
-                  color: "#5A6BAF",
+                  color: "#8192D4",
                   fontFamily: "'DM Serif Display', serif",
                 }}
               >
                 {wonPrize.code === "TRY_AGAIN" ? "Better Luck Next Time!" : "YOU WON!"}
               </h3>
-              <p style={{ fontSize: 14, color: "#6E6A63", marginTop: 4, fontWeight: 500 }}>
+              <p style={{ fontSize: 14, color: "#78726A", marginTop: 4, fontWeight: 500 }}>
                 {wonPrize.code === "TRY_AGAIN"
                   ? "Don't worry, enjoy shopping our new stationery collection!"
                   : `Use code ${wonPrize.code} to get ${wonPrize.label} on your order.`}
@@ -366,8 +371,8 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 <>
                   <div
                     style={{
-                      background: "#F4EFE6",
-                      border: "2px dashed #5A6BAF",
+                      background: "#FFFFFF",
+                      border: "2px dashed #8192D4",
                       borderRadius: 14,
                       padding: "12px",
                       margin: "18px 0 8px",
@@ -380,7 +385,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                     {wonPrize.code}
                   </div>
                   {wonPrize.minOrderAmount ? (
-                    <p style={{ fontSize: 12.5, color: "#5A6BAF", fontWeight: 700, marginBottom: 16 }}>
+                    <p style={{ fontSize: 12.5, color: "#8192D4", fontWeight: 700, marginBottom: 16 }}>
                       Min. order required: &#8377;{wonPrize.minOrderAmount}
                     </p>
                   ) : null}
@@ -393,14 +398,14 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   style={{
                     width: "100%",
                     padding: "14px",
-                    background: "#5A6BAF",
-                    color: "#FAF7F2",
+                    background: "#8192D4",
+                    color: "#FFFFFF",
                     border: "none",
                     borderRadius: 14,
                     fontSize: 15,
                     fontWeight: 800,
                     cursor: "pointer",
-                    boxShadow: "0 6px 20px rgba(90, 107, 175, 0.35)",
+                    boxShadow: "0 6px 20px rgba(129, 146, 212, 0.35)",
                     transition: "all 0.18s ease",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
@@ -415,7 +420,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                     width: "100%",
                     padding: "12px",
                     background: "#23201D",
-                    color: "#FAF7F2",
+                    color: "#FFFFFF",
                     border: "none",
                     borderRadius: 14,
                     fontSize: 14,
@@ -434,16 +439,15 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   style={{
                     fontSize: 32,
                     fontWeight: 900,
-                    color: "#FAF7F2",
+                    color: "#23201D",
                     fontFamily: "'DM Serif Display', serif",
                     lineHeight: 1.1,
-                    letterSpacing: "0.5px",
-                    textShadow: "0 2px 10px rgba(0,0,0,0.15)",
+                    letterSpacing: "-0.5px",
                   }}
                 >
                   SPIN & WIN! 🥳
                 </h2>
-                <p style={{ fontSize: 13.5, color: "rgba(250,247,242,0.92)", marginTop: 6, fontWeight: 500 }}>
+                <p style={{ fontSize: 13.5, color: "#78726A", marginTop: 6, fontWeight: 500 }}>
                   Spin the wheel and unlock exclusive stationery discounts instantly.
                 </p>
               </div>
@@ -451,8 +455,9 @@ export function SpinWheelModal({ isOpen, onClose }) {
               {errorMsg && (
                 <div
                   style={{
-                    background: "#FAF7F2",
-                    color: "#D9381E",
+                    background: "#FDF2F2",
+                    color: "#9B1C1C",
+                    border: "1px solid #F8B4B4",
                     padding: "8px 12px",
                     borderRadius: 10,
                     fontSize: 12.5,
@@ -478,7 +483,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   color: "#23201D",
                   background: "#FAF7F2",
                   outline: "none",
-                  boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
+                  boxShadow: "0 2px 8px rgba(35, 32, 29, 0.02)",
                 }}
               />
 
@@ -497,7 +502,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   color: "#23201D",
                   background: "#FAF7F2",
                   outline: "none",
-                  boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
+                  boxShadow: "0 2px 8px rgba(35, 32, 29, 0.02)",
                 }}
               />
 
@@ -534,7 +539,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                     color: "#23201D",
                     background: "#FAF7F2",
                     outline: "none",
-                    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
+                    boxShadow: "0 2px 8px rgba(35, 32, 29, 0.02)",
                   }}
                 />
               </div>
@@ -546,15 +551,15 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 style={{
                   width: "100%",
                   padding: "15px",
-                  background: isSpinning ? "#3D4977" : "#23201D",
-                  color: "#FAF7F2",
+                  background: isSpinning ? "#9C968D" : "#23201D",
+                  color: "#FFFFFF",
                   border: "none",
                   borderRadius: 16,
-                  fontSize: 17,
-                  fontWeight: 900,
+                  fontSize: 16,
+                  fontWeight: 800,
                   letterSpacing: "1px",
                   cursor: isSpinning ? "not-allowed" : "pointer",
-                  boxShadow: "0 8px 24px rgba(35, 32, 29, 0.4)",
+                  boxShadow: "0 8px 24px rgba(35, 32, 29, 0.2)",
                   marginTop: 6,
                   transition: "all 0.18s ease",
                 }}
@@ -568,7 +573,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 {isSpinning ? "SPINNING... 🌀" : "SPIN NOW"}
               </button>
 
-              <p style={{ fontSize: 10.5, color: "rgba(250,247,242,0.8)", textAlign: "center" }}>
+              <p style={{ fontSize: 10.5, color: "#78726A", textAlign: "center" }}>
                 By entering, you agree to receive stationery updates and offers from elow.
               </p>
             </form>
