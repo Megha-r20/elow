@@ -74,9 +74,9 @@ export function Stars({ n, size = 12, showCount, count }) {
 }
 /* ─── Badge ─────────────────────────────────────────────────────── */
 const BADGE_STYLES = {
-    teal: { bg: "#858BE4", color: "#fff" },
-    lavender: { bg: "#858BE4", color: "#fff" },
-    yellow: { bg: "#858BE4", color: "#fff" },
+    teal: { bg: "#AB88CD", color: "#fff" },
+    lavender: { bg: "#AB88CD", color: "#fff" },
+    yellow: { bg: "#AB88CD", color: "#fff" },
     red: { bg: "#D97762", color: "#fff" },
     terracotta: { bg: "#D97762", color: "#fff" },
     pink: { bg: "#E8A598", color: "#fff" },
@@ -110,8 +110,8 @@ export function SectionHead({ eyebrow, title, sub, right, center, }) {
         }}>
       <div style={{ flex: 1 }}>
         {eyebrow && (<div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, justifyContent: center ? "center" : "flex-start" }}>
-            <span style={{ display: "inline-block", width: 18, height: 1.5, background: "#858BE4" }}/>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#858BE4", letterSpacing: "2px", textTransform: "uppercase" }}>{eyebrow}</span>
+            <span style={{ display: "inline-block", width: 18, height: 1.5, background: "#AB88CD" }}/>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#AB88CD", letterSpacing: "2px", textTransform: "uppercase" }}>{eyebrow}</span>
           </div>)}
         <h2 className="font-display" style={{ fontSize: 32, fontWeight: 400, color: "#23201D", lineHeight: 1.12, letterSpacing: "-0.3px" }}>
           {title}

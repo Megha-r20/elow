@@ -90,7 +90,7 @@ export function ProductCard({ product, compact = false }) {
                     {cleanSubcategory}
                 </p>
 
-                <h3 className={`font-semibold text-[#23201D] leading-snug line-clamp-1 ${compact ? "text-xs mb-1" : "text-[15px] mb-1"} group-hover:text-[#858BE4] transition-colors`}>
+                <h3 className={`font-semibold text-[#23201D] leading-snug line-clamp-1 ${compact ? "text-xs mb-1" : "text-[15px] mb-1"} group-hover:text-[#AB88CD] transition-colors`}>
                     {product.name}
                 </h3>
 

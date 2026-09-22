@@ -8,7 +8,7 @@ const SECTORS = [
   { label: "₹100 OFF", bg: "#F4EFE6", color: "#23201D" },
   { label: "NO LUCK", bg: "#9C968D", color: "#FFFFFF" },
   { label: "₹150 OFF", bg: "#D4A359", color: "#23201D" },
-  { label: "₹50 OFF", bg: "#858BE4", color: "#FFFFFF" },
+  { label: "₹50 OFF", bg: "#AB88CD", color: "#FFFFFF" },
   { label: "₹250 OFF", bg: "#FAF7F2", color: "#23201D" },
 ];
 
