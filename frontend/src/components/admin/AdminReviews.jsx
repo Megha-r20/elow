@@ -138,9 +138,9 @@ export function AdminReviews({
                       style={{
                         fontSize: 10.5,
                         fontWeight: 800,
-                        background: isApproved ? "rgba(129,146,212,0.15)" : "#FEF3C7",
-                        color: isApproved ? "#8192D4" : "#D97706",
-                        border: isApproved ? "1px solid rgba(129,146,212,0.3)" : "1px solid #FDE68A",
+                        background: isApproved ? "rgba(171, 136, 205,0.15)" : "#FEF3C7",
+                        color: isApproved ? "#AB88CD" : "#D97706",
+                        border: isApproved ? "1px solid rgba(171, 136, 205,0.3)" : "1px solid #FDE68A",
                         padding: "2px 8px",
                         borderRadius: 999,
                       }}
@@ -167,7 +167,7 @@ export function AdminReviews({
                     <button
                       onClick={() => handleApproveReview(r.id || r._id)}
                       style={{
-                        background: "#8192D4",
+                        background: "#AB88CD",
                         color: "#FFFFFF",
                         border: "none",
                         padding: "8px 18px",
@@ -175,7 +175,7 @@ export function AdminReviews({
                         fontSize: 12.5,
                         fontWeight: 700,
                         cursor: "pointer",
-                        boxShadow: "0 2px 8px rgba(129,146,212,0.3)",
+                        boxShadow: "0 2px 8px rgba(171, 136, 205,0.3)",
                       }}
                     >
                       ✓ Accept Review

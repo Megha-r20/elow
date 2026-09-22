@@ -6,7 +6,7 @@ import { useCart, useWishlist, useToast, useDrawer, useDocumentTitle } from "../
 import { Stars, Badge, Price, Breadcrumb, QtyStepper, Divider, Icons, SectionHead } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { getApiUrl } from "../api/config";
-const T = { teal: "#8192D4", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
+const T = { teal: "#AB88CD", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", border: "#EAE3D9", sand: "#F4EFE6", cream: "#FAF7F2" };
 export default function ProductDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -259,7 +259,7 @@ export default function ProductDetail() {
                           {r.avatar ? (
                             <img src={r.avatar} alt={r.name} style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", border: `1px solid ${T.border}` }}/>
                           ) : (
-                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#8192D4", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 700 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#AB88CD", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 700 }}>
                               {r.name?.[0] || "U"}
                             </div>
                           )}

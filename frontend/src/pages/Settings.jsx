@@ -85,7 +85,7 @@ export default function Settings() {
       <div className="container" style={{ maxWidth: 860 }}>
         {/* Header */}
         <div style={{ marginBottom: 32 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#EBF3EF", border: "1px solid rgba(129,146,212,0.3)", color: "#8192D4", padding: "4px 14px", borderRadius: 999, fontSize: 11.5, fontWeight: 700, letterSpacing: "1px", marginBottom: 10 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#EBF3EF", border: "1px solid rgba(171, 136, 205,0.3)", color: "#AB88CD", padding: "4px 14px", borderRadius: 999, fontSize: 11.5, fontWeight: 700, letterSpacing: "1px", marginBottom: 10 }}>
             ⚙️ USER ACCOUNT & SETTINGS
           </div>
           <h1 style={{ fontSize: 32, fontWeight: 800, color: "#23201D", letterSpacing: "-0.5px" }}>
@@ -100,13 +100,13 @@ export default function Settings() {
           {/* Card 1: Account Summary Overview */}
           <div style={{ background: "#FFFFFF", borderRadius: 24, padding: "28px 32px", border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.03)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-              <div style={{ width: 58, height: 58, borderRadius: "50%", background: user.role === "admin" ? "#1C1C1A" : "#8192D4", color: "#FFFFFF", fontSize: 24, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: 58, height: 58, borderRadius: "50%", background: user.role === "admin" ? "#1C1C1A" : "#AB88CD", color: "#FFFFFF", fontSize: 24, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {user.name.charAt(0).toUpperCase()}
               </div>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>{user.name}</h3>
-                  <span style={{ fontSize: 10, fontWeight: 800, background: user.role === "admin" ? "#1C1C1A" : "#8192D4", color: "#FFFFFF", padding: "3px 10px", borderRadius: 999, textTransform: "uppercase" }}>
+                  <span style={{ fontSize: 10, fontWeight: 800, background: user.role === "admin" ? "#1C1C1A" : "#AB88CD", color: "#FFFFFF", padding: "3px 10px", borderRadius: 999, textTransform: "uppercase" }}>
                     {user.role}
                   </span>
                 </div>

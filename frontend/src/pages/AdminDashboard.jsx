@@ -399,14 +399,14 @@ export function AdminDashboard() {
             return { color: "#16A34A", bg: "rgba(22,163,74,0.12)", border: "rgba(22,163,74,0.3)" };
         if (s === "shipped")
             return { color: "#2563EB", bg: "rgba(37,99,235,0.12)", border: "rgba(37,99,235,0.3)" };
-        return { color: "#8192D4", bg: "rgba(129,146,212,0.15)", border: "rgba(129,146,212,0.3)" };
+        return { color: "#AB88CD", bg: "rgba(171, 136, 205,0.15)", border: "rgba(171, 136, 205,0.3)" };
     };
     return (<div style={{ background: "#FAF7F2", minHeight: "100vh", paddingBottom: 80 }}>
       {/* Banner */}
       <div style={{ background: "#1C1C1A", color: "#FAF7F2", padding: "48px 0 36px", borderBottom: "1px solid #383430", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
         <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
           <div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(129,146,212,0.22)", border: "1px solid rgba(129,146,212,0.4)", color: "#8EBAA3", padding: "5px 14px", borderRadius: 999, fontSize: 11.5, fontWeight: 700, letterSpacing: "1px", marginBottom: 12 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(171, 136, 205,0.22)", border: "1px solid rgba(171, 136, 205,0.4)", color: "#8EBAA3", padding: "5px 14px", borderRadius: 999, fontSize: 11.5, fontWeight: 700, letterSpacing: "1px", marginBottom: 12 }}>
               ⚡ ELOW ADMIN CONTROL CENTER
             </div>
             <h1 style={{ fontSize: 34, fontWeight: 700, color: "#FFFFFF", letterSpacing: "-0.5px" }}>
@@ -421,7 +421,7 @@ export function AdminDashboard() {
             <button onClick={() => { fetchOrders(); fetchProducts(); fetchReviews(); addToast("Refreshed live store data"); }} className="btn" style={{ background: "rgba(255,255,255,0.08)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.15)", padding: "12px 20px", borderRadius: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.15s" }}>
               🔄 Refresh Data
             </button>
-            <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "12px 22px", borderRadius: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 8, border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(129,146,212,0.3)" }}>
+            <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#AB88CD", color: "#FFFFFF", padding: "12px 22px", borderRadius: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 8, border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(171, 136, 205,0.3)" }}>
               + Add New Product
             </button>
             <Link to="/shop" className="btn" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.2)", color: "#FFFFFF", padding: "12px 20px", borderRadius: 12, fontWeight: 600, textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}>
@@ -437,13 +437,13 @@ export function AdminDashboard() {
           <div style={{ background: "#FFFFFF", borderRadius: 22, padding: "24px", border: "1px solid #EAE3D9", boxShadow: "0 8px 24px rgba(35,32,29,0.04)", transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)", cursor: "default" }} onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-3px)")} onMouseLeave={e => (e.currentTarget.style.transform = "translateY(0)")}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <span style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1.2px", textTransform: "uppercase" }}>TOTAL REVENUE</span>
-              <div style={{ width: 38, height: 38, borderRadius: 12, background: "#EBF3EF", color: "#8192D4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>💳</div>
+              <div style={{ width: 38, height: 38, borderRadius: 12, background: "#EBF3EF", color: "#AB88CD", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>💳</div>
             </div>
             <h3 style={{ fontSize: 32, fontWeight: 800, color: "#23201D", marginTop: 2, letterSpacing: "-0.5px" }}>
               &#8377;{totalRevenue.toLocaleString("en-IN")}
             </h3>
-            <p style={{ fontSize: 12.5, color: "#8192D4", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ background: "rgba(129,146,212,0.18)", width: 18, height: 18, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10 }}>✓</span>
+            <p style={{ fontSize: 12.5, color: "#AB88CD", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
+              <span style={{ background: "rgba(171, 136, 205,0.18)", width: 18, height: 18, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10 }}>✓</span>
               From {totalOrdersCount} store orders
             </p>
           </div>
@@ -456,8 +456,8 @@ export function AdminDashboard() {
             <h3 style={{ fontSize: 32, fontWeight: 800, color: "#23201D", marginTop: 2, letterSpacing: "-0.5px" }}>
               {totalOrdersCount} Orders
             </h3>
-            <p style={{ fontSize: 12.5, color: "#8192D4", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#8192D4", display: "inline-block" }}/>
+            <p style={{ fontSize: 12.5, color: "#AB88CD", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#AB88CD", display: "inline-block" }}/>
               Live customer tracking
             </p>
           </div>

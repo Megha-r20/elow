@@ -9,8 +9,8 @@ export default function FAQ() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const T = {
-    purple: "#8192D4",
-    purpleDark: "#6C7CC1",
+    purple: "#AB88CD",
+    purpleDark: "#9873BB",
     cream: "#FAF7F2",
     sand: "#F4EFE6",
     border: "#EAE3D9",
@@ -115,8 +115,8 @@ export default function FAQ() {
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
-              background: "rgba(129, 146, 212, 0.12)",
-              border: "1px solid rgba(129, 146, 212, 0.3)",
+              background: "rgba(171, 136, 205, 0.12)",
+              border: "1px solid rgba(171, 136, 205, 0.3)",
               borderRadius: 999,
               padding: "6px 18px",
               marginBottom: 20,
@@ -210,7 +210,7 @@ export default function FAQ() {
                   fontWeight: 600,
                   cursor: "pointer",
                   transition: "all 0.15s ease",
-                  boxShadow: isActive ? "0 4px 14px rgba(129, 146, 212, 0.3)" : "none",
+                  boxShadow: isActive ? "0 4px 14px rgba(171, 136, 205, 0.3)" : "none",
                 }}
               >
                 {c.label}

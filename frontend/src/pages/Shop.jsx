@@ -526,7 +526,7 @@ export default function Shop() {
                         ))}
                         <button
                             onClick={clearAll}
-                            style={{ border: "none", background: "none", color: "#8192D4", fontSize: 12, fontWeight: 600, cursor: "pointer", textDecoration: "underline", marginLeft: 4 }}
+                            style={{ border: "none", background: "none", color: "#AB88CD", fontSize: 12, fontWeight: 600, cursor: "pointer", textDecoration: "underline", marginLeft: 4 }}
                         >
                             Clear all
                         </button>

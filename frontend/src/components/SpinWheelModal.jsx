@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { getApiUrl } from "../api/config";
 
 const SECTORS = [
-  { label: "₹50 OFF", bg: "#8192D4", color: "#FFFFFF" },
+  { label: "₹50 OFF", bg: "#AB88CD", color: "#FFFFFF" },
   { label: "₹100 OFF", bg: "#F4EFE6", color: "#23201D" },
   { label: "NO LUCK", bg: "#9C968D", color: "#FFFFFF" },
   { label: "₹150 OFF", bg: "#D4A359", color: "#23201D" },
@@ -244,7 +244,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   const bAngle = bIdx * 30;
                   const bx = 50 + 47.2 * Math.cos((Math.PI * bAngle) / 180);
                   const by = 50 + 47.2 * Math.sin((Math.PI * bAngle) / 180);
-                  return <circle key={bIdx} cx={bx} cy={by} r="1.1" fill="#8192D4" opacity="0.9" />;
+                  return <circle key={bIdx} cx={bx} cy={by} r="1.1" fill="#AB88CD" opacity="0.9" />;
                 })}
 
                 {/* Sectors */}
@@ -355,7 +355,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                 style={{
                   fontSize: 24,
                   fontWeight: 900,
-                  color: "#8192D4",
+                  color: "#AB88CD",
                   fontFamily: "'DM Serif Display', serif",
                 }}
               >
@@ -372,7 +372,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   <div
                     style={{
                       background: "#FFFFFF",
-                      border: "2px dashed #8192D4",
+                      border: "2px dashed #AB88CD",
                       borderRadius: 14,
                       padding: "12px",
                       margin: "18px 0 8px",
@@ -385,7 +385,7 @@ export function SpinWheelModal({ isOpen, onClose }) {
                     {wonPrize.code}
                   </div>
                   {wonPrize.minOrderAmount ? (
-                    <p style={{ fontSize: 12.5, color: "#8192D4", fontWeight: 700, marginBottom: 16 }}>
+                    <p style={{ fontSize: 12.5, color: "#AB88CD", fontWeight: 700, marginBottom: 16 }}>
                       Min. order required: &#8377;{wonPrize.minOrderAmount}
                     </p>
                   ) : null}
@@ -398,14 +398,14 @@ export function SpinWheelModal({ isOpen, onClose }) {
                   style={{
                     width: "100%",
                     padding: "14px",
-                    background: "#8192D4",
+                    background: "#AB88CD",
                     color: "#FFFFFF",
                     border: "none",
                     borderRadius: 14,
                     fontSize: 15,
                     fontWeight: 800,
                     cursor: "pointer",
-                    boxShadow: "0 6px 20px rgba(129, 146, 212, 0.35)",
+                    boxShadow: "0 6px 20px rgba(171, 136, 205, 0.35)",
                     transition: "all 0.18s ease",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}

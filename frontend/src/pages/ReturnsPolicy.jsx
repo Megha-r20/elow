@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function ReturnsPolicy() {
   const navigate = useNavigate();
-  const T = { purple: "#8192D4", cream: "#FAF7F2", border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63" };
+  const T = { purple: "#AB88CD", cream: "#FAF7F2", border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63" };
 
   return (
     <div style={{ background: T.cream, minHeight: "100vh", padding: "60px 0 100px" }}>

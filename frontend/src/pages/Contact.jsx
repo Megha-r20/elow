@@ -4,7 +4,7 @@ import { Mail, Phone, ArrowLeft } from "lucide-react";
 export default function Contact() {
   const navigate = useNavigate();
   const T = {
-    purple: "#8192D4",
+    purple: "#AB88CD",
     cream: "#FAF7F2",
     sand: "#F4EFE6",
     border: "#EAE3D9",

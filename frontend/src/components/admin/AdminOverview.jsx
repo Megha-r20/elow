@@ -9,7 +9,7 @@ const T = {
   light: "#9C968D",
   sand: "#F4EFE6",
   cream: "#FAF7F2",
-  teal: "#8192D4",
+  teal: "#AB88CD",
 };
 
 export function AdminOverview({ orders = [], products = [], setTab, getStatusBadgeStyle, token }) {
@@ -92,7 +92,7 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
                 fontSize: 11,
                 fontWeight: 700,
                 padding: "4px 12px",
-                background: "rgba(129, 146, 212, 0.15)",
+                background: "rgba(171, 136, 205, 0.15)",
                 color: T.teal,
                 borderRadius: 999,
                 display: "inline-flex",
@@ -118,8 +118,8 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
               <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} style={{ width: "100%", height: 160, overflow: "visible" }}>
                 <defs>
                   <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#8192D4" stopOpacity="0.35" />
-                    <stop offset="100%" stopColor="#8192D4" stopOpacity="0.0" />
+                    <stop offset="0%" stopColor="#AB88CD" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#AB88CD" stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
 
@@ -128,11 +128,11 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
                 <line x1="20" y1={chartHeight - 30} x2={chartWidth - 20} y2={chartHeight - 30} stroke="#EAE3D9" strokeDasharray="4 4" />
 
                 <path d={areaPath} fill="url(#revenueGradient)" />
-                <path d={svgPath} fill="none" stroke="#8192D4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                <path d={svgPath} fill="none" stroke="#AB88CD" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
 
                 {points.map((p, idx) => (
                   <g key={idx} style={{ cursor: "pointer" }}>
-                    <circle cx={p.x} cy={p.y} r="4" fill="#FFFFFF" stroke="#8192D4" strokeWidth="2.5" />
+                    <circle cx={p.x} cy={p.y} r="4" fill="#FFFFFF" stroke="#AB88CD" strokeWidth="2.5" />
                     <title>{`${p.date}: ₹${p.revenue.toLocaleString("en-IN")}`}</title>
                   </g>
                 ))}

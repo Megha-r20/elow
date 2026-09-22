@@ -9,7 +9,7 @@ const T = {
   light: "#9C968D",
   sand: "#F4EFE6",
   cream: "#FAF7F2",
-  teal: "#8192D4",
+  teal: "#AB88CD",
 };
 
 export default function AdminPromo({ token, showToast }) {
@@ -294,7 +294,7 @@ export default function AdminPromo({ token, showToast }) {
                           borderRadius: 999,
                           fontSize: 11,
                           fontWeight: 700,
-                          background: p.isActive !== false ? "rgba(129, 146, 212, 0.15)" : T.sand,
+                          background: p.isActive !== false ? "rgba(171, 136, 205, 0.15)" : T.sand,
                           color: p.isActive !== false ? T.teal : T.muted,
                         }}
                       >

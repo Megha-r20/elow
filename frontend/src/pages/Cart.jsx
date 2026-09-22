@@ -4,7 +4,7 @@ import { Breadcrumb, QtyStepper, ShippingProgress, Icons, Divider } from "../com
 import { ProductCard } from "../components/ProductCard";
 import { useState, useEffect } from "react";
 import { getApiUrl } from "../api/config";
-const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4" };
+const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#AB88CD" };
 export default function Cart() {
     useDocumentTitle("Shopping Cart");
     const navigate = useNavigate();

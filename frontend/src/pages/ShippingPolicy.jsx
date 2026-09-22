@@ -5,8 +5,8 @@ export default function ShippingPolicy() {
   const navigate = useNavigate();
 
   const T = {
-    purple: "#8192D4",
-    purpleDark: "#6C7CC1",
+    purple: "#AB88CD",
+    purpleDark: "#9873BB",
     cream: "#FAF7F2",
     sand: "#F4EFE6",
     border: "#EAE3D9",
@@ -69,8 +69,8 @@ export default function ShippingPolicy() {
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
-              background: "rgba(129, 146, 212, 0.12)",
-              border: "1px solid rgba(129, 146, 212, 0.3)",
+              background: "rgba(171, 136, 205, 0.12)",
+              border: "1px solid rgba(171, 136, 205, 0.3)",
               borderRadius: 999,
               padding: "6px 18px",
               marginBottom: 20,
@@ -128,7 +128,7 @@ export default function ShippingPolicy() {
                   width: 48,
                   height: 48,
                   borderRadius: 14,
-                  background: "rgba(129, 146, 212, 0.1)",
+                  background: "rgba(171, 136, 205, 0.1)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -269,7 +269,7 @@ export default function ShippingPolicy() {
         <div
           style={{
             marginTop: 48,
-            background: "linear-gradient(135deg, #8192D4 0%, #6C7CC1 100%)",
+            background: "linear-gradient(135deg, #AB88CD 0%, #9873BB 100%)",
             borderRadius: 20,
             padding: "32px 40px",
             color: "#FFFFFF",

@@ -10,7 +10,7 @@ const T = {
   light: "#9C968D",
   sand: "#F4EFE6",
   cream: "#FAF7F2",
-  teal: "#8192D4",
+  teal: "#AB88CD",
 };
 
 export default function AdminCategories({ token, showToast }) {
@@ -298,7 +298,7 @@ export default function AdminCategories({ token, showToast }) {
                           borderRadius: 999,
                           fontSize: 11,
                           fontWeight: 700,
-                          background: cat.isActive !== false ? "rgba(129, 146, 212, 0.15)" : T.sand,
+                          background: cat.isActive !== false ? "rgba(171, 136, 205, 0.15)" : T.sand,
                           color: cat.isActive !== false ? T.teal : T.muted,
                         }}
                       >

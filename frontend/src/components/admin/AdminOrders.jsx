@@ -79,7 +79,7 @@ export function AdminOrders({
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, marginBottom: 16 }}>
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>ORDER ID</span>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "#AB88CD", letterSpacing: "1px" }}>ORDER ID</span>
                       <span style={{ fontSize: 11, fontWeight: 800, color: bStyle.color, background: bStyle.bg, border: `1px solid ${bStyle.border}`, padding: "2px 10px", borderRadius: 999 }}>
                         ● {o.status || "Processing"}
                       </span>
@@ -148,7 +148,7 @@ export function AdminOrders({
                     <p style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1px", marginBottom: 6 }}>ORDER SUMMARY</p>
                     <p style={{ fontSize: 13, color: "#23201D", lineHeight: 1.6 }}>
                       Payment Method: <span style={{ fontWeight: 800, textTransform: "uppercase" }}>{o.payMethod}</span><br />
-                      Total Amount: <strong style={{ fontSize: 16, color: "#8192D4" }}>&#8377;{o.total?.toLocaleString("en-IN")}</strong>
+                      Total Amount: <strong style={{ fontSize: 16, color: "#AB88CD" }}>&#8377;{o.total?.toLocaleString("en-IN")}</strong>
                     </p>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export function AdminOrders({
                             <p style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>{item.product?.name || "Product"}</p>
                             <p style={{ fontSize: 11, color: "#9C968D" }}>&#8377;{item.product?.price || 0}</p>
                           </div>
-                          <span style={{ fontSize: 11.5, fontWeight: 800, color: "#8192D4", background: "rgba(129,146,212,0.12)", padding: "2px 8px", borderRadius: 6, marginLeft: 4 }}>
+                          <span style={{ fontSize: 11.5, fontWeight: 800, color: "#AB88CD", background: "rgba(171, 136, 205,0.12)", padding: "2px 8px", borderRadius: 6, marginLeft: 4 }}>
                             x{item.qty || 1}
                           </span>
                         </div>

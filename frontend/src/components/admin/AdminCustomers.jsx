@@ -9,7 +9,7 @@ const T = {
   light: "#9C968D",
   sand: "#F4EFE6",
   cream: "#FAF7F2",
-  teal: "#8192D4",
+  teal: "#AB88CD",
 };
 
 export default function AdminCustomers({ token, showToast }) {
@@ -165,7 +165,7 @@ export default function AdminCustomers({ token, showToast }) {
                               width: 40,
                               height: 40,
                               borderRadius: "50%",
-                              background: isAdmin ? "rgba(129, 146, 212, 0.2)" : T.sand,
+                              background: isAdmin ? "rgba(171, 136, 205, 0.2)" : T.sand,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
@@ -229,7 +229,7 @@ export default function AdminCustomers({ token, showToast }) {
                             borderRadius: 999,
                             fontSize: 11,
                             fontWeight: 700,
-                            background: isAdmin ? "rgba(129, 146, 212, 0.15)" : T.sand,
+                            background: isAdmin ? "rgba(171, 136, 205, 0.15)" : T.sand,
                             color: isAdmin ? T.teal : T.muted,
                           }}
                         >

@@ -154,7 +154,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: "1.5px",
-                color: "#8192D4",
+                color: "#AB88CD",
                 textTransform: "uppercase",
               }}
             >
@@ -206,8 +206,8 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
               background: "none",
               cursor: "pointer",
               fontFamily: "inherit",
-              color: mode === "login" ? "#8192D4" : "#9C968D",
-              borderBottom: `2.5px solid ${mode === "login" ? "#8192D4" : "transparent"}`,
+              color: mode === "login" ? "#AB88CD" : "#9C968D",
+              borderBottom: `2.5px solid ${mode === "login" ? "#AB88CD" : "transparent"}`,
               transition: "all 0.2s ease",
             }}
           >
@@ -229,8 +229,8 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
               background: "none",
               cursor: "pointer",
               fontFamily: "inherit",
-              color: mode === "signup" ? "#8192D4" : "#9C968D",
-              borderBottom: `2.5px solid ${mode === "signup" ? "#8192D4" : "transparent"}`,
+              color: mode === "signup" ? "#AB88CD" : "#9C968D",
+              borderBottom: `2.5px solid ${mode === "signup" ? "#AB88CD" : "transparent"}`,
               transition: "all 0.2s ease",
             }}
           >
@@ -303,7 +303,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
                   className="btn btn-dark btn-md btn-full"
                   style={{
                     marginTop: 8,
-                    background: "#8192D4",
+                    background: "#AB88CD",
                     color: "#FFFFFF",
                     borderRadius: 12,
                     padding: "13px",
@@ -320,7 +320,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
                       setMode("login");
                       setError(null);
                     }}
-                    style={{ background: "none", border: "none", color: "#8192D4", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}
+                    style={{ background: "none", border: "none", color: "#AB88CD", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}
                   >
                     ← Back to Sign In
                   </button>
@@ -531,7 +531,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
                           setMode("forgot");
                           setError(null);
                         }}
-                        style={{ background: "none", border: "none", color: "#8192D4", fontSize: 11.5, fontWeight: 600, cursor: "pointer" }}
+                        style={{ background: "none", border: "none", color: "#AB88CD", fontSize: 11.5, fontWeight: 600, cursor: "pointer" }}
                       >
                         Forgot Password?
                       </button>
@@ -572,7 +572,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }) {
                   className="btn btn-dark btn-md btn-full"
                   style={{
                     marginTop: 8,
-                    background: role === "admin" ? "#23201D" : "#8192D4",
+                    background: role === "admin" ? "#23201D" : "#AB88CD",
                     color: "#FFFFFF",
                     borderRadius: 12,
                     padding: "13px",

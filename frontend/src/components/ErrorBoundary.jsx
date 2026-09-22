@@ -74,7 +74,7 @@ export class ErrorBoundary extends React.Component {
               <button
                 onClick={this.handleReset}
                 style={{
-                  background: "#8192D4",
+                  background: "#AB88CD",
                   color: "#FFFFFF",
                   border: "none",
                   padding: "12px 24px",
@@ -82,7 +82,7 @@ export class ErrorBoundary extends React.Component {
                   fontWeight: 700,
                   fontSize: 14,
                   cursor: "pointer",
-                  boxShadow: "0 4px 14px rgba(129,146,212,0.3)",
+                  boxShadow: "0 4px 14px rgba(171, 136, 205,0.3)",
                 }}
               >
                 🔄 Try Again

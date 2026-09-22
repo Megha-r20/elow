@@ -62,7 +62,7 @@ export function AdminProductModals({
           <div role="dialog" aria-modal="true" aria-label="Add New Product" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 520, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>INVENTORY</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#AB88CD", letterSpacing: "1px" }}>INVENTORY</span>
                 <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>+ Add New Product</h3>
               </div>
               <button onClick={() => setShowAddModal(false)} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 34, height: 34, border: "none", cursor: "pointer" }} aria-label="Close add product modal">
@@ -113,7 +113,7 @@ export function AdminProductModals({
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <span>IMAGE URL (Pinterest supported)</span>
-                  {resolvingAdd && <span style={{ fontSize: 11, color: "#8192D4", fontWeight: 600 }}>✨ Resolving Pinterest Image...</span>}
+                  {resolvingAdd && <span style={{ fontSize: 11, color: "#AB88CD", fontWeight: 600 }}>✨ Resolving Pinterest Image...</span>}
                 </label>
                 <input
                   type="text"
@@ -169,7 +169,7 @@ export function AdminProductModals({
                 </label>
               </div>
 
-              <button type="submit" disabled={resolvingAdd} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: resolvingAdd ? "wait" : "pointer" }}>
+              <button type="submit" disabled={resolvingAdd} className="btn" style={{ background: "#AB88CD", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: resolvingAdd ? "wait" : "pointer" }}>
                 {resolvingAdd ? "Resolving Pinterest Image..." : "Add Product to Store Catalog"}
               </button>
             </form>
@@ -184,7 +184,7 @@ export function AdminProductModals({
           <div role="dialog" aria-modal="true" aria-label="Edit Product" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 520, maxWidth: "92vw", maxHeight: "90vh", background: "#FFFFFF", zIndex: 850, borderRadius: 24, padding: 28, overflowY: "auto", border: "1px solid #EAE3D9", boxShadow: "0 24px 64px rgba(35,32,29,0.25)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", letterSpacing: "1px" }}>EDIT PRODUCT</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#AB88CD", letterSpacing: "1px" }}>EDIT PRODUCT</span>
                 <h3 style={{ fontSize: 20, fontWeight: 800, color: "#23201D" }}>Edit #{editingProduct.id}</h3>
               </div>
               <button onClick={() => setEditingProduct(null)} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 34, height: 34, border: "none", cursor: "pointer" }} aria-label="Close edit product modal">
@@ -235,7 +235,7 @@ export function AdminProductModals({
               <div>
                 <label style={{ fontSize: 12, fontWeight: 700, color: "#23201D", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <span>IMAGE URL (Pinterest supported)</span>
-                  {resolvingEdit && <span style={{ fontSize: 11, color: "#8192D4", fontWeight: 600 }}>✨ Resolving Pinterest Image...</span>}
+                  {resolvingEdit && <span style={{ fontSize: 11, color: "#AB88CD", fontWeight: 600 }}>✨ Resolving Pinterest Image...</span>}
                 </label>
                 <input
                   type="text"
@@ -291,7 +291,7 @@ export function AdminProductModals({
                 </label>
               </div>
 
-              <button type="submit" disabled={resolvingEdit} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: resolvingEdit ? "wait" : "pointer" }}>
+              <button type="submit" disabled={resolvingEdit} className="btn" style={{ background: "#AB88CD", color: "#FFFFFF", padding: "14px", borderRadius: 12, fontWeight: 700, border: "none", marginTop: 12, cursor: resolvingEdit ? "wait" : "pointer" }}>
                 {resolvingEdit ? "Resolving Pinterest Image..." : "Save Product Changes"}
               </button>
             </form>

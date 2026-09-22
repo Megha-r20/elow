@@ -4,7 +4,7 @@ import { useCart, useToast } from "../hooks";
 import { useAuth } from "../context/AuthContext";
 import { StepBar, Breadcrumb, Icons, Divider } from "../components/ui";
 import { getApiUrl } from "../api/config";
-const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#8192D4" };
+const T = { border: "#EAE3D9", txt: "#23201D", muted: "#6E6A63", light: "#9C968D", sand: "#F4EFE6", cream: "#FAF7F2", teal: "#AB88CD" };
 const INIT_FORM = {
     firstName: "", lastName: "", email: "", phone: "",
     address: "", city: "", state: "Maharashtra", pincode: "",
@@ -349,7 +349,7 @@ export default function Checkout() {
                   <div
                     style={{
                       background: "#F2F7F4",
-                      border: "1px dashed #8192D4",
+                      border: "1px dashed #AB88CD",
                       borderRadius: 12,
                       padding: "10px 14px",
                       display: "flex",
@@ -358,7 +358,7 @@ export default function Checkout() {
                     }}
                   >
                     <div>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: "#8192D4", letterSpacing: "0.5px" }}>COUPON APPLIED</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#AB88CD", letterSpacing: "0.5px" }}>COUPON APPLIED</span>
                       <p style={{ fontSize: 14, fontWeight: 800, color: T.txt }}>{promoCode} (-₹{discount.toLocaleString("en-IN")})</p>
                     </div>
                     <button

@@ -142,7 +142,7 @@ export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
             />
           </div>
           <div>
-            <span style={{ fontSize: 11, fontWeight: 800, color: "#8192D4", textTransform: "uppercase", letterSpacing: "1px" }}>
+            <span style={{ fontSize: 11, fontWeight: 800, color: "#AB88CD", textTransform: "uppercase", letterSpacing: "1px" }}>
               Verified Purchase
             </span>
             <h3 style={{ fontSize: 15, fontWeight: 700, color: "#23201D", margin: "2px 0 0" }}>
@@ -204,7 +204,7 @@ export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
                   </button>
                 );
               })}
-              <span style={{ fontSize: 14, fontWeight: 700, color: "#8192D4", marginLeft: 8 }}>
+              <span style={{ fontSize: 14, fontWeight: 700, color: "#AB88CD", marginLeft: 8 }}>
                 {rating === 5
                   ? "5.0 — Excellent!"
                   : rating === 4
@@ -270,14 +270,14 @@ export function ReviewModal({ isOpen, onClose, product, orderId, user }) {
             style={{
               width: "100%",
               padding: "14px",
-              background: "#8192D4",
+              background: "#AB88CD",
               color: "#FFFFFF",
               border: "none",
               borderRadius: 14,
               fontSize: 15,
               fontWeight: 800,
               cursor: submitting ? "not-allowed" : "pointer",
-              boxShadow: "0 4px 16px rgba(129, 146, 212, 0.3)",
+              boxShadow: "0 4px 16px rgba(171, 136, 205, 0.3)",
               transition: "transform 0.15s ease",
             }}
             onMouseEnter={(e) => {

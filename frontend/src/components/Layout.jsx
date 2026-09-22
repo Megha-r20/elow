@@ -78,9 +78,9 @@ export default function Layout() {
           {[0, 1].map(k => (<span key={k} style={{ display: "flex", alignItems: "center" }}>
               {ANNOUNCE.map((m, i) => (<span key={m} style={{ display: "flex", alignItems: "center" }}>
                   <span style={{ fontSize: 11.5, fontWeight: 500, color: "rgba(255,255,255,0.82)", whiteSpace: "nowrap" }}>{m}</span>
-                  {i < ANNOUNCE.length - 1 && <span style={{ color: "#8192D4", margin: "0 24px", fontSize: 10 }}>✦</span>}
+                  {i < ANNOUNCE.length - 1 && <span style={{ color: "#AB88CD", margin: "0 24px", fontSize: 10 }}>✦</span>}
                 </span>))}
-              <span style={{ color: "#8192D4", margin: "0 24px", fontSize: 10 }}>✦</span>
+              <span style={{ color: "#AB88CD", margin: "0 24px", fontSize: 10 }}>✦</span>
             </span>))}
         </div>
       </div>
@@ -120,19 +120,19 @@ export default function Layout() {
                 { h: "COLLECTIONS", ls: ["The Journaling Edit", "Study Essentials", "Pastel Dreams", "Korean Desk Set"] },
             ].map(col => (<div key={col.h}>
                           <p style={{ fontSize: 9.5, fontWeight: 700, color: "#B8B4AE", letterSpacing: "2px", marginBottom: 14 }}>{col.h}</p>
-                          {col.ls.map(l => (<Link key={l} to="/shop" style={{ display: "block", fontSize: 13.5, fontWeight: 500, color: "#1C1C1A", textDecoration: "none", padding: "7px 0", borderBottom: "1px solid #F5F0E8", transition: "color 0.13s, padding-left 0.15s" }} onMouseEnter={e => { const el = e.currentTarget; el.style.color = "#8192D4"; el.style.paddingLeft = "6px"; }} onMouseLeave={e => { const el = e.currentTarget; el.style.color = "#1C1C1A"; el.style.paddingLeft = "0"; }}>{l}</Link>))}
+                          {col.ls.map(l => (<Link key={l} to="/shop" style={{ display: "block", fontSize: 13.5, fontWeight: 500, color: "#1C1C1A", textDecoration: "none", padding: "7px 0", borderBottom: "1px solid #F5F0E8", transition: "color 0.13s, padding-left 0.15s" }} onMouseEnter={e => { const el = e.currentTarget; el.style.color = "#AB88CD"; el.style.paddingLeft = "6px"; }} onMouseLeave={e => { const el = e.currentTarget; el.style.color = "#1C1C1A"; el.style.paddingLeft = "0"; }}>{l}</Link>))}
                         </div>))}
                       <div style={{ borderRadius: 14, overflow: "hidden" }}>
                         <div style={{ height: 160, background: "#F5F0E8", borderRadius: 14, overflow: "hidden" }}>
                           <img src={CATEGORIES[0].image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
                         </div>
                         <p style={{ fontSize: 12, fontWeight: 700, color: "#1C1C1A", marginTop: 10 }}>The Journaling Edit</p>
-                        <Link to="/shop" style={{ fontSize: 12, color: "#8192D4", textDecoration: "none", fontWeight: 600 }}>Shop now →</Link>
+                        <Link to="/shop" style={{ fontSize: 12, color: "#AB88CD", textDecoration: "none", fontWeight: 600 }}>Shop now →</Link>
                       </div>
                     </div>
                   </div>
                 </div>) : (<Link key={link.label} to={link.path} className={`nav-link${isActive(link.path) ? " active" : ""}`} style={link.path === "/admin"
-                ? { color: isActive(link.path) ? "#8192D4" : "#8192D4", fontWeight: 700 }
+                ? { color: isActive(link.path) ? "#AB88CD" : "#AB88CD", fontWeight: 700 }
                 : link.dim
                     ? { color: "#8C8880", fontWeight: 400 }
                     : {}}>
@@ -166,7 +166,7 @@ export default function Layout() {
                 width: 28,
                 height: 28,
                 borderRadius: "50%",
-                background: "#8192D4",
+                background: "#AB88CD",
                 color: "#FFFFFF",
                 fontSize: 12,
                 fontWeight: 800,
@@ -179,7 +179,7 @@ export default function Layout() {
                   <span style={{ fontSize: 13, fontWeight: 700, color: isAdmin ? "#FFFFFF" : "#23201D" }}>
                     {user.name.split(" ")[0]}
                   </span>
-                  {isAdmin && (<span style={{ fontSize: 9.5, fontWeight: 800, background: "#8192D4", color: "#FFFFFF", padding: "2px 7px", borderRadius: 999, letterSpacing: "0.5px" }}>
+                  {isAdmin && (<span style={{ fontSize: 9.5, fontWeight: 800, background: "#AB88CD", color: "#FFFFFF", padding: "2px 7px", borderRadius: 999, letterSpacing: "0.5px" }}>
                       ADMIN
                     </span>)}
                   <span style={{ fontSize: 10, opacity: 0.6, marginLeft: 2 }}>▼</span>
@@ -221,7 +221,7 @@ export default function Layout() {
                         padding: "10px 12px",
                         fontSize: 12.5,
                         fontWeight: 700,
-                        color: "#8192D4",
+                        color: "#AB88CD",
                         background: "#F2F7F4",
                         borderRadius: 10,
                         border: "none",
@@ -338,8 +338,8 @@ export default function Layout() {
               <Link to="/shipping" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Shipping Policy</Link>
               <Link to="/faq" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>FAQ</Link>
               <Link to="/shop?filter=wishlist" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#1C1C1A", textDecoration: "none" }}>Wishlist</Link>
-              {isAdmin && (<Link to="/admin" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#8192D4", textDecoration: "none" }}>⚡ Admin Portal</Link>)}
-              {user ? (<button onClick={() => { setMobileNav(false); logout(); addToast("Logged out"); }} style={{ fontSize: 16, fontWeight: 700, color: "#DC2626", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>Sign Out</button>) : (<button onClick={() => { setMobileNav(false); setAuthModalOpen(true); }} style={{ fontSize: 16, fontWeight: 700, color: "#8192D4", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>Sign In / Register</button>)}
+              {isAdmin && (<Link to="/admin" onClick={() => setMobileNav(false)} style={{ fontSize: 16, fontWeight: 700, color: "#AB88CD", textDecoration: "none" }}>⚡ Admin Portal</Link>)}
+              {user ? (<button onClick={() => { setMobileNav(false); logout(); addToast("Logged out"); }} style={{ fontSize: 16, fontWeight: 700, color: "#DC2626", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>Sign Out</button>) : (<button onClick={() => { setMobileNav(false); setAuthModalOpen(true); }} style={{ fontSize: 16, fontWeight: 700, color: "#AB88CD", background: "none", border: "none", textAlign: "left", cursor: "pointer", padding: 0 }}>Sign In / Register</button>)}
             </div>
           </div>
         </>)}
@@ -373,7 +373,7 @@ export default function Layout() {
                 <input autoFocus className="field" value={searchQ} onChange={e => setSearchQ(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && searchQ.trim()) {
             setSearchOpen(false);
             navigate(`/shop?q=${encodeURIComponent(searchQ.trim())}`);
-        } }} placeholder="Search journals, pens, washi tape, stickers…" style={{ flex: 1, fontSize: 17, border: "none", borderBottom: "2px solid #8192D4", borderRadius: 0, padding: "8px 0", background: "transparent" }}/>
+        } }} placeholder="Search journals, pens, washi tape, stickers…" style={{ flex: 1, fontSize: 17, border: "none", borderBottom: "2px solid #AB88CD", borderRadius: 0, padding: "8px 0", background: "transparent" }}/>
                 <button onClick={() => setSearchOpen(false)} className="icon-btn" style={{ background: "#F4EFE6", borderRadius: "50%", width: 38, height: 38 }}>
                   <Icons.Close />
                 </button>
@@ -532,12 +532,12 @@ export default function Layout() {
                   minWidth: 200,
                   transition: "border-color 0.15s",
                 }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#8192D4")}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "#AB88CD")}
                 onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
               />
               <button
                 style={{
-                  background: "#8192D4",
+                  background: "#AB88CD",
                   color: "#FAF7F2",
                   border: "none",
                   borderRadius: 8,
@@ -548,8 +548,8 @@ export default function Layout() {
                   transition: "all 0.15s ease",
                 }}
                 onClick={() => addToast("Subscribed to newsletter!", "success")}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#6C7CC1")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "#8192D4")}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#9873BB")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#AB88CD")}
               >
                 Subscribe
               </button>
@@ -614,7 +614,7 @@ export default function Layout() {
       </footer>
 
       {/* Back to top */}
-      <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ position: "fixed", bottom: 28, right: 28, zIndex: 400, width: 44, height: 44, background: "#1C1C1A", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 24px rgba(0,0,0,0.25)", transition: "transform 0.18s, background 0.18s" }} onMouseEnter={e => { const el = e.currentTarget; el.style.transform = "translateY(-3px)"; el.style.background = "#8192D4"; }} onMouseLeave={e => { const el = e.currentTarget; el.style.transform = "translateY(0)"; el.style.background = "#1C1C1A"; }}>
+      <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ position: "fixed", bottom: 28, right: 28, zIndex: 400, width: 44, height: 44, background: "#1C1C1A", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 24px rgba(0,0,0,0.25)", transition: "transform 0.18s, background 0.18s" }} onMouseEnter={e => { const el = e.currentTarget; el.style.transform = "translateY(-3px)"; el.style.background = "#AB88CD"; }} onMouseLeave={e => { const el = e.currentTarget; el.style.transform = "translateY(0)"; el.style.background = "#1C1C1A"; }}>
         ↑
       </button>
     </div>);

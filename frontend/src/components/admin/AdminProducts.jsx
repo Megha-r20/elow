@@ -30,7 +30,7 @@ export function AdminProducts({
             <option value="accessories">Accessories</option>
           </select>
 
-          <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#8192D4", color: "#FFFFFF", padding: "10px 20px", borderRadius: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
+          <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#AB88CD", color: "#FFFFFF", padding: "10px 20px", borderRadius: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
             + Add Product
           </button>
         </div>
@@ -73,7 +73,7 @@ export function AdminProducts({
                     {p.originalPrice && <span style={{ fontSize: 11.5, color: "#9C968D", textDecoration: "line-through", marginLeft: 6 }}>&#8377;{p.originalPrice}</span>}
                   </td>
                   <td style={{ padding: "14px 12px" }}>
-                    <span style={{ fontSize: 11.5, fontWeight: 800, color: p.inStock ? "#8192D4" : "#DC2626", background: p.inStock ? "rgba(129,146,212,0.15)" : "rgba(220,38,38,0.15)", padding: "4px 10px", borderRadius: 999 }}>
+                    <span style={{ fontSize: 11.5, fontWeight: 800, color: p.inStock ? "#AB88CD" : "#DC2626", background: p.inStock ? "rgba(171, 136, 205,0.15)" : "rgba(220,38,38,0.15)", padding: "4px 10px", borderRadius: 999 }}>
                       {p.inStock ? `In Stock (${p.stockCount ?? 0})` : `Out of Stock (${p.stockCount ?? 0})`}
                     </span>
                   </td>
@@ -85,7 +85,7 @@ export function AdminProducts({
                   </td>
                   <td style={{ padding: "14px 12px", textAlign: "right" }}>
                     <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                      <button onClick={() => openEditModal(p)} style={{ background: "#FAF7F2", color: "#8192D4", border: "1px solid #8192D4", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#8192D4"; e.currentTarget.style.color = "#FFFFFF"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#FAF7F2"; e.currentTarget.style.color = "#8192D4"; }}>
+                      <button onClick={() => openEditModal(p)} style={{ background: "#FAF7F2", color: "#AB88CD", border: "1px solid #AB88CD", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#AB88CD"; e.currentTarget.style.color = "#FFFFFF"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#FAF7F2"; e.currentTarget.style.color = "#AB88CD"; }}>
                         ✏️ Edit
                       </button>
                       <button onClick={() => handleDeleteProduct(p.id, p.name)} style={{ background: "#FDF2F2", color: "#DC2626", border: "1px solid #F8B4B4", padding: "7px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, cursor: "pointer", transition: "all 0.15s" }}>

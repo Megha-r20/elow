@@ -15,8 +15,8 @@ export default function OrderTracking() {
 
 
   const T = {
-    purple: "#8192D4",
-    purpleDark: "#6C7CC1",
+    purple: "#AB88CD",
+    purpleDark: "#9873BB",
     cream: "#FAF7F2",
     sand: "#F4EFE6",
     border: "#EAE3D9",
@@ -172,8 +172,8 @@ export default function OrderTracking() {
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
-              background: "rgba(129, 146, 212, 0.12)",
-              border: "1px solid rgba(129, 146, 212, 0.3)",
+              background: "rgba(171, 136, 205, 0.12)",
+              border: "1px solid rgba(171, 136, 205, 0.3)",
               borderRadius: 999,
               padding: "6px 18px",
               marginBottom: 20,
@@ -340,7 +340,7 @@ export default function OrderTracking() {
                   </h2>
                   <span
                     style={{
-                      background: activeOrder.status === "Delivered" ? "#E8F5E9" : "rgba(129, 146, 212, 0.15)",
+                      background: activeOrder.status === "Delivered" ? "#E8F5E9" : "rgba(171, 136, 205, 0.15)",
                       color: activeOrder.status === "Delivered" ? "#2E7D32" : T.purple,
                       padding: "4px 12px",
                       borderRadius: 999,
