@@ -7,7 +7,7 @@ export const CATEGORIES = [
     { id: "stickers", label: "Stickers", image: u("photo-1775884078872-3de6e7bded55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"), productCount: 31, color: "#FFF0DC" },
     { id: "planners", label: "Planners", image: u("photo-1711030239034-d7dbf7f2794d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"), productCount: 9, color: "#E5F5EC" },
     { id: "notebooks", label: "Notebooks", image: u("photo-1760720962384-e470ee773c1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"), productCount: 16, color: "#F8F0E0" },
-    { id: "desk", label: "Desk Accessories", image: u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"), productCount: 11, color: "#E5EEFF" },
+    { id: "desk", label: "Desk Accessories", image: "/desk-accessories.jpg", productCount: 11, color: "#E5EEFF" },
     { id: "gifting", label: "Gift Combos", image: "/gift-combo.jpg", productCount: 50, color: "#FDEFEF" },
 ];
 
