@@ -3,7 +3,7 @@ const u = (id, w = 600, h = 600) => `https://images.unsplash.com/${id}&w=${w}&h=
 export const CATEGORIES = [
     { id: "journals", label: "Journals", image: "/journals.jpg", productCount: 14, color: "#EEE8F8" },
     { id: "pens", label: "Pens & Markers", image: "/pens-markers.jpg", productCount: 22, color: "#FFE8EC" },
-    { id: "washi", label: "Washi Tape", image: u("photo-1731575131547-d1f74ba73f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"), productCount: 18, color: "#DFF5F3" },
+    { id: "washi", label: "Washi Tape", image: "/washi-tape.jpg", productCount: 18, color: "#DFF5F3" },
     { id: "stickers", label: "Stickers", image: "/stickers.jpg", productCount: 31, color: "#FFF0DC" },
     { id: "planners", label: "Planners", image: "/planners.jpg", productCount: 9, color: "#E5F5EC" },
     { id: "notebooks", label: "Notebooks", image: "/notebooks.jpg", productCount: 16, color: "#F8F0E0" },
