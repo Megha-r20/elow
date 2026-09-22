@@ -288,7 +288,7 @@ export const forgotPassword = async (req, res) => {
   user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour expiry
   await user.save();
 
-  logger.info(`[Password Reset Requested] Email: ${user.email}, Token: ${rawToken}`);
+  logger.info(`[Password Reset Requested] Email: ${user.email}`);
 
   sendPasswordResetEmail(user.email, rawToken).catch((err) => {
     logger.error(`[Email Dispatch Error] ${err.message}`);
