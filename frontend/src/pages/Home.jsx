@@ -157,8 +157,10 @@ export default function Home() {
                     boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
                     paddingBottom: 20
                 }}>
-                  <div style={{ position: "relative", width: "100%", height: 175, marginBottom: 32, overflow: "hidden", borderRadius: "16px 16px 0 0" }}>
-                    <img src={cat.image} alt={cat.label} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 25%", imageRendering: "-webkit-optimize-contrast", display: "block", transition: "transform 0.35s ease" }}/>
+                  <div style={{ position: "relative", width: "100%", height: 175, marginBottom: 32 }}>
+                    <div style={{ width: "100%", height: "100%", overflow: "hidden", borderRadius: "16px 16px 0 0" }}>
+                      <img src={cat.image} alt={cat.label} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 25%", imageRendering: "-webkit-optimize-contrast", display: "block", transition: "transform 0.35s ease" }}/>
+                    </div>
                     <div style={{
                     width: 48,
                     height: 48,
@@ -173,7 +175,7 @@ export default function Home() {
                     left: "50%",
                     transform: "translateX(-50%)",
                     zIndex: 10,
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
                 }}>
                       <IconComp size={20} strokeWidth={2} style={{ color: "rgba(0,0,0,0.6)" }}/>
                     </div>
