@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Plus, Search, Edit3, Trash2, Tag, Check, X, RefreshCw } from "lucide-react";
 import { resolvePinterestImage, normalizeImageUrl } from "../../utils/imageUtils";
 import { getApiUrl } from "../../api/config";
+import { useAuth } from "../../context/AuthContext";
 
 const T = {
   border: "#EAE3D9",
@@ -14,6 +15,7 @@ const T = {
 };
 
 export default function AdminCategories({ token, showToast }) {
+  const { authFetch } = useAuth();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -37,9 +39,7 @@ export default function AdminCategories({ token, showToast }) {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await fetch(getApiUrl("/api/admin/categories"), {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await authFetch(getApiUrl("/api/admin/categories"));
       if (res.ok) {
         const data = await res.json();
         setCategories(data);
@@ -87,11 +87,10 @@ export default function AdminCategories({ token, showToast }) {
         : getApiUrl("/api/admin/categories");
       const method = editingCategory ? "PUT" : "POST";
 
-      const res = await fetch(url, {
+      const res = await authFetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(form),
       });
@@ -115,9 +114,8 @@ export default function AdminCategories({ token, showToast }) {
     if (!window.confirm(`Are you sure you want to delete category "${catName}"?`)) return;
 
     try {
-      const res = await fetch(getApiUrl(`/api/admin/categories/${catId}`), {
+      const res = await authFetch(getApiUrl(`/api/admin/categories/${catId}`), {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (res.ok && data.success) {

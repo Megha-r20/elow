@@ -31,9 +31,12 @@ const defaultAllowedOrigins = [
   "http://127.0.0.1:5173",
 ];
 
-const allowedOrigins = process.env.FRONTEND_URL
-  ? process.env.FRONTEND_URL.split(",").map((url) => url.trim().replace(/\/$/, "")).filter(Boolean)
-  : defaultAllowedOrigins;
+const getAllowedOrigins = () => {
+  const envOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(",").map((url) => url.trim().replace(/\/$/, "")).filter(Boolean)
+    : [];
+  return Array.from(new Set([...envOrigins, ...defaultAllowedOrigins]));
+};
 
 app.use(
   cors({
@@ -42,7 +45,8 @@ app.use(
       if (!origin) return callback(null, true);
 
       const cleanOrigin = origin.trim().replace(/\/$/, "");
-      const isAllowed = allowedOrigins.includes(cleanOrigin);
+      const currentAllowed = getAllowedOrigins();
+      const isAllowed = currentAllowed.includes(cleanOrigin);
 
       if (isAllowed) {
         callback(null, true);

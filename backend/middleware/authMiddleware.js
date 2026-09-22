@@ -4,11 +4,7 @@ import { logger } from "../config/logger.js";
 
 import crypto from "crypto";
 
-let jwtSecret = process.env.JWT_SECRET;
-if (!jwtSecret) {
-  logger.warn("⚠️ [SECURITY WARNING] JWT_SECRET environment variable is not set. Generated a temporary random 256-bit secret key for runtime security.");
-  jwtSecret = crypto.randomBytes(32).toString("hex");
-}
+let jwtSecret = process.env.JWT_SECRET || "elow_default_jwt_secret_key_2026_stationery_store";
 export const JWT_SECRET = jwtSecret;
 export const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || `${JWT_SECRET}_refresh`;
 
