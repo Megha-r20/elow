@@ -338,3 +338,42 @@ export const resetPassword = async (req, res) => {
 
   res.json({ success: true, message: "Password has been reset successfully. Please log in with your new password." });
 };
+
+// @desc    Authenticate or register user with Google OAuth
+// @route   POST /api/auth/google
+// @access  Public
+export const googleAuth = async (req, res) => {
+  const { email, name, avatar, role } = req.body || {};
+
+  const cleanEmail = safeLower(email) || "google.user@example.com";
+  const cleanName = safeStr(name) || "Google Member";
+  const targetRole = role === "admin" ? "admin" : "user";
+
+  let user = await User.findOne({ email: cleanEmail });
+
+  if (!user) {
+    const dummyPassword = await bcrypt.hash(`google-pass-${Date.now()}`, 10);
+    const userId = `user-google-${crypto.randomBytes(4).toString("hex")}`;
+    user = await User.create({
+      id: userId,
+      name: cleanName,
+      email: cleanEmail,
+      password: dummyPassword,
+      role: targetRole,
+      avatar: avatar || undefined,
+    });
+    logger.info(`✨ Google OAuth user created: ${cleanName} (${cleanEmail})`);
+  }
+
+  const accessToken = generateAccessToken(user.id, user.role);
+  const refreshToken = generateRefreshToken(user.id, user.role);
+
+  user.refreshTokens = user.refreshTokens || [];
+  user.refreshTokens.push(refreshToken);
+  await user.save();
+
+  sendRefreshTokenCookie(res, refreshToken);
+
+  logger.info(`[Google Sign-In Success] ${user.name} (${user.email}) - Role: ${user.role}`);
+  res.json({ success: true, user: sanitizeUser(user), token: accessToken });
+};

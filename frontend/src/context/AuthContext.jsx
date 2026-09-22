@@ -124,6 +124,31 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
+    const googleLogin = useCallback(async (role = "user", customEmail, customName) => {
+        try {
+            const res = await fetch(getApiUrl("/api/auth/google"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({
+                    email: customEmail || "google.user@example.com",
+                    name: customName || "Ritika Sharma",
+                    role: role,
+                }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                return { success: false, error: data.error || "Google authentication failed" };
+            }
+            try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
+            setToken(data.token);
+            setUser(data.user);
+            return { success: true, user: data.user };
+        } catch (err) {
+            return { success: false, error: err.message || "Network error during Google Sign In" };
+        }
+    }, []);
+
     const updateProfile = useCallback(async (data) => {
         if (!token)
             return { success: false, error: "Not authenticated" };
@@ -189,6 +214,7 @@ export function AuthProvider({ children }) {
             loading,
             login,
             register,
+            googleLogin,
             updateProfile,
             logout,
             authFetch,
