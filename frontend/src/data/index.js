@@ -1,14 +1,14 @@
 const u = (id, w = 600, h = 600) => `https://images.unsplash.com/${id}&w=${w}&h=${h}&fit=crop&q=82`;
 
 export const CATEGORIES = [
-    { id: "journals", label: "Journals", image: "/journals.jpg", productCount: 14, color: "#EEE8F8" },
-    { id: "pens", label: "Pens & Markers", image: "/pens-markers.jpg", productCount: 22, color: "#FFE8EC" },
-    { id: "washi", label: "Washi Tape", image: "/washi-tape.jpg", productCount: 18, color: "#DFF5F3" },
-    { id: "stickers", label: "Stickers", image: "/stickers.jpg", productCount: 31, color: "#FFF0DC" },
-    { id: "planners", label: "Planners", image: "/planners.jpg", productCount: 9, color: "#E5F5EC" },
-    { id: "notebooks", label: "Notebooks", image: "/notebooks.jpg", productCount: 16, color: "#F8F0E0" },
-    { id: "desk", label: "Desk Accessories", image: "/desk-accessories.jpg", productCount: 11, color: "#E5EEFF" },
-    { id: "gifting", label: "Gift Combos", image: "/gift-combo.jpg", productCount: 50, color: "#FDEFEF" },
+    { id: "journals", label: "Journals", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800", fallbackImage: "/journals.jpg", productCount: 14, color: "#EEE8F8" },
+    { id: "pens", label: "Pens & Markers", image: "https://images.unsplash.com/photo-1725953386283-d918bb2ac9bb?auto=format&fit=crop&q=80&w=800", fallbackImage: "/pens-markers.jpg", productCount: 22, color: "#FFE8EC" },
+    { id: "washi", label: "Washi Tape", image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=800", fallbackImage: "/washi-tape.jpg", productCount: 18, color: "#DFF5F3" },
+    { id: "stickers", label: "Stickers", image: "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?auto=format&fit=crop&q=80&w=800", fallbackImage: "/stickers.jpg", productCount: 31, color: "#FFF0DC" },
+    { id: "planners", label: "Planners", image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=800", fallbackImage: "/planners.jpg", productCount: 9, color: "#E5F5EC" },
+    { id: "notebooks", label: "Notebooks", image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&q=80&w=800", fallbackImage: "/notebooks.jpg", productCount: 16, color: "#F8F0E0" },
+    { id: "desk", label: "Desk Accessories", image: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&q=80&w=800", fallbackImage: "/desk-accessories.jpg", productCount: 11, color: "#E5EEFF" },
+    { id: "gifting", label: "Gift Combos", image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=800", fallbackImage: "/gift-combo.jpg", productCount: 50, color: "#FDEFEF" },
 ];
 
 export const REVIEWS = [
