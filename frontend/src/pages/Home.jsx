@@ -157,8 +157,8 @@ export default function Home() {
                     boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
                     paddingBottom: 20
                 }}>
-                  <div style={{ position: "relative", width: "100%", height: 160, marginBottom: 32 }}>
-                    <img src={cat.image} alt={cat.label} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "16px 16px 0 0", display: "block" }}/>
+                  <div style={{ position: "relative", width: "100%", height: 175, marginBottom: 32, overflow: "hidden", borderRadius: "16px 16px 0 0" }}>
+                    <img src={cat.image} alt={cat.label} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 25%", imageRendering: "-webkit-optimize-contrast", display: "block", transition: "transform 0.35s ease" }}/>
                     <div style={{
                     width: 48,
                     height: 48,
