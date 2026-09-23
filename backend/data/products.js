@@ -3,6 +3,634 @@ const u = (id, w = 600, h = 600) =>
 
 export const PRODUCTS = [
   {
+    "id": "P048",
+    "name": "Lavender Weekly Planner",
+    "shortName": "Lavender Weekly Planner",
+    "category": "planners",
+    "subcategory": "Weekly Planners",
+    "price": 499,
+    "originalPrice": 649,
+    "rating": 4.4,
+    "reviewCount": 73,
+    "images": [
+      "https://i.pinimg.com/736x/ca/62/fa/ca62faf946122e9c98f76ac7a1255bb2.jpg",
+      "https://pin.it/5bNOfo88x"
+    ],
+    "tags": [
+      "planners",
+      "weekly planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Undated weekly planner with a soft lavender aesthetic and spacious layout.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Weekly Planners",
+      "Stock: 26 items available"
+    ],
+    "inStock": true,
+    "stockCount": 26
+  },
+  {
+    "id": "P049",
+    "name": "Productivity Planner",
+    "shortName": "Productivity Planner",
+    "category": "planners",
+    "subcategory": "Productivity Planners",
+    "price": 599,
+    "originalPrice": 749,
+    "rating": 4.7,
+    "reviewCount": 96,
+    "images": [
+      "https://i.pinimg.com/736x/27/fe/9e/27fe9e2082b59c6441a95d52494b9173.jpg",
+      "https://pin.it/5DPPwvZes"
+    ],
+    "tags": [
+      "planners",
+      "productivity planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "badge": "NEW",
+    "badgeVariant": "teal",
+    "isNew": true,
+    "isBestseller": false,
+    "description": "Structured planner for organizing priorities, tasks and weekly goals.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Productivity Planners",
+      "Stock: 19 items available"
+    ],
+    "inStock": true,
+    "stockCount": 19
+  },
+  {
+    "id": "P050",
+    "name": "Aesthetic Daily Planner",
+    "shortName": "Aesthetic Daily Planner",
+    "category": "planners",
+    "subcategory": "Daily Planners",
+    "price": 449,
+    "originalPrice": 599,
+    "rating": 4.3,
+    "reviewCount": 34,
+    "images": [
+      "https://i.pinimg.com/736x/64/b3/1b/64b31b88e47cfa4314bb741452c803ee.jpg",
+      "https://pin.it/F1S2y0fNI"
+    ],
+    "tags": [
+      "planners",
+      "daily planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Minimal daily planner designed for clean and organized schedules.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Daily Planners",
+      "Stock: 28 items available"
+    ],
+    "inStock": true,
+    "stockCount": 28
+  },
+  {
+    "id": "P051",
+    "name": "Student Study Planner",
+    "shortName": "Student Study Planner",
+    "category": "planners",
+    "subcategory": "Student Planners",
+    "price": 399,
+    "originalPrice": 499,
+    "rating": 4.6,
+    "reviewCount": 57,
+    "images": [
+      "https://i.pinimg.com/736x/0b/e1/b1/0be1b1fcad8acd0b26224d79f8200046.jpg",
+      "https://pin.it/6JIHR3vok"
+    ],
+    "tags": [
+      "planners",
+      "student planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Student-friendly planner for classes, assignments, exams and study sessions.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Student Planners",
+      "Stock: 37 items available"
+    ],
+    "inStock": true,
+    "stockCount": 37
+  },
+  {
+    "id": "P052",
+    "name": "Dream Goals Planner",
+    "shortName": "Dream Goals Planner",
+    "category": "planners",
+    "subcategory": "Goal Planners",
+    "price": 549,
+    "originalPrice": 699,
+    "rating": 4.9,
+    "reviewCount": 80,
+    "images": [
+      "https://i.pinimg.com/736x/c8/3a/12/c83a12a1a57ca986bc331dd4eeae48b8.jpg",
+      "https://pin.it/2yvOeMtQe"
+    ],
+    "tags": [
+      "planners",
+      "goal planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "badge": "BESTSELLER",
+    "badgeVariant": "yellow",
+    "isNew": false,
+    "isBestseller": true,
+    "description": "Goal-setting planner with sections for milestones and action steps.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Goal Planners",
+      "Stock: 18 items available"
+    ],
+    "inStock": true,
+    "stockCount": 18
+  },
+  {
+    "id": "P053",
+    "name": "Purple Academic Planner",
+    "shortName": "Purple Academic Planner",
+    "category": "planners",
+    "subcategory": "Academic Planners",
+    "price": 649,
+    "originalPrice": 799,
+    "rating": 4.5,
+    "reviewCount": 18,
+    "images": [
+      "https://i.pinimg.com/736x/2b/87/a1/2b87a1a80fd1482f81f839b7941ddc0d.jpg",
+      "https://pin.it/6JnfAVrQe"
+    ],
+    "tags": [
+      "planners",
+      "academic planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Academic planner designed around semesters, deadlines and study goals.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Academic Planners",
+      "Stock: 23 items available"
+    ],
+    "inStock": true,
+    "stockCount": 23
+  },
+  {
+    "id": "P054",
+    "name": "Monthly Reset Planner",
+    "shortName": "Monthly Reset Planner",
+    "category": "planners",
+    "subcategory": "Monthly Planners",
+    "price": 429,
+    "originalPrice": 549,
+    "rating": 4.8,
+    "reviewCount": 41,
+    "images": [
+      "https://i.pinimg.com/736x/d6/e2/98/d6e29831cd62db49f49c5cc0ace72b26.jpg",
+      "https://pin.it/4AE96Wz8I"
+    ],
+    "tags": [
+      "planners",
+      "monthly planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Monthly planner for routines, priorities, goals and personal resets.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Monthly Planners",
+      "Stock: 31 items available"
+    ],
+    "inStock": true,
+    "stockCount": 31
+  },
+  {
+    "id": "P055",
+    "name": "Self-Care Planner",
+    "shortName": "Self-Care Planner",
+    "category": "planners",
+    "subcategory": "Wellness Planners",
+    "price": 499,
+    "originalPrice": 649,
+    "rating": 4.4,
+    "reviewCount": 64,
+    "images": [
+      "https://i.pinimg.com/736x/14/ed/09/14ed09630b70043191e0c5a8a86bf26c.jpg",
+      "https://pin.it/15L839R7A"
+    ],
+    "tags": [
+      "planners",
+      "wellness planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "badge": "NEW",
+    "badgeVariant": "teal",
+    "isNew": true,
+    "isBestseller": false,
+    "description": "Gentle planning system for habits, routines and personal wellbeing.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Wellness Planners",
+      "Stock: 20 items available"
+    ],
+    "inStock": true,
+    "stockCount": 20
+  },
+  {
+    "id": "P056",
+    "name": "Undated Life Planner",
+    "shortName": "Undated Life Planner",
+    "category": "planners",
+    "subcategory": "Life Planners",
+    "price": 699,
+    "originalPrice": 899,
+    "rating": 4.7,
+    "reviewCount": 87,
+    "images": [
+      "https://i.pinimg.com/736x/b0/b1/7a/b0b17ad24eafa7ad6e00b1a98c4e590e.jpg",
+      "https://pin.it/6W1VjxIdm"
+    ],
+    "tags": [
+      "planners",
+      "life planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Flexible undated planner for organizing personal and professional life.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Life Planners",
+      "Stock: 12 items available"
+    ],
+    "inStock": true,
+    "stockCount": 12
+  },
+  {
+    "id": "P057",
+    "name": "Content Creator Planner",
+    "shortName": "Content Creator Planner",
+    "category": "planners",
+    "subcategory": "Creative Planners",
+    "price": 579,
+    "originalPrice": 729,
+    "rating": 4.3,
+    "reviewCount": 25,
+    "images": [
+      "https://i.pinimg.com/736x/9f/dd/ca/9fddcabc637525c858a9ff268c896ec9.jpg",
+      "https://pin.it/VD88E0cWN"
+    ],
+    "tags": [
+      "planners",
+      "creative planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "badge": "BESTSELLER",
+    "badgeVariant": "yellow",
+    "isNew": false,
+    "isBestseller": true,
+    "description": "Planner for content ideas, posting schedules and creative projects.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Creative Planners",
+      "Stock: 16 items available"
+    ],
+    "inStock": true,
+    "stockCount": 16
+  },
+  {
+    "id": "P058",
+    "name": "Budget & Savings Planner",
+    "shortName": "Budget & Savings Planner",
+    "category": "planners",
+    "subcategory": "Finance Planners",
+    "price": 449,
+    "originalPrice": 579,
+    "rating": 4.6,
+    "reviewCount": 48,
+    "images": [
+      "https://i.pinimg.com/736x/74/96/09/749609d801fda935c1c2458228d32296.jpg",
+      "https://pin.it/6lxlJCj3E"
+    ],
+    "tags": [
+      "planners",
+      "finance planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Simple planner for tracking budgets, expenses and savings goals.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Finance Planners",
+      "Stock: 29 items available"
+    ],
+    "inStock": true,
+    "stockCount": 29
+  },
+  {
+    "id": "P059",
+    "name": "Minimal Desk Planner",
+    "shortName": "Minimal Desk Planner",
+    "category": "planners",
+    "subcategory": "Desk Planners",
+    "price": 379,
+    "originalPrice": 479,
+    "rating": 4.9,
+    "reviewCount": 71,
+    "images": [
+      "https://i.pinimg.com/736x/0d/b9/b6/0db9b6ea83a405636dc03e9932c1e3e7.jpg",
+      "https://pin.it/5jgXu1zke"
+    ],
+    "tags": [
+      "planners",
+      "desk planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Compact desk planner with clean layouts for everyday tasks.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Desk Planners",
+      "Stock: 34 items available"
+    ],
+    "inStock": true,
+    "stockCount": 34
+  },
+  {
+    "id": "P060",
+    "name": "Habit Tracker Planner",
+    "shortName": "Habit Tracker Planner",
+    "category": "planners",
+    "subcategory": "Habit Planners",
+    "price": 399,
+    "originalPrice": 499,
+    "rating": 4.5,
+    "reviewCount": 94,
+    "images": [
+      "https://i.pinimg.com/736x/14/00/73/1400734ffee4108a0866ac7a69f83d70.jpg",
+      "https://pin.it/6UAgRZ3cz"
+    ],
+    "tags": [
+      "planners",
+      "habit planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Habit-focused planner with monthly and weekly tracking sections.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Habit Planners",
+      "Stock: 33 items available"
+    ],
+    "inStock": true,
+    "stockCount": 33
+  },
+  {
+    "id": "P061",
+    "name": "Exam Countdown Planner",
+    "shortName": "Exam Countdown Planner",
+    "category": "planners",
+    "subcategory": "Student Planners",
+    "price": 349,
+    "originalPrice": 449,
+    "rating": 4.8,
+    "reviewCount": 32,
+    "images": [
+      "https://i.pinimg.com/1200x/26/1d/d4/261dd476873c09ac4b97998535637ceb.jpg"
+    ],
+    "tags": [
+      "planners",
+      "student planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "badge": "NEW",
+    "badgeVariant": "teal",
+    "isNew": true,
+    "isBestseller": false,
+    "description": "Study planner designed to organize revision and countdown to exams.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Student Planners",
+      "Stock: 25 items available"
+    ],
+    "inStock": true,
+    "stockCount": 25
+  },
+  {
+    "id": "P062",
+    "name": "Cozy Sunday Planner",
+    "shortName": "Cozy Sunday Planner",
+    "category": "planners",
+    "subcategory": "Weekly Planners",
+    "price": 429,
+    "originalPrice": 549,
+    "rating": 4.4,
+    "reviewCount": 55,
+    "images": [
+      "https://i.pinimg.com/736x/73/e8/3b/73e83b4c07fb16a89b75789b51c483e2.jpg"
+    ],
+    "tags": [
+      "planners",
+      "weekly planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "badge": "BESTSELLER",
+    "badgeVariant": "yellow",
+    "isNew": false,
+    "isBestseller": true,
+    "description": "Relaxed weekly planner inspired by cozy Sunday routines.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Weekly Planners",
+      "Stock: 22 items available"
+    ],
+    "inStock": true,
+    "stockCount": 22
+  },
+  {
+    "id": "P063",
+    "name": "Project Planning Pad",
+    "shortName": "Project Planning Pad",
+    "category": "planners",
+    "subcategory": "Project Planners",
+    "price": 299,
+    "originalPrice": 399,
+    "rating": 4.7,
+    "reviewCount": 78,
+    "images": [
+      "https://i.pinimg.com/736x/29/91/9d/29919dd533fc74f24f77d7daedc4ca89.jpg"
+    ],
+    "tags": [
+      "planners",
+      "project planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Tear-off planning pad for breaking projects into manageable tasks.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Project Planners",
+      "Stock: 40 items available"
+    ],
+    "inStock": true,
+    "stockCount": 40
+  },
+  {
+    "id": "P064",
+    "name": "Meal & Grocery Planner",
+    "shortName": "Meal & Grocery Planner",
+    "category": "planners",
+    "subcategory": "Meal Planners",
+    "price": 329,
+    "originalPrice": 429,
+    "rating": 4.3,
+    "reviewCount": 16,
+    "images": [
+      "https://i.pinimg.com/736x/4d/27/0e/4d270e51efb7f3e1a1f6d1b0402ad5fa.jpg",
+      "https://pin.it/6zU0Ofjg5"
+    ],
+    "tags": [
+      "planners",
+      "meal planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Weekly meal planner with grocery-list sections and meal notes.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Meal Planners",
+      "Stock: 36 items available"
+    ],
+    "inStock": true,
+    "stockCount": 36
+  },
+  {
+    "id": "P065",
+    "name": "Finance Dashboard Planner",
+    "shortName": "Finance Dashboard Planner",
+    "category": "planners",
+    "subcategory": "Finance Planners",
+    "price": 529,
+    "originalPrice": 679,
+    "rating": 4.6,
+    "reviewCount": 39,
+    "images": [
+      "https://i.pinimg.com/1200x/74/96/09/749609d801fda935c1c2458228d32296.jpg"
+    ],
+    "tags": [
+      "planners",
+      "finance planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Organized planner for monthly income, expenses and financial goals.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Finance Planners",
+      "Stock: 17 items available"
+    ],
+    "inStock": true,
+    "stockCount": 17
+  },
+  {
+    "id": "P066",
+    "name": "Creative Week Planner",
+    "shortName": "Creative Week Planner",
+    "category": "planners",
+    "subcategory": "Creative Planners",
+    "price": 399,
+    "originalPrice": 499,
+    "rating": 4.9,
+    "reviewCount": 62,
+    "images": [
+      "https://i.pinimg.com/736x/f3/23/c4/f323c4421052685deeaed3fdc0ba4ff0.jpg"
+    ],
+    "tags": [
+      "planners",
+      "creative planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "isNew": false,
+    "isBestseller": false,
+    "description": "Colorful weekly planner designed for creative schedules and ideas.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Creative Planners",
+      "Stock: 28 items available"
+    ],
+    "inStock": true,
+    "stockCount": 28
+  },
+  {
+    "id": "P067",
+    "name": "Yearly Vision Planner",
+    "shortName": "Yearly Vision Planner",
+    "category": "planners",
+    "subcategory": "Goal Planners",
+    "price": 699,
+    "originalPrice": 899,
+    "rating": 4.5,
+    "reviewCount": 85,
+    "images": [
+      "https://i.pinimg.com/736x/d6/51/b2/d651b2d67a94138f36e4c58ab6beca2a.jpg"
+    ],
+    "tags": [
+      "planners",
+      "goal planners",
+      "stationery",
+      "aesthetic"
+    ],
+    "badge": "NEW",
+    "badgeVariant": "teal",
+    "isNew": true,
+    "isBestseller": true,
+    "description": "Vision-focused planner for yearly goals, milestones and reflections.",
+    "details": [
+      "Category: Planners",
+      "Subcategory: Goal Planners",
+      "Stock: 14 items available"
+    ],
+    "inStock": true,
+    "stockCount": 14
+  },
+  {
     "id": "P001",
     "name": "Lavender Glass Dip Pen",
     "shortName": "Lavender Glass Dip Pen",
@@ -1490,634 +2118,6 @@ export const PRODUCTS = [
     ],
     "inStock": true,
     "stockCount": 30
-  },
-  {
-    "id": "P048",
-    "name": "Lavender Weekly Planner",
-    "shortName": "Lavender Weekly Planner",
-    "category": "planners",
-    "subcategory": "Weekly Planners",
-    "price": 499,
-    "originalPrice": 649,
-    "rating": 4.4,
-    "reviewCount": 73,
-    "images": [
-      "https://i.pinimg.com/736x/ca/62/fa/ca62faf946122e9c98f76ac7a1255bb2.jpg",
-      "https://pin.it/5bNOfo88x"
-    ],
-    "tags": [
-      "planners",
-      "weekly planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Undated weekly planner with a soft lavender aesthetic and spacious layout.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Weekly Planners",
-      "Stock: 26 items available"
-    ],
-    "inStock": true,
-    "stockCount": 26
-  },
-  {
-    "id": "P049",
-    "name": "Productivity Planner",
-    "shortName": "Productivity Planner",
-    "category": "planners",
-    "subcategory": "Productivity Planners",
-    "price": 599,
-    "originalPrice": 749,
-    "rating": 4.7,
-    "reviewCount": 96,
-    "images": [
-      "https://i.pinimg.com/736x/27/fe/9e/27fe9e2082b59c6441a95d52494b9173.jpg",
-      "https://pin.it/5DPPwvZes"
-    ],
-    "tags": [
-      "planners",
-      "productivity planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "badge": "NEW",
-    "badgeVariant": "teal",
-    "isNew": true,
-    "isBestseller": false,
-    "description": "Structured planner for organizing priorities, tasks and weekly goals.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Productivity Planners",
-      "Stock: 19 items available"
-    ],
-    "inStock": true,
-    "stockCount": 19
-  },
-  {
-    "id": "P050",
-    "name": "Aesthetic Daily Planner",
-    "shortName": "Aesthetic Daily Planner",
-    "category": "planners",
-    "subcategory": "Daily Planners",
-    "price": 449,
-    "originalPrice": 599,
-    "rating": 4.3,
-    "reviewCount": 34,
-    "images": [
-      "https://i.pinimg.com/736x/64/b3/1b/64b31b88e47cfa4314bb741452c803ee.jpg",
-      "https://pin.it/F1S2y0fNI"
-    ],
-    "tags": [
-      "planners",
-      "daily planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Minimal daily planner designed for clean and organized schedules.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Daily Planners",
-      "Stock: 28 items available"
-    ],
-    "inStock": true,
-    "stockCount": 28
-  },
-  {
-    "id": "P051",
-    "name": "Student Study Planner",
-    "shortName": "Student Study Planner",
-    "category": "planners",
-    "subcategory": "Student Planners",
-    "price": 399,
-    "originalPrice": 499,
-    "rating": 4.6,
-    "reviewCount": 57,
-    "images": [
-      "https://i.pinimg.com/736x/0b/e1/b1/0be1b1fcad8acd0b26224d79f8200046.jpg",
-      "https://pin.it/6JIHR3vok"
-    ],
-    "tags": [
-      "planners",
-      "student planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Student-friendly planner for classes, assignments, exams and study sessions.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Student Planners",
-      "Stock: 37 items available"
-    ],
-    "inStock": true,
-    "stockCount": 37
-  },
-  {
-    "id": "P052",
-    "name": "Dream Goals Planner",
-    "shortName": "Dream Goals Planner",
-    "category": "planners",
-    "subcategory": "Goal Planners",
-    "price": 549,
-    "originalPrice": 699,
-    "rating": 4.9,
-    "reviewCount": 80,
-    "images": [
-      "https://i.pinimg.com/736x/c8/3a/12/c83a12a1a57ca986bc331dd4eeae48b8.jpg",
-      "https://pin.it/2yvOeMtQe"
-    ],
-    "tags": [
-      "planners",
-      "goal planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "badge": "BESTSELLER",
-    "badgeVariant": "yellow",
-    "isNew": false,
-    "isBestseller": true,
-    "description": "Goal-setting planner with sections for milestones and action steps.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Goal Planners",
-      "Stock: 18 items available"
-    ],
-    "inStock": true,
-    "stockCount": 18
-  },
-  {
-    "id": "P053",
-    "name": "Purple Academic Planner",
-    "shortName": "Purple Academic Planner",
-    "category": "planners",
-    "subcategory": "Academic Planners",
-    "price": 649,
-    "originalPrice": 799,
-    "rating": 4.5,
-    "reviewCount": 18,
-    "images": [
-      "https://i.pinimg.com/736x/2b/87/a1/2b87a1a80fd1482f81f839b7941ddc0d.jpg",
-      "https://pin.it/6JnfAVrQe"
-    ],
-    "tags": [
-      "planners",
-      "academic planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Academic planner designed around semesters, deadlines and study goals.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Academic Planners",
-      "Stock: 23 items available"
-    ],
-    "inStock": true,
-    "stockCount": 23
-  },
-  {
-    "id": "P054",
-    "name": "Monthly Reset Planner",
-    "shortName": "Monthly Reset Planner",
-    "category": "planners",
-    "subcategory": "Monthly Planners",
-    "price": 429,
-    "originalPrice": 549,
-    "rating": 4.8,
-    "reviewCount": 41,
-    "images": [
-      "https://i.pinimg.com/736x/d6/e2/98/d6e29831cd62db49f49c5cc0ace72b26.jpg",
-      "https://pin.it/4AE96Wz8I"
-    ],
-    "tags": [
-      "planners",
-      "monthly planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Monthly planner for routines, priorities, goals and personal resets.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Monthly Planners",
-      "Stock: 31 items available"
-    ],
-    "inStock": true,
-    "stockCount": 31
-  },
-  {
-    "id": "P055",
-    "name": "Self-Care Planner",
-    "shortName": "Self-Care Planner",
-    "category": "planners",
-    "subcategory": "Wellness Planners",
-    "price": 499,
-    "originalPrice": 649,
-    "rating": 4.4,
-    "reviewCount": 64,
-    "images": [
-      "https://i.pinimg.com/736x/14/ed/09/14ed09630b70043191e0c5a8a86bf26c.jpg",
-      "https://pin.it/15L839R7A"
-    ],
-    "tags": [
-      "planners",
-      "wellness planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "badge": "NEW",
-    "badgeVariant": "teal",
-    "isNew": true,
-    "isBestseller": false,
-    "description": "Gentle planning system for habits, routines and personal wellbeing.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Wellness Planners",
-      "Stock: 20 items available"
-    ],
-    "inStock": true,
-    "stockCount": 20
-  },
-  {
-    "id": "P056",
-    "name": "Undated Life Planner",
-    "shortName": "Undated Life Planner",
-    "category": "planners",
-    "subcategory": "Life Planners",
-    "price": 699,
-    "originalPrice": 899,
-    "rating": 4.7,
-    "reviewCount": 87,
-    "images": [
-      "https://i.pinimg.com/736x/b0/b1/7a/b0b17ad24eafa7ad6e00b1a98c4e590e.jpg",
-      "https://pin.it/6W1VjxIdm"
-    ],
-    "tags": [
-      "planners",
-      "life planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Flexible undated planner for organizing personal and professional life.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Life Planners",
-      "Stock: 12 items available"
-    ],
-    "inStock": true,
-    "stockCount": 12
-  },
-  {
-    "id": "P057",
-    "name": "Content Creator Planner",
-    "shortName": "Content Creator Planner",
-    "category": "planners",
-    "subcategory": "Creative Planners",
-    "price": 579,
-    "originalPrice": 729,
-    "rating": 4.3,
-    "reviewCount": 25,
-    "images": [
-      "https://i.pinimg.com/736x/9f/dd/ca/9fddcabc637525c858a9ff268c896ec9.jpg",
-      "https://pin.it/VD88E0cWN"
-    ],
-    "tags": [
-      "planners",
-      "creative planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "badge": "BESTSELLER",
-    "badgeVariant": "yellow",
-    "isNew": false,
-    "isBestseller": true,
-    "description": "Planner for content ideas, posting schedules and creative projects.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Creative Planners",
-      "Stock: 16 items available"
-    ],
-    "inStock": true,
-    "stockCount": 16
-  },
-  {
-    "id": "P058",
-    "name": "Budget & Savings Planner",
-    "shortName": "Budget & Savings Planner",
-    "category": "planners",
-    "subcategory": "Finance Planners",
-    "price": 449,
-    "originalPrice": 579,
-    "rating": 4.6,
-    "reviewCount": 48,
-    "images": [
-      "https://i.pinimg.com/736x/74/96/09/749609d801fda935c1c2458228d32296.jpg",
-      "https://pin.it/6lxlJCj3E"
-    ],
-    "tags": [
-      "planners",
-      "finance planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Simple planner for tracking budgets, expenses and savings goals.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Finance Planners",
-      "Stock: 29 items available"
-    ],
-    "inStock": true,
-    "stockCount": 29
-  },
-  {
-    "id": "P059",
-    "name": "Minimal Desk Planner",
-    "shortName": "Minimal Desk Planner",
-    "category": "planners",
-    "subcategory": "Desk Planners",
-    "price": 379,
-    "originalPrice": 479,
-    "rating": 4.9,
-    "reviewCount": 71,
-    "images": [
-      "https://i.pinimg.com/736x/0d/b9/b6/0db9b6ea83a405636dc03e9932c1e3e7.jpg",
-      "https://pin.it/5jgXu1zke"
-    ],
-    "tags": [
-      "planners",
-      "desk planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Compact desk planner with clean layouts for everyday tasks.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Desk Planners",
-      "Stock: 34 items available"
-    ],
-    "inStock": true,
-    "stockCount": 34
-  },
-  {
-    "id": "P060",
-    "name": "Habit Tracker Planner",
-    "shortName": "Habit Tracker Planner",
-    "category": "planners",
-    "subcategory": "Habit Planners",
-    "price": 399,
-    "originalPrice": 499,
-    "rating": 4.5,
-    "reviewCount": 94,
-    "images": [
-      "https://i.pinimg.com/736x/14/00/73/1400734ffee4108a0866ac7a69f83d70.jpg",
-      "https://pin.it/6UAgRZ3cz"
-    ],
-    "tags": [
-      "planners",
-      "habit planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Habit-focused planner with monthly and weekly tracking sections.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Habit Planners",
-      "Stock: 33 items available"
-    ],
-    "inStock": true,
-    "stockCount": 33
-  },
-  {
-    "id": "P061",
-    "name": "Exam Countdown Planner",
-    "shortName": "Exam Countdown Planner",
-    "category": "planners",
-    "subcategory": "Student Planners",
-    "price": 349,
-    "originalPrice": 449,
-    "rating": 4.8,
-    "reviewCount": 32,
-    "images": [
-      "https://i.pinimg.com/1200x/26/1d/d4/261dd476873c09ac4b97998535637ceb.jpg"
-    ],
-    "tags": [
-      "planners",
-      "student planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "badge": "NEW",
-    "badgeVariant": "teal",
-    "isNew": true,
-    "isBestseller": false,
-    "description": "Study planner designed to organize revision and countdown to exams.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Student Planners",
-      "Stock: 25 items available"
-    ],
-    "inStock": true,
-    "stockCount": 25
-  },
-  {
-    "id": "P062",
-    "name": "Cozy Sunday Planner",
-    "shortName": "Cozy Sunday Planner",
-    "category": "planners",
-    "subcategory": "Weekly Planners",
-    "price": 429,
-    "originalPrice": 549,
-    "rating": 4.4,
-    "reviewCount": 55,
-    "images": [
-      "https://i.pinimg.com/736x/73/e8/3b/73e83b4c07fb16a89b75789b51c483e2.jpg"
-    ],
-    "tags": [
-      "planners",
-      "weekly planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "badge": "BESTSELLER",
-    "badgeVariant": "yellow",
-    "isNew": false,
-    "isBestseller": true,
-    "description": "Relaxed weekly planner inspired by cozy Sunday routines.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Weekly Planners",
-      "Stock: 22 items available"
-    ],
-    "inStock": true,
-    "stockCount": 22
-  },
-  {
-    "id": "P063",
-    "name": "Project Planning Pad",
-    "shortName": "Project Planning Pad",
-    "category": "planners",
-    "subcategory": "Project Planners",
-    "price": 299,
-    "originalPrice": 399,
-    "rating": 4.7,
-    "reviewCount": 78,
-    "images": [
-      "https://i.pinimg.com/736x/29/91/9d/29919dd533fc74f24f77d7daedc4ca89.jpg"
-    ],
-    "tags": [
-      "planners",
-      "project planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Tear-off planning pad for breaking projects into manageable tasks.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Project Planners",
-      "Stock: 40 items available"
-    ],
-    "inStock": true,
-    "stockCount": 40
-  },
-  {
-    "id": "P064",
-    "name": "Meal & Grocery Planner",
-    "shortName": "Meal & Grocery Planner",
-    "category": "planners",
-    "subcategory": "Meal Planners",
-    "price": 329,
-    "originalPrice": 429,
-    "rating": 4.3,
-    "reviewCount": 16,
-    "images": [
-      "https://i.pinimg.com/736x/4d/27/0e/4d270e51efb7f3e1a1f6d1b0402ad5fa.jpg",
-      "https://pin.it/6zU0Ofjg5"
-    ],
-    "tags": [
-      "planners",
-      "meal planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Weekly meal planner with grocery-list sections and meal notes.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Meal Planners",
-      "Stock: 36 items available"
-    ],
-    "inStock": true,
-    "stockCount": 36
-  },
-  {
-    "id": "P065",
-    "name": "Finance Dashboard Planner",
-    "shortName": "Finance Dashboard Planner",
-    "category": "planners",
-    "subcategory": "Finance Planners",
-    "price": 529,
-    "originalPrice": 679,
-    "rating": 4.6,
-    "reviewCount": 39,
-    "images": [
-      "https://i.pinimg.com/1200x/74/96/09/749609d801fda935c1c2458228d32296.jpg"
-    ],
-    "tags": [
-      "planners",
-      "finance planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Organized planner for monthly income, expenses and financial goals.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Finance Planners",
-      "Stock: 17 items available"
-    ],
-    "inStock": true,
-    "stockCount": 17
-  },
-  {
-    "id": "P066",
-    "name": "Creative Week Planner",
-    "shortName": "Creative Week Planner",
-    "category": "planners",
-    "subcategory": "Creative Planners",
-    "price": 399,
-    "originalPrice": 499,
-    "rating": 4.9,
-    "reviewCount": 62,
-    "images": [
-      "https://i.pinimg.com/736x/f3/23/c4/f323c4421052685deeaed3fdc0ba4ff0.jpg"
-    ],
-    "tags": [
-      "planners",
-      "creative planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "isNew": false,
-    "isBestseller": false,
-    "description": "Colorful weekly planner designed for creative schedules and ideas.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Creative Planners",
-      "Stock: 28 items available"
-    ],
-    "inStock": true,
-    "stockCount": 28
-  },
-  {
-    "id": "P067",
-    "name": "Yearly Vision Planner",
-    "shortName": "Yearly Vision Planner",
-    "category": "planners",
-    "subcategory": "Goal Planners",
-    "price": 699,
-    "originalPrice": 899,
-    "rating": 4.5,
-    "reviewCount": 85,
-    "images": [
-      "https://i.pinimg.com/736x/d6/51/b2/d651b2d67a94138f36e4c58ab6beca2a.jpg"
-    ],
-    "tags": [
-      "planners",
-      "goal planners",
-      "stationery",
-      "aesthetic"
-    ],
-    "badge": "NEW",
-    "badgeVariant": "teal",
-    "isNew": true,
-    "isBestseller": true,
-    "description": "Vision-focused planner for yearly goals, milestones and reflections.",
-    "details": [
-      "Category: Planners",
-      "Subcategory: Goal Planners",
-      "Stock: 14 items available"
-    ],
-    "inStock": true,
-    "stockCount": 14
   },
   {
     "id": "P068",

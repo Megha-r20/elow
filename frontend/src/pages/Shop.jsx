@@ -109,6 +109,16 @@ export default function Shop() {
             case "bestselling":
                 list.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0));
                 break;
+            case "featured":
+            default:
+                if (activeCat === "all") {
+                    list.sort((a, b) => {
+                        const aPlanner = a.category === "planners" ? 1 : 0;
+                        const bPlanner = b.category === "planners" ? 1 : 0;
+                        return bPlanner - aPlanner;
+                    });
+                }
+                break;
         }
         return list;
     }, [activeCat, sort, priceRange, onlyInStock, onlyNew, onlyBest, onlyWishlist, searchQ, wishlist.ids, liveProducts]);
