@@ -8,7 +8,7 @@ import { resolvePinterestUrl } from "../utils/pinterestResolver.js";
 
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
 
-// Helper function to seed initial categories if DB collection is empty
+// Helper function to seed initial categories if DB collection is empty, or update image URLs if they change
 const seedCategoriesIfNeeded = async () => {
   const count = await Category.countDocuments();
   if (count === 0 && DEFAULT_CATEGORIES && DEFAULT_CATEGORIES.length > 0) {
@@ -22,6 +22,18 @@ const seedCategoriesIfNeeded = async () => {
       isActive: true,
     }));
     await Category.insertMany(docs);
+  } else if (DEFAULT_CATEGORIES && DEFAULT_CATEGORIES.length > 0) {
+    for (const c of DEFAULT_CATEGORIES) {
+      await Category.updateOne(
+        { id: c.id },
+        {
+          $set: {
+            image: c.image || c.imageUrl || "",
+            name: c.label || c.name || c.id,
+          },
+        }
+      );
+    }
   }
 };
 
@@ -62,7 +74,7 @@ export const getCategories = async (req, res) => {
         slug: c.slug,
         desc: c.description,
         description: c.description,
-        image: c.image || defaultCat.image,
+        image: defaultCat.image || c.image,
         count: calculatedCount,
         productCount: calculatedCount,
         isActive: c.isActive,

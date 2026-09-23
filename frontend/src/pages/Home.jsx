@@ -62,7 +62,7 @@ export default function Home() {
                                 const did = (d.id || "").toLowerCase();
                                 return did === matchId || matchId.includes(did) || did.includes(matchId);
                             }) || {};
-                            const rawImg = c.image || defaultCat.image || "";
+                            const rawImg = defaultCat.image || c.image || "";
                             let finalImg = rawImg.trim();
                             if (finalImg && !/^https?:\/\//i.test(finalImg) && !finalImg.startsWith("/") && !finalImg.startsWith("data:")) {
                                 finalImg = `https://${finalImg}`;
@@ -72,8 +72,8 @@ export default function Home() {
                                 ...defaultCat,
                                 ...c,
                                 id: c.id || c.slug || defaultCat.id,
-                                label: c.label || c.name || defaultCat.label || c.id,
-                                image: finalImg || defaultCat.image,
+                                label: defaultCat.label || c.label || c.name || c.id,
+                                image: defaultCat.image || finalImg,
                                 fallbackImage: defaultCat.fallbackImage || defaultCat.image,
                                 productCount: countVal,
                                 color: defaultCat.color || "#EEE8F8"
