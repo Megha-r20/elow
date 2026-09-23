@@ -1,45 +1,44 @@
 const u = (id, w = 600, h = 600) => `https://images.unsplash.com/${id}&w=${w}&h=${h}&fit=crop&q=82`;
 
 export const CATEGORIES = [
-    { id: "journals", label: "Journals", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800", fallbackImage: "/journals.jpg", productCount: 14, color: "#EEE8F8" },
-    { id: "pens", label: "Pens & Markers", image: "https://images.unsplash.com/photo-1725953386283-d918bb2ac9bb?auto=format&fit=crop&q=80&w=800", fallbackImage: "/pens-markers.jpg", productCount: 22, color: "#FFE8EC" },
-    { id: "washi", label: "Washi Tape", image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=800", fallbackImage: "/washi-tape.jpg", productCount: 18, color: "#DFF5F3" },
-    { id: "stickers", label: "Stickers", image: "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?auto=format&fit=crop&q=80&w=800", fallbackImage: "/stickers.jpg", productCount: 31, color: "#FFF0DC" },
-    { id: "planners", label: "Planners", image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=800", fallbackImage: "/planners.jpg", productCount: 9, color: "#E5F5EC" },
-    { id: "notebooks", label: "Notebooks", image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&q=80&w=800", fallbackImage: "/notebooks.jpg", productCount: 16, color: "#F8F0E0" },
-    { id: "desk", label: "Desk Accessories", image: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&q=80&w=800", fallbackImage: "/desk-accessories.jpg", productCount: 11, color: "#E5EEFF" },
-    { id: "gifting", label: "Gift Combos", image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=800", fallbackImage: "/gift-combo.jpg", productCount: 50, color: "#FDEFEF" },
+    { id: "journals", label: "Journals", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800", fallbackImage: "/journals.jpg", productCount: 22, color: "#EEE8F8" },
+    { id: "pens", label: "Pens & Ink", image: "https://images.unsplash.com/photo-1725953386283-d918bb2ac9bb?auto=format&fit=crop&q=80&w=800", fallbackImage: "/pens-markers.jpg", productCount: 25, color: "#FFE8EC" },
+    { id: "washi", label: "Washi Tape", image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=800", fallbackImage: "/washi-tape.jpg", productCount: 20, color: "#DFF5F3" },
+    { id: "stickers", label: "Stickers", image: "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?auto=format&fit=crop&q=80&w=800", fallbackImage: "/stickers.jpg", productCount: 22, color: "#FFF0DC" },
+    { id: "planners", label: "Planners", image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=800", fallbackImage: "/planners.jpg", productCount: 20, color: "#E5F5EC" },
+    { id: "desk", label: "Workspace & Desk", image: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&q=80&w=800", fallbackImage: "/desk-accessories.jpg", productCount: 21, color: "#E5EEFF" },
+    { id: "gifting", label: "Accessories", image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=800", fallbackImage: "/gift-combo.jpg", productCount: 20, color: "#FDEFEF" },
 ];
 
 export const REVIEWS = [
     {
         id: "r1",
-        productId: "p1",
+        productId: "P001",
         name: "Ritika S.",
         avatar: u("photo-1579017308347-e53e0d2fc5e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA", 80, 80),
         rating: 5,
         date: "Aug 2024",
-        text: "The journal quality is incredible — smooth pages, lovely cover. I have been journaling every morning since I ordered it. The dot grid is perfect, barely visible but super helpful.",
+        text: "The glass dip pen quality is incredible — smooth ink flow, lovely feel. I have been using it every morning for calligraphy.",
         verified: true,
     },
     {
         id: "r2",
-        productId: "p1",
+        productId: "P026",
         name: "Meghna P.",
         avatar: u("photo-1750814019023-4e43037f5075?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA", 80, 80),
         rating: 5,
         date: "Jul 2024",
-        text: "Finally found my perfect pen set. The gel pens write so smoothly and the colours are exactly as shown. Will definitely reorder!",
+        text: "Finally found my perfect lavender journal. The paper quality is so premium and smooth. Will definitely reorder!",
         verified: true,
     },
     {
         id: "r3",
-        productId: "p2",
+        productId: "P068",
         name: "Aanya K.",
         avatar: u("photo-1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA", 80, 80),
         rating: 4,
         date: "Jul 2024",
-        text: "The washi tape collection is stunning. Beautiful prints and the adhesion is perfect — repositionable without leaving residue. Decorated my whole planner with them!",
+        text: "The Lavender Sky washi tape collection is stunning. Beautiful prints and perfect adhesion for my bullet journal!",
         verified: true,
     },
 ];
@@ -74,4 +73,3 @@ export const HERO_IMAGES = {
 };
 
 export { PRODUCTS } from "./products.js";
-
