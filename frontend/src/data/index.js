@@ -1,13 +1,13 @@
 const u = (id, w = 600, h = 600) => `https://images.unsplash.com/${id}&w=${w}&h=${h}&fit=crop&q=82`;
 
 export const CATEGORIES = [
-    { id: "journals", label: "Journals", image: "https://i.pinimg.com/736x/f6/c9/c3/f6c9c3e62c2b2d472cc2171e780721eb.jpg", fallbackImage: "/journals.jpg", productCount: 22, color: "#EEE8F8" },
-    { id: "pens", label: "Pens & Ink", image: "https://i.pinimg.com/736x/be/5e/f5/be5ef511b100cd1b4cadce3cc28e67ea.jpg", fallbackImage: "/pens-markers.jpg", productCount: 25, color: "#FFE8EC" },
-    { id: "washi", label: "Washi Tape", image: "https://i.pinimg.com/736x/e6/c9/d7/e6c9d7a0406783764a0433325ae36f0c.jpg", fallbackImage: "/washi-tape.jpg", productCount: 20, color: "#DFF5F3" },
-    { id: "stickers", label: "Stickers", image: "https://i.pinimg.com/736x/13/a9/74/13a9746407831fdd98386a9920fe83d0.jpg", fallbackImage: "/stickers.jpg", productCount: 22, color: "#FFF0DC" },
-    { id: "planners", label: "Planners", image: "https://i.pinimg.com/736x/ca/62/fa/ca62faf946122e9c98f76ac7a8684725.jpg", fallbackImage: "/planners.jpg", productCount: 20, color: "#E5F5EC" },
-    { id: "desk", label: "Workspace & Desk", image: "https://i.pinimg.com/1200x/f3/d4/81/f3d481ba5611b84ba0374cc5df870a8f.jpg", fallbackImage: "/desk-accessories.jpg", productCount: 21, color: "#E5EEFF" },
-    { id: "gifting", label: "Accessories", image: "https://i.pinimg.com/736x/be/11/29/be112946b7ed1f8faa4d554a0e0bf1a6.jpg", fallbackImage: "/gift-combo.jpg", productCount: 20, color: "#FDEFEF" },
+    { id: "journals", label: "Journals", image: "https://i.pinimg.com/736x/b4/36/63/b436631b0540af88e56ebbbe0bae7225.jpg", fallbackImage: "/journals.jpg", productCount: 22, color: "#EEE8F8" },
+    { id: "pens", label: "Pens & Markers", image: "https://i.pinimg.com/1200x/83/77/e1/8377e146a982995b73c6ab429b0c9086.jpg", fallbackImage: "/pens-markers.jpg", productCount: 25, color: "#FFE8EC" },
+    { id: "washi", label: "Washi Tape", image: "https://i.pinimg.com/1200x/59/03/21/590321b4fba750d7c7fd44ac9275c113.jpg", fallbackImage: "/washi-tape.jpg", productCount: 20, color: "#DFF5F3" },
+    { id: "stickers", label: "Stickers", image: "https://i.pinimg.com/736x/4a/c1/3a/4ac13a77c2e20daf95eb3908a51ba8c2.jpg", fallbackImage: "/stickers.jpg", productCount: 22, color: "#FFF0DC" },
+    { id: "planners", label: "Planners", image: "https://i.pinimg.com/736x/00/ac/d8/00acd8a7de0235bf864aa6e6d3809ff4.jpg", fallbackImage: "/planners.jpg", productCount: 20, color: "#E5F5EC" },
+    { id: "desk", label: "Desk Accessories", image: "https://i.pinimg.com/736x/8a/d3/6b/8ad36b7926877e5e6d9aa699214aa6a1.jpg", fallbackImage: "/desk-accessories.jpg", productCount: 21, color: "#E5EEFF" },
+    { id: "gifting", label: "Gift Combos", image: "https://i.pinimg.com/736x/5c/a7/30/5ca730b11ab643bde784311628014b92.jpg", fallbackImage: "/gift-combo.jpg", productCount: 20, color: "#FDEFEF" },
 ];
 
 export const REVIEWS = [
