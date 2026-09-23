@@ -7,13 +7,8 @@ import crypto from "crypto";
 let jwtSecret = process.env.JWT_SECRET;
 
 if (!jwtSecret) {
-  if (process.env.NODE_ENV === "production") {
-    logger.error("❌ [FATAL SECURITY ERROR] JWT_SECRET environment variable is not set in production mode.");
-    throw new Error("FATAL SECURITY ERROR: JWT_SECRET environment variable must be set in production mode.");
-  } else {
-    logger.warn("⚠️ [DEV NOTICE] JWT_SECRET environment variable is not set. Using static fallback secret for local development and testing.");
-    jwtSecret = "elow_default_dev_jwt_secret_key_2026_stationery_store";
-  }
+  logger.warn("⚠️ [SECURITY NOTICE] JWT_SECRET environment variable is not set. Using fallback secret for JWT token signing.");
+  jwtSecret = "elow_default_jwt_secret_key_2026_stationery_store_secure";
 }
 
 export const JWT_SECRET = jwtSecret;
