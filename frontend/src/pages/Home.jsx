@@ -20,7 +20,16 @@ const T = {
 export default function Home() {
     useDocumentTitle("Home — Beautiful Stationery");
     const navigate = useNavigate();
-    const [categories, setCategories] = useState(() => CATEGORIES);
+    const [categories, setCategories] = useState(() => {
+        try {
+            const saved = localStorage.getItem("elow_categories");
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            }
+        } catch (_e) {}
+        return CATEGORIES;
+    });
     const [featured, setFeatured] = useState(() => PRODUCTS.slice(0, 8));
     const [bestSellers, setBestSellers] = useState(() => PRODUCTS.filter(p => p.isBestseller).slice(0, 8));
 
@@ -58,6 +67,7 @@ export default function Home() {
                             if (finalImg && !/^https?:\/\//i.test(finalImg) && !finalImg.startsWith("/") && !finalImg.startsWith("data:")) {
                                 finalImg = `https://${finalImg}`;
                             }
+                            const countVal = (c.count !== undefined && c.count > 0) ? c.count : (c.productCount || defaultCat.productCount || 0);
                             return {
                                 ...defaultCat,
                                 ...c,
@@ -65,7 +75,7 @@ export default function Home() {
                                 label: c.label || c.name || defaultCat.label || c.id,
                                 image: finalImg || defaultCat.image,
                                 fallbackImage: defaultCat.fallbackImage || defaultCat.image,
-                                productCount: c.count !== undefined ? c.count : (c.productCount || defaultCat.productCount || 0),
+                                productCount: countVal,
                                 color: defaultCat.color || "#EEE8F8"
                             };
                         });

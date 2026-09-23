@@ -40,18 +40,34 @@ const seedProductsIfNeeded = async () => {
 export const getCategories = async (req, res) => {
   try {
     await seedCategoriesIfNeeded();
+    await seedProductsIfNeeded();
     const categories = await Category.find({ isActive: true }).sort({ name: 1 }).lean();
-    const formatted = categories.map((c) => ({
-      id: c.id,
-      label: c.name,
-      name: c.name,
-      slug: c.slug,
-      desc: c.description,
-      description: c.description,
-      image: c.image,
-      count: c.productCount,
-      isActive: c.isActive,
-    }));
+
+    const counts = await Product.aggregate([
+      { $group: { _id: "$category", count: { $sum: 1 } } }
+    ]);
+    const countMap = {};
+    counts.forEach(item => {
+      if (item._id) countMap[item._id.toLowerCase()] = item.count;
+    });
+
+    const formatted = categories.map((c) => {
+      const matchId = (c.id || c.slug || "").toLowerCase();
+      const defaultCat = (DEFAULT_CATEGORIES || []).find(d => (d.id || "").toLowerCase() === matchId) || {};
+      const calculatedCount = countMap[matchId] ?? defaultCat.productCount ?? c.productCount ?? 0;
+      return {
+        id: c.id,
+        label: c.name,
+        name: c.name,
+        slug: c.slug,
+        desc: c.description,
+        description: c.description,
+        image: c.image || defaultCat.image,
+        count: calculatedCount,
+        productCount: calculatedCount,
+        isActive: c.isActive,
+      };
+    });
     res.json(formatted);
   } catch (_err) {
     res.json(DEFAULT_CATEGORIES || []);
