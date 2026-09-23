@@ -309,10 +309,6 @@ export const googleAuth = async (req, res) => {
 
   const cleanEmail = safeLower(email) || "google.user@example.com";
   const cleanName = safeStr(name) || "Google Member";
-  
-  // Security Fix: Do not allow untrusted client request body to dictate admin role.
-  // Default to "user", or "admin" ONLY for authorized admin emails.
-  const targetRole = (cleanEmail === "admin@elow.com" || cleanEmail.startsWith("admin@")) ? "admin" : "user";
 
   let user = await User.findOne({ email: cleanEmail });
 
@@ -324,7 +320,7 @@ export const googleAuth = async (req, res) => {
       name: cleanName,
       email: cleanEmail,
       password: dummyPassword,
-      role: targetRole,
+      role: "user", // All new Google OAuth registrations strictly default to standard "user" role
       avatar: avatar || undefined,
     });
     logger.info(`✨ Google OAuth user created: ${cleanName} (${cleanEmail})`);

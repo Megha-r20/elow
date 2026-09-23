@@ -78,6 +78,19 @@ describe("Auth & RBAC Integration Tests", () => {
     expect(res.body.user.role).toBe("user");
   });
 
+  it("should never auto-grant admin role via email patterns on googleAuth", async () => {
+    const res = await request(app)
+      .post("/api/auth/google")
+      .send({
+        name: "Fake Admin",
+        email: "admin-fake@example.com",
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.user.role).toBe("user");
+  });
+
   it("should fail login with incorrect password (401 Unauthorized)", async () => {
     await request(app)
       .post("/api/auth/register")
