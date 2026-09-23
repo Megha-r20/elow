@@ -11,25 +11,38 @@ const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
 // Helper function to seed initial categories or sync/purge legacy categories in MongoDB
 const seedCategoriesIfNeeded = async () => {
   if (DEFAULT_CATEGORIES && DEFAULT_CATEGORIES.length > 0) {
-    const validIds = DEFAULT_CATEGORIES.map((c) => c.id);
-    await Category.deleteMany({ id: { $nin: validIds } });
-
-    for (const c of DEFAULT_CATEGORIES) {
-      await Category.updateOne(
-        { id: c.id },
-        {
-          $set: {
-            id: c.id,
-            name: c.label || c.name || c.id,
-            slug: (c.id || "").toLowerCase(),
-            description: c.desc || c.description || "",
-            image: c.image || c.imageUrl || "",
-            productCount: c.productCount ?? c.count ?? 0,
-            isActive: true,
+    const dbCount = await Category.countDocuments();
+    if (dbCount !== DEFAULT_CATEGORIES.length) {
+      logger.info(`[Auto Sync] Category count (${dbCount}) != static categories (${DEFAULT_CATEGORIES.length}). Resetting MongoDB Atlas categories...`);
+      await Category.deleteMany({});
+      const docs = DEFAULT_CATEGORIES.map((c) => ({
+        id: c.id,
+        name: c.label || c.name || c.id,
+        slug: (c.id || "").toLowerCase(),
+        description: c.desc || c.description || "",
+        image: c.image || c.imageUrl || "",
+        productCount: c.productCount ?? c.count ?? 0,
+        isActive: true,
+      }));
+      await Category.insertMany(docs);
+    } else {
+      for (const c of DEFAULT_CATEGORIES) {
+        await Category.updateOne(
+          { id: c.id },
+          {
+            $set: {
+              id: c.id,
+              name: c.label || c.name || c.id,
+              slug: (c.id || "").toLowerCase(),
+              description: c.desc || c.description || "",
+              image: c.image || c.imageUrl || "",
+              productCount: c.productCount ?? c.count ?? 0,
+              isActive: true,
+            },
           },
-        },
-        { upsert: true }
-      );
+          { upsert: true }
+        );
+      }
     }
   }
 };
@@ -37,30 +50,34 @@ const seedCategoriesIfNeeded = async () => {
 // Helper function to seed initial products or sync/purge legacy products in MongoDB
 const seedProductsIfNeeded = async () => {
   if (DEFAULT_PRODUCTS && DEFAULT_PRODUCTS.length > 0) {
-    const validProductIds = DEFAULT_PRODUCTS.map((p) => p.id);
-    await Product.deleteMany({ id: { $nin: validProductIds } });
-
-    const bulkOps = DEFAULT_PRODUCTS.map((p) => ({
-      updateOne: {
-        filter: { id: p.id },
-        update: {
-          $set: {
-            category: p.category,
-            subcategory: p.subcategory || "",
-            name: p.name,
-            shortName: p.shortName || p.name,
-            price: p.price,
-            originalPrice: p.originalPrice,
-            description: p.description,
-            images: p.images,
-            inStock: p.inStock,
-            stockCount: p.stockCount,
+    const dbCount = await Product.countDocuments();
+    if (dbCount !== DEFAULT_PRODUCTS.length) {
+      logger.info(`[Auto Sync] Product count (${dbCount}) != static catalog (${DEFAULT_PRODUCTS.length}). Resetting MongoDB Atlas products collection...`);
+      await Product.deleteMany({});
+      await Product.insertMany(DEFAULT_PRODUCTS);
+    } else {
+      const bulkOps = DEFAULT_PRODUCTS.map((p) => ({
+        updateOne: {
+          filter: { id: p.id },
+          update: {
+            $set: {
+              category: p.category,
+              subcategory: p.subcategory || "",
+              name: p.name,
+              shortName: p.shortName || p.name,
+              price: p.price,
+              originalPrice: p.originalPrice,
+              description: p.description,
+              images: p.images,
+              inStock: p.inStock,
+              stockCount: p.stockCount,
+            },
           },
+          upsert: true,
         },
-        upsert: true,
-      },
-    }));
-    await Product.bulkWrite(bulkOps);
+      }));
+      await Product.bulkWrite(bulkOps);
+    }
   }
 };
 
