@@ -4,7 +4,18 @@ import { logger } from "../config/logger.js";
 
 import crypto from "crypto";
 
-let jwtSecret = process.env.JWT_SECRET || "elow_default_jwt_secret_key_2026_stationery_store";
+let jwtSecret = process.env.JWT_SECRET;
+
+if (!jwtSecret) {
+  if (process.env.NODE_ENV === "production") {
+    logger.error("❌ [FATAL SECURITY ERROR] JWT_SECRET environment variable is not set in production mode.");
+    throw new Error("FATAL SECURITY ERROR: JWT_SECRET environment variable must be set in production mode.");
+  } else {
+    logger.warn("⚠️ [DEV NOTICE] JWT_SECRET environment variable is not set. Using static fallback secret for local development and testing.");
+    jwtSecret = "elow_default_dev_jwt_secret_key_2026_stationery_store";
+  }
+}
+
 export const JWT_SECRET = jwtSecret;
 export const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || `${JWT_SECRET}_refresh`;
 
