@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { Product } from "../models/Product.js";
 import { Review } from "../models/Review.js";
 import { Category } from "../models/Category.js";
-import { CATEGORIES as DEFAULT_CATEGORIES, PRICE_RANGES } from "../data/products.js";
+import { PRODUCTS as DEFAULT_PRODUCTS, CATEGORIES as DEFAULT_CATEGORIES, PRICE_RANGES } from "../data/products.js";
 import { logger } from "../config/logger.js";
 import { resolvePinterestUrl } from "../utils/pinterestResolver.js";
 
@@ -18,10 +18,19 @@ const seedCategoriesIfNeeded = async () => {
       slug: (c.id || "").toLowerCase(),
       description: c.desc || c.description || "",
       image: c.image || c.imageUrl || "",
-      productCount: c.count || 0,
+      productCount: c.productCount || c.count || 0,
       isActive: true,
     }));
     await Category.insertMany(docs);
+  }
+};
+
+// Helper function to seed initial products if DB collection is empty
+const seedProductsIfNeeded = async () => {
+  const count = await Product.countDocuments();
+  if (count === 0 && DEFAULT_PRODUCTS && DEFAULT_PRODUCTS.length > 0) {
+    logger.info(`[Auto Seed] Product database collection is empty. Auto-seeding ${DEFAULT_PRODUCTS.length} catalog items into MongoDB...`);
+    await Product.insertMany(DEFAULT_PRODUCTS);
   }
 };
 
@@ -55,6 +64,11 @@ const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // @route   GET /api/products
 // @access  Public
 export const getProducts = async (req, res) => {
+  try {
+    await seedProductsIfNeeded();
+  } catch (_e) {
+    /* ignore auto-seed error if DB connection has issues */
+  }
   const { cat, q, filter, priceRange, inStock, sort } = req.query;
 
   const mongoQuery = {};

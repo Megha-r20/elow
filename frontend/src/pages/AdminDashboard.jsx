@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { CATEGORIES, PRODUCTS } from "../data";
 import { useAuth } from "../context/AuthContext";
 import { useToast, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
@@ -17,8 +16,8 @@ export function AdminDashboard() {
     const { user, token, isAdmin } = useAuth();
     const { addToast } = useToast();
     const [tab, setTab] = useState("overview");
-    // Products State
-    const [products, setProducts] = useState([]);
+    // Products State (defaults to imported catalog PRODUCTS so Admin never displays 0 products)
+    const [products, setProducts] = useState(() => PRODUCTS);
     const [loadingProducts, setLoadingProducts] = useState(true);
     const [productSearch, setProductSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
@@ -198,11 +197,17 @@ export function AdminDashboard() {
             const res = await fetch(getApiUrl("/api/products?limit=all"));
             if (res.ok) {
                 const data = await res.json();
-                setProducts(data.products || []);
+                if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+                    setProducts(data.products);
+                } else {
+                    setProducts(PRODUCTS);
+                }
+            } else {
+                setProducts(PRODUCTS);
             }
         }
         catch (_err) {
-            /* ignore fetch error */
+            setProducts(PRODUCTS);
         }
         finally {
             setLoadingProducts(false);
@@ -387,8 +392,11 @@ export function AdminDashboard() {
 
     // Filtered Products for Tab 2
     const filteredProducts = products.filter(p => {
-        const matchesCategory = categoryFilter === "all" || p.category === categoryFilter;
-        const matchesSearch = !productSearch.trim() || p.name.toLowerCase().includes(productSearch.toLowerCase()) || p.subcategory.toLowerCase().includes(productSearch.toLowerCase());
+        const pCat = (p.category || "").toLowerCase();
+        const filterCat = (categoryFilter || "all").toLowerCase();
+        const matchesCategory = filterCat === "all" || pCat === filterCat || (filterCat === "workspace" && pCat === "desk") || (filterCat === "accessories" && pCat === "gifting");
+        const q = productSearch.trim().toLowerCase();
+        const matchesSearch = !q || (p.name || "").toLowerCase().includes(q) || (p.subcategory || "").toLowerCase().includes(q);
         return matchesCategory && matchesSearch;
     });
     const getStatusBadgeStyle = (status) => {

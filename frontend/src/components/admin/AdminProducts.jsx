@@ -24,10 +24,12 @@ export function AdminProducts({
           <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="field field-sm">
             <option value="all">All Categories</option>
             <option value="journals">Journals</option>
+            <option value="pens">Pens & Ink</option>
+            <option value="washi">Washi Tape</option>
+            <option value="stickers">Stickers</option>
             <option value="planners">Planners</option>
-            <option value="pens">Pens</option>
-            <option value="workspace">Workspace</option>
-            <option value="accessories">Accessories</option>
+            <option value="desk">Workspace & Desk</option>
+            <option value="gifting">Accessories</option>
           </select>
 
           <button onClick={() => setShowAddModal(true)} className="btn" style={{ background: "#AB88CD", color: "#FFFFFF", padding: "10px 20px", borderRadius: 12, fontWeight: 700, border: "none", cursor: "pointer" }}>
