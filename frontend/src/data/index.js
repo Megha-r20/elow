@@ -6,8 +6,8 @@ export const CATEGORIES = [
     { id: "washi", label: "Washi Tape", image: "https://i.pinimg.com/1200x/59/03/21/590321b4fba750d7c7fd44ac9275c113.jpg", fallbackImage: "/washi-tape.jpg", productCount: 20, color: "#DFF5F3" },
     { id: "stickers", label: "Stickers", image: "https://i.pinimg.com/736x/4a/c1/3a/4ac13a77c2e20daf95eb3908a51ba8c2.jpg", fallbackImage: "/stickers.jpg", productCount: 22, color: "#FFF0DC" },
     { id: "planners", label: "Planners", image: "https://i.pinimg.com/736x/00/ac/d8/00acd8a7de0235bf864aa6e6d3809ff4.jpg", fallbackImage: "/planners.jpg", productCount: 20, color: "#E5F5EC" },
-    { id: "desk", label: "Desk Accessories", image: "https://i.pinimg.com/736x/8a/d3/6b/8ad36b7926877e5e6d9aa699214aa6a1.jpg", fallbackImage: "/desk-accessories.jpg", productCount: 21, color: "#E5EEFF" },
-    { id: "gifting", label: "Gift Combos", image: "https://i.pinimg.com/736x/5c/a7/30/5ca730b11ab643bde784311628014b92.jpg", fallbackImage: "/gift-combo.jpg", productCount: 20, color: "#FDEFEF" },
+    { id: "desk", label: "Desk Accessories", image: "https://i.pinimg.com/736x/8a/d3/6b/8ad36b7926877e5e6d9aa699214aa6a1.jpg", fallbackImage: "/desk-accessories.jpg", productCount: 41, color: "#E5EEFF" },
+    { id: "gifting", label: "Gift Combos", image: "https://i.pinimg.com/736x/5c/a7/30/5ca730b11ab643bde784311628014b92.jpg", fallbackImage: "/gift-combo.jpg", productCount: 0, color: "#FDEFEF" },
 ];
 
 export const REVIEWS = [

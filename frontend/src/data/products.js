@@ -4053,7 +4053,7 @@ export const PRODUCTS = [
     "id": "P131",
     "name": "Lavender Pencil Pouch",
     "shortName": "Lavender Pencil Pouch",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Pencil Cases",
     "price": 349,
     "originalPrice": 449,
@@ -4063,7 +4063,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/736x/be/11/29/be112946b7ed1f8faa4d554a0e0bf1a6.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "pencil cases",
       "stationery",
       "aesthetic"
@@ -4072,7 +4072,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Soft lavender pouch with enough space for everyday stationery essentials.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Pencil Cases",
       "Stock: 39 items available"
     ],
@@ -4083,7 +4083,7 @@ export const PRODUCTS = [
     "id": "P132",
     "name": "Transparent Stationery Pouch",
     "shortName": "Transparent Stationery Pouch",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Pencil Cases",
     "price": 299,
     "originalPrice": 399,
@@ -4093,7 +4093,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/1a/cc/a0/1acca070c8f97f7f18f55c5ccce696b9.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "pencil cases",
       "stationery",
       "aesthetic"
@@ -4104,7 +4104,7 @@ export const PRODUCTS = [
     "isBestseller": true,
     "description": "Clear pouch that keeps stationery visible and easy to organize.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Pencil Cases",
       "Stock: 43 items available"
     ],
@@ -4115,7 +4115,7 @@ export const PRODUCTS = [
     "id": "P133",
     "name": "Vintage Brass Bookmark",
     "shortName": "Vintage Brass Bookmark",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Bookmarks",
     "price": 199,
     "originalPrice": 279,
@@ -4125,7 +4125,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/736x/80/f1/06/80f106f570cc392a1d2c6ba77cb2ef30.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "bookmarks",
       "stationery",
       "aesthetic"
@@ -4136,7 +4136,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Elegant brass-style bookmark with a timeless vintage appearance.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Bookmarks",
       "Stock: 51 items available"
     ],
@@ -4147,7 +4147,7 @@ export const PRODUCTS = [
     "id": "P134",
     "name": "Purple Tassel Bookmark",
     "shortName": "Purple Tassel Bookmark",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Bookmarks",
     "price": 149,
     "originalPrice": 219,
@@ -4157,7 +4157,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/58/8f/f0/588ff075503cc96a57b331fb34d868e2.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "bookmarks",
       "stationery",
       "aesthetic"
@@ -4166,7 +4166,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Decorative bookmark featuring a soft purple tassel.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Bookmarks",
       "Stock: 64 items available"
     ],
@@ -4177,7 +4177,7 @@ export const PRODUCTS = [
     "id": "P135",
     "name": "Floral Paper Clip Set",
     "shortName": "Floral Paper Clip Set",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Paper Clips",
     "price": 179,
     "originalPrice": 249,
@@ -4187,7 +4187,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/d5/c4/90/d5c4906cee983aef3a411f8aaff33be7.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "paper clips",
       "stationery",
       "aesthetic"
@@ -4196,7 +4196,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Decorative floral paper clips for journals, planners and documents.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Paper Clips",
       "Stock: 48 items available"
     ],
@@ -4207,7 +4207,7 @@ export const PRODUCTS = [
     "id": "P136",
     "name": "Gold Star Paper Clips",
     "shortName": "Gold Star Paper Clips",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Paper Clips",
     "price": 159,
     "originalPrice": 229,
@@ -4217,7 +4217,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/02/d0/3f/02d03ff5e5e7fb04dd36ebb62c1e5e9f.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "paper clips",
       "stationery",
       "aesthetic"
@@ -4226,7 +4226,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Star-shaped metallic paper clips with a polished decorative finish.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Paper Clips",
       "Stock: 57 items available"
     ],
@@ -4237,7 +4237,7 @@ export const PRODUCTS = [
     "id": "P137",
     "name": "Lavender Sticky Notes",
     "shortName": "Lavender Sticky Notes",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Sticky Notes",
     "price": 129,
     "originalPrice": 179,
@@ -4247,7 +4247,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/a5/b7/c2/a5b7c25452218bf707509ef5bd0b14ab.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "sticky notes",
       "stationery",
       "aesthetic"
@@ -4258,7 +4258,7 @@ export const PRODUCTS = [
     "isBestseller": true,
     "description": "Soft lavender sticky notes for reminders, study notes and planning.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Sticky Notes",
       "Stock: 72 items available"
     ],
@@ -4269,7 +4269,7 @@ export const PRODUCTS = [
     "id": "P138",
     "name": "Cloud Sticky Note Set",
     "shortName": "Cloud Sticky Note Set",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Sticky Notes",
     "price": 169,
     "originalPrice": 229,
@@ -4279,7 +4279,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/53/81/b7/5381b7703b43bcb8d92a6f0f5e9762dd.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "sticky notes",
       "stationery",
       "aesthetic"
@@ -4288,7 +4288,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Cloud-shaped sticky notes in a calming pastel palette.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Sticky Notes",
       "Stock: 55 items available"
     ],
@@ -4299,7 +4299,7 @@ export const PRODUCTS = [
     "id": "P139",
     "name": "Mini Scissors Lavender",
     "shortName": "Mini Scissors Lavender",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Craft Tools",
     "price": 229,
     "originalPrice": 299,
@@ -4309,7 +4309,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/48/17/af/4817afbf2739fe8a7f352aa1c6bea253.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "craft tools",
       "stationery",
       "aesthetic"
@@ -4320,7 +4320,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Compact scissors with a lavender handle for crafting and journaling.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Craft Tools",
       "Stock: 37 items available"
     ],
@@ -4331,7 +4331,7 @@ export const PRODUCTS = [
     "id": "P140",
     "name": "Aesthetic Ruler Set",
     "shortName": "Aesthetic Ruler Set",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Rulers",
     "price": 149,
     "originalPrice": 199,
@@ -4341,7 +4341,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/736x/66/79/ed/6679eda7f9f2019225f3207efdcd6ef7.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "rulers",
       "stationery",
       "aesthetic"
@@ -4350,7 +4350,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Minimal rulers designed for precise planning and creative layouts.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Rulers",
       "Stock: 61 items available"
     ],
@@ -4361,7 +4361,7 @@ export const PRODUCTS = [
     "id": "P141",
     "name": "Purple Pencil Sharpener",
     "shortName": "Purple Pencil Sharpener",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Desk Tools",
     "price": 129,
     "originalPrice": 179,
@@ -4371,7 +4371,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/736x/92/2f/c6/922fc66e4f6593189b4a0bcbe1f55eb3.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "desk tools",
       "stationery",
       "aesthetic"
@@ -4380,7 +4380,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Compact sharpener with a smooth purple finish.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Desk Tools",
       "Stock: 68 items available"
     ],
@@ -4391,7 +4391,7 @@ export const PRODUCTS = [
     "id": "P142",
     "name": "Washi Tape Dispenser",
     "shortName": "Washi Tape Dispenser",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Tape Tools",
     "price": 249,
     "originalPrice": 329,
@@ -4401,7 +4401,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/e1/cd/e7/e1cde72bc23be3cbe968306c233f45fe.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "tape tools",
       "stationery",
       "aesthetic"
@@ -4412,7 +4412,7 @@ export const PRODUCTS = [
     "isBestseller": true,
     "description": "Handy dispenser for neatly cutting and storing decorative tape.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Tape Tools",
       "Stock: 32 items available"
     ],
@@ -4423,7 +4423,7 @@ export const PRODUCTS = [
     "id": "P143",
     "name": "Journal Elastic Band Set",
     "shortName": "Journal Elastic Band Set",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Journal Accessories",
     "price": 179,
     "originalPrice": 249,
@@ -4433,7 +4433,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/ee/20/a8/ee20a82979aba3d323526142d4d45a80.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "journal accessories",
       "stationery",
       "aesthetic"
@@ -4442,7 +4442,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Decorative elastic bands for securing notebooks and planners.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Journal Accessories",
       "Stock: 44 items available"
     ],
@@ -4453,7 +4453,7 @@ export const PRODUCTS = [
     "id": "P144",
     "name": "Mini Bookmark Charm",
     "shortName": "Mini Bookmark Charm",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Bookmarks",
     "price": 219,
     "originalPrice": 299,
@@ -4463,7 +4463,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/736x/b0/08/6a/b0086ad83203f66833d7a547af7924.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "bookmarks",
       "stationery",
       "aesthetic"
@@ -4472,7 +4472,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Small decorative bookmark charm designed for journals and novels.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Bookmarks",
       "Stock: 35 items available"
     ],
@@ -4483,7 +4483,7 @@ export const PRODUCTS = [
     "id": "P145",
     "name": "Purple Binder Clips",
     "shortName": "Purple Binder Clips",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Clips",
     "price": 139,
     "originalPrice": 199,
@@ -4493,7 +4493,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/cf/8e/99/cf8e99530d120ef298c39298c275dc5c.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "clips",
       "stationery",
       "aesthetic"
@@ -4504,7 +4504,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Set of aesthetic binder clips for organizing papers and documents.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Clips",
       "Stock: 59 items available"
     ],
@@ -4515,7 +4515,7 @@ export const PRODUCTS = [
     "id": "P146",
     "name": "Desk Photo Clips",
     "shortName": "Desk Photo Clips",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Photo Accessories",
     "price": 199,
     "originalPrice": 279,
@@ -4525,7 +4525,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/09/25/2e/09252e67c7be736223a21524f71f9e0e.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "photo accessories",
       "stationery",
       "aesthetic"
@@ -4534,7 +4534,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Mini clips for displaying photographs, notes and inspirational cards.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Photo Accessories",
       "Stock: 46 items available"
     ],
@@ -4545,7 +4545,7 @@ export const PRODUCTS = [
     "id": "P147",
     "name": "Lavender Book Sleeve",
     "shortName": "Lavender Book Sleeve",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Book Sleeves",
     "price": 449,
     "originalPrice": 579,
@@ -4555,7 +4555,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/1200x/89/02/38/890238a4b259b1040647ce5e2fc305db.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "book sleeves",
       "stationery",
       "aesthetic"
@@ -4566,7 +4566,7 @@ export const PRODUCTS = [
     "isBestseller": true,
     "description": "Protective fabric sleeve for carrying notebooks and favorite books.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Book Sleeves",
       "Stock: 24 items available"
     ],
@@ -4577,7 +4577,7 @@ export const PRODUCTS = [
     "id": "P148",
     "name": "Stationery Travel Case",
     "shortName": "Stationery Travel Case",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Storage Cases",
     "price": 499,
     "originalPrice": 649,
@@ -4587,7 +4587,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/736x/4a/fc/3d/4afc3dae85d892cbb92585d8b1989370.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "storage cases",
       "stationery",
       "aesthetic"
@@ -4596,7 +4596,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Compact travel case with compartments for organizing stationery.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Storage Cases",
       "Stock: 18 items available"
     ],
@@ -4607,7 +4607,7 @@ export const PRODUCTS = [
     "id": "P149",
     "name": "Purple Lanyard Charm",
     "shortName": "Purple Lanyard Charm",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Charms",
     "price": 159,
     "originalPrice": 229,
@@ -4617,7 +4617,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/736x/a0/27/30/a0273060aff3cdc16e326115876510ee.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "charms",
       "stationery",
       "aesthetic"
@@ -4626,7 +4626,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Small decorative charm for bags, pencil cases and lanyards.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Charms",
       "Stock: 41 items available"
     ],
@@ -4637,7 +4637,7 @@ export const PRODUCTS = [
     "id": "P150",
     "name": "Mini Craft Storage Box",
     "shortName": "Mini Craft Storage Box",
-    "category": "gifting",
+    "category": "desk",
     "subcategory": "Storage Boxes",
     "price": 299,
     "originalPrice": 399,
@@ -4647,7 +4647,7 @@ export const PRODUCTS = [
       "https://i.pinimg.com/736x/47/a3/4b/47a34b770e85fd788bddb7af1b344c80.jpg"
     ],
     "tags": [
-      "gifting",
+      "desk",
       "storage boxes",
       "stationery",
       "aesthetic"
@@ -4656,7 +4656,7 @@ export const PRODUCTS = [
     "isBestseller": false,
     "description": "Compact compartment box for storing stickers, clips and tiny supplies.",
     "details": [
-      "Category: Accessories",
+      "Category: Workspace & Desk",
       "Subcategory: Storage Boxes",
       "Stock: 28 items available"
     ],
@@ -4671,8 +4671,8 @@ export const CATEGORIES = [
   { id: "washi",     label: "Washi Tape",        image: "https://i.pinimg.com/1200x/59/03/21/590321b4fba750d7c7fd44ac9275c113.jpg", fallbackImage: "/washi-tape.jpg", productCount: 20, color: "#DFF5F3" },
   { id: "stickers",  label: "Stickers",          image: "https://i.pinimg.com/736x/4a/c1/3a/4ac13a77c2e20daf95eb3908a51ba8c2.jpg", fallbackImage: "/stickers.jpg", productCount: 22, color: "#FFF0DC" },
   { id: "planners",  label: "Planners",          image: "https://i.pinimg.com/736x/00/ac/d8/00acd8a7de0235bf864aa6e6d3809ff4.jpg", fallbackImage: "/planners.jpg", productCount: 20, color: "#E5F5EC" },
-  { id: "desk",      label: "Desk Accessories",  image: "https://i.pinimg.com/736x/8a/d3/6b/8ad36b7926877e5e6d9aa699214aa6a1.jpg", fallbackImage: "/desk-accessories.jpg", productCount: 21, color: "#E5EEFF" },
-  { id: "gifting",   label: "Gift Combos",      image: "https://i.pinimg.com/736x/5c/a7/30/5ca730b11ab643bde784311628014b92.jpg", fallbackImage: "/gift-combo.jpg", productCount: 20, color: "#FDEFEF" },
+  { id: "desk",      label: "Desk Accessories",  image: "https://i.pinimg.com/736x/8a/d3/6b/8ad36b7926877e5e6d9aa699214aa6a1.jpg", fallbackImage: "/desk-accessories.jpg", productCount: 41, color: "#E5EEFF" },
+  { id: "gifting",   label: "Gift Combos",      image: "https://i.pinimg.com/736x/5c/a7/30/5ca730b11ab643bde784311628014b92.jpg", fallbackImage: "/gift-combo.jpg", productCount: 0, color: "#FDEFEF" },
 ];
 
 export const REVIEWS = [
