@@ -72,25 +72,15 @@ export const getCategories = async (req, res) => {
     const countMap = {};
     counts.forEach(item => {
       if (item._id) {
-        const raw = item._id.toLowerCase();
-        let catId = raw;
-        if (raw.includes("desk")) catId = "desk";
-        else if (raw.includes("gift") || raw.includes("gifting")) catId = "gifting";
-        else if (raw.includes("pen")) catId = "pens";
-        else if (raw.includes("journal")) catId = "journals";
-        else if (raw.includes("planner")) catId = "planners";
-        else if (raw.includes("sticker")) catId = "stickers";
-        else if (raw.includes("washi")) catId = "washi";
-
-        countMap[catId] = (countMap[catId] || 0) + item.count;
-        countMap[raw] = (countMap[raw] || 0) + item.count;
+        countMap[item._id.toLowerCase()] = item.count;
       }
     });
 
     const formatted = categories.map((c) => {
       const matchId = (c.id || c.slug || "").toLowerCase();
       const defaultCat = (DEFAULT_CATEGORIES || []).find(d => (d.id || "").toLowerCase() === matchId) || {};
-      const calculatedCount = countMap[matchId] ?? defaultCat.productCount ?? c.productCount ?? 0;
+      const dbCount = countMap[matchId];
+      const calculatedCount = (dbCount !== undefined && dbCount >= 0) ? dbCount : (defaultCat.productCount ?? 0);
       return {
         id: c.id,
         label: c.name,
