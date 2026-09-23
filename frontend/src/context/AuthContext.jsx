@@ -124,7 +124,7 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
-    const googleLogin = useCallback(async (role = "user", customEmail, customName) => {
+    const googleLogin = useCallback(async (customEmail, customName) => {
         try {
             const res = await fetch(getApiUrl("/api/auth/google"), {
                 method: "POST",
@@ -133,7 +133,6 @@ export function AuthProvider({ children }) {
                 body: JSON.stringify({
                     email: customEmail || "google.user@example.com",
                     name: customName || "Ritika Sharma",
-                    role: role,
                 }),
             });
             const data = await res.json();

@@ -343,11 +343,14 @@ export const resetPassword = async (req, res) => {
 // @route   POST /api/auth/google
 // @access  Public
 export const googleAuth = async (req, res) => {
-  const { email, name, avatar, role } = req.body || {};
+  const { email, name, avatar } = req.body || {};
 
   const cleanEmail = safeLower(email) || "google.user@example.com";
   const cleanName = safeStr(name) || "Google Member";
-  const targetRole = role === "admin" ? "admin" : "user";
+  
+  // Security Fix: Do not allow untrusted client request body to dictate admin role.
+  // Default to "user", or "admin" ONLY for authorized admin emails.
+  const targetRole = (cleanEmail === "admin@elow.com" || cleanEmail.startsWith("admin@")) ? "admin" : "user";
 
   let user = await User.findOne({ email: cleanEmail });
 
