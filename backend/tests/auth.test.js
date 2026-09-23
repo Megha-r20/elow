@@ -98,6 +98,18 @@ describe("Auth & RBAC Integration Tests", () => {
     expect(res.body.error).toBe("Invalid email or password");
   });
 
+  it("should strictly reject login attempts with invalid password on admin-prefixed emails", async () => {
+    const res = await request(app)
+      .post("/api/auth/login")
+      .send({
+        email: "admin-hacker@example.com",
+        password: "WrongPassword123!",
+      });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toBe("Invalid email or password");
+  });
+
   it("should return 401 Unauthorized for protected route without token", async () => {
     const res = await request(app).get("/api/auth/me");
     expect(res.status).toBe(401);
