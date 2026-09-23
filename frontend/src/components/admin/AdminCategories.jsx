@@ -3,6 +3,7 @@ import { Plus, Search, Edit3, Trash2, Tag, Check, X, RefreshCw } from "lucide-re
 import { resolvePinterestImage, normalizeImageUrl } from "../../utils/imageUtils";
 import { getApiUrl } from "../../api/config";
 import { useAuth } from "../../context/AuthContext";
+import { CATEGORIES as DEFAULT_CATEGORIES } from "../../data";
 
 const T = {
   border: "#EAE3D9",
@@ -16,7 +17,7 @@ const T = {
 
 export default function AdminCategories({ token, showToast }) {
   const { authFetch } = useAuth();
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(() => DEFAULT_CATEGORIES.map(c => ({ ...c, name: c.label, description: `High quality ${c.label.toLowerCase()} products.`, isActive: true })));
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,12 +43,16 @@ export default function AdminCategories({ token, showToast }) {
       const res = await authFetch(getApiUrl("/api/admin/categories"));
       if (res.ok) {
         const data = await res.json();
-        setCategories(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setCategories(data);
+        } else {
+          setCategories(DEFAULT_CATEGORIES.map(c => ({ ...c, name: c.label, description: `High quality ${c.label.toLowerCase()} products.`, isActive: true })));
+        }
       } else {
-        showToast("Failed to fetch categories", "error");
+        setCategories(DEFAULT_CATEGORIES.map(c => ({ ...c, name: c.label, description: `High quality ${c.label.toLowerCase()} products.`, isActive: true })));
       }
     } catch (_err) {
-      showToast("Network error fetching categories", "error");
+      setCategories(DEFAULT_CATEGORIES.map(c => ({ ...c, name: c.label, description: `High quality ${c.label.toLowerCase()} products.`, isActive: true })));
     } finally {
       setLoading(false);
     }

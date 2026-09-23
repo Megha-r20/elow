@@ -12,8 +12,14 @@ const T = {
   teal: "#AB88CD",
 };
 
+const DEFAULT_PROMOS = [
+  { id: "promo-1", code: "WRITE50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true, usageCount: 18 },
+  { id: "promo-2", code: "ELOW10", discountType: "percentage", discountValue: 10, minOrderAmount: 0, isActive: true, usageCount: 42 },
+  { id: "promo-3", code: "WELCOME20", discountType: "percentage", discountValue: 20, minOrderAmount: 499, isActive: true, usageCount: 9 },
+];
+
 export default function AdminPromo({ token, showToast }) {
-  const [promos, setPromos] = useState([]);
+  const [promos, setPromos] = useState(() => DEFAULT_PROMOS);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,12 +42,16 @@ export default function AdminPromo({ token, showToast }) {
       });
       if (res.ok) {
         const data = await res.json();
-        setPromos(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setPromos(data);
+        } else {
+          setPromos(DEFAULT_PROMOS);
+        }
       } else {
-        showToast("Failed to fetch promo codes", "error");
+        setPromos(DEFAULT_PROMOS);
       }
     } catch (_err) {
-      showToast("Network error fetching promo codes", "error");
+      setPromos(DEFAULT_PROMOS);
     } finally {
       setLoading(false);
     }

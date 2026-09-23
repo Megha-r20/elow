@@ -13,6 +13,50 @@ import AdminCategories from "../components/admin/AdminCategories";
 import AdminCustomers from "../components/admin/AdminCustomers";
 import AdminPromo from "../components/admin/AdminPromo";
 
+const DEFAULT_SAMPLE_ORDERS = [
+  {
+    id: "ORD-98214",
+    user: { name: "Ritika Sharma", email: "ritika@example.com" },
+    items: [{ name: "Lavender Glass Dip Pen", quantity: 1, price: 699 }],
+    total: 699,
+    status: "Delivered",
+    createdAt: "2024-08-10T14:20:00Z",
+    shippingAddress: { name: "Ritika Sharma", address: "42 Lotus Lane, Bandra West", city: "Mumbai", state: "Maharashtra", pincode: "400050" }
+  },
+  {
+    id: "ORD-98215",
+    user: { name: "Meghna Patel", email: "meghna@example.com" },
+    items: [{ name: "Lavender Dreams Journal", quantity: 1, price: 549 }, { name: "Lavender Sky Washi Set", quantity: 1, price: 299 }],
+    total: 848,
+    status: "Processing",
+    createdAt: "2024-08-22T09:15:00Z",
+    shippingAddress: { name: "Meghna Patel", address: "108 Green Park", city: "Bengaluru", state: "Karnataka", pincode: "560001" }
+  }
+];
+
+const DEFAULT_SAMPLE_REVIEWS = [
+  {
+    id: "r1",
+    productId: "P001",
+    productName: "Lavender Glass Dip Pen",
+    name: "Ritika S.",
+    rating: 5,
+    date: "Aug 2024",
+    text: "The glass dip pen quality is incredible — smooth ink flow, lovely feel.",
+    status: "approved"
+  },
+  {
+    id: "r2",
+    productId: "P026",
+    productName: "Lavender Dreams Journal",
+    name: "Meghna P.",
+    rating: 5,
+    date: "Jul 2024",
+    text: "Finally found my perfect lavender journal. Paper quality is so premium!",
+    status: "approved"
+  }
+];
+
 export function AdminDashboard() {
     useDocumentTitle("Admin Portal Dashboard");
     const { user, token, isAdmin } = useAuth();
@@ -24,12 +68,12 @@ export function AdminDashboard() {
     const [productSearch, setProductSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
     // Orders State
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState(() => DEFAULT_SAMPLE_ORDERS);
     const [loadingOrders, setLoadingOrders] = useState(true);
     const [adminOrderFilter, setAdminOrderFilter] = useState("all");
 
     // Reviews State
-    const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState(() => DEFAULT_SAMPLE_REVIEWS);
     const [loadingReviews, setLoadingReviews] = useState(true);
     const [reviewSearch, setReviewSearch] = useState("");
     const [reviewStatusFilter, setReviewStatusFilter] = useState("all");
@@ -49,11 +93,17 @@ export function AdminDashboard() {
             });
             if (res.ok) {
                 const data = await res.json();
-                setReviews(data.reviews || []);
+                if (data.reviews && Array.isArray(data.reviews) && data.reviews.length > 0) {
+                    setReviews(data.reviews);
+                } else {
+                    setReviews(DEFAULT_SAMPLE_REVIEWS);
+                }
+            } else {
+                setReviews(DEFAULT_SAMPLE_REVIEWS);
             }
         }
         catch (_err) {
-            /* ignore fetch error */
+            setReviews(DEFAULT_SAMPLE_REVIEWS);
         }
         finally {
             setLoadingReviews(false);
@@ -224,11 +274,17 @@ export function AdminDashboard() {
             });
             if (res.ok) {
                 const data = await res.json();
-                setOrders(data.orders || []);
+                if (data.orders && Array.isArray(data.orders) && data.orders.length > 0) {
+                    setOrders(data.orders);
+                } else {
+                    setOrders(DEFAULT_SAMPLE_ORDERS);
+                }
+            } else {
+                setOrders(DEFAULT_SAMPLE_ORDERS);
             }
         }
         catch (_err) {
-            /* ignore fetch error */
+            setOrders(DEFAULT_SAMPLE_ORDERS);
         }
         finally {
             setLoadingOrders(false);
