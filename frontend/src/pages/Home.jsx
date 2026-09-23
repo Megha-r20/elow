@@ -67,7 +67,7 @@ export default function Home() {
                             if (finalImg && !/^https?:\/\//i.test(finalImg) && !finalImg.startsWith("/") && !finalImg.startsWith("data:")) {
                                 finalImg = `https://${finalImg}`;
                             }
-                            const countVal = (c.count !== undefined && c.count > 0) ? c.count : (c.productCount || defaultCat.productCount || 0);
+                            const countVal = c.count ?? c.productCount ?? defaultCat.productCount ?? 0;
                             return {
                                 ...defaultCat,
                                 ...c,

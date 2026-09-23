@@ -37,12 +37,34 @@ const seedCategoriesIfNeeded = async () => {
   }
 };
 
-// Helper function to seed initial products if DB collection is empty
+// Helper function to seed initial products if DB collection is empty, or sync updated catalog fields in MongoDB
 const seedProductsIfNeeded = async () => {
   const count = await Product.countDocuments();
   if (count === 0 && DEFAULT_PRODUCTS && DEFAULT_PRODUCTS.length > 0) {
     logger.info(`[Auto Seed] Product database collection is empty. Auto-seeding ${DEFAULT_PRODUCTS.length} catalog items into MongoDB...`);
     await Product.insertMany(DEFAULT_PRODUCTS);
+  } else if (DEFAULT_PRODUCTS && DEFAULT_PRODUCTS.length > 0) {
+    const bulkOps = DEFAULT_PRODUCTS.map((p) => ({
+      updateOne: {
+        filter: { id: p.id },
+        update: {
+          $set: {
+            category: p.category,
+            subcategory: p.subcategory || "",
+            name: p.name,
+            shortName: p.shortName || p.name,
+            price: p.price,
+            originalPrice: p.originalPrice,
+            description: p.description,
+            images: p.images,
+            inStock: p.inStock,
+            stockCount: p.stockCount,
+          },
+        },
+        upsert: true,
+      },
+    }));
+    await Product.bulkWrite(bulkOps);
   }
 };
 
@@ -60,7 +82,20 @@ export const getCategories = async (req, res) => {
     ]);
     const countMap = {};
     counts.forEach(item => {
-      if (item._id) countMap[item._id.toLowerCase()] = item.count;
+      if (item._id) {
+        const raw = item._id.toLowerCase();
+        let catId = raw;
+        if (raw.includes("desk")) catId = "desk";
+        else if (raw.includes("gift") || raw.includes("gifting")) catId = "gifting";
+        else if (raw.includes("pen")) catId = "pens";
+        else if (raw.includes("journal")) catId = "journals";
+        else if (raw.includes("planner")) catId = "planners";
+        else if (raw.includes("sticker")) catId = "stickers";
+        else if (raw.includes("washi")) catId = "washi";
+
+        countMap[catId] = (countMap[catId] || 0) + item.count;
+        countMap[raw] = (countMap[raw] || 0) + item.count;
+      }
     });
 
     const formatted = categories.map((c) => {
