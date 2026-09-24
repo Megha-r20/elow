@@ -11,7 +11,10 @@ const bgVideo = "/Background_video.mp4";
 const T = {
     teal: "#AB88CD",
     cream: "#FAF7F2",
-    sand: "#F4EFE6",
+    sand: "#FBF9F5",
+    softLavender: "#F7F1F8",
+    mutedLavender: "#F4EEF6",
+    softBlush: "#F9F1F0",
     border: "#EAE3D9",
     txt: "#23201D",
     muted: "#6E6A63",
@@ -190,7 +193,7 @@ export default function Home() {
       </section>
 
       {/* ── Trust bar ───────────────────────────────────────────── */}
-      <div style={{ background: "#fff", borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
+      <div style={{ background: T.sand, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
         <div className="container">
           <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 0 }}>
             {[
@@ -210,7 +213,7 @@ export default function Home() {
       </div>
 
       {/* ── Categories ────────────────────────────────────────────────── */}
-      <section className="section" style={{ background: T.cream }}>
+      <section className="section" style={{ background: T.softLavender }}>
         <div className="container">
           <SectionHead eyebrow="Browse" title="Shop by Category" sub="Find exactly what you need — from journals to desk accessories." right={<button onClick={() => navigate("/shop")} className="btn btn-ghost btn-md" style={{ border: `1px solid ${T.border}` }}>View all <Icons.ArrowRight /></button>}/>
           
@@ -293,7 +296,7 @@ export default function Home() {
       </section>
 
       {/* ── Editorial split: The Journaling Edit ────────────────── */}
-      <section className="section" style={{ background: T.sand }}>
+      <section className="section" style={{ background: T.mutedLavender }}>
         <div className="container">
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderRadius: 24, overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.08)" }}>
             {/* Image */}
@@ -314,7 +317,7 @@ export default function Home() {
                 Everything you need to build a journaling habit that sticks. Dotted journals, smooth gel pens, decorative washi tapes, and more — curated for beginners and seasoned journalers alike.
               </p>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 36 }}>
-                {["Journals", "Pens", "Washi Tape", "Stickers"].map(t => (<span key={t} style={{ background: T.sand, border: `1px solid ${T.border}`, borderRadius: 999, padding: "6px 16px", fontSize: 12.5, fontWeight: 600, color: T.txt }}>{t}</span>))}
+                {["Journals", "Pens", "Washi Tape", "Stickers"].map(t => (<span key={t} style={{ background: T.sand, border: `1px solid ${T.border}`, borderRadius: 999, padding: "6px 16px", fontSize 12.5, fontWeight: 600, color: T.txt }}>{t}</span>))}
               </div>
               <button className="btn btn-dark btn-lg" onClick={() => navigate("/shop?cat=journals")} style={{ alignSelf: "flex-start", background: "linear-gradient(135deg, #AB88CD 0%, #9873BB 100%)", color: "#FAF7F2", border: "none" }}>
                 Explore Journaling <Icons.ArrowRight />
@@ -325,7 +328,7 @@ export default function Home() {
       </section>
 
       {/* ── Best Sellers ─────────────────────────────────────────── */}
-      <section className="section" style={{ background: T.cream, overflow: "hidden" }}>
+      <section className="section" style={{ background: T.sand, overflow: "hidden" }}>
         <div className="container">
           <SectionHead eyebrow="Most Popular" title="Best Sellers" sub="The products our community can't stop buying." right={<button onClick={() => navigate("/shop?filter=bestseller")} className="btn btn-ghost btn-md">View all <Icons.ArrowRight /></button>}/>
           <div className="hide-scroll" style={{ display: "flex", gap: 24, overflowX: "auto", paddingBottom: 32, paddingTop: 16, margin: "0 -32px", paddingLeft: 32, paddingRight: 32, scrollSnapType: "x mandatory" }}>
@@ -351,7 +354,7 @@ export default function Home() {
       </section>
 
       {/* ── Gift ideas ───────────────────────────────────────────── */}
-      <section className="section" style={{ background: "#FAFAF7" }}>
+      <section className="section" style={{ background: T.softBlush }}>
         <div className="container">
           <SectionHead eyebrow="Gifting" title="Find the Perfect Gift" center/>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridAutoRows: "260px", gap: 16 }}>
@@ -375,7 +378,7 @@ export default function Home() {
       </section>
 
       {/* ── Reviews ──────────────────────────────────────────────── */}
-      <section className="section" style={{ background: T.sand }}>
+      <section className="section" style={{ background: T.softLavender }}>
         <div className="container">
           <SectionHead eyebrow="Community" title="What Our Customers Say" center/>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18 }}>
