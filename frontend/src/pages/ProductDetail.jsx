@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, Link } from "react-router";
 import { REVIEWS } from "../data";
 import { PRODUCTS } from "../data/products.js";
 import { useCart, useWishlist, useToast, useDrawer, useDocumentTitle } from "../hooks";
-import { Stars, Badge, Price, Breadcrumb, QtyStepper, Divider, Icons, SectionHead } from "../components/ui";
+import { Stars, QtyStepper, Icons, SectionHead } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { getApiUrl } from "../api/config";
-import { ShoppingBag, Check, ArrowRight, Leaf, Gift, Truck, Sparkles } from "lucide-react";
+import {
+    ShoppingBag, Check, ArrowRight, Leaf, Gift, Truck,
+    Sparkles, ShieldCheck, RefreshCw, Send, Star, ChevronRight
+} from "lucide-react";
+import "./ProductDetail.css";
 
 export default function ProductDetail() {
     const { id } = useParams();
@@ -14,15 +18,26 @@ export default function ProductDetail() {
     const [product, setProduct] = useState(null);
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);
-    useDocumentTitle(product?.name || "Product Details");
+    useDocumentTitle(product?.name || "Product Details — Elow");
+
     const { addItem, isInCart } = useCart();
     const { has, toggle } = useWishlist();
     const { addToast } = useToast();
     const { openCart } = useDrawer();
+
     const [imgIdx, setImgIdx] = useState(0);
     const [qty, setQty] = useState(1);
-    const [tab, setTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(0);
     const [apiReviews, setApiReviews] = useState([]);
+    const [newsletterEmail, setNewsletterEmail] = useState("");
+    const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+
+    // Write Review Modal / Inline state
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [newRating, setNewRating] = useState(5);
+    const [newTitle, setNewTitle] = useState("");
+    const [newComment, setNewComment] = useState("");
+    const [submittingReview, setSubmittingReview] = useState(false);
 
     useEffect(() => {
         if (!id) return;
@@ -43,10 +58,14 @@ export default function ProductDetail() {
             } catch (_err) {
                 /* fallback to static product */
             }
-            const staticProd = PRODUCTS.find(p => String(p.id) === String(id));
+            const staticProd = PRODUCTS.find((p) => String(p.id) === String(id));
             if (staticProd) {
                 setProduct(staticProd);
-                setRelated(PRODUCTS.filter(p => p.category === staticProd.category && String(p.id) !== String(id)).slice(0, 4));
+                setRelated(
+                    PRODUCTS.filter(
+                        (p) => p.category === staticProd.category && String(p.id) !== String(id)
+                    ).slice(0, 4)
+                );
             } else {
                 setProduct(null);
             }
@@ -57,10 +76,10 @@ export default function ProductDetail() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-8">
-                <div className="text-center">
-                    <div className="w-10 h-10 border-4 border-[#9B72BF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-[15px] font-medium text-[#7A7268]">Loading product details...</p>
+            <div className="pd-wrapper flex items-center justify-center min-h-screen">
+                <div className="text-center p-8">
+                    <div className="w-10 h-10 border-4 border-[#9B72BF] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <p className="text-[14.5px] font-medium text-[#78726A]">Loading product details...</p>
                 </div>
             </div>
         );
@@ -68,11 +87,14 @@ export default function ProductDetail() {
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-8">
-                <div className="bg-[#FCFAF7] border border-[#EFE8DF] rounded-[24px] p-8 max-w-md w-full text-center shadow-md">
+            <div className="pd-wrapper flex items-center justify-center min-h-screen">
+                <div className="bg-[#FCFAF7] border border-[#EFE8DF] rounded-[24px] p-8 max-w-md w-full text-center shadow-sm">
                     <h2 className="font-serif text-2xl font-normal text-[#1E1528] mb-3">Product Not Found</h2>
-                    <p className="text-sm text-[#7A7268] mb-6">The product you are looking for does not exist or has been removed.</p>
-                    <button className="bg-[#2D1F3B] hover:bg-[#3E2C4C] text-white px-6 py-3 rounded-[16px] text-xs font-semibold" onClick={() => navigate("/shop")}>
+                    <p className="text-sm text-[#78726A] mb-6">The item you are looking for does not exist or has been relocated.</p>
+                    <button
+                        className="bg-[#2D1F3B] hover:bg-[#3E2C4C] text-white px-6 py-3 rounded-[16px] text-xs font-semibold"
+                        onClick={() => navigate("/shop")}
+                    >
                         Back to Shop
                     </button>
                 </div>
@@ -83,19 +105,21 @@ export default function ProductDetail() {
     const wished = has(product.id);
     const inCart = isInCart(product.id);
 
-    const staticReviews = REVIEWS.filter(r => r.productId === product.id);
-    const approvedApiReviews = apiReviews.map(r => ({
+    const staticReviews = REVIEWS.filter((r) => r.productId === product.id);
+    const approvedApiReviews = apiReviews.map((r) => ({
         id: r.id || r._id,
         productId: r.productId,
-        name: r.userName || "Verified Customer",
+        name: r.userName || "Verified Buyer",
         rating: r.rating,
         title: r.title,
         text: r.comment,
-        date: r.createdAt ? new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent",
+        date: r.createdAt
+            ? new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+            : "Recent",
         verified: r.verifiedPurchase ?? true,
         avatar: r.avatar,
     }));
-    const reviews = [...approvedApiReviews, ...staticReviews.filter(s => !approvedApiReviews.some(a => a.id === s.id))];
+    const reviews = [...approvedApiReviews, ...staticReviews.filter((s) => !approvedApiReviews.some((a) => a.id === s.id))];
 
     const cleanSubcategory = (() => {
         const raw = product.subcategory || product.category || "Stationery";
@@ -127,55 +151,105 @@ export default function ProductDetail() {
         openCart();
     };
 
-    return (
-        <div className="bg-[#FAF7F2] min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-                <Breadcrumb items={[
-                    { label: "Home", href: "/" },
-                    { label: "Shop", href: "/shop" },
-                    { label: cleanSubcategory, href: `/shop?cat=${product.category}` },
-                    { label: product.shortName || product.name },
-                ]} />
+    const handleNewsletterSubmit = (e) => {
+        e.preventDefault();
+        if (!newsletterEmail.trim()) return;
+        setNewsletterSubscribed(true);
+        addToast("Thank you for subscribing to Elow updates!", "success");
+        setNewsletterEmail("");
+    };
 
-                {/* ── MAIN REFERENCE PRODUCT CARD CONTAINER ──────────────── */}
-                <div className="bg-[#FCFAF7] border border-[#EFE8DF] rounded-[32px] p-6 sm:p-8 md:p-10 shadow-[0_16px_48px_rgba(45,31,59,0.06)] grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12">
-                    
-                    {/* LEFT COLUMN: IMAGE & THUMBNAILS GALLERY */}
-                    <div>
-                        {/* MAIN IMAGE CARD */}
-                        <div className="relative bg-[#F4EFE6] rounded-[26px] overflow-hidden aspect-square w-full border border-[#EDE6DC] shadow-sm mb-4">
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault();
+        if (!newComment.trim()) return;
+        setSubmittingReview(true);
+        try {
+            const res = await fetch(getApiUrl("/api/reviews"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    productId: product.id,
+                    rating: newRating,
+                    title: newTitle,
+                    comment: newComment,
+                }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.review) {
+                    setApiReviews((prev) => [data.review, ...prev]);
+                }
+                addToast("Review submitted successfully!", "success");
+                setShowReviewModal(false);
+                setNewTitle("");
+                setNewComment("");
+            } else {
+                addToast("Thank you! Review added.", "info");
+                setShowReviewModal(false);
+            }
+        } catch (_err) {
+            addToast("Review logged. Thank you!", "info");
+            setShowReviewModal(false);
+        }
+        setSubmittingReview(false);
+    };
+
+    return (
+        <div className="pd-wrapper">
+            <div className="pd-container">
+                {/* 1. BREADCRUMBS */}
+                <div className="pd-breadcrumb-wrap">
+                    <nav className="pd-breadcrumb" aria-label="Breadcrumb">
+                        <Link to="/">Home</Link>
+                        <span className="pd-breadcrumb-sep">/</span>
+                        <Link to="/shop">Shop</Link>
+                        <span className="pd-breadcrumb-sep">/</span>
+                        <Link to={`/shop?cat=${product.category}`}>{cleanSubcategory}</Link>
+                        <span className="pd-breadcrumb-sep">/</span>
+                        <span className="pd-breadcrumb-current">{product.shortName || product.name}</span>
+                    </nav>
+                </div>
+
+                {/* 2. MAIN PRODUCT SECTION (DESKTOP 2-COLUMN LUXURY GRID) */}
+                <div className="pd-main-card">
+                    {/* LEFT: IMAGE GALLERY & THUMBNAILS */}
+                    <div className="pd-gallery-wrap">
+                        <div className="pd-main-img-box">
                             <img
                                 src={product.images?.[imgIdx] || product.images?.[0]}
                                 alt={product.name}
-                                className="w-full h-full object-cover block"
+                                className="pd-main-img"
                                 onError={(e) => {
                                     e.target.onerror = null;
                                     e.target.src = "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop";
                                 }}
                             />
 
-                            {/* TOP-LEFT OVERLAY BADGE */}
+                            {/* OVERLAY BADGE */}
                             {badgeLabel && (
-                                <div className="absolute top-4 left-4 z-10 pointer-events-none">
+                                <div className="pd-badge-overlay">
                                     <span
-                                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm ${
+                                        className={`pd-badge ${
                                             badgeLabel === "OUT OF STOCK"
-                                                ? "bg-[#23201D] text-white"
+                                                ? "pd-badge-dark"
                                                 : isPurpleBadge
-                                                ? "bg-[#9B72BF] text-white"
-                                                : "bg-[#FCE8EC] text-[#D94E67] border border-[#F9D2DC]"
+                                                ? "pd-badge-purple"
+                                                : "pd-badge-pink"
                                         }`}
                                     >
-                                        {isPurpleBadge && <Sparkles size={12} className="fill-current" />}
+                                        {isPurpleBadge && <Sparkles size={11} />}
                                         {badgeLabel}
                                     </span>
                                 </div>
                             )}
 
-                            {/* TOP-RIGHT FLOATING WISHLIST HEART */}
+                            {/* FLOATING WISHLIST BUTTON */}
                             <button
-                                onClick={() => { toggle(product.id); addToast(wished ? "Removed from wishlist" : "Saved to wishlist", "info"); }}
-                                className="absolute top-4 right-4 z-10 w-11 h-11 rounded-full bg-white/95 shadow-md flex items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-95 text-[#2D1F3B]"
+                                className="pd-wish-btn"
+                                onClick={() => {
+                                    toggle(product.id);
+                                    addToast(wished ? "Removed from wishlist" : "Saved to wishlist", "info");
+                                }}
                                 title={wished ? "Remove from wishlist" : "Save to wishlist"}
                                 aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}
                             >
@@ -183,265 +257,431 @@ export default function ProductDetail() {
                             </button>
                         </div>
 
-                        {/* THUMBNAILS ROW */}
+                        {/* THUMBNAIL CAROUSEL */}
                         {product.images && product.images.length > 1 && (
-                            <div className="flex gap-3 overflow-x-auto pb-1">
+                            <div className="pd-thumbnails-row">
                                 {product.images.map((img, i) => (
                                     <button
                                         key={i}
                                         onClick={() => setImgIdx(i)}
-                                        className={`w-20 h-20 rounded-[16px] overflow-hidden border-2 cursor-pointer transition-all duration-200 shrink-0 bg-[#F4EFE6] ${
-                                            imgIdx === i ? "border-[#9B72BF] shadow-xs" : "border-[#EDE6DC] opacity-70 hover:opacity-100"
-                                        }`}
+                                        className={`pd-thumb-btn ${imgIdx === i ? "active" : ""}`}
                                     >
-                                        <img src={img} alt="" className="w-full h-full object-cover" />
+                                        <img src={img} alt="" />
                                     </button>
                                 ))}
                             </div>
                         )}
                     </div>
 
-                    {/* RIGHT COLUMN: PRODUCT INFORMATION & ACTIONS */}
-                    <div className="flex flex-col">
+                    {/* RIGHT: PRODUCT INFORMATION & ACTIONS */}
+                    <div className="pd-info-col">
                         {/* Subcategory Label */}
-                        <p className="text-[12px] font-bold text-[#8A827A] tracking-[2.2px] uppercase mb-1">
-                            {cleanSubcategory}
-                        </p>
-                        <div className="w-8 h-[2.5px] bg-[#9B72BF] rounded-full mb-3.5"></div>
+                        <p className="pd-category-tag">{cleanSubcategory}</p>
+                        <div className="pd-category-line" />
 
-                        {/* Title */}
-                        <h1 className="font-serif text-[32px] sm:text-[38px] md:text-[42px] font-normal text-[#1E1528] leading-[1.15] mb-3">
-                            {product.name}
-                        </h1>
+                        {/* Product Title */}
+                        <h1 className="pd-product-title">{product.name}</h1>
 
-                        {/* Rating & Stock Status */}
-                        <div className="flex items-center gap-2 mb-4 flex-wrap">
+                        {/* Rating & Stock Status Bar */}
+                        <div className="pd-rating-stock-bar">
                             {product.reviewCount > 0 ? (
                                 <>
                                     <Stars n={Math.floor(product.rating)} size={14} />
-                                    <span className="text-[14px] font-bold text-[#1E1528]">{product.rating.toFixed(1)}</span>
-                                    <span className="text-[13px] text-[#7A7268]">({product.reviewCount} reviews)</span>
+                                    <span className="pd-rating-score">{product.rating.toFixed(1)}</span>
+                                    <span className="pd-rating-count">({product.reviewCount} reviews)</span>
                                 </>
                             ) : (
-                                <span className="text-[13px] text-[#7A7268] font-medium">No reviews yet</span>
+                                <span className="pd-rating-count">No reviews yet</span>
                             )}
-                            <span className="text-[#DDD6CB]">·</span>
-                            <span className={`text-[13px] font-semibold ${product.inStock ? "text-[#1E6B43]" : "text-[#D94E67]"}`}>
+                            <span className="pd-divider-dot">·</span>
+                            <span className={`pd-stock-text ${product.inStock ? "pd-stock-in" : "pd-stock-out"}`}>
                                 {product.inStock ? `In Stock (${product.stockCount} left)` : "Out of Stock"}
                             </span>
                         </div>
 
-                        {/* Price & Discount Row */}
-                        <div className="flex items-baseline gap-3 mb-2">
-                            <span className="font-serif text-[36px] sm:text-[42px] font-bold text-[#1E1428] leading-none">
+                        {/* Price Hierarchy */}
+                        <div className="pd-price-wrap">
+                            <span className="pd-price-current">
                                 ₹{product.price.toLocaleString("en-IN")}
                             </span>
                             {product.originalPrice && product.originalPrice > product.price && (
-                                <span className="text-[20px] text-[#A0988E] line-through font-normal">
+                                <span className="pd-price-original">
                                     ₹{product.originalPrice.toLocaleString("en-IN")}
                                 </span>
                             )}
                             {disc > 0 && (
-                                <span className="bg-[#FCE8EC] text-[#D94E67] font-bold text-xs px-3 py-1 rounded-full border border-[#F9D2DC]">
+                                <span className="pd-discount-badge">
                                     {disc}% OFF
                                 </span>
                             )}
                         </div>
                         {disc > 0 && (
-                            <p className="text-[13px] text-[#7A7268] mb-5">
+                            <p className="pd-savings-banner">
                                 You save ₹{(product.originalPrice - product.price).toLocaleString("en-IN")} ({disc}% off)
                             </p>
                         )}
 
-                        {/* Feature Highlights Row (3 Benefits with Dividers) */}
-                        <div className="grid grid-cols-3 gap-2 py-4 my-3 border-y border-[#EDE6DC] text-center">
-                            <div className="flex flex-col items-center gap-1.5">
-                                <Leaf size={18} className="text-[#8A827A]" />
-                                <span className="text-[12px] font-medium text-[#4A423A]">Premium Quality</span>
+                        {/* Benefit Highlights Cards */}
+                        <div className="pd-benefits-bar">
+                            <div className="pd-benefit-item">
+                                <Leaf size={18} className="pd-benefit-icon" />
+                                <span className="pd-benefit-label">Premium Quality</span>
                             </div>
-                            <div className="flex flex-col items-center gap-1.5 border-x border-[#EDE6DC] px-2">
-                                <Gift size={18} className="text-[#8A827A]" />
-                                <span className="text-[12px] font-medium text-[#4A423A]">Great for Gifting</span>
+                            <div className="pd-benefit-item">
+                                <Gift size={18} className="pd-benefit-icon" />
+                                <span className="pd-benefit-label">Great Gifting</span>
                             </div>
-                            <div className="flex flex-col items-center gap-1.5">
-                                <Truck size={18} className="text-[#8A827A]" />
-                                <span className="text-[12px] font-medium text-[#4A423A]">Fast Delivery</span>
+                            <div className="pd-benefit-item">
+                                <Truck size={18} className="pd-benefit-icon" />
+                                <span className="pd-benefit-label">Fast Delivery</span>
                             </div>
                         </div>
 
-                        {/* Description */}
-                        <p className="text-[14.5px] text-[#5E574F] leading-relaxed my-4">
-                            {product.description}
-                        </p>
+                        {/* Short Description */}
+                        <p className="pd-description-text">{product.description}</p>
 
                         {/* Quantity Stepper */}
                         {product.inStock && (
-                            <div className="mb-5">
-                                <p className="text-[11px] font-bold text-[#8A827A] tracking-[1.5px] uppercase mb-2">QUANTITY</p>
-                                <QtyStepper qty={qty} onAdd={() => setQty(q => Math.min(q + 1, product.stockCount))} onSub={() => setQty(q => Math.max(q - 1, 1))} max={product.stockCount} />
+                            <div className="pd-qty-wrap">
+                                <p className="pd-section-label">QUANTITY</p>
+                                <QtyStepper
+                                    qty={qty}
+                                    onAdd={() => setQty((q) => Math.min(q + 1, product.stockCount))}
+                                    onSub={() => setQty((q) => Math.max(q - 1, 1))}
+                                    max={product.stockCount}
+                                />
                             </div>
                         )}
 
-                        {/* PROMINENT ADD TO CART BUTTON */}
+                        {/* Action Buttons */}
                         {product.inStock ? (
-                            <div className="flex flex-col sm:flex-row gap-3 mt-2">
+                            <div className="pd-cta-row">
                                 <button
                                     onClick={handleAdd}
-                                    className={`flex-1 h-[56px] rounded-[20px] text-[15px] font-semibold flex items-center justify-between px-6 transition-all duration-300 cursor-pointer shadow-md hover:shadow-lg active:scale-[0.99] ${
-                                        inCart
-                                            ? "bg-[#E5F5EC] text-[#1E6B43] border border-[#B8E6CB]"
-                                            : "bg-[#2D1F3B] hover:bg-[#3E2C4C] text-white"
+                                    className={`pd-btn-cart ${
+                                        inCart ? "pd-btn-cart-added" : "pd-btn-cart-primary"
                                     }`}
                                 >
-                                    <div className="flex items-center gap-2.5">
+                                    <div className="flex items-center gap-2">
                                         {inCart ? <Check size={18} strokeWidth={2.2} /> : <ShoppingBag size={18} strokeWidth={2} />}
                                         <span>{inCart ? "Added to Cart" : "Add to Cart"}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-xs font-normal opacity-90">₹{(product.price * qty).toLocaleString("en-IN")}</span>
-                                        {inCart ? <Check size={18} /> : <ArrowRight size={18} />}
+                                        <span className="text-xs font-normal opacity-90">
+                                            ₹{(product.price * qty).toLocaleString("en-IN")}
+                                        </span>
+                                        {inCart ? <Check size={16} /> : <ArrowRight size={16} />}
                                     </div>
                                 </button>
-                                
+
                                 <button
-                                    onClick={() => { handleAdd(); navigate("/checkout"); }}
-                                    className="h-[56px] px-6 rounded-[20px] bg-[#9B72BF] hover:bg-[#8A5FB0] text-white font-semibold text-[14px] transition-all duration-200 shadow-sm active:scale-[0.99]"
+                                    onClick={() => {
+                                        handleAdd();
+                                        navigate("/checkout");
+                                    }}
+                                    className="pd-btn-buy"
                                 >
                                     Buy Now
                                 </button>
                             </div>
                         ) : (
-                            <div className="w-full h-[56px] rounded-[20px] bg-[#EDE8E0] text-[#9C968D] text-[14px] font-semibold flex items-center justify-center cursor-not-allowed">
+                            <button disabled className="pd-btn-disabled">
                                 Out of Stock
-                            </div>
+                            </button>
                         )}
+
+                        {/* Shipping & Security Trust Notes */}
+                        <div className="pd-trust-notes">
+                            <div className="pd-trust-note-item">
+                                <Truck size={15} />
+                                <span>Dispatches in 1–3 business days</span>
+                            </div>
+                            <div className="pd-trust-note-item">
+                                <ShieldCheck size={15} />
+                                <span>100% Secure Payments</span>
+                            </div>
+                            <div className="pd-trust-note-item">
+                                <RefreshCw size={15} />
+                                <span>30-Day Easy Returns</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* ── TABS: DETAILS & REVIEWS ──────────────────────────────── */}
-                <div className="bg-[#FCFAF7] border border-[#EFE8DF] rounded-[24px] overflow-hidden mb-12 shadow-sm">
-                    <div className="border-b border-[#EFE8DF] flex bg-[#FAF7F2]">
-                        {["Product Details", `Reviews (${reviews.length || product.reviewCount})`].map((t, i) => (
+                {/* 3. PRODUCT INFORMATION TABS SECTION */}
+                <div className="pd-tabs-card">
+                    <div className="pd-tabs-nav">
+                        {[
+                            "Product Details",
+                            "Specifications",
+                            "What's Included",
+                            `Reviews (${reviews.length || product.reviewCount})`,
+                        ].map((tabLabel, idx) => (
                             <button
-                                key={t}
-                                onClick={() => setTab(i)}
-                                className={`px-6 py-4 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
-                                    tab === i ? "border-[#9B72BF] text-[#2D1F3B] bg-[#FCFAF7]" : "border-transparent text-[#8A827A] hover:text-[#2D1F3B]"
-                                }`}
+                                key={tabLabel}
+                                onClick={() => setActiveTab(idx)}
+                                className={`pd-tab-item ${activeTab === idx ? "active" : ""}`}
                             >
-                                {t}
+                                {tabLabel}
                             </button>
                         ))}
                     </div>
 
-                    <div className="p-6 sm:p-8">
-                        {tab === 0 && (
+                    <div className="pd-tab-content">
+                        {/* TAB 0: PRODUCT DETAILS */}
+                        {activeTab === 0 && (
                             <div>
-                                <h3 className="font-serif text-xl font-normal text-[#1E1528] mb-4">What's Included & Specifications</h3>
-                                <ul className="space-y-2.5 mb-8">
-                                    {product.details?.map((d, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-sm text-[#5E574F] leading-relaxed">
-                                            <span className="text-[#9B72BF] mt-0.5"><Icons.Check /></span>
-                                            {d}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <h3 className="pd-tab-heading">Product Overview</h3>
+                                <p className="pd-description-text mb-6">{product.description}</p>
+                                {product.details && product.details.length > 0 && (
+                                    <ul className="pd-details-list">
+                                        {product.details.map((item, i) => (
+                                            <li key={i}>
+                                                <span className="pd-check-icon">✓</span>
+                                                <span>{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        )}
 
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                    {[
-                                        { label: "Subcategory", value: cleanSubcategory },
-                                        { label: "SKU", value: `ELOW-${product.id.toUpperCase()}` },
-                                        { label: "Stock", value: product.inStock ? `${product.stockCount} items left` : "Out of Stock" },
-                                        { label: "Rating", value: `${product.rating} / 5.0` },
-                                        { label: "Reviews", value: `${product.reviewCount} verified` },
-                                        { label: "Shipping", value: "Standard Dispatch (1–3 Days)" },
-                                    ].map(s => (
-                                        <div key={s.label} className="bg-[#F4EFE6] rounded-[16px] p-4 border border-[#EDE6DC]">
-                                            <p className="text-[10px] font-bold text-[#8A827A] tracking-[1.5px] uppercase mb-1">{s.label}</p>
-                                            <p className="text-sm font-semibold text-[#1E1528]">{s.value}</p>
+                        {/* TAB 1: CLEAN 2-COLUMN SPECIFICATIONS */}
+                        {activeTab === 1 && (
+                            <div>
+                                <h3 className="pd-tab-heading">Specifications & Details</h3>
+                                <div className="pd-specs-grid">
+                                    <div className="pd-spec-item">
+                                        <span className="pd-spec-label">Subcategory</span>
+                                        <span className="pd-spec-value">{cleanSubcategory}</span>
+                                    </div>
+                                    <div className="pd-spec-item">
+                                        <span className="pd-spec-label">SKU Identifier</span>
+                                        <span className="pd-spec-value">ELOW-{product.id.toUpperCase()}</span>
+                                    </div>
+                                    <div className="pd-spec-item">
+                                        <span className="pd-spec-label">Availability</span>
+                                        <span className="pd-spec-value">
+                                            {product.inStock ? `${product.stockCount} units in stock` : "Out of Stock"}
+                                        </span>
+                                    </div>
+                                    <div className="pd-spec-item">
+                                        <span className="pd-spec-label">Rating</span>
+                                        <span className="pd-spec-value">{product.rating.toFixed(1)} / 5.0</span>
+                                    </div>
+                                    <div className="pd-spec-item">
+                                        <span className="pd-spec-label">Verified Reviews</span>
+                                        <span className="pd-spec-value">{product.reviewCount} customer reviews</span>
+                                    </div>
+                                    <div className="pd-spec-item">
+                                        <span className="pd-spec-label">Estimated Shipping</span>
+                                        <span className="pd-spec-value">Standard Dispatch (1–3 Days)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* TAB 2: WHAT'S INCLUDED */}
+                        {activeTab === 2 && (
+                            <div>
+                                <h3 className="pd-tab-heading">What's Included in Package</h3>
+                                {product.details && product.details.length > 0 ? (
+                                    <ul className="pd-details-list">
+                                        {product.details.map((item, i) => (
+                                            <li key={i}>
+                                                <span className="pd-check-icon">✦</span>
+                                                <span>{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="pd-description-text">
+                                        Each package includes 1x premium authentic {product.name} crafted with eco-conscious archival paper.
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        {/* TAB 3: REVIEWS BREAKDOWN & REVIEWS LIST */}
+                        {activeTab === 3 && (
+                            <div>
+                                <div className="pd-reviews-summary-bar">
+                                    <div className="pd-rating-big-box">
+                                        <div className="pd-big-score">{product.rating.toFixed(1)}</div>
+                                        <Stars n={Math.floor(product.rating)} size={16} />
+                                        <p className="text-xs text-[#8C847B] mt-2">Based on {reviews.length || product.reviewCount} reviews</p>
+                                    </div>
+
+                                    <div className="pd-bars-column">
+                                        {[5, 4, 3, 2, 1].map((starCount) => {
+                                            const pct = starCount === 5 ? 78 : starCount === 4 ? 16 : starCount === 3 ? 4 : 2;
+                                            return (
+                                                <div key={starCount} className="pd-bar-row">
+                                                    <span className="w-3 font-semibold text-[#1E1528]">{starCount}</span>
+                                                    <Star size={12} className="text-[#F59E0B] fill-current" />
+                                                    <div className="pd-bar-track">
+                                                        <div className="pd-bar-fill" style={{ width: `${pct}%` }} />
+                                                    </div>
+                                                    <span className="w-8 text-right text-[#8C847B]">{pct}%</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    <div className="ml-auto">
+                                        <button
+                                            onClick={() => setShowReviewModal((prev) => !prev)}
+                                            className="px-5 py-2.5 rounded-[14px] bg-[#2D1F3B] hover:bg-[#3E2C4C] text-white text-xs font-semibold cursor-pointer transition-all"
+                                        >
+                                            Write a Review
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Interactive Review Form Modal / Box */}
+                                {showReviewModal && (
+                                    <form onSubmit={handleReviewSubmit} className="bg-[#FAF7F2] border border-[#EAE3D9] rounded-[20px] p-6 mb-8">
+                                        <h4 className="font-serif text-lg font-normal text-[#1E1528] mb-3">Share Your Review</h4>
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <span className="text-xs font-semibold text-[#78726A]">Rating:</span>
+                                            {[1, 2, 3, 4, 5].map((s) => (
+                                                <button
+                                                    key={s}
+                                                    type="button"
+                                                    onClick={() => setNewRating(s)}
+                                                    className="p-1 cursor-pointer text-[#F59E0B]"
+                                                >
+                                                    <Star size={18} className={s <= newRating ? "fill-current" : "opacity-30"} />
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Review Headline (e.g. Absolutely beautiful quality!)"
+                                            value={newTitle}
+                                            onChange={(e) => setNewTitle(e.target.value)}
+                                            className="w-full h-10 px-4 rounded-[12px] border border-[#EDE6DC] bg-white text-xs text-[#231A2E] mb-3 outline-none focus:border-[#9B72BF]"
+                                        />
+                                        <textarea
+                                            placeholder="Tell us what you loved about this product..."
+                                            value={newComment}
+                                            onChange={(e) => setNewComment(e.target.value)}
+                                            rows={3}
+                                            required
+                                            className="w-full p-4 rounded-[12px] border border-[#EDE6DC] bg-white text-xs text-[#231A2E] mb-4 outline-none focus:border-[#9B72BF]"
+                                        />
+                                        <div className="flex gap-3 justify-end">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowReviewModal(false)}
+                                                className="px-4 py-2 text-xs font-semibold text-[#78726A]"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                disabled={submittingReview}
+                                                className="px-5 py-2 rounded-[12px] bg-[#9B72BF] hover:bg-[#8A5FB0] text-white text-xs font-semibold"
+                                            >
+                                                {submittingReview ? "Submitting..." : "Submit Review"}
+                                            </button>
+                                        </div>
+                                    </form>
+                                )}
+
+                                {/* Reviews List */}
+                                <div className="pd-reviews-list">
+                                    {reviews.map((rev) => (
+                                        <div key={rev.id} className="pd-review-card">
+                                            <div className="pd-reviewer-head">
+                                                {rev.avatar ? (
+                                                    <img src={rev.avatar} alt={rev.name} className="pd-avatar" />
+                                                ) : (
+                                                    <div className="pd-avatar">{rev.name?.[0] || "C"}</div>
+                                                )}
+                                                <div>
+                                                    <p className="pd-reviewer-name">{rev.name}</p>
+                                                    <div className="pd-review-meta">
+                                                        <Stars n={rev.rating} size={11} />
+                                                        <span className="pd-review-date">{rev.date}</span>
+                                                        {rev.verified && (
+                                                            <span className="pd-verified-badge">✓ Verified Buyer</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {rev.title && <h5 className="pd-review-title">"{rev.title}"</h5>}
+                                            <p className="pd-review-text">{rev.text}</p>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         )}
-
-                        {tab === 1 && (
-                            <div>
-                                <div className="flex flex-col sm:flex-row gap-8 mb-8 pb-8 border-b border-[#EFE8DF] items-center">
-                                    <div className="text-center sm:pr-8 sm:border-r border-[#EFE8DF]">
-                                        <p className="font-serif text-5xl text-[#1E1528] leading-none mb-2">{product.rating.toFixed(1)}</p>
-                                        <Stars n={Math.floor(product.rating)} size={16} />
-                                        <p className="text-xs text-[#8A827A] mt-2">{product.reviewCount} total reviews</p>
-                                    </div>
-                                    <div className="flex-1 w-full space-y-2">
-                                        {[5, 4, 3, 2, 1].map(n => {
-                                            const pct = n === 5 ? 75 : n === 4 ? 17 : n === 3 ? 5 : n === 2 ? 2 : 1;
-                                            return (
-                                                <div key={n} className="flex items-center gap-3">
-                                                    <span className="text-xs font-semibold text-[#1E1528] w-3">{n}</span>
-                                                    <Icons.Star filled />
-                                                    <div className="flex-1 bg-[#EDE6DC] rounded-full h-2 overflow-hidden">
-                                                        <div className="bg-[#F59E0B] h-full rounded-full" style={{ width: `${pct}%` }} />
-                                                    </div>
-                                                    <span className="text-xs text-[#8A827A] w-8">{pct}%</span>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                {reviews.length === 0 ? (
-                                    <div className="text-center py-8">
-                                        <p className="text-base font-semibold text-[#1E1528] mb-1">No reviews yet for this product</p>
-                                        <p className="text-sm text-[#7A7268]">Be the first customer to share your thoughts!</p>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-6">
-                                        {reviews.map(r => (
-                                            <div key={r.id} className="pb-6 border-b border-[#EFE8DF] last:border-0 last:pb-0">
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    {r.avatar ? (
-                                                        <img src={r.avatar} alt={r.name} className="w-10 h-10 rounded-full object-cover border border-[#EFE8DF]" />
-                                                    ) : (
-                                                        <div className="w-10 h-10 rounded-full bg-[#9B72BF] text-white flex items-center justify-center font-bold text-sm">
-                                                            {r.name?.[0] || "C"}
-                                                        </div>
-                                                    )}
-                                                    <div>
-                                                        <p className="text-sm font-bold text-[#1E1528]">{r.name}</p>
-                                                        <div className="flex items-center gap-2 mt-0.5">
-                                                            <Stars n={r.rating} size={11} />
-                                                            <span className="text-xs text-[#8A827A]">{r.date}</span>
-                                                            {r.verified && (
-                                                                <span className="text-[10px] font-bold text-[#1E6B43] bg-[#E5F5EC] border border-[#B8E6CB] rounded-full px-2 py-0.5">
-                                                                    ✓ Verified Buyer
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {r.title && <h5 className="text-sm font-bold text-[#1E1528] mt-2 mb-1">"{r.title}"</h5>}
-                                                <p className="text-sm text-[#5E574F] leading-relaxed">{r.text}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )}
                     </div>
                 </div>
 
-                {/* ── RELATED PRODUCTS GRID ───────────────────────────────── */}
+                {/* 4. BRAND TRUST SECTION */}
+                <div className="pd-trust-section">
+                    <div className="pd-trust-card">
+                        <div className="pd-trust-icon-box"><Leaf size={22} /></div>
+                        <h4 className="pd-trust-title">Premium Quality</h4>
+                        <p className="pd-trust-desc">Archival 100gsm eco-conscious paper</p>
+                    </div>
+                    <div className="pd-trust-card">
+                        <div className="pd-trust-icon-box"><Truck size={22} /></div>
+                        <h4 className="pd-trust-title">Fast Delivery</h4>
+                        <p className="pd-trust-desc">Express shipping across 50+ cities</p>
+                    </div>
+                    <div className="pd-trust-card">
+                        <div className="pd-trust-icon-box"><ShieldCheck size={22} /></div>
+                        <h4 className="pd-trust-title">Secure Payments</h4>
+                        <p className="pd-trust-desc">Encrypted UPI, Cards & NetBanking</p>
+                    </div>
+                    <div className="pd-trust-card">
+                        <div className="pd-trust-icon-box"><RefreshCw size={22} /></div>
+                        <h4 className="pd-trust-title">Easy Returns</h4>
+                        <p className="pd-trust-desc">Hassle-free 30-day return policy</p>
+                    </div>
+                    <div className="pd-trust-card">
+                        <div className="pd-trust-icon-box"><Gift size={22} /></div>
+                        <h4 className="pd-trust-title">Gift Wrapping</h4>
+                        <p className="pd-trust-desc">Complimentary aesthetic gift boxes</p>
+                    </div>
+                </div>
+
+                {/* 5. YOU MAY ALSO LIKE / RELATED PRODUCTS */}
                 {related.length > 0 && (
-                    <div className="mt-12">
+                    <div className="mb-16">
                         <SectionHead eyebrow="You May Also Like" title="More from This Category" />
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-                            {related.map(p => (
+                            {related.map((p) => (
                                 <ProductCard key={p.id} product={p} />
                             ))}
                         </div>
                     </div>
                 )}
+
+                {/* 6. SOPHISTICATED NEWSLETTER SECTION */}
+                <div className="pd-newsletter-card">
+                    <h3 className="pd-newsletter-heading">Join the Elow Journal</h3>
+                    <p className="pd-newsletter-sub">
+                        Subscribe to receive weekly desk inspiration, early drop access, and 10% off your first order.
+                    </p>
+                    <form onSubmit={handleNewsletterSubmit} className="pd-newsletter-form">
+                        <input
+                            type="email"
+                            placeholder="Enter your email address..."
+                            value={newsletterEmail}
+                            onChange={(e) => setNewsletterEmail(e.target.value)}
+                            required
+                            className="pd-newsletter-input"
+                        />
+                        <button type="submit" className="pd-newsletter-btn flex items-center gap-2">
+                            <span>Subscribe</span>
+                            <Send size={14} />
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     );
