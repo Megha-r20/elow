@@ -221,9 +221,9 @@ export function ProductCard({ product, compact = false }) {
                                 transition: "all 0.2s ease",
                                 cursor: "pointer",
                                 border: "none",
-                                background: inCart ? "#E5F5EC" : "#2D1F3B",
+                                background: inCart ? "#E5F5EC" : "#9B72BF",
                                 color: inCart ? "#1E6B43" : "#FFFFFF",
-                                boxShadow: "0 2px 8px rgba(45, 31, 59, 0.08)",
+                                boxShadow: "0 2px 8px rgba(155, 114, 191, 0.25)",
                             }}
                         >
                             {inCart ? (

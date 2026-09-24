@@ -391,14 +391,14 @@
 }
 
 .pd-btn-cart-primary {
-  background: #2D1F3B;
+  background: #9B72BF;
   color: #FFFFFF;
 }
 
 .pd-btn-cart-primary:hover {
-  background: #3E2C4C;
+  background: #8A5FB0;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(45, 31, 59, 0.2);
+  box-shadow: 0 8px 24px rgba(155, 114, 191, 0.3);
 }
 
 .pd-btn-cart-added {
