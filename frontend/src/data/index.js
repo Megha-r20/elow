@@ -60,15 +60,15 @@ export const PRICE_RANGES = [
 ];
 
 export const HERO_IMAGES = {
-    journalCollage: u("photo-1535837487710-a191373a20ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-    washiRolls: u("photo-1700085663963-bbe0f7789b4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-    pensPouch: u("photo-1725953386283-d918bb2ac9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+    journalCollage: "https://i.pinimg.com/1200x/1f/23/61/1f2361abdebdceb003b26fedfb6a3e51.jpg",
+    washiRolls: "https://i.pinimg.com/736x/85/09/20/8509203040bed33acd5f993b9ed7d01b.jpg",
+    pensPouch: "https://i.pinimg.com/736x/87/83/19/878319feb6b2539364730e72999560e4.jpg",
     deskPinks: u("photo-1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
     writing1: u("photo-1579017308347-e53e0d2fc5e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
     writing2: u("photo-1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
     writing3: u("photo-1781456505405-76d614cf5746?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
     cozySetup: u("photo-1750814019023-4e43037f5075?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-    bulletJournal: u("photo-1711030239034-d7dbf7f2794d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+    bulletJournal: "https://i.pinimg.com/1200x/55/47/24/554724b25cc169bbe442816148a90c56.jpg",
     deskOrg: u("photo-1774578342274-29121c889b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
 };
 
