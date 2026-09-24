@@ -182,7 +182,7 @@ export function ProductCard({ product, compact = false }) {
                     )}
                 </div>
 
-                {/* ROW 4: PRICE & DISCOUNT SECTION (22PX MARGIN TO ADD TO CART) */}
+                {/* ROW 4: PRICE SECTION (22PX MARGIN TO ADD TO CART) */}
                 <div
                     className="product-card-price-row"
                     style={{
@@ -198,11 +198,6 @@ export function ProductCard({ product, compact = false }) {
                     {product.originalPrice && product.originalPrice > product.price && (
                         <span style={{ fontSize: "14px", color: "#A0988E", textDecoration: "line-through", fontWeight: 400 }}>
                             ₹{product.originalPrice.toLocaleString("en-IN")}
-                        </span>
-                    )}
-                    {discount > 0 && (
-                        <span style={{ marginLeft: "auto", background: "#FDF2F4", color: "#D94E67", fontWeight: 600, fontSize: "10.5px", padding: "3px 10px", borderRadius: "20px", border: "1px solid #F9D2DC" }}>
-                            {discount}% OFF
                         </span>
                     )}
                 </div>
