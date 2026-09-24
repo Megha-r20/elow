@@ -101,7 +101,7 @@ export default function Checkout() {
             const orderPayload = {
                 items: items.map((i) => ({
                     product: { id: i.product.id, name: i.product.name, price: i.product.price },
-                    qty: i.quantity,
+                    qty: i.qty !== undefined ? i.qty : (i.quantity !== undefined ? i.quantity : 1),
                 })),
                 promoCode: promoCode || undefined,
                 giftWrap: form.giftWrap,

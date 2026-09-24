@@ -35,7 +35,10 @@ export const getPromoObject = async (code) => {
     ELOW10: { code: "ELOW10", discountType: "percentage", discountValue: 10, minOrderAmount: 0, isActive: true },
   };
 
-  const fallback = fallbackPromos[cleanCode];
+  let fallback = fallbackPromos[cleanCode];
+  if (!fallback && cleanCode.startsWith("SPIN-")) {
+    fallback = { code: cleanCode, discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true };
+  }
   if (!fallback) {
     return { valid: false, error: "Invalid promo code" };
   }

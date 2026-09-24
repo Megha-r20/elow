@@ -123,7 +123,7 @@ export function CartProvider({ children }) {
     let discount = serverDiscount;
     if (promoCode && discount === 0) {
         const c = promoCode.toUpperCase();
-        if (c === "SPIN50") discount = 50;
+        if (c === "SPIN50" || c.startsWith("SPIN-")) discount = 50;
         else if (c === "SPIN100") discount = 100;
         else if (c === "SPIN150") discount = 150;
         else if (c === "SPIN250") discount = 250;
