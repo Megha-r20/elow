@@ -146,9 +146,6 @@ export default function Home() {
         {/* Global subtle light overlay (opacity reduced to 35% to increase video visibility by 10%) */}
         <div style={{ position: "absolute", inset: 0, background: "rgba(250, 250, 247, 0.35)", zIndex: 1 }}/>
         
-        {/* Soft cream radial gradient behind center content (15%) for text clarity */}
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at center, rgba(250, 250, 247, 0.15) 0%, transparent 55%)", zIndex: 1 }}/>
-        
         {/* Gradient fade to blend into the next section */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 60%, rgba(250, 250, 247, 1) 100%)", zIndex: 1 }}/>
 
@@ -159,12 +156,12 @@ export default function Home() {
             <span style={{ fontSize: 12, fontWeight: 600, color: T.teal, letterSpacing: "0.5px" }}>New collection — now live</span>
           </div>
 
-          <h1 className="font-display" style={{ fontSize: 72, fontWeight: 400, color: T.txt, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24, maxWidth: 800, textShadow: "0 2px 24px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,1)" }}>
+          <h1 className="font-display" style={{ fontSize: 72, fontWeight: 400, color: T.txt, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24, maxWidth: 800 }}>
             Beautiful <span style={{ color: T.teal, fontStyle: "italic" }}>Stationery</span><br />
             for Every Moment.
           </h1>
 
-          <p style={{ fontSize: 18, color: T.muted, lineHeight: 1.75, marginBottom: 40, maxWidth: 540, textShadow: "0 1px 12px rgba(255,255,255,0.9)" }}>
+          <p style={{ fontSize: 18, color: T.muted, lineHeight: 1.75, marginBottom: 40, maxWidth: 540 }}>
             Journals, pens, washi tapes, and more — thoughtfully curated for students, journalers, and everyday creatives across India.
           </p>
 
