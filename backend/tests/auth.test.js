@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import request from "supertest";
 import mongoose from "mongoose";
 import app from "../app.js";
+import { User } from "../models/User.js";
 
 describe("Auth & RBAC Integration Tests", () => {
   it("should register a new user successfully (201 Created)", async () => {
@@ -89,6 +90,27 @@ describe("Auth & RBAC Integration Tests", () => {
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.user.role).toBe("user");
+  });
+
+  it("should reject googleAuth attempts for existing admin accounts with 403 Forbidden", async () => {
+    // Create an admin user directly
+    await User.create({
+      id: "admin-test-id",
+      name: "Existing Admin",
+      email: "realadmin@example.com",
+      password: "hashedpassword123",
+      role: "admin",
+    });
+
+    const res = await request(app)
+      .post("/api/auth/google")
+      .send({
+        name: "Existing Admin",
+        email: "realadmin@example.com",
+      });
+
+    expect(res.status).toBe(403);
+    expect(res.body.error).toMatch(/Admin accounts must sign in/i);
   });
 
   it("should fail login with incorrect password (401 Unauthorized)", async () => {

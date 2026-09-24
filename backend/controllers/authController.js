@@ -312,6 +312,15 @@ export const googleAuth = async (req, res) => {
 
   let user = await User.findOne({ email: cleanEmail });
 
+  // SECURITY: Strictly reject Google Auth for any admin accounts or attempts to authenticate as admin.
+  // Admin accounts must authenticate exclusively via email and password credentials.
+  if (user && user.role === "admin") {
+    logger.warn(`🛑 Blocked Google Auth attempt for admin account: ${cleanEmail}`);
+    return res.status(403).json({
+      error: "Admin accounts must sign in with email and password credentials.",
+    });
+  }
+
   if (!user) {
     const dummyPassword = await bcrypt.hash(`google-pass-${Date.now()}`, 10);
     const userId = `user-google-${crypto.randomBytes(4).toString("hex")}`;
@@ -326,8 +335,11 @@ export const googleAuth = async (req, res) => {
     logger.info(`✨ Google OAuth user created: ${cleanName} (${cleanEmail})`);
   }
 
-  const accessToken = generateAccessToken(user.id, user.role);
-  const refreshToken = generateRefreshToken(user.id, user.role);
+  // Ensure user role is strictly "user" for Google OAuth authentication
+  user.role = "user";
+
+  const accessToken = generateAccessToken(user.id, "user");
+  const refreshToken = generateRefreshToken(user.id, "user");
 
   user.refreshTokens = user.refreshTokens || [];
   user.refreshTokens.push(refreshToken);
@@ -335,6 +347,6 @@ export const googleAuth = async (req, res) => {
 
   sendRefreshTokenCookie(res, refreshToken);
 
-  logger.info(`[Google Sign-In Success] ${user.name} (${user.email}) - Role: ${user.role}`);
+  logger.info(`[Google Sign-In Success] ${user.name} (${user.email}) - Role: user`);
   res.json({ success: true, user: sanitizeUser(user), token: accessToken });
 };
