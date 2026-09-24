@@ -18,11 +18,17 @@ export default function Shop() {
 
     const [activeCat, setActiveCat] = useState(initCat);
     const [sort, setSort] = useState("featured");
-    const [priceRange, setPriceRange] = useState(null);
+    const [priceRange, setPriceRange] = useState(() => {
+        const mPrice = params.get("maxPrice");
+        if (mPrice === "299") return 0;
+        return null;
+    });
+    const [maxPrice, setMaxPrice] = useState(() => params.get("maxPrice"));
     const [onlyInStock, setOnlyInStock] = useState(false);
     const [onlyNew, setOnlyNew] = useState(params.get("filter") === "new");
     const [onlyBest, setOnlyBest] = useState(params.get("filter") === "bestseller");
     const [onlyWishlist, setOnlyWishlist] = useState(params.get("filter") === "wishlist");
+    const [onlyStudents, setOnlyStudents] = useState(params.get("filter") === "students");
     const [searchQ, setSearchQ] = useState(initQ);
     const [gridView, setGridView] = useState(3);
     const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
@@ -33,12 +39,31 @@ export default function Shop() {
         setOnlyNew(params.get("filter") === "new");
         setOnlyBest(params.get("filter") === "bestseller");
         setOnlyWishlist(params.get("filter") === "wishlist");
+        setOnlyStudents(params.get("filter") === "students");
         setSearchQ(params.get("q") ?? "");
+
+        const mPrice = params.get("maxPrice");
+        setMaxPrice(mPrice);
+        if (mPrice === "299") {
+            setPriceRange(0);
+        } else if (!mPrice) {
+            setPriceRange(null);
+        }
     }, [params]);
+
+    const updateParam = (key, value) => {
+        const newParams = new URLSearchParams(params);
+        if (value === null || value === undefined || value === "") {
+            newParams.delete(key);
+        } else {
+            newParams.set(key, value);
+        }
+        setParams(newParams);
+    };
 
     useEffect(() => {
         setVisibleCount(12);
-    }, [activeCat, sort, priceRange, onlyInStock, onlyNew, onlyBest, onlyWishlist, searchQ]);
+    }, [activeCat, sort, priceRange, maxPrice, onlyInStock, onlyNew, onlyBest, onlyWishlist, onlyStudents, searchQ]);
 
     const [liveProducts, setLiveProducts] = useState(PRODUCTS);
 
@@ -87,10 +112,25 @@ export default function Shop() {
         if (onlyNew) list = list.filter((p) => p.isNew);
         if (onlyBest) list = list.filter((p) => p.isBestseller);
         if (onlyWishlist) list = list.filter((p) => wishlist.has(p.id));
+        if (onlyStudents) {
+            list = list.filter(
+                (p) =>
+                    p.category === "planners" ||
+                    (p.tags && p.tags.some((t) => t.toLowerCase().includes("student") || t.toLowerCase().includes("study") || t.toLowerCase().includes("planner"))) ||
+                    p.name.toLowerCase().includes("student") ||
+                    p.description.toLowerCase().includes("student") ||
+                    p.description.toLowerCase().includes("study")
+            );
+        }
         // Price range
         if (priceRange !== null) {
             const r = PRICE_RANGES[priceRange];
             list = list.filter((p) => p.price >= r.min && p.price <= r.max);
+        } else if (maxPrice) {
+            const numMax = Number(maxPrice);
+            if (!isNaN(numMax)) {
+                list = list.filter((p) => p.price <= numMax);
+            }
         }
         // Sort
         switch (sort) {
@@ -121,7 +161,7 @@ export default function Shop() {
                 break;
         }
         return list;
-    }, [activeCat, sort, priceRange, onlyInStock, onlyNew, onlyBest, onlyWishlist, searchQ, wishlist.ids, liveProducts]);
+    }, [activeCat, sort, priceRange, maxPrice, onlyInStock, onlyNew, onlyBest, onlyWishlist, onlyStudents, searchQ, wishlist.ids, liveProducts]);
 
     const visibleProducts = useMemo(() => {
         return filtered.slice(0, visibleCount);
@@ -129,22 +169,27 @@ export default function Shop() {
 
     const activeFilters = [
         ...(activeCat !== "all" ? [{ label: CATEGORIES.find((c) => c.id === activeCat)?.label ?? activeCat, clear: () => changeCat("all") }] : []),
-        ...(onlyNew ? [{ label: "New Arrivals", clear: () => setOnlyNew(false) }] : []),
-        ...(onlyBest ? [{ label: "Best Sellers", clear: () => setOnlyBest(false) }] : []),
-        ...(onlyWishlist ? [{ label: "My Wishlist", clear: () => setOnlyWishlist(false) }] : []),
+        ...(onlyNew ? [{ label: "New Arrivals", clear: () => updateParam("filter", null) }] : []),
+        ...(onlyBest ? [{ label: "Best Sellers", clear: () => updateParam("filter", null) }] : []),
+        ...(onlyWishlist ? [{ label: "My Wishlist", clear: () => updateParam("filter", null) }] : []),
+        ...(onlyStudents ? [{ label: "For Students", clear: () => updateParam("filter", null) }] : []),
         ...(onlyInStock ? [{ label: "In Stock", clear: () => setOnlyInStock(false) }] : []),
-        ...(priceRange !== null ? [{ label: PRICE_RANGES[priceRange].label, clear: () => setPriceRange(null) }] : []),
-        ...(searchQ ? [{ label: `"${searchQ}"`, clear: () => setSearchQ("") }] : []),
+        ...(priceRange !== null ? [{ label: PRICE_RANGES[priceRange].label, clear: () => { setPriceRange(null); updateParam("maxPrice", null); } }] : []),
+        ...(maxPrice && priceRange === null ? [{ label: `Under ₹${maxPrice}`, clear: () => updateParam("maxPrice", null) }] : []),
+        ...(searchQ ? [{ label: `"${searchQ}"`, clear: () => updateParam("q", null) }] : []),
     ];
 
     const clearAll = () => {
-        changeCat("all");
+        setActiveCat("all");
         setOnlyNew(false);
         setOnlyBest(false);
         setOnlyWishlist(false);
+        setOnlyStudents(false);
         setOnlyInStock(false);
         setPriceRange(null);
+        setMaxPrice(null);
         setSearchQ("");
+        setParams(new URLSearchParams());
     };
 
     const currentCat = CATEGORIES.find((c) => c.id === activeCat);

@@ -359,11 +359,11 @@ export default function Home() {
           <SectionHead eyebrow="Gifting" title="Find the Perfect Gift" center/>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridAutoRows: "260px", gap: 16 }}>
             {[
-            { label: "Under ₹299", img: HERO_IMAGES.pensPouch, sub: "Small treats & everyday essentials", col: "span 2", row: "span 2" },
-            { label: "Under ₹499", img: HERO_IMAGES.washiRolls, sub: "Washi tapes & pen bundles", col: "span 2", row: "span 1" },
-            { label: "For Students", img: HERO_IMAGES.bulletJournal, sub: "Planners & study gear", col: "span 1", row: "span 1" },
-            { label: "For Journalers", img: HERO_IMAGES.journalCollage, sub: "Complete creative kits", col: "span 1", row: "span 1" },
-        ].map((g, i) => (<button key={g.label} onClick={() => navigate("/shop")} className="hover-card" style={{ gridColumn: g.col, gridRow: g.row, border: "none", background: "none", cursor: "pointer", padding: 0, textAlign: "left", borderRadius: 24, overflow: "hidden", position: "relative", width: "100%", height: "100%", display: "block" }}>
+            { label: "Under ₹299", img: HERO_IMAGES.pensPouch, sub: "Small treats & everyday essentials", col: "span 2", row: "span 2", link: "/shop?maxPrice=299" },
+            { label: "Under ₹499", img: HERO_IMAGES.washiRolls, sub: "Washi tapes & pen bundles", col: "span 2", row: "span 1", link: "/shop?maxPrice=499" },
+            { label: "For Students", img: HERO_IMAGES.bulletJournal, sub: "Planners & study gear", col: "span 1", row: "span 1", link: "/shop?filter=students" },
+            { label: "For Journalers", img: HERO_IMAGES.journalCollage, sub: "Complete creative kits", col: "span 1", row: "span 1", link: "/shop?cat=journals" },
+        ].map((g, i) => (<button key={g.label} onClick={() => navigate(g.link)} className="hover-card" style={{ gridColumn: g.col, gridRow: g.row, border: "none", background: "none", cursor: "pointer", padding: 0, textAlign: "left", borderRadius: 24, overflow: "hidden", position: "relative", width: "100%", height: "100%", display: "block" }}>
                 <img src={g.img} alt={g.label} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}/>
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(28,28,26,0.9) 0%, rgba(28,28,26,0.3) 40%, transparent 100%)", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: i === 0 ? 32 : 24 }}>
                   <div style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", padding: "6px 12px", borderRadius: 999, alignSelf: "flex-start", marginBottom: i === 0 ? 16 : 12 }}>
