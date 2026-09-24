@@ -56,18 +56,18 @@ export function ProductCard({ product, compact = false }) {
             className="product-card-container group relative cursor-pointer"
             style={{
                 background: "#FCFAF7",
-                borderRadius: "28px",
+                borderRadius: "24px",
                 border: "1px solid #EFE8DF",
-                padding: "24px",
+                padding: "18px 20px 20px",
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
-                boxShadow: "0 4px 24px rgba(45,31,59,0.03)",
+                boxShadow: "0 4px 20px rgba(45,31,59,0.03)",
                 transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
             }}
             onClick={() => navigate(`/product/${product.id}`)}
         >
-            {/* 1. DOMINANT PRODUCT IMAGE CONTAINER WITH 20PX MARGIN BELOW */}
+            {/* 1. DOMINANT PRODUCT IMAGE CONTAINER WITH 14PX MARGIN BELOW */}
             <div
                 className="product-card-image-wrap relative shrink-0 w-full overflow-hidden"
                 style={{
@@ -75,9 +75,9 @@ export function ProductCard({ product, compact = false }) {
                     width: "100%",
                     aspectRatio: "1 / 1",
                     backgroundColor: "#F4EFE6",
-                    borderRadius: "22px",
+                    borderRadius: "18px",
                     overflow: "hidden",
-                    marginBottom: "20px",
+                    marginBottom: "14px",
                     border: "1px solid rgba(239, 232, 223, 0.8)",
                 }}
             >
@@ -93,9 +93,9 @@ export function ProductCard({ product, compact = false }) {
 
                 {/* ELEGANT TOP-LEFT OVERLAY BADGE */}
                 {badgeLabel && (
-                    <div className="absolute top-3 left-3 z-10 pointer-events-none">
+                    <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
                         <span
-                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10.5px] font-semibold tracking-wider uppercase backdrop-blur-xs shadow-2xs ${
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase backdrop-blur-xs shadow-2xs ${
                                 badgeLabel === "OUT OF STOCK"
                                     ? "bg-[#23201D]/90 text-white"
                                     : isPurpleBadge
@@ -103,7 +103,7 @@ export function ProductCard({ product, compact = false }) {
                                     : "bg-[#FDF2F4] text-[#D94E67] border border-[#F9D2DC]"
                             }`}
                         >
-                            {isPurpleBadge && <Sparkles size={10} className="fill-current" />}
+                            {isPurpleBadge && <Sparkles size={9} className="fill-current" />}
                             {badgeLabel}
                         </span>
                     </div>
@@ -111,7 +111,7 @@ export function ProductCard({ product, compact = false }) {
 
                 {/* SLEEK TOP-RIGHT WISHLIST HEART */}
                 <button
-                    className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs shadow-2xs flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 hover:bg-white"
+                    className="absolute top-2.5 right-2.5 z-10 w-8.5 h-8.5 rounded-full bg-white/90 backdrop-blur-xs shadow-2xs flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 hover:bg-white"
                     onClick={handleWish}
                     title={wished ? "Remove from wishlist" : "Save to wishlist"}
                     aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}
@@ -120,104 +120,104 @@ export function ProductCard({ product, compact = false }) {
                 </button>
             </div>
 
-            {/* 2. PRODUCT DETAILS WITH 14PX, 16PX, 16PX, 22PX STRICT VERTICAL RHYTHM */}
+            {/* 2. PRODUCT DETAILS WITH BALANCED COMPACT VERTICAL RHYTHM */}
             <div className="flex flex-col flex-1" style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-                {/* ROW 1: CATEGORY LABEL (14PX MARGIN TO TITLE) */}
+                {/* ROW 1: CATEGORY LABEL (7PX MARGIN TO TITLE) */}
                 <p
                     className="product-card-category"
                     style={{
-                        fontSize: "11px",
+                        fontSize: "10.5px",
                         fontWeight: 700,
                         color: "#8C847B",
-                        letterSpacing: "2.5px",
+                        letterSpacing: "2.2px",
                         textTransform: "uppercase",
-                        marginBottom: "14px",
-                        lineHeight: 1.4,
+                        marginBottom: "7px",
+                        lineHeight: 1.35,
                     }}
                 >
                     {cleanSubcategory}
                 </p>
 
-                {/* ROW 2: PRODUCT TITLE (16PX MARGIN TO RATING, INCREASED LINE HEIGHT 1.45) */}
+                {/* ROW 2: PRODUCT TITLE (10PX MARGIN TO RATING) */}
                 <h3
                     className="product-card-title font-serif group-hover:text-[#8E63B0] transition-colors"
                     style={{
                         fontFamily: "'DM Serif Display', Georgia, serif",
-                        fontSize: "20px",
+                        fontSize: "19px",
                         fontWeight: 400,
                         color: "#231A2E",
-                        lineHeight: 1.45,
-                        marginBottom: "16px",
+                        lineHeight: 1.35,
+                        marginBottom: "10px",
                     }}
                 >
                     {product.name}
                 </h3>
 
-                {/* ROW 3: DEDICATED RATING ROW (16PX MARGIN TO PRICE) */}
+                {/* ROW 3: DEDICATED RATING ROW (10PX MARGIN TO PRICE) */}
                 <div
                     className="product-card-rating-row"
                     style={{
                         display: "flex",
                         alignItems: "center",
                         gap: "8px",
-                        marginBottom: "16px",
-                        fontSize: "13px",
+                        marginBottom: "10px",
+                        fontSize: "12.5px",
                         color: "#7A7268",
                     }}
                 >
                     {product.reviewCount > 0 ? (
                         <>
-                            <Stars n={Math.floor(product.rating)} size={12} />
-                            <span style={{ fontSize: "13px", fontWeight: 700, color: "#231A2E" }}>
+                            <Stars n={Math.floor(product.rating)} size={11.5} />
+                            <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#231A2E" }}>
                                 {product.rating.toFixed(1)}
                             </span>
-                            <span style={{ fontSize: "12.5px", color: "#8C847B" }}>
+                            <span style={{ fontSize: "12px", color: "#8C847B" }}>
                                 ({product.reviewCount} reviews)
                             </span>
                         </>
                     ) : (
-                        <span style={{ fontSize: "12.5px", color: "#8C847B", fontWeight: 500 }}>
+                        <span style={{ fontSize: "12px", color: "#8C847B", fontWeight: 500 }}>
                             No reviews yet
                         </span>
                     )}
                 </div>
 
-                {/* ROW 4: PRICE SECTION (22PX MARGIN TO ADD TO CART) */}
+                {/* ROW 4: PRICE SECTION (18PX MARGIN TO ADD TO CART) */}
                 <div
                     className="product-card-price-row"
                     style={{
                         display: "flex",
                         alignItems: "baseline",
                         gap: "10px",
-                        marginBottom: "22px",
+                        marginBottom: "18px",
                     }}
                 >
-                    <span style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "25px", fontWeight: 700, color: "#1E1428", lineHeight: 1 }}>
+                    <span style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "24px", fontWeight: 700, color: "#1E1428", lineHeight: 1 }}>
                         ₹{product.price.toLocaleString("en-IN")}
                     </span>
                     {product.originalPrice && product.originalPrice > product.price && (
-                        <span style={{ fontSize: "14px", color: "#A0988E", textDecoration: "line-through", fontWeight: 400 }}>
+                        <span style={{ fontSize: "13.5px", color: "#A0988E", textDecoration: "line-through", fontWeight: 400 }}>
                             ₹{product.originalPrice.toLocaleString("en-IN")}
                         </span>
                     )}
                 </div>
 
                 {/* ROW 5: PROPORTIONATE ADD TO CART BUTTON SEPARATED AT BOTTOM */}
-                <div className="product-card-cta-wrap mt-auto" style={{ marginTop: "auto", paddingTop: "4px" }}>
+                <div className="product-card-cta-wrap mt-auto" style={{ marginTop: "auto", paddingTop: "2px" }}>
                     {product.inStock ? (
                         <button
                             onClick={handleAdd}
                             style={{
                                 width: "100%",
-                                height: "44px",
-                                borderRadius: "16px",
-                                fontSize: "13px",
+                                height: "42px",
+                                borderRadius: "14px",
+                                fontSize: "12.5px",
                                 fontWeight: 600,
-                                letterSpacing: "0.4px",
+                                letterSpacing: "0.3px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: "8px",
+                                gap: "7px",
                                 transition: "all 0.2s ease",
                                 cursor: "pointer",
                                 border: "none",
@@ -228,12 +228,12 @@ export function ProductCard({ product, compact = false }) {
                         >
                             {inCart ? (
                                 <>
-                                    <Check size={15} strokeWidth={2.2} />
+                                    <Check size={14} strokeWidth={2.2} />
                                     <span>In Cart</span>
                                 </>
                             ) : (
                                 <>
-                                    <ShoppingBag size={15} strokeWidth={1.8} />
+                                    <ShoppingBag size={14} strokeWidth={1.8} />
                                     <span>Add to Cart</span>
                                 </>
                             )}
@@ -242,11 +242,11 @@ export function ProductCard({ product, compact = false }) {
                         <div
                             style={{
                                 width: "100%",
-                                height: "44px",
-                                borderRadius: "16px",
+                                height: "42px",
+                                borderRadius: "14px",
                                 background: "#EDE8E0",
                                 color: "#9C968D",
-                                fontSize: "13px",
+                                fontSize: "12.5px",
                                 fontWeight: 600,
                                 display: "flex",
                                 alignItems: "center",

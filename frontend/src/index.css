@@ -248,18 +248,18 @@ input[type="radio"] {
 /* ── Spacious Luxury Editorial Product Card Styles ────────────────── */
 .product-card-container {
   background: #FCFAF7;
-  border-radius: 28px;
+  border-radius: 24px;
   border: 1px solid #EFE8DF;
-  padding: 24px;
+  padding: 18px 20px 20px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  box-shadow: 0 4px 24px rgba(45, 31, 59, 0.03);
+  box-shadow: 0 4px 20px rgba(45, 31, 59, 0.03);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card-container:hover {
-  box-shadow: 0 16px 40px rgba(45, 31, 59, 0.08);
+  box-shadow: 0 14px 36px rgba(45, 31, 59, 0.08);
   transform: translateY(-4px);
 }
 
@@ -268,30 +268,30 @@ input[type="radio"] {
   width: 100%;
   aspect-ratio: 1 / 1;
   background-color: #F4EFE6;
-  border-radius: 22px;
+  border-radius: 18px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   border: 1px solid rgba(239, 232, 223, 0.8);
   flex-shrink: 0;
 }
 
 .product-card-category {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
   color: #8C847B;
-  letter-spacing: 2.5px;
+  letter-spacing: 2.2px;
   text-transform: uppercase;
-  margin-bottom: 14px;
-  line-height: 1.4;
+  margin-bottom: 7px;
+  line-height: 1.35;
 }
 
 .product-card-title {
   font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 400;
   color: #231A2E;
-  line-height: 1.45;
-  margin-bottom: 16px;
+  line-height: 1.35;
+  margin-bottom: 10px;
   transition: color 0.2s ease;
 }
 
@@ -303,8 +303,8 @@ input[type="radio"] {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
-  font-size: 13px;
+  margin-bottom: 10px;
+  font-size: 12.5px;
   color: #7A7268;
 }
 
@@ -312,11 +312,11 @@ input[type="radio"] {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .product-card-cta-wrap {
   margin-top: auto;
-  padding-top: 4px;
+  padding-top: 2px;
 }
 
