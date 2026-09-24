@@ -53,11 +53,11 @@ export function ProductCard({ product, compact = false }) {
 
     return (
         <div
-            className="group relative bg-[#FCFAF7] rounded-[24px] border border-[#EFE8DF] overflow-hidden flex flex-col h-full shadow-[0_2px_14px_rgba(45,31,59,0.03)] hover:shadow-[0_14px_36px_rgba(45,31,59,0.08)] transition-all duration-300 cursor-pointer p-4 sm:p-4.5"
+            className="group relative bg-[#FCFAF7] rounded-[24px] border border-[#EFE8DF] overflow-hidden flex flex-col h-full shadow-[0_2px_14px_rgba(45,31,59,0.03)] hover:shadow-[0_14px_36px_rgba(45,31,59,0.08)] transition-all duration-300 cursor-pointer p-4 sm:p-5"
             onClick={() => navigate(`/product/${product.id}`)}
         >
-            {/* 1. DOMINANT PRODUCT IMAGE CONTAINER WITH 16PX BOTTOM MARGIN */}
-            <div className={`relative bg-[#F4EFE6] rounded-[18px] overflow-hidden shrink-0 w-full mb-4 border border-[#EFE8DF]/70 shadow-2xs ${compact ? "h-[170px]" : "aspect-square"}`}>
+            {/* 1. DOMINANT PRODUCT IMAGE CONTAINER */}
+            <div className={`relative bg-[#F4EFE6] rounded-[18px] overflow-hidden shrink-0 w-full mb-3.5 border border-[#EFE8DF]/70 shadow-2xs ${compact ? "h-[170px]" : "aspect-square"}`}>
                 <img
                     src={product.images?.[0]}
                     alt={product.name}
@@ -97,20 +97,20 @@ export function ProductCard({ product, compact = false }) {
                 </button>
             </div>
 
-            {/* 2. PRODUCT DETAILS WITH GENEROUS SPACING & NATURAL VERTICAL RHYTHM */}
+            {/* 2. PRODUCT DETAILS WITH STRICT 10PX - 16PX VERTICAL BREATHING ROOM */}
             <div className="flex flex-col flex-1">
-                {/* ROW 1: CATEGORY LABEL */}
-                <p className="text-[10px] font-bold text-[#8C847B] tracking-[2.2px] uppercase mb-1.5">
+                {/* ROW 1: CATEGORY LABEL (10PX SPACING TO TITLE) */}
+                <p className="text-[10px] font-bold text-[#8C847B] tracking-[2.2px] uppercase mb-2.5">
                     {cleanSubcategory}
                 </p>
 
-                {/* ROW 2: PRODUCT TITLE */}
+                {/* ROW 2: PRODUCT TITLE (10PX MARGIN-BOTTOM TO RATING) */}
                 <h3 className="font-serif text-[18px] sm:text-[19px] font-normal text-[#231A2E] leading-[1.3] line-clamp-2 group-hover:text-[#8E63B0] transition-colors mb-2.5">
                     {product.name}
                 </h3>
 
-                {/* ROW 3: DEDICATED RATING ROW */}
-                <div className="flex items-center gap-1.5 mb-3">
+                {/* ROW 3: DEDICATED RATING ROW (10PX MARGIN-BOTTOM TO PRICE) */}
+                <div className="flex items-center gap-1.5 mb-2.5">
                     {product.reviewCount > 0 ? (
                         <>
                             <Stars n={Math.floor(product.rating)} size={11} />
@@ -128,7 +128,7 @@ export function ProductCard({ product, compact = false }) {
                     )}
                 </div>
 
-                {/* ROW 4: PRICE & DISCOUNT SECTION */}
+                {/* ROW 4: PRICE & DISCOUNT SECTION (16PX MARGIN-BOTTOM TO BUTTON) */}
                 <div className="flex items-baseline gap-2 mb-4">
                     <span className="font-serif text-[22px] sm:text-[24px] font-bold text-[#1E1428] leading-none">
                         ₹{product.price.toLocaleString("en-IN")}
@@ -145,7 +145,7 @@ export function ProductCard({ product, compact = false }) {
                     )}
                 </div>
 
-                {/* ROW 5: PROPORTIONATE ADD TO CART BUTTON (SEPARATED AT BOTTOM) */}
+                {/* ROW 5: PROPORTIONATE ADD TO CART BUTTON */}
                 <div className="mt-auto">
                     {product.inStock ? (
                         <button
