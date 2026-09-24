@@ -244,3 +244,79 @@ input[type="radio"] {
   border-color: #AB88CD !important;
   background: #F4F8F6 !important;
 }
+
+/* ── Spacious Luxury Editorial Product Card Styles ────────────────── */
+.product-card-container {
+  background: #FCFAF7;
+  border-radius: 28px;
+  border: 1px solid #EFE8DF;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 4px 24px rgba(45, 31, 59, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card-container:hover {
+  box-shadow: 0 16px 40px rgba(45, 31, 59, 0.08);
+  transform: translateY(-4px);
+}
+
+.product-card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #F4EFE6;
+  border-radius: 22px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid rgba(239, 232, 223, 0.8);
+  flex-shrink: 0;
+}
+
+.product-card-category {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8C847B;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.product-card-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #231A2E;
+  line-height: 1.45;
+  margin-bottom: 16px;
+  transition: color 0.2s ease;
+}
+
+.product-card-container:hover .product-card-title {
+  color: #8E63B0;
+}
+
+.product-card-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #7A7268;
+}
+
+.product-card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.product-card-cta-wrap {
+  margin-top: auto;
+  padding-top: 4px;
+}
+
