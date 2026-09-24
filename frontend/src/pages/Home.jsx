@@ -316,8 +316,8 @@ export default function Home() {
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 36 }}>
                 {["Journals", "Pens", "Washi Tape", "Stickers"].map(t => (<span key={t} style={{ background: T.sand, border: `1px solid ${T.border}`, borderRadius: 999, padding: "6px 16px", fontSize: 12.5, fontWeight: 600, color: T.txt }}>{t}</span>))}
               </div>
-              <button className="btn btn-dark btn-lg" onClick={() => navigate("/shop?cat=journals")} style={{ alignSelf: "flex-start" }}>
-                Shop the Edit <Icons.ArrowRight />
+              <button className="btn btn-dark btn-lg" onClick={() => navigate("/shop?cat=journals")} style={{ alignSelf: "flex-start", background: "linear-gradient(135deg, #AB88CD 0%, #9873BB 100%)", color: "#FAF7F2", border: "none" }}>
+                Explore Journaling <Icons.ArrowRight />
               </button>
             </div>
           </div>
