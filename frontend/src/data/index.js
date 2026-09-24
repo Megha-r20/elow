@@ -64,7 +64,7 @@ export const HERO_IMAGES = {
     washiRolls: "https://i.pinimg.com/736x/85/09/20/8509203040bed33acd5f993b9ed7d01b.jpg",
     pensPouch: "https://i.pinimg.com/736x/87/83/19/878319feb6b2539364730e72999560e4.jpg",
     deskPinks: u("photo-1765917921173-e43f86bf9c0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
-    writing1: u("photo-1579017308347-e53e0d2fc5e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
+    writing1: "https://images.unsplash.com/photo-1579017308347-e53e0d2fc5e9?auto=format&fit=crop&w=1200&q=85",
     writing2: u("photo-1517703565892-7cdb859e127b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
     writing3: u("photo-1781456505405-76d614cf5746?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),
     cozySetup: u("photo-1750814019023-4e43037f5075?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfA"),

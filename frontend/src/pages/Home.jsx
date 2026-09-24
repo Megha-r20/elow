@@ -301,7 +301,7 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderRadius: 24, overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.08)" }}>
             {/* Image */}
             <div style={{ position: "relative", height: 440 }}>
-              <img src={HERO_IMAGES.writing1} alt="The Journaling Edit" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}/>
+              <img src={HERO_IMAGES.writing1} alt="The Journaling Edit" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "left center", display: "block" }}/>
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 50%, rgba(245,240,232,0.18) 100%)" }}/>
             </div>
             {/* Copy */}
