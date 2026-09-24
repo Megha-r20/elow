@@ -56,29 +56,74 @@ export default function Home() {
                 if (catRes.ok) {
                     const catData = await catRes.json();
                     if (Array.isArray(catData) && catData.length > 0) {
-                        const merged = catData.map(c => {
-                            const matchId = (c.id || c.slug || "").toLowerCase();
-                            const defaultCat = CATEGORIES.find(d => {
-                                const did = (d.id || "").toLowerCase();
-                                return did === matchId || matchId.includes(did) || did.includes(matchId);
-                            }) || {};
-                            const rawImg = defaultCat.image || c.image || "";
-                            let finalImg = rawImg.trim();
-                            if (finalImg && !/^https?:\/\//i.test(finalImg) && !finalImg.startsWith("/") && !finalImg.startsWith("data:")) {
-                                finalImg = `https://${finalImg}`;
+                        const baseList = (() => {
+                            try {
+                                const saved = localStorage.getItem("elow_categories");
+                                if (saved) {
+                                    const parsed = JSON.parse(saved);
+                                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                                }
+                            } catch (_e) {}
+                            return CATEGORIES;
+                        })();
+
+                        const matchedCatIds = new Set();
+
+                        const merged = baseList.map(b => {
+                            const bId = (b.id || b.slug || b.label || "").toLowerCase();
+                            const matchedApi = catData.find(c => {
+                                const cId = (c.id || c.slug || c.name || "").toLowerCase();
+                                return cId === bId || cId.includes(bId) || bId.includes(cId);
+                            });
+
+                            if (matchedApi) {
+                                matchedCatIds.add(matchedApi.id || matchedApi.slug || matchedApi.name);
+                                const rawImg = b.image || matchedApi.image || "";
+                                let finalImg = rawImg.trim();
+                                if (finalImg && !/^https?:\/\//i.test(finalImg) && !finalImg.startsWith("/") && !finalImg.startsWith("data:")) {
+                                    finalImg = `https://${finalImg}`;
+                                }
+                                const countVal = matchedApi.count ?? matchedApi.productCount ?? b.productCount ?? 0;
+                                return {
+                                    ...b,
+                                    ...matchedApi,
+                                    id: b.id || matchedApi.id || matchedApi.slug,
+                                    label: b.label || matchedApi.label || matchedApi.name,
+                                    image: b.image || finalImg,
+                                    fallbackImage: b.fallbackImage || b.image,
+                                    productCount: countVal,
+                                    color: b.color || "#EEE8F8"
+                                };
                             }
-                            const countVal = c.count ?? c.productCount ?? defaultCat.productCount ?? 0;
-                            return {
-                                ...defaultCat,
-                                ...c,
-                                id: c.id || c.slug || defaultCat.id,
-                                label: defaultCat.label || c.label || c.name || c.id,
-                                image: defaultCat.image || finalImg,
-                                fallbackImage: defaultCat.fallbackImage || defaultCat.image,
-                                productCount: countVal,
-                                color: defaultCat.color || "#EEE8F8"
-                            };
+                            return b;
                         });
+
+                        catData.forEach(c => {
+                            const cKey = c.id || c.slug || c.name;
+                            if (cKey) {
+                                const matchId = (cKey).toLowerCase();
+                                const isAlreadyAdded = merged.some(m => {
+                                    const mId = (m.id || m.slug || m.label || "").toLowerCase();
+                                    return mId === matchId || mId.includes(matchId) || matchId.includes(mId);
+                                });
+                                if (!isAlreadyAdded) {
+                                    const rawImg = c.image || "";
+                                    let finalImg = rawImg.trim();
+                                    if (finalImg && !/^https?:\/\//i.test(finalImg) && !finalImg.startsWith("/") && !finalImg.startsWith("data:")) {
+                                        finalImg = `https://${finalImg}`;
+                                    }
+                                    merged.push({
+                                        id: c.id || c.slug || matchId,
+                                        label: c.label || c.name || c.id,
+                                        image: finalImg || "/journals.jpg",
+                                        fallbackImage: "/journals.jpg",
+                                        productCount: c.count ?? c.productCount ?? 0,
+                                        color: "#EEE8F8"
+                                    });
+                                }
+                            }
+                        });
+
                         setCategories(merged);
                     }
                 }
