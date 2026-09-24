@@ -317,7 +317,7 @@ export default function Home() {
                 Everything you need to build a journaling habit that sticks. Dotted journals, smooth gel pens, decorative washi tapes, and more — curated for beginners and seasoned journalers alike.
               </p>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 36 }}>
-                {["Journals", "Pens", "Washi Tape", "Stickers"].map(t => (<span key={t} style={{ background: T.sand, border: `1px solid ${T.border}`, borderRadius: 999, padding: "6px 16px", fontSize 12.5, fontWeight: 600, color: T.txt }}>{t}</span>))}
+                {["Journals", "Pens", "Washi Tape", "Stickers"].map(t => (<span key={t} style={{ background: T.sand, border: `1px solid ${T.border}`, borderRadius: 999, padding: "6px 16px", fontSize: 12.5, fontWeight: 600, color: T.txt }}>{t}</span>))}
               </div>
               <button className="btn btn-dark btn-lg" onClick={() => navigate("/shop?cat=journals")} style={{ alignSelf: "flex-start", background: "linear-gradient(135deg, #AB88CD 0%, #9873BB 100%)", color: "#FAF7F2", border: "none" }}>
                 Explore Journaling <Icons.ArrowRight />
