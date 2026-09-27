@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 import { User } from "../models/User.js";
 import {
   generateAccessToken,
@@ -14,8 +15,39 @@ import {
 import { logger } from "../config/logger.js";
 import { sendPasswordResetEmail } from "../services/emailService.js";
 
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || "mock-google-client-id");
+
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
 const safeLower = (v) => safeStr(v).toLowerCase();
+
+// Middleware: CSRF validation for cookie-authenticated endpoints
+export const verifyCsrfHeader = (req, res, next) => {
+  const origin = req.headers.origin || req.headers.referer;
+  const host = req.headers.host;
+
+  if (origin) {
+    try {
+      const originUrl = new URL(origin);
+      const allowedOrigins = (process.env.CORS_ORIGIN || "")
+        .split(",")
+        .map((s) => s.trim().toLowerCase())
+        .filter(Boolean);
+
+      const isHostMatch = host && originUrl.host.toLowerCase() === host.toLowerCase();
+      const isAllowedOrigin = allowedOrigins.some((ao) => origin.toLowerCase().startsWith(ao));
+      const isLocalDev = originUrl.hostname === "localhost" || originUrl.hostname === "127.0.0.1";
+
+      if (!isHostMatch && !isAllowedOrigin && !isLocalDev) {
+        logger.warn(`🛑 CSRF validation failed for ${req.path}: Origin ${origin} not permitted`);
+        return res.status(403).json({ error: "CSRF validation failed: Request origin not allowed." });
+      }
+    } catch (_err) {
+      return res.status(403).json({ error: "CSRF validation failed: Invalid Origin or Referer header." });
+    }
+  }
+
+  next();
+};
 
 // @desc    Register new user
 // @route   POST /api/auth/register
@@ -79,10 +111,32 @@ export const loginUser = async (req, res) => {
     return res.status(401).json({ error: "Invalid email or password" });
   }
 
+  // Check if account is currently locked out
+  if (user.lockoutUntil && user.lockoutUntil > new Date()) {
+    const remainingMs = user.lockoutUntil.getTime() - Date.now();
+    const remainingMins = Math.max(1, Math.ceil(remainingMs / (60 * 1000)));
+    logger.warn(`🛑 Blocked login attempt on locked account: ${user.email}`);
+    return res.status(429).json({
+      error: `Account is temporarily locked due to repeated failed login attempts. Please try again in ${remainingMins} minute(s).`,
+    });
+  }
+
   const isPasswordMatch = await bcrypt.compare(cleanPass, user.password).catch(() => false);
 
   if (!isPasswordMatch) {
+    user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+    if (user.failedLoginAttempts >= 5) {
+      user.lockoutUntil = new Date(Date.now() + 15 * 60 * 1000); // 15-minute lockout
+      logger.warn(`🔒 Account locked out after ${user.failedLoginAttempts} failed attempts: ${user.email}`);
+    }
+    await user.save();
     return res.status(401).json({ error: "Invalid email or password" });
+  }
+
+  // Reset failed login tracking on successful authentication
+  if (user.failedLoginAttempts > 0 || user.lockoutUntil) {
+    user.failedLoginAttempts = 0;
+    user.lockoutUntil = null;
   }
 
   const accessToken = generateAccessToken(user.id, user.role);
@@ -305,10 +359,37 @@ export const resetPassword = async (req, res) => {
 // @route   POST /api/auth/google
 // @access  Public
 export const googleAuth = async (req, res) => {
-  const { email, name, avatar } = req.body || {};
+  const { idToken, credential, email: bodyEmail, name: bodyName, avatar: bodyAvatar } = req.body || {};
+  const tokenToVerify = credential || idToken;
 
-  const cleanEmail = safeLower(email) || "google.user@example.com";
-  const cleanName = safeStr(name) || "Google Member";
+  let verifiedEmail = bodyEmail;
+  let verifiedName = bodyName;
+  let verifiedAvatar = bodyAvatar;
+
+  if (tokenToVerify) {
+    try {
+      const ticket = await googleClient.verifyIdToken({
+        idToken: tokenToVerify,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      if (payload) {
+        verifiedEmail = payload.email;
+        verifiedName = payload.name;
+        verifiedAvatar = payload.picture;
+      }
+    } catch (verifyErr) {
+      if (process.env.NODE_ENV === "production" || !bodyEmail) {
+        logger.warn(`🛑 Invalid Google ID token verification attempt: ${verifyErr.message}`);
+        return res.status(401).json({ error: "Invalid Google authentication token." });
+      }
+    }
+  } else if (process.env.NODE_ENV === "production") {
+    return res.status(400).json({ error: "Google ID token or credential is required for OAuth sign-in." });
+  }
+
+  const cleanEmail = safeLower(verifiedEmail) || "google.user@example.com";
+  const cleanName = safeStr(verifiedName) || "Google Member";
 
   let user = await User.findOne({ email: cleanEmail });
 
@@ -330,7 +411,7 @@ export const googleAuth = async (req, res) => {
       email: cleanEmail,
       password: dummyPassword,
       role: "user", // All new Google OAuth registrations strictly default to standard "user" role
-      avatar: avatar || undefined,
+      avatar: verifiedAvatar || undefined,
     });
     logger.info(`✨ Google OAuth user created: ${cleanName} (${cleanEmail})`);
   }

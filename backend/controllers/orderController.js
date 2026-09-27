@@ -263,21 +263,29 @@ export const getOrderById = async (req, res) => {
 // @access  Private/Admin
 export const getAllOrders = async (req, res) => {
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limitParam = req.query.limit !== undefined ? parseInt(req.query.limit, 10) : null;
+  const rawLimit = req.query.limit;
 
-  const total = await Order.countDocuments({});
+  const MAX_LIMIT = 200;
+  let limit = 50;
 
-  let ordersQuery = Order.find({}).sort({ createdAt: -1 });
-  let totalPages = 1;
-
-  if (limitParam && limitParam > 0) {
-    const limit = limitParam;
-    const skip = (page - 1) * limit;
-    ordersQuery = ordersQuery.skip(skip).limit(limit);
-    totalPages = Math.ceil(total / limit) || 1;
+  if (rawLimit === "all" || rawLimit === "0") {
+    limit = MAX_LIMIT;
+  } else if (rawLimit !== undefined && !isNaN(parseInt(rawLimit, 10))) {
+    const parsed = parseInt(rawLimit, 10);
+    if (parsed > 0) {
+      limit = Math.min(parsed, MAX_LIMIT);
+    }
   }
 
-  const orders = await ordersQuery.lean();
+  const total = await Order.countDocuments({});
+  const skip = (page - 1) * limit;
+  const totalPages = Math.ceil(total / limit) || 1;
+
+  const orders = await Order.find({})
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .lean();
 
   res.json({
     orders,

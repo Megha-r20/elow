@@ -65,4 +65,56 @@ describe("Customer Directory & Admin Analytics Integration Tests", () => {
     expect(res.body).toHaveProperty("salesTrend");
     expect(res.body).toHaveProperty("categorySales");
   });
+
+  it("should correctly aggregate customer orderCount, totalSpent, totalRevenue, and categorySales from Order schema fields", async () => {
+    const { Order } = await import("../models/Order.js");
+
+    const targetUser = await User.findOne({ email: targetUserEmail });
+
+    // Create an order matching the Order schema structure
+    await Order.create({
+      id: `US-TEST-${Date.now()}`,
+      userId: targetUser.id,
+      items: [
+        {
+          product: { id: "P001", name: "Test Journal", category: "journals", price: 999 },
+          qty: 2,
+        },
+      ],
+      deliveryAddress: {
+        firstName: "Directory",
+        lastName: "Customer",
+        email: targetUserEmail,
+        address: "123 Test St",
+      },
+      payMethod: "upi",
+      total: 1998,
+      status: "Delivered",
+      date: new Date(),
+    });
+
+    // Verify GET /api/admin/users aggregates customer order stats correctly
+    const usersRes = await request(app)
+      .get("/api/admin/users")
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(usersRes.status).toBe(200);
+    const customerStat = usersRes.body.find((u) => u.email === targetUserEmail);
+    expect(customerStat).toBeDefined();
+    expect(customerStat.orderCount).toBe(1);
+    expect(customerStat.totalSpent).toBe(1998);
+
+    // Verify GET /api/admin/analytics aggregates total revenue and category sales correctly
+    const analyticsRes = await request(app)
+      .get("/api/admin/analytics")
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(analyticsRes.status).toBe(200);
+    expect(analyticsRes.body.summary.totalRevenue).toBe(1998);
+    expect(analyticsRes.body.categorySales.length).toBeGreaterThan(0);
+    const journalSales = analyticsRes.body.categorySales.find((c) => c.category === "journals");
+    expect(journalSales).toBeDefined();
+    expect(journalSales.revenue).toBe(1998);
+    expect(journalSales.units).toBe(2);
+  });
 });

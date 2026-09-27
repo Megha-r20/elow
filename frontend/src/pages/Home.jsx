@@ -4,7 +4,6 @@ import { SectionHead, Icons, Stars } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { Book, PenTool, Paperclip, Star, Calendar, Notebook, PenBox, Gift } from "lucide-react";
 import { CATEGORIES, HERO_IMAGES } from "../data";
-import { PRODUCTS } from "../data/products.js";
 import { useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 const bgVideo = "/Background_video.mp4";
@@ -33,8 +32,8 @@ export default function Home() {
         } catch (_e) {}
         return CATEGORIES;
     });
-    const [featured, setFeatured] = useState(() => PRODUCTS.slice(0, 8));
-    const [bestSellers, setBestSellers] = useState(() => PRODUCTS.filter(p => p.isBestseller).slice(0, 8));
+    const [featured, setFeatured] = useState([]);
+    const [bestSellers, setBestSellers] = useState([]);
 
     useEffect(() => {
         async function fetchHomeProducts() {

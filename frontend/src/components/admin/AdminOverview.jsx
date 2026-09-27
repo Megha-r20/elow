@@ -268,7 +268,13 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
                           fontSize: 14,
                         }}
                       >
-                        {o.deliveryAddress?.firstName ? o.deliveryAddress.firstName.charAt(0).toUpperCase() : "C"}
+                        {o.deliveryAddress?.firstName
+                          ? o.deliveryAddress.firstName.charAt(0).toUpperCase()
+                          : o.shippingAddress?.name
+                          ? o.shippingAddress.name.charAt(0).toUpperCase()
+                          : o.user?.name
+                          ? o.user.name.charAt(0).toUpperCase()
+                          : "C"}
                       </div>
                       <div>
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -290,7 +296,13 @@ export function AdminOverview({ orders = [], products = [], setTab, getStatusBad
                           </span>
                         </div>
                         <p style={{ fontSize: 12, color: T.muted, margin: "3px 0 0" }}>
-                          {o.deliveryAddress?.firstName} {o.deliveryAddress?.lastName} ({o.deliveryAddress?.email}) · {o.items?.length || 0} item(s)
+                          {o.deliveryAddress
+                            ? `${o.deliveryAddress.firstName || ""} ${o.deliveryAddress.lastName || ""} (${o.deliveryAddress.email || ""})`
+                            : o.shippingAddress
+                            ? `${o.shippingAddress.name || ""} (${o.shippingAddress.email || o.user?.email || ""})`
+                            : o.user
+                            ? `${o.user.name || ""} (${o.user.email || ""})`
+                            : "Customer"} · {o.items?.length || 0} item(s)
                         </p>
                       </div>
                     </div>

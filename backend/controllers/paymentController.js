@@ -315,7 +315,29 @@ export const handleStripeWebhook = async (req, res) => {
 // @route   GET /api/admin/promo
 // @access  Private/Admin
 export const getAllPromosAdmin = async (req, res) => {
-  const promos = await PromoCode.find().sort({ createdAt: -1 }).lean();
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const rawLimit = req.query.limit;
+
+  const MAX_LIMIT = 200;
+  let limit = 50;
+
+  if (rawLimit === "all" || rawLimit === "0") {
+    limit = MAX_LIMIT;
+  } else if (rawLimit !== undefined && !isNaN(parseInt(rawLimit, 10))) {
+    const parsed = parseInt(rawLimit, 10);
+    if (parsed > 0) {
+      limit = Math.min(parsed, MAX_LIMIT);
+    }
+  }
+
+  const skip = (page - 1) * limit;
+
+  const promos = await PromoCode.find()
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
   res.json(promos);
 };
 

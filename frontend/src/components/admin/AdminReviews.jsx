@@ -16,9 +16,9 @@ export function AdminReviews({
     if (reviewStatusFilter === "approved" && r.status !== "approved") return false;
     if (reviewSearch.trim()) {
       const q = reviewSearch.toLowerCase();
-      const matchName = (r.userName || "").toLowerCase().includes(q);
-      const matchComment = (r.comment || "").toLowerCase().includes(q);
-      const matchTitle = (r.title || "").toLowerCase().includes(q);
+      const matchName = (r.userName || r.name || "").toLowerCase().includes(q);
+      const matchComment = (r.comment || r.text || "").toLowerCase().includes(q);
+      const matchTitle = (r.title || r.productName || "").toLowerCase().includes(q);
       const matchProd = (r.productId || "").toLowerCase().includes(q);
       return matchName || matchComment || matchTitle || matchProd;
     }
@@ -133,7 +133,7 @@ export function AdminReviews({
                 <div style={{ flex: 1, minWidth: 280 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                     <Stars n={r.rating} size={14} />
-                    <span style={{ fontSize: 13, fontWeight: 800, color: "#23201D" }}>{r.title}</span>
+                    <span style={{ fontSize: 13, fontWeight: 800, color: "#23201D" }}>{r.title || r.productName || "Product Review"}</span>
                     <span
                       style={{
                         fontSize: 10.5,
@@ -149,11 +149,11 @@ export function AdminReviews({
                     </span>
                   </div>
 
-                  <p style={{ fontSize: 13.5, color: "#6E6A63", lineHeight: 1.6, marginBottom: 12 }}>"{r.comment}"</p>
+                  <p style={{ fontSize: 13.5, color: "#6E6A63", lineHeight: 1.6, marginBottom: 12 }}>"{r.comment || r.text}"</p>
 
                   <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 12, color: "#9C968D" }}>
                     <span>
-                      Reviewer: <strong style={{ color: "#23201D" }}>{r.userName || "Customer"}</strong>
+                      Reviewer: <strong style={{ color: "#23201D" }}>{r.userName || r.name || "Customer"}</strong>
                     </span>
                     <span>•</span>
                     <span>

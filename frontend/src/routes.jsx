@@ -9,7 +9,7 @@ const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const Cart = lazy(() => import("./pages/Cart"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const OrderConfirmation = lazy(() => import("./pages/OrderConfirmation"));
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard").then(m => ({ default: m.AdminDashboard })));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const Settings = lazy(() => import("./pages/Settings"));
 const ShippingPolicy = lazy(() => import("./pages/ShippingPolicy"));
 const FAQ = lazy(() => import("./pages/FAQ"));

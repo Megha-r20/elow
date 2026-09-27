@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router";
 import { Icons, Breadcrumb } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
 import { CATEGORIES, SORT_OPTIONS, PRICE_RANGES } from "../data";
-import { PRODUCTS } from "../data/products.js";
 import { useWishlist, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 import { SlidersHorizontal, X, Grid, LayoutGrid } from "lucide-react";
@@ -65,7 +64,7 @@ export default function Shop() {
         setVisibleCount(12);
     }, [activeCat, sort, priceRange, maxPrice, onlyInStock, onlyNew, onlyBest, onlyWishlist, onlyStudents, searchQ]);
 
-    const [liveProducts, setLiveProducts] = useState(PRODUCTS);
+    const [liveProducts, setLiveProducts] = useState([]);
 
     useEffect(() => {
         async function fetchLiveProducts() {

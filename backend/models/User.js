@@ -13,6 +13,8 @@ const userSchema = new mongoose.Schema(
     avatar: { type: String, default: "" },
     address: { type: String, default: "" },
     lastSpinAt: { type: Date },
+    failedLoginAttempts: { type: Number, default: 0 },
+    lockoutUntil: { type: Date, default: null },
     refreshTokens: [{ type: String }],
     resetPasswordToken: { type: String },
     resetPasswordExpires: { type: Date },

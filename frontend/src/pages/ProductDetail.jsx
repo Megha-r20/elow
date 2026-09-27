@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router";
 import { REVIEWS } from "../data";
-import { PRODUCTS } from "../data/products.js";
 import { useCart, useWishlist, useToast, useDrawer, useDocumentTitle } from "../hooks";
 import { Stars, QtyStepper, Icons, SectionHead } from "../components/ui";
 import { ProductCard } from "../components/ProductCard";
@@ -56,17 +55,6 @@ export default function ProductDetail() {
                     }
                 }
             } catch (_err) {
-                /* fallback to static product */
-            }
-            const staticProd = PRODUCTS.find((p) => String(p.id) === String(id));
-            if (staticProd) {
-                setProduct(staticProd);
-                setRelated(
-                    PRODUCTS.filter(
-                        (p) => p.category === staticProd.category && String(p.id) !== String(id)
-                    ).slice(0, 4)
-                );
-            } else {
                 setProduct(null);
             }
             setLoading(false);

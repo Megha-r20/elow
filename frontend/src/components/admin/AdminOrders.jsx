@@ -137,18 +137,23 @@ export function AdminOrders({
                   <div>
                     <p style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1px", marginBottom: 6 }}>DELIVERY ADDRESS</p>
                     <p style={{ fontSize: 13, color: "#23201D", lineHeight: 1.6 }}>
-                      <strong>{o.deliveryAddress?.firstName} {o.deliveryAddress?.lastName}</strong><br />
-                      {o.deliveryAddress?.email}<br />
-                      {o.deliveryAddress?.address}, {o.deliveryAddress?.city}<br />
-                      Phone: {o.deliveryAddress?.phone || "N/A"}
+                      <strong>
+                        {o.deliveryAddress?.firstName
+                          ? `${o.deliveryAddress.firstName} ${o.deliveryAddress.lastName || ""}`
+                          : o.shippingAddress?.name || o.user?.name || "Customer"}
+                      </strong><br />
+                      {o.deliveryAddress?.email || o.shippingAddress?.email || o.user?.email || "N/A"}<br />
+                      {o.deliveryAddress?.address || o.shippingAddress?.address || "N/A"}
+                      {o.deliveryAddress?.city ? `, ${o.deliveryAddress.city}` : o.shippingAddress?.city ? `, ${o.shippingAddress.city}` : ""}<br />
+                      Phone: {o.deliveryAddress?.phone || o.shippingAddress?.phone || "N/A"}
                     </p>
                   </div>
 
                   <div>
                     <p style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1px", marginBottom: 6 }}>ORDER SUMMARY</p>
                     <p style={{ fontSize: 13, color: "#23201D", lineHeight: 1.6 }}>
-                      Payment Method: <span style={{ fontWeight: 800, textTransform: "uppercase" }}>{o.payMethod}</span><br />
-                      Total Amount: <strong style={{ fontSize: 16, color: "#AB88CD" }}>&#8377;{o.total?.toLocaleString("en-IN")}</strong>
+                      Payment Method: <span style={{ fontWeight: 800, textTransform: "uppercase" }}>{o.payMethod || o.paymentMethod || "COD"}</span><br />
+                      Total Amount: <strong style={{ fontSize: 16, color: "#AB88CD" }}>&#8377;{(o.total || o.totalAmount || 0).toLocaleString("en-IN")}</strong>
                     </p>
                   </div>
                 </div>
@@ -157,20 +162,26 @@ export function AdminOrders({
                   <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px dashed #EAE3D9" }}>
                     <p style={{ fontSize: 11, fontWeight: 800, color: "#9C968D", letterSpacing: "1px", marginBottom: 10 }}>ORDERED ITEMS ({o.items.length})</p>
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                      {o.items.map((item, idx) => (
-                        <div key={idx} style={{ display: "flex", alignItems: "center", gap: 8, background: "#FFFFFF", padding: "6px 12px", borderRadius: 12, border: "1px solid #EAE3D9", boxShadow: "0 2px 6px rgba(0,0,0,0.02)" }}>
-                          {item.product?.images?.[0] && (
-                            <img src={item.product.images[0]} alt={item.product.name} style={{ width: 32, height: 32, borderRadius: 8, objectFit: "cover", border: "1px solid #EAE3D9" }} />
-                          )}
-                          <div>
-                            <p style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>{item.product?.name || "Product"}</p>
-                            <p style={{ fontSize: 11, color: "#9C968D" }}>&#8377;{item.product?.price || 0}</p>
+                      {o.items.map((item, idx) => {
+                        const prodName = item.product?.name || item.name || "Product";
+                        const prodPrice = item.product?.price || item.price || 0;
+                        const prodImg = item.product?.images?.[0] || item.image || item.imageUrl;
+                        const qty = item.qty || item.quantity || 1;
+                        return (
+                          <div key={idx} style={{ display: "flex", alignItems: "center", gap: 8, background: "#FFFFFF", padding: "6px 12px", borderRadius: 12, border: "1px solid #EAE3D9", boxShadow: "0 2px 6px rgba(0,0,0,0.02)" }}>
+                            {prodImg && (
+                              <img src={prodImg} alt={prodName} style={{ width: 32, height: 32, borderRadius: 8, objectFit: "cover", border: "1px solid #EAE3D9" }} />
+                            )}
+                            <div>
+                              <p style={{ fontSize: 12.5, fontWeight: 700, color: "#23201D" }}>{prodName}</p>
+                              <p style={{ fontSize: 11, color: "#9C968D" }}>&#8377;{prodPrice}</p>
+                            </div>
+                            <span style={{ fontSize: 11.5, fontWeight: 800, color: "#AB88CD", background: "rgba(171, 136, 205,0.12)", padding: "2px 8px", borderRadius: 6, marginLeft: 4 }}>
+                              x{qty}
+                            </span>
                           </div>
-                          <span style={{ fontSize: 11.5, fontWeight: 800, color: "#AB88CD", background: "rgba(171, 136, 205,0.12)", padding: "2px 8px", borderRadius: 6, marginLeft: 4 }}>
-                            x{item.qty || 1}
-                          </span>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 )}

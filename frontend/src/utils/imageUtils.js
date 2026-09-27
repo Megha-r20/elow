@@ -16,7 +16,7 @@ export function normalizeImageUrl(url) {
 /**
  * Resolves Pinterest shortlinks (pin.it) or Pin URLs via backend API
  */
-export async function resolvePinterestImage(url) {
+export async function resolvePinterestImage(url, token) {
   const normalized = normalizeImageUrl(url);
   if (!normalized) return "";
 
@@ -27,7 +27,7 @@ export async function resolvePinterestImage(url) {
 
   try {
     const res = await fetch(getApiUrl(`/api/admin/resolve-image?url=${encodeURIComponent(normalized)}`), {
-      headers: getAuthHeaders(),
+      headers: getAuthHeaders(token),
     });
     if (res.ok) {
       const data = await res.json();

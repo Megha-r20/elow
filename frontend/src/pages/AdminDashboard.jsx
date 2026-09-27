@@ -1,17 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Link } from "react-router";
-import { CATEGORIES, PRODUCTS } from "../data";
+import { CATEGORIES } from "../data";
 import { useAuth } from "../context/AuthContext";
 import { useToast, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
-import { AdminOverview } from "../components/admin/AdminOverview";
-import { AdminProducts } from "../components/admin/AdminProducts";
-import { AdminOrders } from "../components/admin/AdminOrders";
-import { AdminReviews } from "../components/admin/AdminReviews";
-import { AdminProductModals } from "../components/admin/AdminProductModals";
-import AdminCategories from "../components/admin/AdminCategories";
-import AdminCustomers from "../components/admin/AdminCustomers";
-import AdminPromo from "../components/admin/AdminPromo";
+
+const AdminOverview = lazy(() => import("../components/admin/AdminOverview").then(m => ({ default: m.AdminOverview })));
+const AdminProducts = lazy(() => import("../components/admin/AdminProducts").then(m => ({ default: m.AdminProducts })));
+const AdminOrders = lazy(() => import("../components/admin/AdminOrders").then(m => ({ default: m.AdminOrders })));
+const AdminReviews = lazy(() => import("../components/admin/AdminReviews").then(m => ({ default: m.AdminReviews })));
+const AdminProductModals = lazy(() => import("../components/admin/AdminProductModals").then(m => ({ default: m.AdminProductModals })));
+const AdminCategories = lazy(() => import("../components/admin/AdminCategories"));
+const AdminCustomers = lazy(() => import("../components/admin/AdminCustomers"));
+const AdminPromo = lazy(() => import("../components/admin/AdminPromo"));
 
 const DEFAULT_SAMPLE_ORDERS = [
   {
@@ -62,8 +63,8 @@ export function AdminDashboard() {
     const { user, token, isAdmin } = useAuth();
     const { addToast } = useToast();
     const [tab, setTab] = useState("overview");
-    // Products State (defaults to imported catalog PRODUCTS so Admin never displays 0 products)
-    const [products, setProducts] = useState(() => PRODUCTS);
+    // Products State
+    const [products, setProducts] = useState([]);
     const [loadingProducts, setLoadingProducts] = useState(true);
     const [productSearch, setProductSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
@@ -249,17 +250,17 @@ export function AdminDashboard() {
             const res = await fetch(getApiUrl("/api/products?limit=all"));
             if (res.ok) {
                 const data = await res.json();
-                if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+                if (data.products && Array.isArray(data.products)) {
                     setProducts(data.products);
                 } else {
-                    setProducts(PRODUCTS);
+                    setProducts([]);
                 }
             } else {
-                setProducts(PRODUCTS);
+                setProducts([]);
             }
         }
         catch (_err) {
-            setProducts(PRODUCTS);
+            setProducts([]);
         }
         finally {
             setLoadingProducts(false);
@@ -429,17 +430,21 @@ export function AdminDashboard() {
         </div>
       </div>);
     }
-    const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
-    const totalOrdersCount = orders.length;
-    const inStockCount = products.filter(p => p.inStock).length;
+    const safeOrders = Array.isArray(orders) ? orders : [];
+    const safeProducts = Array.isArray(products) ? products : [];
+    const safeReviews = Array.isArray(reviews) ? reviews : [];
+
+    const totalRevenue = safeOrders.reduce((sum, o) => sum + (o.total || o.totalAmount || 0), 0);
+    const totalOrdersCount = safeOrders.length;
+    const inStockCount = safeProducts.filter(p => p && p.inStock).length;
 
     // Filtered Admin Orders by Status
-    const processingCount = orders.filter(o => (o.status || "Processing").toLowerCase() === "processing" || (o.status || "").toLowerCase() === "order placed").length;
-    const shippedCount = orders.filter(o => (o.status || "").toLowerCase() === "shipped").length;
-    const deliveredCount = orders.filter(o => (o.status || "").toLowerCase() === "delivered").length;
-    const cancelledCount = orders.filter(o => (o.status || "").toLowerCase() === "cancelled").length;
+    const processingCount = safeOrders.filter(o => (o.status || "Processing").toLowerCase() === "processing" || (o.status || "").toLowerCase() === "order placed").length;
+    const shippedCount = safeOrders.filter(o => (o.status || "").toLowerCase() === "shipped").length;
+    const deliveredCount = safeOrders.filter(o => (o.status || "").toLowerCase() === "delivered").length;
+    const cancelledCount = safeOrders.filter(o => (o.status || "").toLowerCase() === "cancelled").length;
 
-    const filteredAdminOrders = orders.filter(o => {
+    const filteredAdminOrders = safeOrders.filter(o => {
         const s = (o.status || "Processing").toLowerCase();
         if (adminOrderFilter === "processing") return s === "processing" || s === "order placed";
         if (adminOrderFilter === "shipped") return s === "shipped";
@@ -449,7 +454,8 @@ export function AdminDashboard() {
     });
 
     // Filtered Products for Tab 2
-    const filteredProducts = products.filter(p => {
+    const filteredProducts = safeProducts.filter(p => {
+        if (!p) return false;
         const pCat = (p.category || "").toLowerCase();
         const filterCat = (categoryFilter || "all").toLowerCase();
         const matchesCategory = filterCat === "all" || pCat === filterCat || (filterCat === "workspace" && pCat === "desk") || (filterCat === "accessories" && pCat === "gifting");
@@ -458,7 +464,7 @@ export function AdminDashboard() {
         return matchesCategory && matchesSearch;
     });
     const getStatusBadgeStyle = (status) => {
-        const s = status.toLowerCase();
+        const s = (status || "").toLowerCase();
         if (s === "cancelled")
             return { color: "#DC2626", bg: "rgba(220,38,38,0.12)", border: "rgba(220,38,38,0.3)" };
         if (s === "delivered")
@@ -534,7 +540,7 @@ export function AdminDashboard() {
               <div style={{ width: 38, height: 38, borderRadius: 12, background: "#F3EFF7", color: "#8B5CF6", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🛒</div>
             </div>
             <h3 style={{ fontSize: 32, fontWeight: 800, color: "#23201D", marginTop: 2, letterSpacing: "-0.5px" }}>
-              {products.length} Items
+              {safeProducts.length} Items
             </h3>
             <p style={{ fontSize: 12.5, color: "#6E6A63", marginTop: 8, fontWeight: 600 }}>
               {inStockCount} available in stock
@@ -547,7 +553,7 @@ export function AdminDashboard() {
               <div style={{ width: 38, height: 38, borderRadius: 12, background: "#FEF3C7", color: "#D97706", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>⭐</div>
             </div>
             <h3 style={{ fontSize: 32, fontWeight: 800, color: "#23201D", marginTop: 2, letterSpacing: "-0.5px" }}>
-              {reviews.length} Reviews
+              {safeReviews.length} Reviews
             </h3>
             <p style={{ fontSize: 12.5, color: "#D97706", marginTop: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 5 }}>
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#F59E0B", display: "inline-block" }}/>
@@ -560,12 +566,12 @@ export function AdminDashboard() {
         <div style={{ background: "#EAE3D9", padding: 6, borderRadius: 16, display: "inline-flex", gap: 6, marginBottom: 32, border: "1px solid #DFD7CB", flexWrap: "wrap" }}>
           {[
             { id: "overview", label: "📊 Store Overview" },
-            { id: "products", label: `📦 Products (${products.length})` },
+            { id: "products", label: `📦 Products (${safeProducts.length})` },
             { id: "categories", label: "🏷️ Categories" },
             { id: "customers", label: "👥 Customers" },
-            { id: "orders", label: `🛒 Orders (${orders.length})` },
+            { id: "orders", label: `🛒 Orders (${safeOrders.length})` },
             { id: "promo", label: "🎟️ Promo Codes" },
-            { id: "reviews", label: `⭐ Reviews (${reviews.length})` },
+            { id: "reviews", label: `⭐ Reviews (${safeReviews.length})` },
           ].map(t => (<button key={t.id} onClick={() => setTab(t.id)} style={{
                 padding: "11px 20px",
                 fontSize: 13.5,
@@ -583,95 +589,99 @@ export function AdminDashboard() {
             </button>))}
         </div>
 
-        {/* TAB 1: OVERVIEW */}
-        {tab === "overview" && (
-          <AdminOverview
-            orders={orders}
-            products={products}
-            setTab={setTab}
-            getStatusBadgeStyle={getStatusBadgeStyle}
-            token={token}
-          />
-        )}
+        <Suspense fallback={<div style={{ padding: "48px", textAlign: "center", color: "#6E6A63", fontSize: 14 }}>Loading module...</div>}>
+          {/* TAB 1: OVERVIEW */}
+          {tab === "overview" && (
+            <AdminOverview
+              orders={orders}
+              products={products}
+              setTab={setTab}
+              getStatusBadgeStyle={getStatusBadgeStyle}
+              token={token}
+            />
+          )}
 
-        {/* TAB 2: PRODUCTS MANAGEMENT */}
-        {tab === "products" && (
-          <AdminProducts
-            products={products}
-            loadingProducts={loadingProducts}
-            filteredProducts={filteredProducts}
-            productSearch={productSearch}
-            setProductSearch={setProductSearch}
-            categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
+          {/* TAB 2: PRODUCTS MANAGEMENT */}
+          {tab === "products" && (
+            <AdminProducts
+              products={products}
+              loadingProducts={loadingProducts}
+              filteredProducts={filteredProducts}
+              productSearch={productSearch}
+              setProductSearch={setProductSearch}
+              categoryFilter={categoryFilter}
+              setCategoryFilter={setCategoryFilter}
+              setShowAddModal={setShowAddModal}
+              openEditModal={openEditModal}
+              handleDeleteProduct={handleDeleteProduct}
+            />
+          )}
+
+          {/* TAB 3: CATEGORIES MANAGEMENT */}
+          {tab === "categories" && (
+            <AdminCategories token={token} showToast={addToast} />
+          )}
+
+          {/* TAB 4: CUSTOMER DIRECTORY */}
+          {tab === "customers" && (
+            <AdminCustomers token={token} showToast={addToast} />
+          )}
+
+          {/* TAB 5: ORDERS MANAGEMENT */}
+          {tab === "orders" && (
+            <AdminOrders
+              orders={orders}
+              loadingOrders={loadingOrders}
+              filteredAdminOrders={filteredAdminOrders}
+              adminOrderFilter={adminOrderFilter}
+              setAdminOrderFilter={setAdminOrderFilter}
+              processingCount={processingCount}
+              shippedCount={shippedCount}
+              deliveredCount={deliveredCount}
+              cancelledCount={cancelledCount}
+              fetchOrders={fetchOrders}
+              addToast={addToast}
+              getStatusBadgeStyle={getStatusBadgeStyle}
+              handleUpdateOrderStatus={handleUpdateOrderStatus}
+              handleDeleteSingleOrder={handleDeleteSingleOrder}
+            />
+          )}
+
+          {/* TAB 6: PROMO CODES */}
+          {tab === "promo" && (
+            <AdminPromo token={token} showToast={addToast} />
+          )}
+
+          {/* TAB 7: REVIEWS */}
+          {tab === "reviews" && (
+            <AdminReviews
+              reviews={reviews}
+              loadingReviews={loadingReviews}
+              reviewSearch={reviewSearch}
+              setReviewSearch={setReviewSearch}
+              reviewStatusFilter={reviewStatusFilter}
+              setReviewStatusFilter={setReviewStatusFilter}
+              fetchReviews={fetchReviews}
+              handleApproveReview={handleApproveReview}
+              handleDeleteReview={handleDeleteReview}
+            />
+          )}
+
+          <AdminProductModals
+            showAddModal={showAddModal}
             setShowAddModal={setShowAddModal}
-            openEditModal={openEditModal}
-            handleDeleteProduct={handleDeleteProduct}
+            newProd={newProd}
+            setNewProd={setNewProd}
+            handleAddProduct={handleAddProduct}
+            editingProduct={editingProduct}
+            setEditingProduct={setEditingProduct}
+            editForm={editForm}
+            setEditForm={setEditForm}
+            handleUpdateProduct={handleUpdateProduct}
           />
-        )}
-
-        {/* TAB 3: CATEGORIES MANAGEMENT */}
-        {tab === "categories" && (
-          <AdminCategories token={token} showToast={addToast} />
-        )}
-
-        {/* TAB 4: CUSTOMER DIRECTORY */}
-        {tab === "customers" && (
-          <AdminCustomers token={token} showToast={addToast} />
-        )}
-
-        {/* TAB 5: ORDERS MANAGEMENT */}
-        {tab === "orders" && (
-          <AdminOrders
-            orders={orders}
-            loadingOrders={loadingOrders}
-            filteredAdminOrders={filteredAdminOrders}
-            adminOrderFilter={adminOrderFilter}
-            setAdminOrderFilter={setAdminOrderFilter}
-            processingCount={processingCount}
-            shippedCount={shippedCount}
-            deliveredCount={deliveredCount}
-            cancelledCount={cancelledCount}
-            fetchOrders={fetchOrders}
-            addToast={addToast}
-            getStatusBadgeStyle={getStatusBadgeStyle}
-            handleUpdateOrderStatus={handleUpdateOrderStatus}
-            handleDeleteSingleOrder={handleDeleteSingleOrder}
-          />
-        )}
-
-        {/* TAB 6: PROMO CODES */}
-        {tab === "promo" && (
-          <AdminPromo token={token} showToast={addToast} />
-        )}
-
-        {/* TAB 7: REVIEWS */}
-        {tab === "reviews" && (
-          <AdminReviews
-            reviews={reviews}
-            loadingReviews={loadingReviews}
-            reviewSearch={reviewSearch}
-            setReviewSearch={setReviewSearch}
-            reviewStatusFilter={reviewStatusFilter}
-            setReviewStatusFilter={setReviewStatusFilter}
-            fetchReviews={fetchReviews}
-            handleApproveReview={handleApproveReview}
-            handleDeleteReview={handleDeleteReview}
-          />
-        )}
+        </Suspense>
       </div>
-
-      <AdminProductModals
-        showAddModal={showAddModal}
-        setShowAddModal={setShowAddModal}
-        newProd={newProd}
-        setNewProd={setNewProd}
-        handleAddProduct={handleAddProduct}
-        editingProduct={editingProduct}
-        setEditingProduct={setEditingProduct}
-        editForm={editForm}
-        setEditForm={setEditForm}
-        handleUpdateProduct={handleUpdateProduct}
-      />
     </div>);
 }
+
+export default AdminDashboard;
