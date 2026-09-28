@@ -96,6 +96,22 @@ export default function Shop() {
         setParams(newParams);
     };
 
+    const getIsNew = (p) => {
+        if (p.isNew === true || p.isNew === "true") return true;
+        if (typeof p.badge === "string" && p.badge.toUpperCase() === "NEW") return true;
+        if (Array.isArray(p.tags) && p.tags.some((t) => typeof t === "string" && t.toLowerCase() === "new")) return true;
+        const staticMatch = PRODUCTS.find((sp) => sp.id === (p.id || p._id));
+        return Boolean(staticMatch?.isNew);
+    };
+
+    const getIsBestseller = (p) => {
+        if (p.isBestseller === true || p.isBestseller === "true") return true;
+        if (typeof p.badge === "string" && p.badge.toUpperCase() === "BESTSELLER") return true;
+        if (Array.isArray(p.tags) && p.tags.some((t) => typeof t === "string" && t.toLowerCase() === "bestseller")) return true;
+        const staticMatch = PRODUCTS.find((sp) => sp.id === (p.id || p._id));
+        return Boolean(staticMatch?.isBestseller);
+    };
+
     const filtered = useMemo(() => {
         let list = [...liveProducts];
         // Category
@@ -113,8 +129,8 @@ export default function Shop() {
         }
         // Filters
         if (onlyInStock) list = list.filter((p) => p.inStock);
-        if (onlyNew) list = list.filter((p) => p.isNew);
-        if (onlyBest) list = list.filter((p) => p.isBestseller);
+        if (onlyNew) list = list.filter(getIsNew);
+        if (onlyBest) list = list.filter(getIsBestseller);
         if (onlyWishlist) list = list.filter((p) => wishlist.has(p.id));
         if (onlyStudents) {
             list = list.filter(
@@ -224,6 +240,9 @@ export default function Shop() {
             <ShopHeader
                 currentCat={currentCat}
                 onlyWishlist={onlyWishlist}
+                onlyNew={onlyNew}
+                onlyBest={onlyBest}
+                onlyStudents={onlyStudents}
                 filteredCount={filtered.length}
                 totalCount={liveProducts.length}
                 setMobileFilterOpen={setMobileFilterOpen}

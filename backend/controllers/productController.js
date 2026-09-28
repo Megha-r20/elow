@@ -60,6 +60,14 @@ const seedProductsIfNeeded = async () => {
         };
       });
       await Product.insertMany(docs);
+    } else {
+      // Sync isNew, isBestseller, and badge attributes across existing database documents
+      const newItems = DEFAULT_PRODUCTS.filter((p) => p.isNew).map((p) => p.id);
+      const bestItems = DEFAULT_PRODUCTS.filter((p) => p.isBestseller).map((p) => p.id);
+      await Promise.all([
+        Product.updateMany({ _id: { $in: newItems } }, { $set: { isNew: true, badge: "NEW" } }),
+        Product.updateMany({ _id: { $in: bestItems } }, { $set: { isBestseller: true, badge: "BESTSELLER" } }),
+      ]).catch(() => {});
     }
   }
 };
@@ -142,8 +150,22 @@ export const getProducts = async (req, res) => {
   }
 
   // Special Filter flags
-  if (filter === "new") mongoQuery.isNew = true;
-  if (filter === "bestseller") mongoQuery.isBestseller = true;
+  if (filter === "new") {
+    mongoQuery.$or = [
+      { isNew: true },
+      { badge: "NEW" },
+      { badge: "new" },
+      { tags: "new" },
+    ];
+  }
+  if (filter === "bestseller") {
+    mongoQuery.$or = [
+      { isBestseller: true },
+      { badge: "BESTSELLER" },
+      { badge: "bestseller" },
+      { tags: "bestseller" },
+    ];
+  }
   if (inStock === "true") mongoQuery.inStock = true;
 
   // Price range filter

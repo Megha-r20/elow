@@ -5,6 +5,9 @@ import { SORT_OPTIONS } from "../../data";
 export function ShopHeader({
     currentCat,
     onlyWishlist,
+    onlyNew,
+    onlyBest,
+    onlyStudents,
     filteredCount,
     totalCount,
     setMobileFilterOpen,
@@ -14,6 +17,26 @@ export function ShopHeader({
     gridView,
     setGridView,
 }) {
+    const pageTitle = onlyWishlist
+        ? "My Wishlist"
+        : onlyNew
+        ? "New Arrivals"
+        : onlyBest
+        ? "Best Sellers"
+        : onlyStudents
+        ? "Student Essentials"
+        : currentCat
+        ? currentCat.label
+        : "All Products";
+
+    const pageSubtitle = onlyNew
+        ? "Fresh designs and newly arrived stationery crafted for mindful days"
+        : onlyBest
+        ? "Our most loved notebooks, pens, and desk essentials"
+        : onlyStudents
+        ? "Curated stationery, planners, and tools for focused learning"
+        : "Curated aesthetic stationery & workspace essentials";
+
     return (
         <div style={{ background: "#FAF7F2", borderBottom: "1px solid #EAE3D9", paddingTop: 36, paddingBottom: 24 }}>
             <div className="container mx-auto px-4 md:px-8">
@@ -21,7 +44,17 @@ export function ShopHeader({
                     items={[
                         { label: "Home", href: "/" },
                         { label: "Shop", href: "/shop" },
-                        ...(currentCat ? [{ label: currentCat.label }] : []),
+                        ...(onlyWishlist
+                            ? [{ label: "Wishlist" }]
+                            : onlyNew
+                            ? [{ label: "New Arrivals" }]
+                            : onlyBest
+                            ? [{ label: "Best Sellers" }]
+                            : onlyStudents
+                            ? [{ label: "Student Essentials" }]
+                            : currentCat
+                            ? [{ label: currentCat.label }]
+                            : []),
                     ]}
                 />
                 <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -37,7 +70,7 @@ export function ShopHeader({
                                 lineHeight: 1.1,
                             }}
                         >
-                            {onlyWishlist ? "My Wishlist" : currentCat ? currentCat.label : "All Products"}
+                            {pageTitle}
                         </h1>
                         <span
                             style={{
@@ -54,7 +87,7 @@ export function ShopHeader({
                         </span>
                     </div>
                     <p style={{ fontSize: 14, color: "#78726A", margin: 0 }}>
-                        Curated aesthetic stationery & workspace essentials
+                        {pageSubtitle}
                     </p>
                 </div>
 
