@@ -12,67 +12,111 @@ export function AuthProvider({ children }) {
             return null;
         }
     });
-    const [token, setToken] = useState(null);
+
+    const [token, setToken] = useState(() => {
+        try {
+            return localStorage.getItem("elow_token") || null;
+        } catch {
+            return null;
+        }
+    });
+
     const [loading, setLoading] = useState(true);
+
+    const persistSession = useCallback((tokenVal, userVal, refreshVal) => {
+        if (tokenVal) {
+            setToken(tokenVal);
+            try { localStorage.setItem("elow_token", tokenVal); } catch (_e) {}
+        }
+        if (userVal) {
+            setUser(userVal);
+            try { localStorage.setItem("elow_user", JSON.stringify(userVal)); } catch (_e) {}
+        }
+        if (refreshVal) {
+            try { localStorage.setItem("elow_refresh_token", refreshVal); } catch (_e) {}
+        }
+    }, []);
+
+    const clearSession = useCallback(() => {
+        setToken(null);
+        setUser(null);
+        try {
+            localStorage.removeItem("elow_token");
+            localStorage.removeItem("elow_refresh_token");
+            localStorage.removeItem("elow_user");
+        } catch (_e) {}
+    }, []);
 
     const refreshSession = useCallback(async () => {
         try {
+            const storedRefreshToken = localStorage.getItem("elow_refresh_token");
             const res = await fetch(getApiUrl("/api/auth/refresh"), {
                 method: "POST",
+                headers: { "Content-Type": "application/json" },
                 credentials: "include",
+                body: JSON.stringify({ refreshToken: storedRefreshToken || undefined }),
             });
             if (res.ok) {
                 const data = await res.json();
-                setToken(data.token);
-                setUser(data.user);
-                try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
+                persistSession(data.token, data.user, data.refreshToken);
                 return data.token;
             }
         } catch (_err) {
             /* ignore refresh network error */
         }
         return null;
-    }, []);
+    }, [persistSession]);
 
     // Check current authenticated user on load or token change
     useEffect(() => {
+        let isMounted = true;
+
         async function fetchMe() {
-            if (!token) {
-                const newToken = await refreshSession();
-                if (!newToken) {
-                    setUser(null);
-                    try { localStorage.removeItem("elow_user"); } catch (_e) { /* ignore */ }
+            const activeToken = token || localStorage.getItem("elow_token");
+
+            if (!activeToken) {
+                // If no token in memory or storage, check if we have a refresh token
+                const storedRefreshToken = localStorage.getItem("elow_refresh_token");
+                if (storedRefreshToken) {
+                    const newToken = await refreshSession();
+                    if (!newToken && isMounted) {
+                        clearSession();
+                    }
                 }
-                setLoading(false);
+                if (isMounted) setLoading(false);
                 return;
             }
+
             try {
                 const res = await fetch(getApiUrl("/api/auth/me"), {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${activeToken}`,
                     },
                     credentials: "include",
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    setUser(data.user);
-                    try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
+                    if (isMounted) {
+                        setUser(data.user);
+                        try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) {}
+                    }
                 } else if (res.status === 401) {
+                    // Token expired, try refreshing
                     const newToken = await refreshSession();
-                    if (!newToken) {
-                        try { localStorage.removeItem("elow_user"); } catch (_e) { /* ignore */ }
-                        setToken(null);
-                        setUser(null);
+                    if (!newToken && isMounted) {
+                        clearSession();
                     }
                 }
             } catch (_err) {
-                /* ignore fetch user error */
+                // Network or connection error: keep existing session in localStorage
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         }
+
         fetchMe();
-    }, [token, refreshSession]);
+        return () => { isMounted = false; };
+    }, [token, refreshSession, clearSession]);
 
     const login = useCallback(async (email, password) => {
         try {
@@ -90,9 +134,7 @@ export function AuthProvider({ children }) {
             if (!res.ok) {
                 return { success: false, error: data.error || "Login failed" };
             }
-            try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
-            setToken(data.token);
-            setUser(data.user);
+            persistSession(data.token, data.user, data.refreshToken);
             return { success: true };
         } catch (err) {
             const cleanEmail = (email || "").toLowerCase().trim();
@@ -105,9 +147,7 @@ export function AuthProvider({ children }) {
                     role: isAdminAcc ? "admin" : "user",
                 };
                 const fallbackToken = `demo-token-${Date.now()}`;
-                try { localStorage.setItem("elow_user", JSON.stringify(fallbackUser)); } catch (_e) {}
-                setToken(fallbackToken);
-                setUser(fallbackUser);
+                persistSession(fallbackToken, fallbackUser, `demo-refresh-${Date.now()}`);
                 return { success: true, offline: true };
             }
 
@@ -116,7 +156,7 @@ export function AuthProvider({ children }) {
                 : (err.message || "Network error. Please try again.");
             return { success: false, error: errMsg };
         }
-    }, []);
+    }, [persistSession]);
 
     const register = useCallback(async (name, email, password) => {
         try {
@@ -134,9 +174,7 @@ export function AuthProvider({ children }) {
             if (!res.ok) {
                 return { success: false, error: data.error || "Registration failed" };
             }
-            try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
-            setToken(data.token);
-            setUser(data.user);
+            persistSession(data.token, data.user, data.refreshToken);
             return { success: true };
         } catch (err) {
             if (name && email) {
@@ -147,9 +185,7 @@ export function AuthProvider({ children }) {
                     role: "user",
                 };
                 const fallbackToken = `demo-token-${Date.now()}`;
-                try { localStorage.setItem("elow_user", JSON.stringify(fallbackUser)); } catch (_e) {}
-                setToken(fallbackToken);
-                setUser(fallbackUser);
+                persistSession(fallbackToken, fallbackUser, `demo-refresh-${Date.now()}`);
                 return { success: true, offline: true };
             }
             const errMsg = err.message === "Failed to fetch"
@@ -157,7 +193,7 @@ export function AuthProvider({ children }) {
                 : (err.message || "Network error. Please try again.");
             return { success: false, error: errMsg };
         }
-    }, []);
+    }, [persistSession]);
 
     const googleLogin = useCallback(async (roleOrEmail, customName) => {
         const isRole = roleOrEmail === "admin" || roleOrEmail === "user";
@@ -176,11 +212,9 @@ export function AuthProvider({ children }) {
             if (!res.ok) {
                 return { success: false, error: data.error || "Google authentication failed" };
             }
-            try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) { /* ignore */ }
-            setToken(data.token);
-            setUser(data.user);
+            persistSession(data.token, data.user, data.refreshToken);
             return { success: true, user: data.user };
-        } catch (err) {
+        } catch (_err) {
             const fallbackUser = {
                 id: `google-user-${Date.now()}`,
                 name: name,
@@ -188,22 +222,21 @@ export function AuthProvider({ children }) {
                 role: targetRole,
             };
             const fallbackToken = `demo-google-token-${Date.now()}`;
-            try { localStorage.setItem("elow_user", JSON.stringify(fallbackUser)); } catch (_e) {}
-            setToken(fallbackToken);
-            setUser(fallbackUser);
+            persistSession(fallbackToken, fallbackUser, `demo-refresh-${Date.now()}`);
             return { success: true, user: fallbackUser, offline: true };
         }
-    }, []);
+    }, [persistSession]);
 
     const updateProfile = useCallback(async (data) => {
-        if (!token)
+        const activeToken = token || localStorage.getItem("elow_token");
+        if (!activeToken)
             return { success: false, error: "Not authenticated" };
         try {
             const res = await fetch(getApiUrl("/api/auth/profile"), {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${activeToken}`,
                 },
                 credentials: "include",
                 body: JSON.stringify(data),
@@ -222,22 +255,24 @@ export function AuthProvider({ children }) {
 
     const logout = useCallback(async () => {
         try {
+            const storedRefreshToken = localStorage.getItem("elow_refresh_token");
             await fetch(getApiUrl("/api/auth/logout"), {
                 method: "POST",
+                headers: { "Content-Type": "application/json" },
                 credentials: "include",
+                body: JSON.stringify({ refreshToken: storedRefreshToken || undefined }),
             });
         } catch (_err) {
             /* ignore logout network error */
         }
-        try { localStorage.removeItem("elow_user"); } catch (_e) { /* ignore */ }
-        setToken(null);
-        setUser(null);
-    }, []);
+        clearSession();
+    }, [clearSession]);
 
     const authFetch = useCallback(async (url, options = {}) => {
+        const activeToken = token || localStorage.getItem("elow_token");
         const headers = { ...(options.headers || {}) };
-        if (token) {
-            headers["Authorization"] = `Bearer ${token}`;
+        if (activeToken) {
+            headers["Authorization"] = `Bearer ${activeToken}`;
         }
         let res = await fetch(url, { ...options, headers, credentials: "include" });
         if (res.status === 401) {
@@ -253,7 +288,8 @@ export function AuthProvider({ children }) {
     }, [token, refreshSession, logout]);
 
     const isAdmin = user?.role === "admin";
-    return (<AuthContext.Provider value={{
+    return (
+        <AuthContext.Provider value={{
             user,
             token,
             isAdmin,
@@ -266,9 +302,11 @@ export function AuthProvider({ children }) {
             authFetch,
             refreshSession,
         }}>
-      {children}
-    </AuthContext.Provider>);
+            {children}
+        </AuthContext.Provider>
+    );
 }
+
 export function useAuth() {
     const ctx = useContext(AuthContext);
     if (!ctx) {

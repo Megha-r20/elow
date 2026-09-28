@@ -15,6 +15,29 @@ const maskUri = (uri) => {
  * Includes connection pooling, automatic reconnects, heartbeat health checks,
  * and duplicate connection prevention.
  */
+/**
+ * Automatically cleans up obsolete or conflicting legacy indexes (such as id_1)
+ * that may persist in existing MongoDB Atlas collections from older schemas.
+ */
+export const dropLegacyIndexes = async (conn) => {
+  const collections = ["users", "products", "categories", "reviews", "orders"];
+  for (const colName of collections) {
+    try {
+      const col = conn.collection(colName);
+      const indexes = await col.indexes();
+      const legacyIdx = indexes.find(
+        (idx) => idx.name === "id_1" || (idx.key && idx.key.id && idx.name !== "_id_")
+      );
+      if (legacyIdx) {
+        await col.dropIndex(legacyIdx.name);
+        logger.info(`🧹 Dropped legacy index '${legacyIdx.name}' from collection '${colName}'`);
+      }
+    } catch (_err) {
+      // safe to ignore if collection or index doesn't exist
+    }
+  }
+};
+
 export const connectDB = async () => {
   const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -53,6 +76,9 @@ export const connectDB = async () => {
     const conn = await mongoose.connect(MONGODB_URI, options);
     const host = conn.connection.host || "Atlas Cluster";
     logger.info(`🟢 Connected to MongoDB Atlas successfully! Host: ${host}`);
+
+    // Clean up legacy id_1 indexes so documents without custom id save smoothly
+    await dropLegacyIndexes(conn.connection);
 
     // Ensure default admin & demo customer accounts exist
     await ensureAdminUser();

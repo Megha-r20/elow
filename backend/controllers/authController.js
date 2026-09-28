@@ -89,75 +89,95 @@ export const registerUser = async (req, res) => {
   sendRefreshTokenCookie(res, refreshToken);
 
   logger.info(`[User Registered] ${newUser.name} (${newUser.email})`);
-  res.status(201).json({ success: true, user: sanitizeUser(newUser), token: accessToken });
+  res.status(201).json({ success: true, user: sanitizeUser(newUser), token: accessToken, refreshToken });
 };
 
 // @desc    Authenticate user & get token
 // @route   POST /api/auth/login
 // @access  Public
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body || {};
+  try {
+    const { email, password } = req.body || {};
 
-  const cleanEmail = safeLower(email);
-  const cleanPass = safeStr(password);
+    const cleanEmail = safeLower(email);
+    const cleanPass = safeStr(password);
 
-  if (!cleanEmail || !cleanPass) {
-    return res.status(400).json({ error: "Email and password are required" });
-  }
-
-  const user = await User.findOne({ email: cleanEmail });
-
-  if (!user) {
-    return res.status(401).json({ error: "Invalid email or password" });
-  }
-
-  // Check if account is currently locked out
-  if (user.lockoutUntil && user.lockoutUntil > new Date()) {
-    const remainingMs = user.lockoutUntil.getTime() - Date.now();
-    const remainingMins = Math.max(1, Math.ceil(remainingMs / (60 * 1000)));
-    logger.warn(`🛑 Blocked login attempt on locked account: ${user.email}`);
-    return res.status(429).json({
-      error: `Account is temporarily locked due to repeated failed login attempts. Please try again in ${remainingMins} minute(s).`,
-    });
-  }
-
-  const isPasswordMatch = await bcrypt.compare(cleanPass, user.password).catch(() => false);
-
-  if (!isPasswordMatch) {
-    user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
-    if (user.failedLoginAttempts >= 5) {
-      user.lockoutUntil = new Date(Date.now() + 15 * 60 * 1000); // 15-minute lockout
-      logger.warn(`🔒 Account locked out after ${user.failedLoginAttempts} failed attempts: ${user.email}`);
+    if (!cleanEmail || !cleanPass) {
+      return res.status(400).json({ error: "Email and password are required" });
     }
-    await user.save();
-    return res.status(401).json({ error: "Invalid email or password" });
+
+    const user = await User.findOne({ email: cleanEmail });
+
+    if (!user) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // Check if account is currently locked out
+    if (user.lockoutUntil && user.lockoutUntil > new Date()) {
+      const remainingMs = user.lockoutUntil.getTime() - Date.now();
+      const remainingMins = Math.max(1, Math.ceil(remainingMs / (60 * 1000)));
+      logger.warn(`🛑 Blocked login attempt on locked account: ${user.email}`);
+      return res.status(429).json({
+        error: `Account is temporarily locked due to repeated failed login attempts. Please try again in ${remainingMins} minute(s).`,
+      });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(cleanPass, user.password).catch(() => false);
+
+    if (!isPasswordMatch) {
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+      if (user.failedLoginAttempts >= 5) {
+        user.lockoutUntil = new Date(Date.now() + 15 * 60 * 1000); // 15-minute lockout
+        logger.warn(`🔒 Account locked out after ${user.failedLoginAttempts} failed attempts: ${user.email}`);
+      }
+      try {
+        await user.save();
+      } catch (_saveErr) {}
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // Reset failed login tracking on successful authentication
+    if (user.failedLoginAttempts > 0 || user.lockoutUntil) {
+      user.failedLoginAttempts = 0;
+      user.lockoutUntil = null;
+    }
+
+    const userId = user.id || user._id;
+    const accessToken = generateAccessToken(userId, user.role);
+    const refreshToken = generateRefreshToken(userId, user.role);
+
+    user.refreshTokens = user.refreshTokens || [];
+    user.refreshTokens.push(refreshToken);
+    if (user.refreshTokens.length > 10) {
+      user.refreshTokens = user.refreshTokens.slice(-10);
+    }
+    try {
+      await user.save();
+    } catch (saveErr) {
+      logger.warn(`Could not persist refresh token: ${saveErr.message}`);
+    }
+
+    sendRefreshTokenCookie(res, refreshToken);
+
+    logger.info(`[User Logged In] ${user.name} (${user.email}) - Role: ${user.role}`);
+    return res.json({
+      success: true,
+      user: sanitizeUser(user),
+      token: accessToken,
+      refreshToken,
+    });
+  } catch (err) {
+    logger.error(`[Login Error] ${err.message}`, err);
+    return res.status(500).json({ error: "Login failed. Please check your credentials or try again." });
   }
-
-  // Reset failed login tracking on successful authentication
-  if (user.failedLoginAttempts > 0 || user.lockoutUntil) {
-    user.failedLoginAttempts = 0;
-    user.lockoutUntil = null;
-  }
-
-  const accessToken = generateAccessToken(user.id, user.role);
-  const refreshToken = generateRefreshToken(user.id, user.role);
-
-  user.refreshTokens = user.refreshTokens || [];
-  user.refreshTokens.push(refreshToken);
-  await user.save();
-
-  sendRefreshTokenCookie(res, refreshToken);
-
-  logger.info(`[User Logged In] ${user.name} (${user.email}) - Role: ${user.role}`);
-  res.json({ success: true, user: sanitizeUser(user), token: accessToken });
 };
 
-// @desc    Refresh short-lived access token using httpOnly refresh cookie (with Token Rotation)
+// @desc    Refresh short-lived access token using httpOnly refresh cookie or body token (with Token Rotation)
 // @route   POST /api/auth/refresh
-// @access  Public (strictly via httpOnly cookie)
+// @access  Public
 export const refreshTokenUser = async (req, res) => {
   const cookies = parseCookies(req);
-  const refreshToken = cookies.refreshToken;
+  const refreshToken = cookies.refreshToken || req.body?.refreshToken;
 
   if (!refreshToken) {
     return res.status(401).json({ error: "Refresh token cookie missing or expired" });
@@ -171,7 +191,7 @@ export const refreshTokenUser = async (req, res) => {
       // Reuse or invalid token detected: clear cookie and revoke user tokens for security
       if (user) {
         user.refreshTokens = [];
-        await user.save();
+        try { await user.save(); } catch (_e) {}
       }
       clearRefreshTokenCookie(res);
       return res.status(401).json({ error: "Refresh token has been revoked or already used" });
@@ -179,15 +199,26 @@ export const refreshTokenUser = async (req, res) => {
 
     // Token Rotation: Remove old token, generate and save new token
     user.refreshTokens = user.refreshTokens.filter((t) => t !== refreshToken);
-    const newAccessToken = generateAccessToken(user.id, user.role);
-    const newRefreshToken = generateRefreshToken(user.id, user.role);
+    const userId = user.id || user._id;
+    const newAccessToken = generateAccessToken(userId, user.role);
+    const newRefreshToken = generateRefreshToken(userId, user.role);
 
     user.refreshTokens.push(newRefreshToken);
-    await user.save();
+    if (user.refreshTokens.length > 10) {
+      user.refreshTokens = user.refreshTokens.slice(-10);
+    }
+    try {
+      await user.save();
+    } catch (_e) {}
 
     sendRefreshTokenCookie(res, newRefreshToken);
 
-    res.json({ success: true, user: sanitizeUser(user), token: newAccessToken });
+    return res.json({
+      success: true,
+      user: sanitizeUser(user),
+      token: newAccessToken,
+      refreshToken: newRefreshToken,
+    });
   } catch (err) {
     clearRefreshTokenCookie(res);
     return res.status(401).json({ error: "Invalid or expired refresh token" });
@@ -199,7 +230,7 @@ export const refreshTokenUser = async (req, res) => {
 // @access  Public
 export const logoutUser = async (req, res) => {
   const cookies = parseCookies(req);
-  const refreshToken = cookies.refreshToken;
+  const refreshToken = cookies.refreshToken || req.body?.refreshToken;
 
   if (refreshToken) {
     try {
@@ -482,5 +513,5 @@ export const googleAuth = async (req, res) => {
   sendRefreshTokenCookie(res, refreshToken);
 
   logger.info(`[Google Sign-In Success] ${user.name} (${user.email}) - Role: user`);
-  res.json({ success: true, user: sanitizeUser(user), token: accessToken });
+  res.json({ success: true, user: sanitizeUser(user), token: accessToken, refreshToken });
 };

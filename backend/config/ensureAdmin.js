@@ -10,43 +10,30 @@ export const ensureAdminUser = async () => {
   try {
     const adminEmail = (process.env.ADMIN_EMAIL || "admin@elow.com").toLowerCase().trim();
     const adminPassword = process.env.ADMIN_PASSWORD || "AdminSecret123!";
-
-    const existingAdmin = await User.findOne({ email: adminEmail });
     const hashedAdminPassword = await bcrypt.hash(adminPassword, 10);
 
-    if (!existingAdmin) {
-      await User.create({
-        _id: crypto.randomUUID(),
-        name: process.env.ADMIN_NAME || "Elow Admin",
-        email: adminEmail,
-        password: hashedAdminPassword,
-        role: "admin",
-      });
-      logger.info(`✨ Auto-seeded default admin account (${adminEmail})`);
-    } else {
-      existingAdmin.role = "admin";
-      existingAdmin.password = hashedAdminPassword;
-      await existingAdmin.save();
-      logger.info(`✨ Updated default admin account credentials & role (${adminEmail})`);
-    }
+    await User.findOneAndUpdate(
+      { email: adminEmail },
+      {
+        $setOnInsert: { _id: crypto.randomUUID(), name: process.env.ADMIN_NAME || "Elow Admin" },
+        $set: { role: "admin", password: hashedAdminPassword },
+      },
+      { upsert: true, returnDocument: "after" }
+    );
+    logger.info(`✨ Ensured default admin account (${adminEmail})`);
 
     const demoEmail = "ritika@example.com";
-    const existingCustomer = await User.findOne({ email: demoEmail });
     const hashedCustPassword = await bcrypt.hash("password123", 10);
 
-    if (!existingCustomer) {
-      await User.create({
-        _id: crypto.randomUUID(),
-        name: "Ritika Sharma",
-        email: demoEmail,
-        password: hashedCustPassword,
-        role: "user",
-      });
-      logger.info(`✨ Auto-seeded default customer account (${demoEmail})`);
-    } else {
-      existingCustomer.password = hashedCustPassword;
-      await existingCustomer.save();
-    }
+    await User.findOneAndUpdate(
+      { email: demoEmail },
+      {
+        $setOnInsert: { _id: crypto.randomUUID(), name: "Ritika Sharma", role: "user" },
+        $set: { password: hashedCustPassword },
+      },
+      { upsert: true, returnDocument: "after" }
+    );
+    logger.info(`✨ Ensured default customer account (${demoEmail})`);
   } catch (err) {
     logger.error(`[Ensure Demo Users Error] ${err.message}`);
   }
