@@ -87,6 +87,11 @@ export function AuthProvider({ children }) {
                 return;
             }
 
+            if (activeToken.startsWith("demo-token-")) {
+                if (isMounted) setLoading(false);
+                return;
+            }
+
             try {
                 const res = await fetch(getApiUrl("/api/auth/me"), {
                     headers: {
@@ -96,14 +101,19 @@ export function AuthProvider({ children }) {
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    if (isMounted) {
+                    if (isMounted && data.user) {
                         setUser(data.user);
                         try { localStorage.setItem("elow_user", JSON.stringify(data.user)); } catch (_e) {}
                     }
                 } else if (res.status === 401) {
                     // Token expired, try refreshing
-                    const newToken = await refreshSession();
-                    if (!newToken && isMounted) {
+                    const storedRefreshToken = localStorage.getItem("elow_refresh_token");
+                    if (storedRefreshToken && !storedRefreshToken.startsWith("demo-refresh-")) {
+                        const newToken = await refreshSession();
+                        if (!newToken && isMounted) {
+                            clearSession();
+                        }
+                    } else if (isMounted) {
                         clearSession();
                     }
                 }

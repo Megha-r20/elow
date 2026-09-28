@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import { User } from "../models/User.js";
 import { logger } from "../config/logger.js";
 
@@ -98,7 +99,18 @@ export const protect = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findOne({ id: decoded.id }).lean();
+    const userId = decoded.id;
+
+    let user = null;
+    if (typeof userId === "string" && mongoose.Types.ObjectId.isValid(userId) && userId.length === 24) {
+      user = await User.findOne({
+        $or: [{ _id: userId }, { _id: new mongoose.Types.ObjectId(userId) }, { id: userId }],
+      }).lean();
+    } else {
+      user = await User.findOne({
+        $or: [{ _id: userId }, { id: userId }],
+      }).lean();
+    }
 
     if (!user) {
       return res.status(401).json({ error: "User profile not found or expired session" });

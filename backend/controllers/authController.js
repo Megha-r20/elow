@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import { OAuth2Client } from "google-auth-library";
 import { User } from "../models/User.js";
 import {
@@ -28,16 +29,17 @@ export const verifyCsrfHeader = (req, res, next) => {
   if (origin) {
     try {
       const originUrl = new URL(origin);
-      const allowedOrigins = (process.env.CORS_ORIGIN || "")
+      const allowedOrigins = (process.env.CORS_ORIGIN || process.env.FRONTEND_URL || "")
         .split(",")
-        .map((s) => s.trim().toLowerCase())
+        .map((s) => s.trim().toLowerCase().replace(/\/$/, ""))
         .filter(Boolean);
 
       const isHostMatch = host && originUrl.host.toLowerCase() === host.toLowerCase();
       const isAllowedOrigin = allowedOrigins.some((ao) => origin.toLowerCase().startsWith(ao));
       const isLocalDev = originUrl.hostname === "localhost" || originUrl.hostname === "127.0.0.1";
+      const isVercel = originUrl.hostname.endsWith("vercel.app");
 
-      if (!isHostMatch && !isAllowedOrigin && !isLocalDev) {
+      if (!isHostMatch && !isAllowedOrigin && !isLocalDev && !isVercel) {
         logger.warn(`🛑 CSRF validation failed for ${req.path}: Origin ${origin} not permitted`);
         return res.status(403).json({ error: "CSRF validation failed: Request origin not allowed." });
       }
@@ -185,7 +187,12 @@ export const refreshTokenUser = async (req, res) => {
 
   try {
     const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
-    const user = await User.findOne({ id: decoded.id });
+    const userId = decoded.id;
+    const filter =
+      typeof userId === "string" && mongoose.Types.ObjectId.isValid(userId) && userId.length === 24
+        ? { $or: [{ _id: userId }, { _id: new mongoose.Types.ObjectId(userId) }, { id: userId }] }
+        : { $or: [{ _id: userId }, { id: userId }] };
+    const user = await User.findOne(filter);
 
     if (!user || !Array.isArray(user.refreshTokens) || !user.refreshTokens.includes(refreshToken)) {
       // Reuse or invalid token detected: clear cookie and revoke user tokens for security
@@ -199,9 +206,9 @@ export const refreshTokenUser = async (req, res) => {
 
     // Token Rotation: Remove old token, generate and save new token
     user.refreshTokens = user.refreshTokens.filter((t) => t !== refreshToken);
-    const userId = user.id || user._id;
-    const newAccessToken = generateAccessToken(userId, user.role);
-    const newRefreshToken = generateRefreshToken(userId, user.role);
+    const newUserId = user.id || user._id;
+    const newAccessToken = generateAccessToken(newUserId, user.role);
+    const newRefreshToken = generateRefreshToken(newUserId, user.role);
 
     user.refreshTokens.push(newRefreshToken);
     if (user.refreshTokens.length > 10) {
@@ -235,8 +242,13 @@ export const logoutUser = async (req, res) => {
   if (refreshToken) {
     try {
       const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
+      const userId = decoded.id;
+      const filter =
+        typeof userId === "string" && mongoose.Types.ObjectId.isValid(userId) && userId.length === 24
+          ? { $or: [{ _id: userId }, { _id: new mongoose.Types.ObjectId(userId) }, { id: userId }] }
+          : { $or: [{ _id: userId }, { id: userId }] };
       await User.findOneAndUpdate(
-        { id: decoded.id },
+        filter,
         { $pull: { refreshTokens: refreshToken } }
       );
     } catch (err) {
@@ -259,7 +271,12 @@ export const getMe = async (req, res) => {
 // @route   PATCH /api/auth/profile
 // @access  Private
 export const updateProfile = async (req, res) => {
-  const user = await User.findOne({ id: req.user.id });
+  const userId = req.user.id;
+  const filter =
+    typeof userId === "string" && mongoose.Types.ObjectId.isValid(userId) && userId.length === 24
+      ? { $or: [{ _id: userId }, { _id: new mongoose.Types.ObjectId(userId) }, { id: userId }] }
+      : { $or: [{ _id: userId }, { id: userId }] };
+  const user = await User.findOne(filter);
   if (!user) {
     return res.status(401).json({ error: "User profile not found" });
   }

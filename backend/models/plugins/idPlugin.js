@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import mongoose from "mongoose";
 
 export const applyIdPlugin = (schema, defaultIdFn = () => crypto.randomUUID()) => {
   schema.set("suppressReservedKeysWarning", true);
@@ -7,7 +8,7 @@ export const applyIdPlugin = (schema, defaultIdFn = () => crypto.randomUUID()) =
   if (!schema.path("_id")) {
     schema.add({
       _id: {
-        type: String,
+        type: mongoose.Schema.Types.Mixed,
         default: defaultIdFn,
       },
     });
@@ -47,13 +48,21 @@ export const applyIdPlugin = (schema, defaultIdFn = () => crypto.randomUUID()) =
     const filter = this.getFilter();
     if (filter) {
       if (filter.id !== undefined && filter._id === undefined) {
-        filter._id = filter.id;
+        const val = filter.id;
         delete filter.id;
+        if (typeof val === "string" && mongoose.Types.ObjectId.isValid(val) && val.length === 24) {
+          filter.$or = [{ _id: val }, { _id: new mongoose.Types.ObjectId(val) }, { id: val }];
+        } else {
+          filter.$or = [{ _id: val }, { id: val }];
+        }
       }
       if (Array.isArray(filter.$or)) {
         filter.$or = filter.$or.map((cond) => {
           if (cond && cond.id !== undefined && cond._id === undefined) {
             const { id, ...rest } = cond;
+            if (typeof id === "string" && mongoose.Types.ObjectId.isValid(id) && id.length === 24) {
+              return { $or: [{ _id: id }, { _id: new mongoose.Types.ObjectId(id) }, { id }], ...rest };
+            }
             return { _id: id, ...rest };
           }
           return cond;

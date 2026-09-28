@@ -4,7 +4,7 @@ import { applyIdPlugin } from "./plugins/idPlugin.js";
 
 const userSchema = new mongoose.Schema(
   {
-    _id: { type: String, default: () => crypto.randomUUID() },
+    _id: { type: mongoose.Schema.Types.Mixed, default: () => crypto.randomUUID() },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, index: true },
     password: { type: String, required: true },
