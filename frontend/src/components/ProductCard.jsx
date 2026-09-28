@@ -9,19 +9,20 @@ export function ProductCard({ product, compact = false }) {
     const { addItem, isInCart } = useCart();
     const { has, toggle } = useWishlist();
     const { addToast } = useToast();
-    const wished = has(product.id);
-    const inCart = isInCart(product.id);
+    const prodId = product.id || product._id;
+    const wished = has(prodId);
+    const inCart = isInCart(prodId);
 
     const handleAdd = (e) => {
         e.stopPropagation();
         if (!product.inStock) return;
-        addItem(product);
+        addItem({ ...product, id: prodId });
         addToast(`${product.shortName || product.name} added to cart`);
     };
 
     const handleWish = (e) => {
         e.stopPropagation();
-        toggle(product.id);
+        toggle(prodId);
         addToast(wished ? "Removed from wishlist" : "Saved to wishlist", "info");
     };
 
@@ -36,15 +37,24 @@ export function ProductCard({ product, compact = false }) {
         ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
         : 0;
 
+    const isNew =
+        product.isNew === true ||
+        product.isNew === "true" ||
+        (typeof product.badge === "string" && product.badge.toUpperCase() === "NEW");
+    const isBestseller =
+        product.isBestseller === true ||
+        product.isBestseller === "true" ||
+        (typeof product.badge === "string" && product.badge.toUpperCase() === "BESTSELLER");
+
     // Minimalist primary badge
     let badgeLabel = null;
     let isPurpleBadge = false;
     if (!product.inStock) {
         badgeLabel = "OUT OF STOCK";
-    } else if (product.isNew || product.badge === "NEW") {
+    } else if (isNew) {
         badgeLabel = "NEW";
         isPurpleBadge = true;
-    } else if (product.isBestseller || product.badge === "BESTSELLER") {
+    } else if (isBestseller) {
         badgeLabel = "BESTSELLER";
         isPurpleBadge = true;
     } else if (discount > 0) {
@@ -65,7 +75,7 @@ export function ProductCard({ product, compact = false }) {
                 boxShadow: "0 4px 20px rgba(45,31,59,0.03)",
                 transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
             }}
-            onClick={() => navigate(`/product/${product.id}`)}
+            onClick={() => navigate(`/product/${prodId}`)}
         >
             {/* 1. DOMINANT PRODUCT IMAGE CONTAINER WITH 14PX MARGIN BELOW */}
             <div

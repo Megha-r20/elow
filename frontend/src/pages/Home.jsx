@@ -40,16 +40,33 @@ export default function Home() {
           fetch(getApiUrl("/api/products?filter=bestseller&limit=8")),
           fetch(getApiUrl("/api/categories")),
         ]);
+        const enrich = (prods) =>
+          prods.map((p) => {
+            const pid = p.id || p._id;
+            const sp = PRODUCTS.find((item) => item.id === pid) || {};
+            return {
+              ...sp,
+              ...p,
+              id: pid,
+              badge: typeof p.badge === "string" && p.badge.trim() ? p.badge : sp.badge,
+              badgeVariant: p.badgeVariant || sp.badgeVariant,
+              isNew: p.isNew !== undefined && p.isNew !== null ? (p.isNew === true || p.isNew === "true") : Boolean(sp.isNew),
+              isBestseller: p.isBestseller !== undefined && p.isBestseller !== null ? (p.isBestseller === true || p.isBestseller === "true") : Boolean(sp.isBestseller),
+              rating: p.rating && Number(p.rating) > 0 ? Number(p.rating) : sp.rating || 0,
+              reviewCount: p.reviewCount !== undefined && Number(p.reviewCount) > 0 ? Number(p.reviewCount) : sp.reviewCount || 0,
+            };
+          });
+
         if (featRes.ok) {
           const featData = await featRes.json();
           if (featData.products && featData.products.length > 0) {
-            setFeatured(featData.products);
+            setFeatured(enrich(featData.products));
           }
         }
         if (bestRes.ok) {
           const bestData = await bestRes.json();
           if (bestData.products && bestData.products.length > 0) {
-            setBestSellers(bestData.products);
+            setBestSellers(enrich(bestData.products));
           }
         }
         if (catRes.ok) {

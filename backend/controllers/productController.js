@@ -53,21 +53,53 @@ const seedProductsIfNeeded = async () => {
       logger.info(`[Auto Sync] Resetting MongoDB Atlas products collection to exact ${DEFAULT_PRODUCTS.length} catalog items...`);
       await Product.deleteMany({});
       const docs = DEFAULT_PRODUCTS.map((p) => {
+        const pid = p.id || p._id || crypto.randomUUID();
         const { id, ...rest } = p;
         return {
-          _id: id || p._id || crypto.randomUUID(),
+          _id: pid,
+          id: pid,
+          badge: p.badge || (p.isNew ? "NEW" : p.isBestseller ? "BESTSELLER" : undefined),
+          badgeVariant: p.badgeVariant || (p.isNew ? "teal" : p.isBestseller ? "purple" : undefined),
           ...rest,
         };
       });
       await Product.insertMany(docs);
     } else {
-      // Sync isNew, isBestseller, and badge attributes across existing database documents
-      const newItems = DEFAULT_PRODUCTS.filter((p) => p.isNew).map((p) => p.id);
-      const bestItems = DEFAULT_PRODUCTS.filter((p) => p.isBestseller).map((p) => p.id);
-      await Promise.all([
-        Product.updateMany({ _id: { $in: newItems } }, { $set: { isNew: true, badge: "NEW" } }),
-        Product.updateMany({ _id: { $in: bestItems } }, { $set: { isBestseller: true, badge: "BESTSELLER" } }),
-      ]).catch(() => {});
+      // Sync all catalog attributes including badges, isNew, isBestseller, ratings, and review counts
+      const bulkOps = DEFAULT_PRODUCTS.map((p) => {
+        const pid = p.id || p._id;
+        return {
+          updateOne: {
+            filter: { $or: [{ _id: pid }, { id: pid }] },
+            update: {
+              $set: {
+                id: pid,
+                name: p.name,
+                shortName: p.shortName || p.name,
+                category: p.category,
+                subcategory: p.subcategory || "",
+                price: p.price,
+                originalPrice: p.originalPrice,
+                rating: p.rating,
+                reviewCount: p.reviewCount,
+                images: p.images,
+                tags: p.tags,
+                badge: p.badge || (p.isNew ? "NEW" : p.isBestseller ? "BESTSELLER" : undefined),
+                badgeVariant: p.badgeVariant || (p.isNew ? "teal" : p.isBestseller ? "purple" : undefined),
+                isNew: Boolean(p.isNew),
+                isBestseller: Boolean(p.isBestseller),
+                description: p.description,
+                details: p.details,
+                inStock: p.inStock,
+                stockCount: p.stockCount,
+              },
+            },
+          },
+        };
+      });
+      await Product.bulkWrite(bulkOps).catch((err) => {
+        logger.warn(`[Auto Sync Bulk Error] ${err.message}`);
+      });
     }
   }
 };
@@ -177,8 +209,8 @@ export const getProducts = async (req, res) => {
     }
   }
 
-  // Sorting
-  let sortOption = { createdAt: -1 };
+  // Sorting: default to catalog order (_id: 1) instead of createdAt: -1 to prevent order flipping
+  let sortOption = { _id: 1 };
   switch (sort) {
     case "price-asc":
       sortOption = { price: 1 };
@@ -190,10 +222,14 @@ export const getProducts = async (req, res) => {
       sortOption = { rating: -1, reviewCount: -1 };
       break;
     case "newest":
-      sortOption = { isNew: -1, createdAt: -1 };
+      sortOption = { isNew: -1, _id: 1 };
       break;
     case "bestselling":
-      sortOption = { isBestseller: -1, createdAt: -1 };
+      sortOption = { isBestseller: -1, _id: 1 };
+      break;
+    case "featured":
+    default:
+      sortOption = { _id: 1 };
       break;
   }
 
@@ -226,10 +262,14 @@ export const getProducts = async (req, res) => {
   }
 
   const products = await productsQuery.lean();
+  const formattedProducts = products.map((p) => ({
+    ...p,
+    id: p.id || p._id,
+  }));
 
   res.json({
-    products,
-    count: products.length,
+    products: formattedProducts,
+    count: formattedProducts.length,
     total,
     page,
     totalPages,
@@ -241,19 +281,27 @@ export const getProducts = async (req, res) => {
 // @access  Public
 export const getProductById = async (req, res) => {
   const prodId = req.params.id;
-  const product = await Product.findOne({ id: prodId }).lean();
+  const product = await Product.findOne({ $or: [{ id: prodId }, { _id: prodId }] }).lean();
 
   if (!product) {
     return res.status(404).json({ error: "Product not found" });
   }
 
-  const related = await Product.find({ category: product.category, id: { $ne: product.id } })
+  const pId = product.id || product._id;
+  const related = await Product.find({
+    category: product.category,
+    $and: [{ id: { $ne: pId } }, { _id: { $ne: pId } }],
+  })
     .limit(4)
     .lean();
 
-  const reviews = await Review.find({ productId: product.id, status: "approved" }).sort({ createdAt: -1 }).lean();
+  const reviews = await Review.find({ productId: pId, status: "approved" }).sort({ createdAt: -1 }).lean();
 
-  res.json({ product, reviews, related });
+  res.json({
+    product: { ...product, id: pId },
+    reviews,
+    related: related.map((r) => ({ ...r, id: r.id || r._id })),
+  });
 };
 
 // @desc    Create new product (Admin)

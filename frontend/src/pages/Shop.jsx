@@ -78,7 +78,37 @@ export default function Shop() {
                 if (res.ok) {
                     const data = await res.json();
                     if (data.products && data.products.length > 0) {
-                        setLiveProducts(data.products);
+                        const enriched = data.products.map((p) => {
+                            const pid = p.id || p._id;
+                            const staticProduct = PRODUCTS.find((sp) => sp.id === pid) || {};
+                            return {
+                                ...staticProduct,
+                                ...p,
+                                id: pid,
+                                badge:
+                                    typeof p.badge === "string" && p.badge.trim()
+                                        ? p.badge
+                                        : staticProduct.badge,
+                                badgeVariant: p.badgeVariant || staticProduct.badgeVariant,
+                                isNew:
+                                    p.isNew !== undefined && p.isNew !== null
+                                        ? p.isNew === true || p.isNew === "true"
+                                        : Boolean(staticProduct.isNew),
+                                isBestseller:
+                                    p.isBestseller !== undefined && p.isBestseller !== null
+                                        ? p.isBestseller === true || p.isBestseller === "true"
+                                        : Boolean(staticProduct.isBestseller),
+                                rating:
+                                    p.rating && Number(p.rating) > 0
+                                        ? Number(p.rating)
+                                        : staticProduct.rating || 0,
+                                reviewCount:
+                                    p.reviewCount !== undefined && Number(p.reviewCount) > 0
+                                        ? Number(p.reviewCount)
+                                        : staticProduct.reviewCount || 0,
+                            };
+                        });
+                        setLiveProducts(enriched);
                     }
                 }
             } catch (_err) {
@@ -131,7 +161,7 @@ export default function Shop() {
         if (onlyInStock) list = list.filter((p) => p.inStock);
         if (onlyNew) list = list.filter(getIsNew);
         if (onlyBest) list = list.filter(getIsBestseller);
-        if (onlyWishlist) list = list.filter((p) => wishlist.has(p.id));
+        if (onlyWishlist) list = list.filter((p) => wishlist.has(p.id || p._id));
         if (onlyStudents) {
             list = list.filter(
                 (p) =>
@@ -170,15 +200,20 @@ export default function Shop() {
                 list.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0));
                 break;
             case "featured":
-            default:
-                if (activeCat === "all") {
-                    list.sort((a, b) => {
+            default: {
+                const catalogIndexMap = new Map(PRODUCTS.map((p, idx) => [p.id, idx]));
+                list.sort((a, b) => {
+                    if (activeCat === "all") {
                         const aPlanner = a.category === "planners" ? 1 : 0;
                         const bPlanner = b.category === "planners" ? 1 : 0;
-                        return bPlanner - aPlanner;
-                    });
-                }
+                        if (aPlanner !== bPlanner) return bPlanner - aPlanner;
+                    }
+                    const aIdx = catalogIndexMap.get(a.id || a._id) ?? 9999;
+                    const bIdx = catalogIndexMap.get(b.id || b._id) ?? 9999;
+                    return aIdx - bIdx;
+                });
                 break;
+            }
         }
         return list;
     }, [activeCat, sort, priceRange, maxPrice, onlyInStock, onlyNew, onlyBest, onlyWishlist, onlyStudents, searchQ, wishlist.ids, liveProducts]);
