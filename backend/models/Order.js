@@ -8,7 +8,7 @@ const generateOrderId = () =>
 const orderSchema = new mongoose.Schema(
   {
     _id: {
-      type: String,
+      type: mongoose.Schema.Types.Mixed,
       default: generateOrderId,
     },
     userId: { type: String, index: true },

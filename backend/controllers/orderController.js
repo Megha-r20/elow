@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import mongoose from "mongoose";
 import Stripe from "stripe";
 import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
@@ -12,6 +13,19 @@ export const ORDER_STATUS_TRANSITIONS = {
   Shipped: ["Delivered"],
   Delivered: [],
   Cancelled: [],
+};
+
+const buildOrderIdQuery = (orderId) => {
+  if (!orderId) return { _id: null };
+  const isObjectId = typeof orderId === "string" && mongoose.Types.ObjectId.isValid(orderId) && orderId.length === 24;
+  if (isObjectId) {
+    return {
+      $or: [{ id: orderId }, { _id: orderId }, { _id: new mongoose.Types.ObjectId(orderId) }],
+    };
+  }
+  return {
+    $or: [{ id: orderId }, { _id: orderId }],
+  };
 };
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
@@ -238,14 +252,18 @@ export const getMyOrders = async (req, res) => {
   }
 
   const orders = await Order.find(mongoQuery).sort({ createdAt: -1 }).lean();
-  res.json({ orders, count: orders.length });
+  const formattedOrders = orders.map((o) => ({
+    ...o,
+    id: o.id || o._id,
+  }));
+  res.json({ orders: formattedOrders, count: formattedOrders.length });
 };
 
 // @desc    Get order details by ID
 // @route   GET /api/orders/:id
 // @access  Private
 export const getOrderById = async (req, res) => {
-  const order = await Order.findOne({ id: req.params.id }).lean();
+  const order = await Order.findOne(buildOrderIdQuery(req.params.id)).lean();
 
   if (!order) {
     return res.status(404).json({ error: "Order not found" });
@@ -255,7 +273,7 @@ export const getOrderById = async (req, res) => {
     return res.status(403).json({ error: "Access denied. You can only view your own orders." });
   }
 
-  res.json(order);
+  res.json({ ...order, id: order.id || order._id });
 };
 
 // @desc    Get all orders (Admin)
@@ -287,9 +305,14 @@ export const getAllOrders = async (req, res) => {
     .limit(limit)
     .lean();
 
+  const formattedOrders = orders.map((o) => ({
+    ...o,
+    id: o.id || o._id,
+  }));
+
   res.json({
-    orders,
-    count: orders.length,
+    orders: formattedOrders,
+    count: formattedOrders.length,
     total,
     page,
     totalPages,
@@ -307,7 +330,7 @@ export const updateOrderStatus = async (req, res) => {
     return res.status(400).json({ error: "Order status is required" });
   }
 
-  const order = await Order.findOne({ id: req.params.id });
+  const order = await Order.findOne(buildOrderIdQuery(req.params.id));
   if (!order) {
     return res.status(404).json({ error: "Order not found" });
   }
@@ -322,7 +345,7 @@ export const updateOrderStatus = async (req, res) => {
   order.status = cleanStatus;
   await order.save();
 
-  logger.info(`[Admin Updated Order Status] ID: ${order.id} -> ${cleanStatus}`);
+  logger.info(`[Admin Updated Order Status] ID: ${order.id || order._id} -> ${cleanStatus}`);
   res.json({ success: true, order: typeof order.toObject === "function" ? order.toObject() : order });
 };
 
@@ -331,7 +354,7 @@ export const updateOrderStatus = async (req, res) => {
 // @access  Private/Admin
 export const deleteSingleOrder = async (req, res) => {
   const orderId = req.params.id;
-  const deleted = await Order.findOneAndDelete({ id: orderId });
+  const deleted = await Order.findOneAndDelete(buildOrderIdQuery(orderId));
 
   if (!deleted) {
     return res.status(404).json({ error: "Order not found" });
@@ -346,7 +369,7 @@ export const deleteSingleOrder = async (req, res) => {
 // @access  Private
 export const cancelOrder = async (req, res) => {
   const orderId = req.params.id;
-  const order = await Order.findOne({ id: orderId });
+  const order = await Order.findOne(buildOrderIdQuery(orderId));
 
   if (!order) {
     return res.status(404).json({ error: "Order not found" });

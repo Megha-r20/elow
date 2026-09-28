@@ -379,7 +379,7 @@ export function AdminDashboard() {
             });
             if (res.ok) {
                 addToast(`Order #${orderId} status updated to ${newStatus}`);
-                setOrders(prev => prev.map(o => (o.id === orderId ? { ...o, status: newStatus } : o)));
+                setOrders(prev => prev.map(o => ((o.id || o._id) === orderId ? { ...o, status: newStatus } : o)));
             }
             else {
                 addToast("Failed to update order status", "error");
@@ -404,7 +404,7 @@ export function AdminDashboard() {
             const data = await res.json();
             if (res.ok) {
                 addToast(`Order #${orderId} deleted successfully`);
-                setOrders(prev => prev.filter(o => o.id !== orderId));
+                setOrders(prev => prev.filter(o => (o.id || o._id) !== orderId));
             }
             else {
                 addToast(data.error || "Failed to delete order", "error");

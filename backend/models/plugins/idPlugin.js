@@ -15,13 +15,15 @@ export const applyIdPlugin = (schema, defaultIdFn = () => crypto.randomUUID()) =
   }
 
   // Define id virtual with getter and setter
-  schema.virtual("id")
-    .get(function () {
-      return this._id;
-    })
-    .set(function (v) {
-      if (v) this._id = v;
-    });
+  if (!schema.path("id")) {
+    schema.virtual("id")
+      .get(function () {
+        return this._id;
+      })
+      .set(function (v) {
+        if (v) this._id = v;
+      });
+  }
 
   // Enable virtuals in toJSON and toObject so doc.id is always serialized
   schema.set("toJSON", {
