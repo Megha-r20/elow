@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router";
 import { REVIEWS } from "../data";
+import { PRODUCTS } from "../data/products.js";
 import { useCart, useWishlist, useToast, useDrawer, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 import {
@@ -57,6 +58,14 @@ export default function ProductDetail() {
                     }
                 }
             } catch (_err) {
+                // API may be waking up, fallback to static catalog
+            }
+
+            const staticP = PRODUCTS.find((p) => p.id === id);
+            if (staticP) {
+                setProduct(staticP);
+                setRelated(PRODUCTS.filter((p) => p.category === staticP.category && p.id !== staticP.id).slice(0, 4));
+            } else {
                 setProduct(null);
             }
             setLoading(false);

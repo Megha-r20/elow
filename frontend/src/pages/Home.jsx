@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CATEGORIES } from "../data";
+import { PRODUCTS } from "../data/products.js";
 import { useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 import {
@@ -28,8 +29,8 @@ export default function Home() {
     } catch (_e) {}
     return CATEGORIES;
   });
-  const [featured, setFeatured] = useState([]);
-  const [bestSellers, setBestSellers] = useState([]);
+  const [featured, setFeatured] = useState(() => PRODUCTS.slice(0, 8));
+  const [bestSellers, setBestSellers] = useState(() => PRODUCTS.filter((p) => p.isBestseller).slice(0, 8));
 
   useEffect(() => {
     async function fetchHomeProducts() {

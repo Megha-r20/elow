@@ -39,20 +39,36 @@ export function FeaturedCarousel({
             scrollSnapType: "x mandatory",
           }}
         >
-          {products.map((p) => (
-            <div
-              key={p.id}
-              style={{
-                flex: "0 0 240px",
-                display: "flex",
-                flexDirection: "column",
-                position: "relative",
-                scrollSnapAlign: "start",
-              }}
-            >
-              <ProductCard product={p} compact={true} />
-            </div>
-          ))}
+          {products.length === 0 ? (
+            [1, 2, 3, 4].map((n) => (
+              <div
+                key={n}
+                style={{
+                  flex: "0 0 240px",
+                  height: 320,
+                  borderRadius: 16,
+                  background: "#F4EFE6",
+                  border: "1px solid #EAE3D9",
+                  opacity: 0.6,
+                }}
+              />
+            ))
+          ) : (
+            products.map((p) => (
+              <div
+                key={p.id}
+                style={{
+                  flex: "0 0 240px",
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "relative",
+                  scrollSnapAlign: "start",
+                }}
+              >
+                <ProductCard product={p} compact={true} />
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>

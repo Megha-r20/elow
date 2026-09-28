@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { CATEGORIES, PRICE_RANGES } from "../data";
+import { PRODUCTS } from "../data/products.js";
 import { useWishlist, useDocumentTitle } from "../hooks";
 import { getApiUrl } from "../api/config";
 import {
@@ -68,7 +69,7 @@ export default function Shop() {
         setVisibleCount(12);
     }, [activeCat, sort, priceRange, maxPrice, onlyInStock, onlyNew, onlyBest, onlyWishlist, onlyStudents, searchQ]);
 
-    const [liveProducts, setLiveProducts] = useState([]);
+    const [liveProducts, setLiveProducts] = useState(PRODUCTS);
 
     useEffect(() => {
         async function fetchLiveProducts() {

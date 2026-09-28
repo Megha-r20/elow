@@ -9,7 +9,7 @@ export const API_BASE_URL = rawApiUrl
   ? rawApiUrl.replace(/\/$/, "")
   : import.meta.env.DEV
   ? "http://localhost:5005"
-  : "";
+  : "https://elow.onrender.com";
 
 export function getApiUrl(endpoint) {
   const path = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
