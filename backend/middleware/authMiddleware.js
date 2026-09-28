@@ -7,19 +7,14 @@ import crypto from "crypto";
 let jwtSecret = process.env.JWT_SECRET;
 let jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
 
-if (process.env.NODE_ENV === "production") {
-  if (!jwtSecret || !jwtRefreshSecret) {
-    throw new Error("Both JWT_SECRET and JWT_REFRESH_SECRET environment variables must be explicitly defined in production.");
-  }
-} else {
-  if (!jwtSecret) {
-    logger.warn("⚠️ [SECURITY NOTICE] JWT_SECRET environment variable is not set. Using fallback secret for JWT token signing.");
-    jwtSecret = "elow_default_jwt_secret_key_2026_stationery_store_secure";
-  }
-  if (!jwtRefreshSecret) {
-    logger.warn("⚠️ [SECURITY NOTICE] JWT_REFRESH_SECRET environment variable is not set. Using separate dev fallback secret for refresh tokens.");
-    jwtRefreshSecret = "elow_default_jwt_refresh_secret_key_2026_stationery_store_secure";
-  }
+if (!jwtSecret) {
+  logger.warn("⚠️ [SECURITY NOTICE] JWT_SECRET environment variable is not set. Using fallback secret for JWT token signing. Please define JWT_SECRET in production environment settings.");
+  jwtSecret = "elow_default_jwt_secret_key_2026_stationery_store_secure";
+}
+
+if (!jwtRefreshSecret) {
+  logger.warn("⚠️ [SECURITY NOTICE] JWT_REFRESH_SECRET environment variable is not set. Using separate, independent fallback secret for refresh tokens (NOT derived from JWT_SECRET). Please define JWT_REFRESH_SECRET in production environment settings.");
+  jwtRefreshSecret = "elow_default_jwt_refresh_secret_key_2026_stationery_store_secure";
 }
 
 export const JWT_SECRET = jwtSecret;
