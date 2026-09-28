@@ -294,14 +294,7 @@ export default function Shop() {
                 <ShopActiveFilters activeFilters={activeFilters} clearAll={clearAll} />
 
                 {/* 3. CONTENT GRID & SIDEBAR */}
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: !onlyWishlist ? "270px 1fr" : "1fr",
-                        gap: 32,
-                        alignItems: "start",
-                    }}
-                >
+                <div className={`shop-layout-grid ${onlyWishlist ? "wishlist-mode" : ""}`}>
                     {/* DESKTOP SIDEBAR */}
                     {!onlyWishlist && (
                         <aside

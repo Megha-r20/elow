@@ -16,35 +16,32 @@ export function GiftSection() {
     <section className="section" style={{ background: "var(--accent-soft-blush)" }}>
       <div className="container">
         <SectionHead eyebrow="Gifting" title="Find the Perfect Gift" center />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridAutoRows: "260px", gap: 16 }}>
+        <div className="gift-grid">
           {giftItems.map((g, i) => (
             <button
               key={g.label}
               onClick={() => navigate(g.link)}
-              className="hover-card"
+              className={`hover-card gift-card-${i}`}
               style={{
-                gridColumn: g.col,
-                gridRow: g.row,
                 border: "none",
                 background: "none",
                 cursor: "pointer",
                 padding: 0,
                 textAlign: "left",
-                borderRadius: 24,
+                borderRadius: 20,
                 overflow: "hidden",
                 position: "relative",
                 width: "100%",
-                height: "100%",
                 display: "block",
               }}
             >
               <img src={g.img} alt={g.label} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(28,28,26,0.9) 0%, rgba(28,28,26,0.3) 40%, transparent 100%)", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: i === 0 ? 32 : 24 }}>
-                <div style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", padding: "6px 12px", borderRadius: 999, alignSelf: "flex-start", marginBottom: i === 0 ? 16 : 12 }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>Gift Guide</span>
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(28,28,26,0.92) 0%, rgba(28,28,26,0.3) 45%, transparent 100%)", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: i === 0 ? "clamp(18px, 4vw, 32px)" : "clamp(14px, 3vw, 24px)" }}>
+                <div style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(8px)", padding: "4px 10px", borderRadius: 999, alignSelf: "flex-start", marginBottom: 8 }}>
+                  <span style={{ fontSize: 9.5, fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>Gift Guide</span>
                 </div>
-                <h3 className="font-display" style={{ color: "#fff", fontSize: i === 0 ? 42 : 24, lineHeight: 1.1, marginBottom: 8 }}>{g.label}</h3>
-                <p style={{ color: "rgba(255,255,255,0.8)", fontSize: i === 0 ? 16 : 14, fontWeight: 400 }}>{g.sub}</p>
+                <h3 className="font-display" style={{ color: "#fff", fontSize: i === 0 ? "clamp(24px, 5vw, 40px)" : "clamp(18px, 3.5vw, 24px)", lineHeight: 1.1, marginBottom: 4 }}>{g.label}</h3>
+                <p style={{ color: "rgba(255,255,255,0.8)", fontSize: i === 0 ? "clamp(13px, 3vw, 15px)" : "clamp(11.5px, 2.5vw, 13px)", fontWeight: 400, margin: 0 }}>{g.sub}</p>
               </div>
             </button>
           ))}

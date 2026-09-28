@@ -10,25 +10,14 @@ export function TrustBar() {
 
   return (
     <div style={{ background: "var(--bg-sand)", borderTop: "1px solid var(--border-warm)", borderBottom: "1px solid var(--border-warm)" }}>
-      <div className="container">
-        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 0 }}>
-          {features.map((f, i) => (
-            <div
-              key={f.t}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 14,
-                padding: "20px 36px",
-                flex: "1 1 0",
-                borderRight: i < 3 ? "1px solid var(--border-warm)" : "none",
-                minWidth: 200,
-              }}
-            >
-              <span style={{ color: "var(--accent-sage)" }}>{f.icon}</span>
+      <div className="container" style={{ padding: "0" }}>
+        <div className="trustbar-grid">
+          {features.map((f) => (
+            <div key={f.t} className="trustbar-item">
+              <span style={{ color: "var(--accent-sage)", flexShrink: 0 }}>{f.icon}</span>
               <div>
-                <p style={{ fontSize: 13.5, fontWeight: 700, color: "var(--txt-espresso)" }}>{f.t}</p>
-                <p style={{ fontSize: 12, color: "var(--txt-light)", marginTop: 2 }}>{f.s}</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "var(--txt-espresso)", margin: 0, lineHeight: 1.25 }}>{f.t}</p>
+                <p style={{ fontSize: 11.5, color: "var(--txt-light)", marginTop: 2, margin: 0 }}>{f.s}</p>
               </div>
             </div>
           ))}

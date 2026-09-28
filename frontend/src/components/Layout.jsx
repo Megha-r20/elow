@@ -80,25 +80,8 @@ export default function Layout() {
       {/* Back to top */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        style={{
-          position: "fixed",
-          bottom: 28,
-          right: 28,
-          zIndex: 400,
-          width: 44,
-          height: 44,
-          background: "#1C1C1A",
-          color: "#fff",
-          border: "none",
-          borderRadius: "50%",
-          cursor: "pointer",
-          fontSize: 18,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 6px 24px rgba(0,0,0,0.25)",
-          transition: "transform 0.18s, background 0.18s",
-        }}
+        className="back-to-top-btn"
+        aria-label="Scroll back to top"
         onMouseEnter={(e) => {
           const el = e.currentTarget;
           el.style.transform = "translateY(-3px)";

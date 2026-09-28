@@ -19,7 +19,7 @@ export function CategoryGrid({ categories }) {
           }
         />
 
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.max(categories.length, 1)}, 1fr)`, gap: 16 }}>
+        <div className="category-responsive-grid">
           {categories.map((cat) => {
             const iconKey = (cat.id || cat.slug || "").toLowerCase();
             const IconComp =
@@ -44,7 +44,7 @@ export function CategoryGrid({ categories }) {
             return (
               <button
                 key={cat.id}
-                className="hover-card"
+                className="hover-card category-card"
                 onClick={() => navigate(`/shop?cat=${cat.id}`)}
                 style={{
                   border: "none",
@@ -56,10 +56,11 @@ export function CategoryGrid({ categories }) {
                   flexDirection: "column",
                   borderRadius: 16,
                   boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
-                  paddingBottom: 20,
+                  paddingBottom: 16,
+                  overflow: "hidden",
                 }}
               >
-                <div style={{ position: "relative", width: "100%", height: 175, marginBottom: 32 }}>
+                <div className="category-card-img-wrap">
                   <div style={{ width: "100%", height: "100%", overflow: "hidden", borderRadius: "16px 16px 0 0", background: "#f5f2eb" }}>
                     <img
                       src={cat.image}
@@ -72,31 +73,19 @@ export function CategoryGrid({ categories }) {
                     />
                   </div>
                   <div
+                    className="category-icon-badge"
                     style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: "50%",
                       background: cat.color,
-                      border: "4px solid #fff",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      position: "absolute",
-                      bottom: -24,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      zIndex: 10,
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
                     }}
                   >
-                    <IconComp size={20} strokeWidth={2} style={{ color: "rgba(0,0,0,0.6)" }} />
+                    <IconComp size={18} strokeWidth={2} style={{ color: "rgba(0,0,0,0.6)" }} />
                   </div>
                 </div>
 
-                <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "0 12px" }}>
-                  <p style={{ fontSize: 13, fontWeight: 800, color: "var(--txt-espresso)", letterSpacing: "0.2px", lineHeight: 1.2 }}>{cat.label}</p>
-                  <p style={{ fontSize: 11.5, color: "var(--txt-light)", marginTop: 4 }}>{cat.productCount} items</p>
-                  <div style={{ width: 24, height: 2, background: cat.color, borderRadius: 2, marginTop: 16 }} />
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "0 8px" }}>
+                  <p style={{ fontSize: 13, fontWeight: 800, color: "var(--txt-espresso)", letterSpacing: "0.2px", lineHeight: 1.25 }}>{cat.label}</p>
+                  <p style={{ fontSize: 11, color: "var(--txt-light)", marginTop: 3 }}>{cat.productCount} items</p>
+                  <div style={{ width: 20, height: 2, background: cat.color, borderRadius: 2, marginTop: 12 }} />
                 </div>
               </button>
             );

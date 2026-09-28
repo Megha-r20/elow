@@ -64,32 +64,11 @@ export function ProductCard({ product, compact = false }) {
     return (
         <div
             className="product-card-container group relative cursor-pointer"
-            style={{
-                background: "#FCFAF7",
-                borderRadius: "24px",
-                border: "1px solid #EFE8DF",
-                padding: "18px 20px 20px",
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                boxShadow: "0 4px 20px rgba(45,31,59,0.03)",
-                transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
-            }}
             onClick={() => navigate(`/product/${prodId}`)}
         >
             {/* 1. DOMINANT PRODUCT IMAGE CONTAINER WITH 14PX MARGIN BELOW */}
             <div
                 className="product-card-image-wrap relative shrink-0 w-full overflow-hidden"
-                style={{
-                    position: "relative",
-                    width: "100%",
-                    aspectRatio: "1 / 1",
-                    backgroundColor: "#F4EFE6",
-                    borderRadius: "18px",
-                    overflow: "hidden",
-                    marginBottom: "14px",
-                    border: "1px solid rgba(239, 232, 223, 0.8)",
-                }}
             >
                 <img
                     src={product.images?.[0]}
@@ -133,104 +112,53 @@ export function ProductCard({ product, compact = false }) {
             {/* 2. PRODUCT DETAILS WITH BALANCED COMPACT VERTICAL RHYTHM */}
             <div className="flex flex-col flex-1" style={{ display: "flex", flexDirection: "column", flex: 1 }}>
                 {/* ROW 1: CATEGORY LABEL (7PX MARGIN TO TITLE) */}
-                <p
-                    className="product-card-category"
-                    style={{
-                        fontSize: "10.5px",
-                        fontWeight: 700,
-                        color: "#8C847B",
-                        letterSpacing: "2.2px",
-                        textTransform: "uppercase",
-                        marginBottom: "7px",
-                        lineHeight: 1.35,
-                    }}
-                >
+                <p className="product-card-category">
                     {cleanSubcategory}
                 </p>
 
                 {/* ROW 2: PRODUCT TITLE (10PX MARGIN TO RATING) */}
-                <h3
-                    className="product-card-title font-serif group-hover:text-[#8E63B0] transition-colors"
-                    style={{
-                        fontFamily: "'DM Serif Display', Georgia, serif",
-                        fontSize: "19px",
-                        fontWeight: 400,
-                        color: "#231A2E",
-                        lineHeight: 1.35,
-                        marginBottom: "10px",
-                    }}
-                >
+                <h3 className="product-card-title font-serif group-hover:text-[#8E63B0] transition-colors">
                     {product.name}
                 </h3>
 
                 {/* ROW 3: DEDICATED RATING ROW (10PX MARGIN TO PRICE) */}
-                <div
-                    className="product-card-rating-row"
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        marginBottom: "10px",
-                        fontSize: "12.5px",
-                        color: "#7A7268",
-                    }}
-                >
+                <div className="product-card-rating-row">
                     {product.reviewCount > 0 ? (
                         <>
                             <Stars n={Math.floor(product.rating)} size={11.5} />
-                            <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#231A2E" }}>
+                            <span style={{ fontSize: "12px", fontWeight: 700, color: "#231A2E" }}>
                                 {product.rating.toFixed(1)}
                             </span>
-                            <span style={{ fontSize: "12px", color: "#8C847B" }}>
-                                ({product.reviewCount} reviews)
+                            <span style={{ fontSize: "11px", color: "#8C847B" }}>
+                                ({product.reviewCount})
                             </span>
                         </>
                     ) : (
-                        <span style={{ fontSize: "12px", color: "#8C847B", fontWeight: 500 }}>
+                        <span style={{ fontSize: "11px", color: "#8C847B", fontWeight: 500 }}>
                             No reviews yet
                         </span>
                     )}
                 </div>
 
                 {/* ROW 4: PRICE SECTION (18PX MARGIN TO ADD TO CART) */}
-                <div
-                    className="product-card-price-row"
-                    style={{
-                        display: "flex",
-                        alignItems: "baseline",
-                        gap: "10px",
-                        marginBottom: "18px",
-                    }}
-                >
-                    <span style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "24px", fontWeight: 700, color: "#1E1428", lineHeight: 1 }}>
+                <div className="product-card-price-row">
+                    <span className="product-card-price">
                         ₹{product.price.toLocaleString("en-IN")}
                     </span>
                     {product.originalPrice && product.originalPrice > product.price && (
-                        <span style={{ fontSize: "13.5px", color: "#A0988E", textDecoration: "line-through", fontWeight: 400 }}>
+                        <span style={{ fontSize: "12.5px", color: "#A0988E", textDecoration: "line-through", fontWeight: 400 }}>
                             ₹{product.originalPrice.toLocaleString("en-IN")}
                         </span>
                     )}
                 </div>
 
                 {/* ROW 5: PROPORTIONATE ADD TO CART BUTTON SEPARATED AT BOTTOM */}
-                <div className="product-card-cta-wrap mt-auto" style={{ marginTop: "auto", paddingTop: "2px" }}>
+                <div className="product-card-cta-wrap mt-auto">
                     {product.inStock ? (
                         <button
                             onClick={handleAdd}
+                            className="product-card-cta-btn"
                             style={{
-                                width: "100%",
-                                height: "42px",
-                                borderRadius: "14px",
-                                fontSize: "12.5px",
-                                fontWeight: 600,
-                                letterSpacing: "0.3px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "7px",
-                                transition: "all 0.2s ease",
-                                cursor: "pointer",
-                                border: "none",
                                 background: inCart ? "#E5F5EC" : "#9B72BF",
                                 color: inCart ? "#1E6B43" : "#FFFFFF",
                                 boxShadow: "0 2px 8px rgba(155, 114, 191, 0.25)",
@@ -250,17 +178,10 @@ export function ProductCard({ product, compact = false }) {
                         </button>
                     ) : (
                         <div
+                            className="product-card-cta-btn"
                             style={{
-                                width: "100%",
-                                height: "42px",
-                                borderRadius: "14px",
                                 background: "#EDE8E0",
                                 color: "#9C968D",
-                                fontSize: "12.5px",
-                                fontWeight: 600,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
                                 userSelect: "none",
                                 cursor: "not-allowed",
                             }}
