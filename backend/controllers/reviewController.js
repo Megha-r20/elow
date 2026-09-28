@@ -75,7 +75,7 @@ export const submitReview = async (req, res) => {
   let newReview;
   try {
     newReview = await Review.create({
-      id: `rev-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
+      _id: crypto.randomUUID(),
       productId,
       userId,
       orderId: safeStr(orderId),

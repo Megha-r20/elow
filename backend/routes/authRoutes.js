@@ -10,6 +10,9 @@ import {
   resetPassword,
   googleAuth,
   verifyCsrfHeader,
+  getWishlist,
+  toggleWishlist,
+  syncWishlist,
 } from "../controllers/authController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { authLimiter } from "../middleware/rateLimiter.js";
@@ -33,5 +36,8 @@ router.post("/forgot-password", authLimiter, validate(forgotPasswordSchema), for
 router.post("/reset-password", authLimiter, validate(resetPasswordSchema), resetPassword);
 router.get("/me", protect, getMe);
 router.patch("/profile", protect, validate(updateProfileSchema), updateProfile);
+router.get("/wishlist", protect, getWishlist);
+router.post("/wishlist/toggle", protect, toggleWishlist);
+router.put("/wishlist", protect, syncWishlist);
 
 export default router;

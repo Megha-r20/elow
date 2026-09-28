@@ -5,14 +5,25 @@ import { logger } from "../config/logger.js";
 import crypto from "crypto";
 
 let jwtSecret = process.env.JWT_SECRET;
+let jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
 
-if (!jwtSecret) {
-  logger.warn("⚠️ [SECURITY NOTICE] JWT_SECRET environment variable is not set. Using fallback secret for JWT token signing.");
-  jwtSecret = "elow_default_jwt_secret_key_2026_stationery_store_secure";
+if (process.env.NODE_ENV === "production") {
+  if (!jwtSecret || !jwtRefreshSecret) {
+    throw new Error("Both JWT_SECRET and JWT_REFRESH_SECRET environment variables must be explicitly defined in production.");
+  }
+} else {
+  if (!jwtSecret) {
+    logger.warn("⚠️ [SECURITY NOTICE] JWT_SECRET environment variable is not set. Using fallback secret for JWT token signing.");
+    jwtSecret = "elow_default_jwt_secret_key_2026_stationery_store_secure";
+  }
+  if (!jwtRefreshSecret) {
+    logger.warn("⚠️ [SECURITY NOTICE] JWT_REFRESH_SECRET environment variable is not set. Using separate dev fallback secret for refresh tokens.");
+    jwtRefreshSecret = "elow_default_jwt_refresh_secret_key_2026_stationery_store_secure";
+  }
 }
 
 export const JWT_SECRET = jwtSecret;
-export const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || `${JWT_SECRET}_refresh`;
+export const JWT_REFRESH_SECRET = jwtRefreshSecret;
 
 // Short-lived Access Token (15 minutes)
 export const generateAccessToken = (userId, role) => {
@@ -72,8 +83,11 @@ export const sanitizeUser = (user) => {
   const raw = typeof user.toObject === "function" ? user.toObject() : user;
   const safeUser = { ...raw };
   delete safeUser.password;
-  delete safeUser._id;
   delete safeUser.__v;
+  if (safeUser._id) {
+    safeUser.id = safeUser._id;
+  }
+  safeUser.wishlist = safeUser.wishlist || [];
   return safeUser;
 };
 

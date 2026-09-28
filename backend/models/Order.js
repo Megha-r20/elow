@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
+import { applyIdPlugin } from "./plugins/idPlugin.js";
+
+const generateOrderId = () =>
+  `US-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
 const orderSchema = new mongoose.Schema(
   {
-    id: {
+    _id: {
       type: String,
-      required: true,
-      unique: true,
-      index: true,
-      default: () => `US-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`,
+      default: generateOrderId,
     },
     userId: { type: String, index: true },
     items: [
@@ -51,5 +52,7 @@ const orderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+applyIdPlugin(orderSchema, generateOrderId);
 
 export const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);

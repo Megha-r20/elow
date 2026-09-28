@@ -73,11 +73,11 @@ export const registerUser = async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(cleanPass, 10);
-  const userId = `user-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+  const userId = crypto.randomUUID();
   const refreshToken = generateRefreshToken(userId, "user");
 
   const newUser = await User.create({
-    id: userId,
+    _id: userId,
     name: cleanName,
     email: cleanEmail,
     password: hashedPassword,
@@ -281,6 +281,59 @@ export const updateProfile = async (req, res) => {
   res.json({ success: true, user: sanitizeUser(user), message: "Profile updated successfully" });
 };
 
+// @desc    Get current user's wishlist
+// @route   GET /api/auth/wishlist
+// @access  Private
+export const getWishlist = async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  res.json({ wishlist: user.wishlist || [] });
+};
+
+// @desc    Toggle item in user's server-side wishlist
+// @route   POST /api/auth/wishlist/toggle
+// @access  Private
+export const toggleWishlist = async (req, res) => {
+  const { productId } = req.body || {};
+  if (!productId) {
+    return res.status(400).json({ error: "Product ID is required" });
+  }
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  const cleanId = String(productId).trim();
+  const list = user.wishlist || [];
+  const idx = list.indexOf(cleanId);
+  if (idx > -1) {
+    list.splice(idx, 1);
+  } else {
+    list.push(cleanId);
+  }
+  user.wishlist = list;
+  await user.save();
+  res.json({ success: true, wishlist: user.wishlist });
+};
+
+// @desc    Batch sync wishlist (e.g. migrate guest local items on login)
+// @route   PUT /api/auth/wishlist
+// @access  Private
+export const syncWishlist = async (req, res) => {
+  const { productIds } = req.body || {};
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  if (Array.isArray(productIds)) {
+    const combined = new Set([...(user.wishlist || []), ...productIds.map(String)]);
+    user.wishlist = Array.from(combined);
+    await user.save();
+  }
+  res.json({ success: true, wishlist: user.wishlist || [] });
+};
+
 // @desc    Request password reset token
 // @route   POST /api/auth/forgot-password
 // @access  Public
@@ -404,9 +457,9 @@ export const googleAuth = async (req, res) => {
 
   if (!user) {
     const dummyPassword = await bcrypt.hash(`google-pass-${Date.now()}`, 10);
-    const userId = `user-google-${crypto.randomBytes(4).toString("hex")}`;
+    const userId = crypto.randomUUID();
     user = await User.create({
-      id: userId,
+      _id: userId,
       name: cleanName,
       email: cleanEmail,
       password: dummyPassword,

@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
+import { applyIdPlugin } from "./plugins/idPlugin.js";
 
 const reviewSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true, index: true, default: () => `rev-${Date.now()}-${crypto.randomBytes(4).toString("hex")}` },
+    _id: { type: String, default: () => crypto.randomUUID() },
     productId: { type: String, required: true, index: true },
     userId: { type: String, index: true },
     orderId: { type: String },
@@ -17,6 +18,8 @@ const reviewSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+applyIdPlugin(reviewSchema, () => crypto.randomUUID());
 
 reviewSchema.index({ productId: 1, userId: 1 }, { unique: true });
 

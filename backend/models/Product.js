@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
+import { applyIdPlugin } from "./plugins/idPlugin.js";
 
 const productSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true, index: true, default: () => `prod-${Date.now()}-${crypto.randomBytes(4).toString("hex")}` },
+    _id: { type: String, default: () => crypto.randomUUID() },
     name: { type: String, required: true },
     shortName: { type: String },
     category: { type: String, required: true, index: true },
@@ -25,6 +26,8 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true, suppressReservedKeysWarning: true }
 );
+
+applyIdPlugin(productSchema, () => crypto.randomUUID());
 
 productSchema.index(
   { name: "text", shortName: "text", description: "text", category: "text", subcategory: "text", tags: "text" },

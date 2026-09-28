@@ -175,7 +175,7 @@ export const createOrder = async (req, res) => {
   const orderId = `US-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
   const orderData = {
-    id: orderId,
+    _id: orderId,
     userId: req.user.id,
     items: sanitizedItems,
     deliveryAddress,

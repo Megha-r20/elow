@@ -16,7 +16,7 @@ const seedCategoriesIfNeeded = async () => {
       logger.info(`[Auto Sync] Resetting MongoDB Atlas categories collection to exact ${DEFAULT_CATEGORIES.length} items...`);
       await Category.deleteMany({});
       const docs = DEFAULT_CATEGORIES.map((c) => ({
-        id: c.id,
+        _id: c.id || crypto.randomUUID(),
         name: c.label || c.name || c.id,
         slug: (c.id || "").toLowerCase(),
         description: c.desc || c.description || "",
@@ -28,7 +28,7 @@ const seedCategoriesIfNeeded = async () => {
     } else {
       for (const c of DEFAULT_CATEGORIES) {
         await Category.updateOne(
-          { id: c.id },
+          { _id: c.id },
           {
             $set: {
               name: c.label || c.name || c.id,
@@ -52,7 +52,14 @@ const seedProductsIfNeeded = async () => {
     if (dbCount !== DEFAULT_PRODUCTS.length) {
       logger.info(`[Auto Sync] Resetting MongoDB Atlas products collection to exact ${DEFAULT_PRODUCTS.length} catalog items...`);
       await Product.deleteMany({});
-      await Product.insertMany(DEFAULT_PRODUCTS);
+      const docs = DEFAULT_PRODUCTS.map((p) => {
+        const { id, ...rest } = p;
+        return {
+          _id: id || p._id || crypto.randomUUID(),
+          ...rest,
+        };
+      });
+      await Product.insertMany(docs);
     }
   }
 };
@@ -254,7 +261,7 @@ export const createProduct = async (req, res) => {
   const resolvedImages = await Promise.all(rawImages.map((img) => resolvePinterestUrl(img)));
 
   const newProduct = await Product.create({
-    id: `prod-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
+    _id: crypto.randomUUID(),
     name: cleanName,
     shortName: cleanName,
     category: cleanCategory,
@@ -364,7 +371,7 @@ export const createCategory = async (req, res) => {
   const catSlug = (slug || cleanName).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const catId = catSlug || `cat-${Date.now()}`;
 
-  const existing = await Category.findOne({ $or: [{ id: catId }, { slug: catSlug }] });
+  const existing = await Category.findOne({ $or: [{ _id: catId }, { slug: catSlug }] });
   if (existing) {
     return res.status(400).json({ error: "Category with this name or slug already exists" });
   }
@@ -372,7 +379,7 @@ export const createCategory = async (req, res) => {
   const resolvedImage = image ? await resolvePinterestUrl(safeStr(image)) : "";
 
   const newCat = await Category.create({
-    id: catId,
+    _id: catId,
     name: cleanName,
     slug: catSlug,
     description: safeStr(description),

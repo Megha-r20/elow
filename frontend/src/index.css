@@ -10,10 +10,14 @@
   --txt-muted: #6E6A63;
   --txt-light: #9C968D;
   --border-warm: #EAE3D9;
+  --bg-sand: #FBF9F5;
   --accent-sage: #AB88CD;
   --accent-sage-dark: #9873BB;
   --accent-clay: #D97762;
   --accent-rose: #F9EBEA;
+  --accent-soft-lavender: #F7F1F8;
+  --accent-muted-lavender: #F4EEF6;
+  --accent-soft-blush: #F9F1F0;
   --shadow-soft: 0 4px 20px rgba(35, 32, 29, 0.04);
   --shadow-hover: 0 16px 40px rgba(35, 32, 29, 0.08);
 }

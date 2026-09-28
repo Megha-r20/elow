@@ -32,21 +32,21 @@ async function seedData() {
 
   const initialUsers = [
     {
-      id: `user-admin-${crypto.randomBytes(4).toString("hex")}`,
+      _id: crypto.randomUUID(),
       name: process.env.ADMIN_NAME || "Elow Admin",
       email: adminEmail,
       password: bcrypt.hashSync(adminPassword, 10),
       role: "admin",
     },
     {
-      id: `user-cust-${crypto.randomBytes(4).toString("hex")}`,
+      _id: crypto.randomUUID(),
       name: "Ritika Sharma",
       email: "ritika@example.com",
       password: bcrypt.hashSync("password123", 10),
       role: "user",
     },
     {
-      id: `user-cust-${crypto.randomBytes(4).toString("hex")}`,
+      _id: crypto.randomUUID(),
       name: "Elow Customer",
       email: "user@elow.com",
       password: bcrypt.hashSync("user123", 10),
@@ -71,7 +71,11 @@ async function seedData() {
     await PromoCode.deleteMany({});
 
     logger.info(`🌱 Inserting ${PRODUCTS.length} products into collection 'products'...`);
-    await Product.insertMany(PRODUCTS);
+    const productDocs = PRODUCTS.map((p) => {
+      const { id, ...rest } = p;
+      return { _id: id || p._id || crypto.randomUUID(), ...rest };
+    });
+    await Product.insertMany(productDocs);
 
     logger.info("👤 Inserting default user accounts into collection 'users'...");
     await User.insertMany(initialUsers);

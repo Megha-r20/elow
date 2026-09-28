@@ -8,49 +8,28 @@ import { logger } from "../config/logger.js";
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 const safeStr = (v) => (v === null || v === undefined ? "" : String(v).trim());
 
-// Helper to look up and validate promo code
+// Helper to look up and validate promo code (All promos live in the database only)
 export const getPromoObject = async (code) => {
   if (!code) return { valid: false, error: "Promo code is required" };
   const cleanCode = safeStr(code).toUpperCase();
 
-  // 1. Database Promo Check (DB records take priority over fallbacks)
-  let dbPromo = await PromoCode.findOne({ code: cleanCode }).lean();
+  // Database Promo Check - All promos live strictly in MongoDB
+  const dbPromo = await PromoCode.findOne({ code: cleanCode }).lean();
 
-  if (dbPromo) {
-    if (dbPromo.isActive === false) {
-      return { valid: false, error: "Promo code is inactive" };
-    }
-    if (dbPromo.expiryDate && new Date() > new Date(dbPromo.expiryDate)) {
-      return { valid: false, error: "Promo code has expired" };
-    }
-    if (dbPromo.isSingleUse && dbPromo.isUsed) {
-      return { valid: false, error: "Promo code has already been used" };
-    }
-    return { valid: true, promo: dbPromo };
-  }
-
-  // 2. Fallback Promos (only if DB has no record for this code)
-  const fallbackPromos = {
-    WRITE50: { code: "WRITE50", discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true },
-    ELOW10: { code: "ELOW10", discountType: "percentage", discountValue: 10, minOrderAmount: 0, isActive: true },
-  };
-
-  let fallback = fallbackPromos[cleanCode];
-  if (!fallback && cleanCode.startsWith("SPIN-")) {
-    fallback = { code: cleanCode, discountType: "fixed", discountValue: 50, minOrderAmount: 0, isActive: true };
-  }
-  if (!fallback) {
+  if (!dbPromo) {
     return { valid: false, error: "Invalid promo code" };
   }
 
-  if (fallback.isActive === false) {
+  if (dbPromo.isActive === false) {
     return { valid: false, error: "Promo code is inactive" };
   }
-  if (fallback.expiryDate && new Date() > new Date(fallback.expiryDate)) {
+  if (dbPromo.expiryDate && new Date() > new Date(dbPromo.expiryDate)) {
     return { valid: false, error: "Promo code has expired" };
   }
-
-  return { valid: true, promo: fallback };
+  if (dbPromo.isSingleUse && dbPromo.isUsed) {
+    return { valid: false, error: "Promo code has already been used" };
+  }
+  return { valid: true, promo: dbPromo };
 };
 
 // Helper to calculate server promo discount

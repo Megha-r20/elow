@@ -1,5 +1,14 @@
 import { createContext, useContext, useReducer, useState, useCallback, useEffect } from "react";
 import { getApiUrl } from "../api/config";
+import { useAuth } from "./AuthContext";
+
+function useOptionalAuth() {
+    try {
+        return useAuth();
+    } catch {
+        return null;
+    }
+}
 function cartReducer(state, action) {
     switch (action.type) {
         case "ADD": {
@@ -46,24 +55,40 @@ export function CartProvider({ children }) {
             return null;
         }
     });
+    const auth = useOptionalAuth();
+    const user = auth?.user;
+    const authFetch = auth?.authFetch;
+
     const [lastOrder, setLastOrder] = useState(() => {
         try {
-            const stored = localStorage.getItem("lastOrder");
+            const stored = sessionStorage.getItem("lastOrder") || localStorage.getItem("lastOrder");
             return stored ? JSON.parse(stored) : null;
         }
         catch {
             return null;
         }
     });
-    const [myOrders, setMyOrders] = useState(() => {
-        try {
-            const stored = localStorage.getItem("myOrders");
-            return stored ? JSON.parse(stored) : [];
+    const [myOrders, setMyOrders] = useState([]);
+
+    // Server-side Orders Synchronization for logged in users
+    useEffect(() => {
+        if (!user || !authFetch) return;
+        let cancelled = false;
+        async function fetchServerOrders() {
+            try {
+                const res = await authFetch(getApiUrl("/api/orders/my-orders"));
+                if (res.ok) {
+                    const data = await res.json();
+                    if (!cancelled && Array.isArray(data.orders)) {
+                        setMyOrders(data.orders);
+                    }
+                }
+            } catch (_e) { /* ignore */ }
         }
-        catch {
-            return [];
-        }
-    });
+        fetchServerOrders();
+        return () => { cancelled = true; };
+    }, [user, authFetch]);
+
     useEffect(() => {
         try { localStorage.setItem("cart", JSON.stringify(state)); } catch (_e) { /* ignore */ }
     }, [state]);
@@ -78,12 +103,9 @@ export function CartProvider({ children }) {
     useEffect(() => {
         try {
             if (lastOrder)
-                localStorage.setItem("lastOrder", JSON.stringify(lastOrder));
+                sessionStorage.setItem("lastOrder", JSON.stringify(lastOrder));
         } catch (_e) { /* ignore */ }
     }, [lastOrder]);
-    useEffect(() => {
-        try { localStorage.setItem("myOrders", JSON.stringify(myOrders)); } catch (_e) { /* ignore */ }
-    }, [myOrders]);
     const addItem = useCallback((product, qty = 1) => dispatch({ type: "ADD", product, qty }), []);
     const removeItem = useCallback((id) => dispatch({ type: "REMOVE", id }), []);
     const setQty = useCallback((id, qty) => dispatch({ type: "SET_QTY", id, qty }), []);
@@ -181,6 +203,10 @@ export function useCart() {
 }
 const WishContext = createContext(null);
 export function WishlistProvider({ children }) {
+    const auth = useOptionalAuth();
+    const user = auth?.user;
+    const authFetch = auth?.authFetch;
+
     const [ids, setIds] = useState(() => {
         try {
             const stored = localStorage.getItem("wishlist");
@@ -190,10 +216,70 @@ export function WishlistProvider({ children }) {
             return new Set();
         }
     });
+
+    // Server-side Wishlist Synchronization across devices
     useEffect(() => {
-        localStorage.setItem("wishlist", JSON.stringify(Array.from(ids)));
+        if (!user || !authFetch) return;
+        let cancelled = false;
+        async function syncServerWishlist() {
+            try {
+                // If local guest IDs exist, sync them to server
+                const localIds = Array.from(ids);
+                if (localIds.length > 0) {
+                    await authFetch(getApiUrl("/api/auth/wishlist"), {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ productIds: localIds }),
+                    });
+                }
+                const res = await authFetch(getApiUrl("/api/auth/wishlist"));
+                if (res.ok) {
+                    const data = await res.json();
+                    if (!cancelled && Array.isArray(data.wishlist)) {
+                        setIds(new Set(data.wishlist));
+                        try { localStorage.setItem("wishlist", JSON.stringify(data.wishlist)); } catch (_e) {}
+                    }
+                }
+            } catch (_err) {
+                if (Array.isArray(user.wishlist) && user.wishlist.length > 0) {
+                    setIds(new Set(user.wishlist));
+                }
+            }
+        }
+        syncServerWishlist();
+        return () => { cancelled = true; };
+    }, [user, authFetch]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("wishlist", JSON.stringify(Array.from(ids)));
+        } catch (_e) { /* ignore */ }
     }, [ids]);
-    const toggle = useCallback((id) => setIds(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; }), []);
+
+    const toggle = useCallback((id) => {
+        setIds((prev) => {
+            const n = new Set(prev);
+            if (n.has(id)) {
+                n.delete(id);
+            } else {
+                n.add(id);
+            }
+            try {
+                localStorage.setItem("wishlist", JSON.stringify(Array.from(n)));
+            } catch (_e) {}
+            return n;
+        });
+
+        // Persist change to server if user is logged in
+        if (user && authFetch) {
+            authFetch(getApiUrl("/api/auth/wishlist/toggle"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ productId: id }),
+            }).catch(() => {});
+        }
+    }, [user, authFetch]);
+
     const has = useCallback((id) => ids.has(id), [ids]);
     return <WishContext.Provider value={{ ids, toggle, has }}>{children}</WishContext.Provider>;
 }

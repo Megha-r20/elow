@@ -16,7 +16,7 @@ export const ensureAdminUser = async () => {
 
     if (!existingAdmin) {
       await User.create({
-        id: `user-admin-${crypto.randomBytes(4).toString("hex")}`,
+        _id: crypto.randomUUID(),
         name: process.env.ADMIN_NAME || "Elow Admin",
         email: adminEmail,
         password: hashedAdminPassword,
@@ -36,7 +36,7 @@ export const ensureAdminUser = async () => {
 
     if (!existingCustomer) {
       await User.create({
-        id: `user-cust-${crypto.randomBytes(4).toString("hex")}`,
+        _id: crypto.randomUUID(),
         name: "Ritika Sharma",
         email: demoEmail,
         password: hashedCustPassword,
